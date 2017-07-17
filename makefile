@@ -1,2 +1,4 @@
-MarxanConnectGUImake: gui.py MarxanConnectGUI.py
-	pyinstaller --onefile --windowed --icon=icon_bundle.ico --hidden-import wx --hidden-import wx._xml -y MarxanConnectGUI.py
+MarxanConnectGUImake: gui.py MarxanConnectGUI.py setup.py
+	python setup.py build
+	cp -r ../MarxanConnectPy/data* build/
+	"C:/Program Files (x86)/NSIS/makensis.exe" "Marxan with Connectivity.nsi"

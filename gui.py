@@ -17,7 +17,7 @@ import wx.xrc
 class MarxanConnectGUI ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect", pos = wx.DefaultPosition, size = wx.Size( 700,-1 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect", pos = wx.DefaultPosition, size = wx.Size( 700,596 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -43,10 +43,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.m_staticText1.Wrap( -1 )
 		pu_file.Add( self.m_staticText1, 0, wx.ALL, 5 )
 		
-		self.m_filePicker1 = wx.FilePickerCtrl( self.Spatial, wx.ID_ANY, u"data\\shapefiles\\marxan_pu.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-		self.m_filePicker1.SetMinSize( wx.Size( 500,-1 ) )
+		self.pu_filePicker = wx.FilePickerCtrl( self.Spatial, wx.ID_ANY, u".\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.pu_filePicker.SetMinSize( wx.Size( 500,-1 ) )
 		
-		pu_file.Add( self.m_filePicker1, 0, wx.ALL, 5 )
+		pu_file.Add( self.pu_filePicker, 0, wx.ALL, 5 )
 		
 		
 		fgSizer3.Add( pu_file, 1, wx.ALIGN_RIGHT, 5 )
@@ -63,10 +63,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.m_staticText12.Wrap( -1 )
 		conmat.Add( self.m_staticText12, 0, wx.ALL, 5 )
 		
-		self.m_filePicker12 = wx.FilePickerCtrl( self.Spatial, wx.ID_ANY, u"data\\grid_connectivity_matrix.csv", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-		self.m_filePicker12.SetMinSize( wx.Size( 500,-1 ) )
+		self.conmat_filePicker = wx.FilePickerCtrl( self.Spatial, wx.ID_ANY, u".\\data\\grid_connectivity_matix.csv", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.conmat_filePicker.SetMinSize( wx.Size( 500,-1 ) )
 		
-		conmat.Add( self.m_filePicker12, 0, wx.ALL, 5 )
+		conmat.Add( self.conmat_filePicker, 0, wx.ALL, 5 )
 		
 		
 		fgSizer3.Add( conmat, 1, wx.ALIGN_RIGHT|wx.ALL, 5 )
@@ -77,7 +77,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		m_radioBox2Choices = [ u"Identical grids", u"Rescale Connectivity Matrix" ]
 		self.m_radioBox2 = wx.RadioBox( self.Spatial, wx.ID_ANY, u"Rescale Connectivity?", wx.DefaultPosition, wx.DefaultSize, m_radioBox2Choices, 1, wx.RA_SPECIFY_COLS )
-		self.m_radioBox2.SetSelection( 0 )
+		self.m_radioBox2.SetSelection( 1 )
 		fgSizer3.Add( self.m_radioBox2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		congrid = wx.FlexGridSizer( 0, 2, 0, 0 )
@@ -88,10 +88,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.m_staticText11.Wrap( -1 )
 		congrid.Add( self.m_staticText11, 0, wx.ALL, 5 )
 		
-		self.m_filePicker11 = wx.FilePickerCtrl( self.Spatial, wx.ID_ANY, u"data\\shapefiles\\marxan_pu.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-		self.m_filePicker11.SetMinSize( wx.Size( 500,-1 ) )
+		self.cu_filePicker = wx.FilePickerCtrl( self.Spatial, wx.ID_ANY, u".\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.cu_filePicker.SetMinSize( wx.Size( 500,-1 ) )
 		
-		congrid.Add( self.m_filePicker11, 0, wx.ALL, 5 )
+		congrid.Add( self.cu_filePicker, 0, wx.ALL, 5 )
+		
+		self.plot_button = wx.Button( self.Spatial, wx.ID_ANY, u"Plot Shapefiles", wx.DefaultPosition, wx.DefaultSize, 0 )
+		congrid.Add( self.plot_button, 0, wx.ALL, 5 )
 		
 		
 		fgSizer3.Add( congrid, 1, wx.ALIGN_RIGHT, 5 )
@@ -127,7 +130,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.directory.Wrap( -1 )
 		fgSizer111.Add( self.directory, 0, wx.ALL, 5 )
 		
-		self.m_dirPicker11 = wx.DirPickerCtrl( self.Spatial, wx.ID_ANY, u"data\\\n", u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
+		self.m_dirPicker11 = wx.DirPickerCtrl( self.Spatial, wx.ID_ANY, u".\\data\\\n", u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
 		self.m_dirPicker11.SetMinSize( wx.Size( 500,-1 ) )
 		
 		fgSizer111.Add( self.m_dirPicker11, 0, wx.ALL, 5 )
@@ -150,7 +153,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Spatial.SetSizer( fgSizer3 )
 		self.Spatial.Layout()
 		fgSizer3.Fit( self.Spatial )
-		self.m_notebook1.AddPage( self.Spatial, u"Spatial", False )
+		self.m_notebook1.AddPage( self.Spatial, u"Metrics", True )
 		self.Objectves = wx.Panel( self.m_notebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer9 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer9.SetFlexibleDirection( wx.BOTH )
@@ -162,15 +165,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer9.Fit( self.Objectves )
 		self.m_notebook1.AddPage( self.Objectves, u"Objectives", False )
 		self.Metrics = wx.Panel( self.m_notebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		fgSizer5 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer5.SetFlexibleDirection( wx.BOTH )
-		fgSizer5.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		
-		self.Metrics.SetSizer( fgSizer5 )
-		self.Metrics.Layout()
-		fgSizer5.Fit( self.Metrics )
-		self.m_notebook1.AddPage( self.Metrics, u"Metrics", True )
+		self.m_notebook1.AddPage( self.Metrics, u"Spatial", False )
 		self.PostMarxan = wx.Panel( self.m_notebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer10 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer10.SetFlexibleDirection( wx.BOTH )
@@ -192,6 +187,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		# Connect Events
 		self.Bind( wx.EVT_SIZE, self.resizeAll )
+		self.pu_filePicker.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_pu_file_pick )
+		self.conmat_filePicker.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_conmat_file_pick )
+		self.m_radioBox2.Bind( wx.EVT_RADIOBOX, self.on_radio_button )
+		self.cu_filePicker.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_cu_file_pick )
+		self.plot_button.Bind( wx.EVT_BUTTON, self.on_plot_button_click )
 	
 	def __del__( self ):
 		pass
@@ -199,6 +199,21 @@ class MarxanConnectGUI ( wx.Frame ):
 	
 	# Virtual event handlers, overide them in your derived class
 	def resizeAll( self, event ):
+		event.Skip()
+	
+	def on_pu_file_pick( self, event ):
+		event.Skip()
+	
+	def on_conmat_file_pick( self, event ):
+		event.Skip()
+	
+	def on_radio_button( self, event ):
+		event.Skip()
+	
+	def on_cu_file_pick( self, event ):
+		event.Skip()
+	
+	def on_plot_button_click( self, event ):
 		event.Skip()
 	
 
