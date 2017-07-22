@@ -1,6 +1,6 @@
 #importing wx files
 import wx
- 
+
 #import the newly created GUI file
 import gui
 
@@ -20,7 +20,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def __init__(self,parent):
         #initialize parent class
         gui.MarxanConnectGUI.__init__(self,parent)
-        icons = wx.IconBundle() 
+        icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
                 icon = wx.Icon('C:/Users/Remi-Work/Desktop/MarxanConnectGUI/icon_bundle.ico', wx.BITMAP_TYPE_ICO, desiredWidth=sz, desiredHeight=sz) 
@@ -32,7 +32,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 #        self.SetIcon(ico)  
 
  
-    def on_plot_button_click(self,event):
+    def on_plot_button(self,event):
         print("plot button works")
         plotwindow = wx.App()
         fr = wx.Frame(None, title='test')
@@ -41,12 +41,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         fr.Show()
         plotwindow.MainLoop()
 
-    def on_pu_file_pick( self, event ):
-        self.pu_filepath = self.pu_filePicker.GetPath()
+    def on_PU_file( self, event ):
+        self.pu_filepath = self.PU_file.GetPath()
         print(self.pu_filepath)
 
-    def on_cu_file_pick(self, event):
-        self.cu_filepath=self.cu_filePicker.GetPath()
+    def on_CU_file(self, event):
+        self.cu_filepath=self.CU_file.GetPath()
         print(self.cu_filepath)
 
 class popupplot(wx.Panel):
