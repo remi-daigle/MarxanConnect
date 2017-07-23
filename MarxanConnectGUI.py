@@ -8,6 +8,8 @@ import gui
 import matplotlib
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
+
 
 
 import geopandas as gpd
@@ -27,19 +29,39 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 icons.AddIcon(icon) 
             except: 
                 pass 
-                self.SetIcons(icons) 
-#        ico = wx.Icon('favicon.ico', wx.BITMAP_TYPE_ICO)
-#        self.SetIcon(ico)  
+                self.SetIcons(icons)
+        self.pu_filepath = "C:\Program Files (x86)\MarxanConnect\data\shapefiles\marxan_pu.shp"
+        self.cu_filepath = "C:\Program Files (x86)\MarxanConnect\data\shapefiles\connectivity_grid.shp"
 
- 
-    def on_plot_button(self,event):
+    def on_plot_button(self, event):
         print("plot button works")
-        plotwindow = wx.App()
-        fr = wx.Frame(None, title='test')
-        panel = popupplot(fr)
-        panel.draw_shapefiles(pu_filepath=self.pu_filepath,cu_filepath=self.cu_filepath)
-        fr.Show()
-        plotwindow.MainLoop()
+        self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        self.m_auinotebook1.AddPage(self.plot, u"Plot", False, wx.NullBitmap)
+        self.plot.figure = plt.figure()
+        self.plot.axes = self.plot.figure.gca()
+        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
+        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        self.plot.SetSizer(self.plot.sizer)
+        self.plot.Fit()
+        self.draw_shapefiles(pu_filepath=self.pu_filepath, cu_filepath=self.cu_filepath)
+
+
+    def draw_shapefiles(self, pu_filepath, cu_filepath):
+        print("drawing: " + pu_filepath + " and ", cu_filepath)
+        pu = gpd.GeoDataFrame.from_file(pu_filepath)
+        for i in range(len(pu)):
+            poly = pu.geometry[i]
+            self.plot.axes.add_patch(PolygonPatch(poly, color='#f1a340', alpha=0.5))
+
+        cu = gpd.GeoDataFrame.from_file(cu_filepath)
+        for i in range(len(cu)):
+            poly = cu.geometry[i]
+            self.plot.axes.add_patch(PolygonPatch(poly, color='#998ec3', alpha=0.5, label='Connectivity Shapefile'))
+
+        self.plot.axes.axis('scaled')
+        self.plot.axes.plot()
+
 
     def on_PU_file( self, event ):
         self.pu_filepath = self.PU_file.GetPath()
@@ -48,32 +70,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_CU_file(self, event):
         self.cu_filepath=self.CU_file.GetPath()
         print(self.cu_filepath)
-
-class popupplot(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
-        self.figure = plt.figure()
-        self.axes = self.figure.gca()
-        self.canvas = FigureCanvas(self, -1, self.figure)
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
-        self.SetSizer(self.sizer)
-        self.Fit()
-
-    def draw_shapefiles(self,pu_filepath,cu_filepath):
-        print("drawing: "+pu_filepath+" and ",cu_filepath)
-        pu = gpd.GeoDataFrame.from_file(pu_filepath)
-        for i in range(len(pu)):
-            poly = pu.geometry[i]
-            self.axes.add_patch(PolygonPatch(poly, color='#f1a340',alpha=0.5))
-
-        cu = gpd.GeoDataFrame.from_file(cu_filepath)
-        for i in range(len(cu)):
-            poly = cu.geometry[i]
-            self.axes.add_patch(PolygonPatch(poly, color='#998ec3',alpha=0.5,label='Connectivity Shapefile'))
-
-        self.axes.axis('scaled')
-        self.axes.plot()
 
 app = wx.App(False)
  
