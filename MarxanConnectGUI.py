@@ -17,8 +17,11 @@ import geopandas as gpd
 from descartes import PolygonPatch
 import shapely
 
+import sys
+sys.path.append('../MarxanConnectPy/')
+import marxanconpy
 
-
+import os
 
 #inherit from the MainFrame created in wxFowmBuilder and create CalcFrame
 class MarxanConnectGUI(gui.MarxanConnectGUI):
@@ -34,8 +37,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             except: 
                 pass 
                 self.SetIcons(icons)
-        self.pu_filepath = "C:\Program Files (x86)\MarxanConnect\data\shapefiles\marxan_pu.shp"
-        self.cu_filepath = "C:\Program Files (x86)\MarxanConnect\data\shapefiles\connectivity_grid.shp"
+
+        # set default file paths
+
+        self.pu_filepath = self.PU_file.GetPath()
+        self.cu_filepath = self.CU_file.GetPath()
+        self.cm_filepath = self.CM_file.GetPath()
+        self.pucm_filename = self.PUCM_filename.GetLabelText()
+        self.pucm_filepath = os.path.join(os.environ['USERPROFILE'], "My Documents")
 
     def on_plot_button(self, event):
         print("plot button works")
@@ -89,9 +98,36 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.pu_filepath = self.PU_file.GetPath()
         print(self.pu_filepath)
 
+    def on_rescaleRadioBox(self, event):
+        if(self.CU_def.Hide()==True):
+            self.CU_def.Hide()
+            self.CU_filetext.Hide()
+            self.CU_file.Hide()
+        else:
+            self.CU_def.Show()
+            self.CU_filetext.Show()
+            self.CU_file.Show()
+
     def on_CU_file(self, event):
         self.cu_filepath=self.CU_file.GetPath()
         print(self.cu_filepath)
+
+    def on_CM_file( self, event ):
+        self.cm_filepath = self.CM_file.GetPath()
+        print(self.cm_filepath)
+
+    def on_PUCM_filedir(self, event):
+        self.pucm_filepath=self.PUCM_filedir.GetPath()
+        print(self.pucm_filepath)
+
+    def on_PUCM_filenameTextEnter(self, event):
+        self.pucm_filename = self.PUCM_filenameTextEnter.GetPath()
+        print(self.pucm_filename)
+
+    def on_rescale_button(self, event):
+        print(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filepath, self.pucm_filename)
+        marxanconpy.rescale_matrix(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filepath, self.pucm_filename)
+        print("rescaling!")
 
 app = wx.App(False)
  
