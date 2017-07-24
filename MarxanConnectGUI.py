@@ -7,6 +7,7 @@ import gui
 #import matplotlib
 import matplotlib
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
+from matplotlib.collections import PatchCollection
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
@@ -14,6 +15,9 @@ from mpl_toolkits.basemap import Basemap
 
 import geopandas as gpd
 from descartes import PolygonPatch
+import shapely
+
+
 
 
 #inherit from the MainFrame created in wxFowmBuilder and create CalcFrame
@@ -48,21 +52,39 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 
     def draw_shapefiles(self, pu_filepath, cu_filepath):
-        print("drawing: " + pu_filepath + " and ", cu_filepath)
         pu = gpd.GeoDataFrame.from_file(pu_filepath)
-        for i in range(len(pu)):
-            poly = pu.geometry[i]
-            self.plot.axes.add_patch(PolygonPatch(poly, color='#f1a340', alpha=0.5))
-
         cu = gpd.GeoDataFrame.from_file(cu_filepath)
-        for i in range(len(cu)):
-            poly = cu.geometry[i]
-            self.plot.axes.add_patch(PolygonPatch(poly, color='#998ec3', alpha=0.5, label='Connectivity Shapefile'))
 
-        self.plot.axes.axis('scaled')
-        self.plot.axes.plot()
+        bufferwidth = 1
+        lonmin = min([pu.total_bounds[0], cu.total_bounds[0]]) - bufferwidth
+        lonmax = min([pu.total_bounds[2], cu.total_bounds[2]]) + bufferwidth
+        latmin = min([pu.total_bounds[1], cu.total_bounds[1]]) - bufferwidth
+        latmax = min([pu.total_bounds[3], cu.total_bounds[3]]) + bufferwidth
+
+        self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
+                                resolution='i', projection='tmerc', lat_0=(latmin+latmax)/2, lon_0=(lonmin+lonmax)/2)
 
 
+        self.plot.map.drawmapboundary(fill_color='lightskyblue')
+        self.plot.map.fillcontinents(color='#ddaa66', lake_color='lightskyblue')
+        self.plot.map.drawcoastlines()
+
+        patches = []
+        for poly in pu.geometry:
+            mpoly = shapely.ops.transform(self.plot.map, poly)
+            patches.append(PolygonPatch(mpoly))
+
+        self.plot.axes.add_collection(PatchCollection(patches, match_original=True, color='#f1a340', alpha=0.5))
+
+        patches = []
+        for poly in cu.geometry:
+            mpoly = shapely.ops.transform(self.plot.map, poly)
+            patches.append(PolygonPatch(mpoly))
+
+        self.plot.axes.add_collection(PatchCollection(patches, match_original=True, color='#998ec3', alpha=0.5))
+
+
+        
     def on_PU_file( self, event ):
         self.pu_filepath = self.PU_file.GetPath()
         print(self.pu_filepath)
