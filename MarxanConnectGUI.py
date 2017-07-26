@@ -26,7 +26,7 @@ sys.path.append('../MarxanConnectPy/')
 import marxanconpy
 
 # define current working directory
-cwd = os.path.dirname(__file__)
+cwd = os.getcwd()
 
 
 #inherit from the MainFrame created in wxFowmBuilder and create CalcFrame
@@ -75,7 +75,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         pu = gpd.GeoDataFrame.from_file(pu_filepath)
         cu = gpd.GeoDataFrame.from_file(cu_filepath)
 
-        lonmin, lonmax, latmin, latmax = buffer_shp_corners([pu,cu],1)
+        lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],1)
 
         # bufferwidth = 1
         # lonmin = min([pu.total_bounds[0], cu.total_bounds[0]]) - bufferwidth
