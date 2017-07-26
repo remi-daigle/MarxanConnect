@@ -11,17 +11,23 @@ from matplotlib.collections import PatchCollection
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
-
-
+# import spatial modules
 import geopandas as gpd
 from descartes import PolygonPatch
 import shapely
 
+#import system helper modules
+import os
 import sys
+
+# import MarxanConnectPy from https://github.com/remi-daigle/MarxanConnectPy
+# MarxanConnectPy and MarxanConnectGUI must be in the same folder (i.e. Github/MarxanConnectPy/ and Github/MarxanConnectGUI/)
 sys.path.append('../MarxanConnectPy/')
 import marxanconpy
 
-import os
+# define current working directory
+cwd = os.path.dirname(__file__)
+
 
 #inherit from the MainFrame created in wxFowmBuilder and create CalcFrame
 class MarxanConnectGUI(gui.MarxanConnectGUI):
@@ -32,7 +38,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
-                icon = wx.Icon('C:/Users/Remi-Work/Desktop/MarxanConnectGUI/icon_bundle.ico', wx.BITMAP_TYPE_ICO, desiredWidth=sz, desiredHeight=sz) 
+                icon = wx.Icon(os.path.join(cwd,'icon_bundle.ico'), wx.BITMAP_TYPE_ICO, desiredWidth=sz, desiredHeight=sz)
                 icons.AddIcon(icon) 
             except: 
                 pass 
@@ -40,9 +46,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # set default file paths
 
-        self.pu_filepath = self.PU_file.GetPath()
-        self.cu_filepath = self.CU_file.GetPath()
-        self.cm_filepath = self.CM_file.GetPath()
+        if(os.path.isdir(os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect"))):
+            pfdir = os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect")
+        else:
+            pfdir = os.path.join(os.environ['ProgramFiles'], "MarxanConnect")
+
+        self.pu_filepath = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
+        self.cu_filepath = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
+        self.cm_filepath = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
         self.pucm_filename = self.PUCM_filename.GetLabelText()
         self.pucm_filepath = os.path.join(os.environ['USERPROFILE'], "My Documents")
 
@@ -64,11 +75,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         pu = gpd.GeoDataFrame.from_file(pu_filepath)
         cu = gpd.GeoDataFrame.from_file(cu_filepath)
 
-        bufferwidth = 1
-        lonmin = min([pu.total_bounds[0], cu.total_bounds[0]]) - bufferwidth
-        lonmax = min([pu.total_bounds[2], cu.total_bounds[2]]) + bufferwidth
-        latmin = min([pu.total_bounds[1], cu.total_bounds[1]]) - bufferwidth
-        latmax = min([pu.total_bounds[3], cu.total_bounds[3]]) + bufferwidth
+        lonmin, lonmax, latmin, latmax = buffer_shp_corners([pu,cu],1)
+
+        # bufferwidth = 1
+        # lonmin = min([pu.total_bounds[0], cu.total_bounds[0]]) - bufferwidth
+        # lonmax = min([pu.total_bounds[2], cu.total_bounds[2]]) + bufferwidth
+        # latmin = min([pu.total_bounds[1], cu.total_bounds[1]]) - bufferwidth
+        # latmax = min([pu.total_bounds[3], cu.total_bounds[3]]) + bufferwidth
 
         self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
                                 resolution='i', projection='tmerc', lat_0=(latmin+latmax)/2, lon_0=(lonmin+lonmax)/2)

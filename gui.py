@@ -109,7 +109,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		sizer1.Add( self.PU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.PU_file = wx.FilePickerCtrl( self.demographicInput1, wx.ID_ANY, u"C:\\Program Files (x86)\\MarxanConnect\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.PU_file = wx.FilePickerCtrl( self.demographicInput1, wx.ID_ANY, u"~\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		sizer1.Add( self.PU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -145,7 +145,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		sizer4.Add( self.CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.CU_file = wx.FilePickerCtrl( self.demographicInput1, wx.ID_ANY, u"C:\\Program Files (x86)\\MarxanConnect\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.CU_file = wx.FilePickerCtrl( self.demographicInput1, wx.ID_ANY, u"~\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		sizer4.Add( self.CU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -187,7 +187,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.CM_filetext.Wrap( -1 )
 		sizer7.Add( self.CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.CM_file = wx.FilePickerCtrl( self.demographicInput1, wx.ID_ANY, u"C:\\Program Files (x86)\\MarxanConnect\\data\\grid_connectivity_matrix.csv", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.CM_file = wx.FilePickerCtrl( self.demographicInput1, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		sizer7.Add( self.CM_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -227,7 +227,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		sizer10.Add( self.PUCM_filedirtext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.PUCM_filedir = wx.DirPickerCtrl( self.demographicInput1, wx.ID_ANY, u"%userprofile%\\documents", u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
+		self.PUCM_filedir = wx.DirPickerCtrl( self.demographicInput1, wx.ID_ANY, u"~\\documents", u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
 		sizer10.Add( self.PUCM_filedir, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		self.PUCM_filetext = wx.StaticText( self.demographicInput1, wx.ID_ANY, u"Output Filename", wx.DefaultPosition, wx.DefaultSize, 0 )
