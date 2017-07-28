@@ -1,5 +1,6 @@
 #importing wx files
 import wx
+import wx.lib.agw.aui as aui
 
 #import the newly created GUI file
 import gui
@@ -59,6 +60,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cm_filepath = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
         self.pucm_filename = self.PUCM_filename.GetLabelText()
         self.pucm_filedir = os.path.join(os.environ['USERPROFILE'], "My Documents")
+
+
 
     def on_plot_map_button(self, event):
         if not hasattr(self, 'plot'):

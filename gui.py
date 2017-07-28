@@ -11,15 +11,6 @@ import wx
 import wx.xrc
 import wx.aui
 
-ID_GETTING_STARTED = 1000
-ID_DEMOGRAPHIC_INPUT = 1001
-ID_GENETIC_INPUT = 1002
-ID_LANDSCAPE_INPUT = 1003
-ID_CONNECTIVITY_METRICS = 1004
-ID_MARXAN_ANALYSIS = 1005
-ID_POSTMARXAN_EVALUATION = 1006
-ID_PLOT_OPTIONS = 1007
-
 ###########################################################################
 ## Class MarxanConnectGUI
 ###########################################################################
@@ -44,40 +35,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.m_menubar1.Append( self.m_menu2, u"File" ) 
 		
-		self.m_menu1 = wx.Menu()
-		self.mgettingStarted = wx.MenuItem( self.m_menu1, ID_GETTING_STARTED, u"Getting Started", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mgettingStarted )
-		
-		self.mdemographicInput = wx.MenuItem( self.m_menu1, ID_DEMOGRAPHIC_INPUT, u"Demographic Input", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mdemographicInput )
-		self.mdemographicInput.Check( True )
-		
-		self.mgeneticInput = wx.MenuItem( self.m_menu1, ID_GENETIC_INPUT, u"Genetic Input", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mgeneticInput )
-		self.mgeneticInput.Check( True )
-		
-		self.mlandscapeInput = wx.MenuItem( self.m_menu1, ID_LANDSCAPE_INPUT, u"Landscape Input", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mlandscapeInput )
-		self.mlandscapeInput.Check( True )
-		
-		self.mconnectivityMetrics = wx.MenuItem( self.m_menu1, ID_CONNECTIVITY_METRICS, u"Connectivity Metrics", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mconnectivityMetrics )
-		self.mconnectivityMetrics.Check( True )
-		
-		self.mmarxanAnalysis = wx.MenuItem( self.m_menu1, ID_MARXAN_ANALYSIS, u"Marxan Analysis", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mmarxanAnalysis )
-		self.mmarxanAnalysis.Check( True )
-		
-		self.mpostmarxanEvaluation = wx.MenuItem( self.m_menu1, ID_POSTMARXAN_EVALUATION, u"Post-Marxan Evaluation", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mpostmarxanEvaluation )
-		self.mpostmarxanEvaluation.Check( True )
-		
-		self.mplotOptions = wx.MenuItem( self.m_menu1, ID_PLOT_OPTIONS, u"Plot Options", wx.EmptyString, wx.ITEM_CHECK )
-		self.m_menu1.Append( self.mplotOptions )
-		self.mplotOptions.Check( True )
-		
-		self.m_menubar1.Append( self.m_menu1, u"View" ) 
-		
 		self.m_menu3 = wx.Menu()
 		self.m_menubar1.Append( self.m_menu3, u"Help" ) 
 		
@@ -85,9 +42,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_auinotebook1 = wx.aui.AuiNotebook( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.aui.AUI_NB_DEFAULT_STYLE )
+		self.m_auinotebook1 = wx.aui.AuiNotebook( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.aui.AUI_NB_TAB_EXTERNAL_MOVE|wx.aui.AUI_NB_TAB_MOVE|wx.aui.AUI_NB_TAB_SPLIT|wx.aui.AUI_NB_TOP|wx.aui.AUI_NB_WINDOWLIST_BUTTON )
 		self.gettingStarted = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.m_auinotebook1.AddPage( self.gettingStarted, u"Getting Started", False, wx.NullBitmap )
+		self.gettingStarted.Enable( False )
+		self.gettingStarted.Hide()
+		
+		self.m_auinotebook1.AddPage( self.gettingStarted, u"Getting Started", True, wx.NullBitmap )
 		self.demographicInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		demoMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		demoMainSizer.AddGrowableCol( 0 )
@@ -491,7 +451,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( demoMainSizer1 )
 		self.plottingOptions.Layout()
 		demoMainSizer1.Fit( self.plottingOptions )
-		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", True, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", False, wx.NullBitmap )
 		
 		bSizer3.Add( self.m_auinotebook1, 1, wx.EXPAND, 5 )
 		
