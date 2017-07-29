@@ -3,7 +3,7 @@ Marxan with Connectivity (Graphical User Interface)
 
 ## Installation
 ### Windows Installer:
-Please download the [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnectGUI/raw/master/MarxanConnectSetupWindows.exe) file to the desired directory and run it! (**WARNING! MarxanConnectGUI is 'pre-beta' and is not yet fully operational, download at your own risk**)
+Please download the [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnectGUI/releases/download/0.0.0/MarxanConnectSetupWindows.exe) file to the desired directory and run it! (**WARNING! MarxanConnectGUI is 'pre-beta' and is not yet fully operational, download at your own risk**)
 
 ### Build from source:
 Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (#Please note, I could not build the repository using Anaconda). It also assumes you have all the pre-requisite python modules installed, i.e.:
