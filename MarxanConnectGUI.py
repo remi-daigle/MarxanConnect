@@ -23,6 +23,7 @@ import sys
 import pandas
 import numpy
 import networkx as nx
+import threading
 
 # import MarxanConnectPy from https://github.com/remi-daigle/MarxanConnectPy
 # MarxanConnectPy and MarxanConnectGUI must be in the same folder (i.e. Github/MarxanConnectPy/ and Github/MarxanConnectGUI/)
@@ -75,6 +76,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
         self.draw_shapefiles(pu_filepath=self.pu_filepath, cu_filepath=self.cu_filepath)
+        for i in range(self.m_auinotebook1.GetPageCount()):
+            if self.m_auinotebook1.GetPageText(i) == "Plot":
+                self.m_auinotebook1.ChangeSelection(i)
 
     def on_plot_graph_button(self, event):
         if not hasattr(self, 'plot'):
@@ -88,6 +92,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
         self.on_draw_graph(pucm_filedir=self.pucm_filedir, pucm_filename=self.pucm_filename)
+        for i in range(self.m_auinotebook1.GetPageCount()):
+            if self.m_auinotebook1.GetPageText(i) == "Plot":
+                self.m_auinotebook1.ChangeSelection(i)
 
     def draw_shapefiles(self, pu_filepath, cu_filepath):
         pu = gpd.GeoDataFrame.from_file(pu_filepath)
@@ -175,7 +182,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_rescale_button(self, event):
         print(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filedir, self.pucm_filename)
-        marxanconpy.rescale_matrix(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filedir, self.pucm_filename)
+        threading.Thread(marxanconpy.rescale_matrix(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filedir, self.pucm_filename)).start()
+
         print("rescaling!")
 
     def on_calc_metrics(self, event):
