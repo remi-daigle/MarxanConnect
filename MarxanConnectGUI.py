@@ -75,7 +75,50 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
-        self.draw_shapefiles(pu_filepath=self.pu_filepath, cu_filepath=self.cu_filepath)
+        
+        pu = gpd.GeoDataFrame.from_file(self.pu_filepath)
+        cu = gpd.GeoDataFrame.from_file(self.cu_filepath)
+        
+        
+        lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],1)
+
+
+        self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
+                                resolution='i', projection='tmerc', lat_0=(latmin+latmax)/2, lon_0=(lonmin+lonmax)/2)
+
+        #plot basemap
+        if(self.bmap_plot_check.GetValue()):
+            self.plot.map.drawmapboundary(fill_color=tuple(c/255 for c in self.bmap_oceancol.GetColour()))
+            self.plot.map.fillcontinents(color=tuple(c/255 for c in self.bmap_landcol.GetColour()), lake_color=tuple(c/255 for c in self.bmap_lakecol.GetColour()))
+            self.plot.map.drawcoastlines()
+        else:
+            self.plot.map.drawmapboundary(fill_color='white')
+        
+        #plot first layer
+        if(self.lyr1_plot_check.GetValue()):
+            if(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==0):
+                self.draw_shapefiles(sf = pu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.pu_metric_lowcol.GetColour(), hicol = self.pu_metric_hicol.GetColour(), trans = self.pu_poly_alpha.GetValue()/100)
+            elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==1):
+                #metric = self.cu_metric_choice.GetCurrentSelection()
+                self.draw_shapefiles(sf = cu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.cu_metric_lowcol.GetColour(), hicol = self.cu_metric_hicol.GetColour(), trans = self.cu_poly_alpha.GetValue()/100)
+            elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==2):
+                self.draw_shapefiles(sf = pu, colour = self.pu_poly_col.GetColour(), trans = self.pu_poly_alpha.GetValue()/100)
+            else:
+                self.draw_shapefiles(sf = cu, colour = self.cu_poly_col.GetColour(), trans = self.cu_poly_alpha.GetValue()/100)
+        
+        #plot second layer
+        if(self.lyr2_plot_check.GetValue()):
+            if(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==0):
+                self.draw_shapefiles(sf = pu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.pu_metric_lowcol1.GetColour(), hicol = self.pu_metric_hicol1.GetColour(), trans = self.pu_poly_alpha1.GetValue()/100)
+            elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==1):
+                #metric = self.cu_metric_choice.GetCurrentSelection()
+                self.draw_shapefiles(sf = cu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.cu_metric_lowcol1.GetColour(), hicol = self.cu_metric_hicol1.GetColour(), trans = self.cu_poly_alpha1.GetValue()/100)
+            elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==2):
+                self.draw_shapefiles(sf = pu, colour = self.pu_poly_col1.GetColour(), trans = self.pu_poly_alpha1.GetValue()/100)
+            else:
+                self.draw_shapefiles(sf = cu, colour = self.cu_poly_col1.GetColour(), trans = self.cu_poly_alpha1.GetValue()/100)
+        
+        #change selection to plot tab
         for i in range(self.m_auinotebook1.GetPageCount()):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
@@ -96,50 +139,48 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
 
-    def draw_shapefiles(self, pu_filepath, cu_filepath):
-        pu = gpd.GeoDataFrame.from_file(pu_filepath)
-        cu = gpd.GeoDataFrame.from_file(cu_filepath)
+    def draw_shapefiles(self, sf, colour = None, trans = 0.5, metric = None, lowcol = None, hicol = None):
+        print(lowcol)
+        if(metric==None):
+            patches = []
+            colour=tuple(c/255 for c in tuple(c/255 for c in colour))
+            for poly in sf.geometry:
+                mpoly = shapely.ops.transform(self.plot.map, poly)
+                patches.append(PolygonPatch(mpoly))
+            self.plot.axes.add_collection(PatchCollection(patches, match_original=True, color=colour, alpha=trans))
+        else:
+            patches = []
+            #define colormap
+            c1=tuple(c/255 for c in lowcol)
+            c2=tuple(c/255 for c in hicol)
+            
+            seq = [(None,) * 4, 0.0] + list((c1,c2)) + [1.0, (None,) * 4]
+            cdict = {'red': [], 'green': [], 'blue': []}
+            for i, item in enumerate(seq):
+                if isinstance(item, float):
+                    r1, g1, b1, a = seq[i - 1]
+                    r2, g2, b2, a = seq[i + 1]
+                    cdict['red'].append([item, r1, r2])
+                    cdict['green'].append([item, g1, g2])
+                    cdict['blue'].append([item, b1, b2])
+            cmap = matplotlib.colors.LinearSegmentedColormap('CustomMap', cdict)
+                    
+            #cmap = matplotlib.cm.get_cmap('OrRd')
+            norm = matplotlib.colors.Normalize(min(metric), max(metric))
+            bins = numpy.linspace(min(metric), max(metric), 10)
+            color_producer = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
+            for poly, evc in zip(sf.geometry, metric):
+                rgba = color_producer.to_rgba(evc)
+                mpoly = shapely.ops.transform(self.plot.map, poly)
+                patches.append(PolygonPatch(mpoly,color=rgba))
+    
+            self.plot.axes.add_collection(PatchCollection(patches, match_original=True, alpha=trans))
+            self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.15, 0.2, 0.04], zorder=3)
+            self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend, cmap=cmap, ticks=bins, boundaries=bins, orientation='horizontal')
+            self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
 
-        lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],1)
 
-        # bufferwidth = 1
-        # lonmin = min([pu.total_bounds[0], cu.total_bounds[0]]) - bufferwidth
-        # lonmax = min([pu.total_bounds[2], cu.total_bounds[2]]) + bufferwidth
-        # latmin = min([pu.total_bounds[1], cu.total_bounds[1]]) - bufferwidth
-        # latmax = min([pu.total_bounds[3], cu.total_bounds[3]]) + bufferwidth
-
-        self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
-                                resolution='i', projection='tmerc', lat_0=(latmin+latmax)/2, lon_0=(lonmin+lonmax)/2)
-
-
-        self.plot.map.drawmapboundary(fill_color='lightskyblue')
-        self.plot.map.fillcontinents(color='#ddaa66', lake_color='lightskyblue')
-        self.plot.map.drawcoastlines()
-
-
-        patches = []
-        cmap = matplotlib.cm.get_cmap('OrRd')
-        norm = matplotlib.colors.Normalize(min(self.connectivityMetrics.eigvectcent), max(self.connectivityMetrics.eigvectcent))
-        bins = numpy.linspace(min(self.connectivityMetrics.eigvectcent), max(self.connectivityMetrics.eigvectcent), 10)
-        color_producer = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
-        for poly, evc in zip(pu.geometry, self.connectivityMetrics.eigvectcent):
-            rgba = color_producer.to_rgba(evc)
-            mpoly = shapely.ops.transform(self.plot.map, poly)
-            patches.append(PolygonPatch(mpoly,color=rgba))
-
-        # self.plot.axes.add_collection(PatchCollection(patches, match_original=True, color='#f1a340', alpha=0.5))
-        self.plot.axes.add_collection(PatchCollection(patches, match_original=True, alpha=0.9))
-        self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.15, 0.2, 0.04], zorder=3)
-        self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend, cmap=cmap, ticks=bins, boundaries=bins, orientation='horizontal')
-        self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
-
-
-        patches = []
-        for poly in cu.geometry:
-            mpoly = shapely.ops.transform(self.plot.map, poly)
-            patches.append(PolygonPatch(mpoly))
-
-        self.plot.axes.add_collection(PatchCollection(patches, match_original=True, color='#998ec3', alpha=0.5))
+        
 
     def on_draw_graph(self,pucm_filedir, pucm_filename):
         pucm_filepath = os.path.join(pucm_filedir, pucm_filename)
@@ -204,6 +245,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.connectivityMetrics.conmat = pandas.read_csv(os.path.join(self.pucm_filedir, self.pucm_filename))
             self.connectivityMetrics.boundary_dat = self.connectivityMetrics.conmat.melt(id_vars=['puID'])
             self.connectivityMetrics.boundary_dat.columns = ['id1', 'id2', 'boundary']
+            
+    def testcolourbox(self, event):
+        print(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection())
 
 app = wx.App(False)
  
