@@ -15,6 +15,8 @@ import matplotlib
 import matplotlib.basemap
 import geopandas
 import descartes
+import igraph # from 'pip install python-igraph', not just igraph)
+import networkx
 
 # for compiling executable
 import cx_Freeze
