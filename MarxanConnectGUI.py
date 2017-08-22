@@ -59,7 +59,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.pu_filepath = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
         self.cu_filepath = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
         self.cm_filepath = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
-        self.pucm_filename = self.PUCM_filename.GetLabelText()
+        self.pucm_filename = self.PUCM_filename.GetValue()
         self.pucm_filedir = os.path.join(os.environ['USERPROFILE'], "My Documents")
 
 
@@ -79,8 +79,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         pu = gpd.GeoDataFrame.from_file(self.pu_filepath)
         cu = gpd.GeoDataFrame.from_file(self.cu_filepath)
         
-        
-        lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],1)
+        lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],float(self.bmap_buffer.GetValue()))
 
 
         self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
@@ -97,10 +96,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         #plot first layer
         if(self.lyr1_plot_check.GetValue()):
             if(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==0):
-                self.draw_shapefiles(sf = pu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.pu_metric_lowcol.GetColour(), hicol = self.pu_metric_hicol.GetColour(), trans = self.pu_poly_alpha.GetValue()/100)
+                metric = self.get_metric(type = 'pu')
+                self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol.GetColour(), hicol = self.pu_metric_hicol.GetColour(), trans = self.pu_metric_alpha.GetValue()/100, legend = self.pu_metric_legend.GetCurrentSelection())
             elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==1):
-                #metric = self.cu_metric_choice.GetCurrentSelection()
-                self.draw_shapefiles(sf = cu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.cu_metric_lowcol.GetColour(), hicol = self.cu_metric_hicol.GetColour(), trans = self.cu_poly_alpha.GetValue()/100)
+                metric = self.get_metric(type = 'cu')
+                self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol.GetColour(), hicol = self.cu_metric_hicol.GetColour(), trans = self.cu_metric_alpha.GetValue()/100, legend = self.cu_metric_legend.GetCurrentSelection())
             elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==2):
                 self.draw_shapefiles(sf = pu, colour = self.pu_poly_col.GetColour(), trans = self.pu_poly_alpha.GetValue()/100)
             else:
@@ -109,10 +109,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         #plot second layer
         if(self.lyr2_plot_check.GetValue()):
             if(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==0):
-                self.draw_shapefiles(sf = pu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.pu_metric_lowcol1.GetColour(), hicol = self.pu_metric_hicol1.GetColour(), trans = self.pu_poly_alpha1.GetValue()/100)
+                metric = self.get_metric(type = 'pu')
+                self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol1.GetColour(), hicol = self.pu_metric_hicol1.GetColour(), trans = self.pu_metric_alpha1.GetValue()/100, legend = self.pu_metric_legend1.GetCurrentSelection())
             elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==1):
-                #metric = self.cu_metric_choice.GetCurrentSelection()
-                self.draw_shapefiles(sf = cu, metric = self.connectivityMetrics.eigvectcent,lowcol = self.cu_metric_lowcol1.GetColour(), hicol = self.cu_metric_hicol1.GetColour(), trans = self.cu_poly_alpha1.GetValue()/100)
+                metric = self.get_metric(type = 'cu')
+                self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol1.GetColour(), hicol = self.cu_metric_hicol1.GetColour(), trans = self.cu_metric_alpha1.GetValue()/100, legend = self.cu_metric_legend1.GetCurrentSelection())
             elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==2):
                 self.draw_shapefiles(sf = pu, colour = self.pu_poly_col1.GetColour(), trans = self.pu_poly_alpha1.GetValue()/100)
             else:
@@ -139,8 +140,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
 
-    def draw_shapefiles(self, sf, colour = None, trans = 0.5, metric = None, lowcol = None, hicol = None):
-        print(lowcol)
+    def draw_shapefiles(self, sf, colour = None, trans = None, metric = None, lowcol = None, hicol = None, legend = None):
         if(metric==None):
             patches = []
             colour=tuple(c/255 for c in tuple(c/255 for c in colour))
@@ -165,7 +165,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     cdict['blue'].append([item, b1, b2])
             cmap = matplotlib.colors.LinearSegmentedColormap('CustomMap', cdict)
                     
-            #cmap = matplotlib.cm.get_cmap('OrRd')
             norm = matplotlib.colors.Normalize(min(metric), max(metric))
             bins = numpy.linspace(min(metric), max(metric), 10)
             color_producer = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
@@ -175,9 +174,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 patches.append(PolygonPatch(mpoly,color=rgba))
     
             self.plot.axes.add_collection(PatchCollection(patches, match_original=True, alpha=trans))
-            self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.15, 0.2, 0.04], zorder=3)
-            self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend, cmap=cmap, ticks=bins, boundaries=bins, orientation='horizontal')
-            self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
+            if(legend==0):
+                self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.8, 0.2, 0.04], zorder=3)
+                self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend, cmap=cmap, ticks=bins, boundaries=bins, orientation='horizontal')
+                self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
+            elif(legend==1):
+                self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.15, 0.2, 0.04], zorder=3)
+                self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend, cmap=cmap, ticks=bins, boundaries=bins, orientation='horizontal')
+                self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
+                
 
 
         
@@ -191,9 +196,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         nx.draw_networkx(g1,with_labels=True,edge_color='lightgray')
 
         
-    def on_PU_file( self, event ):
+    def on_PU_file(self, event):
         self.pu_filepath = self.PU_file.GetPath()
-        print(self.pu_filepath)
 
     def on_rescaleRadioBox(self, event):
         if(self.CU_def.Hide()==True):
@@ -207,48 +211,70 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_CU_file(self, event):
         self.cu_filepath=self.CU_file.GetPath()
-        print(self.cu_filepath)
 
-    def on_CM_file( self, event ):
+    def on_CM_file(self, event ):
         self.cm_filepath = self.CM_file.GetPath()
-        print(self.cm_filepath)
 
     def on_PUCM_filedir(self, event):
         self.pucm_filedir=self.PUCM_filedir.GetPath()
-        print(self.pucm_filedir)
 
     def on_PUCM_filenameTextEnter(self, event):
         self.pucm_filename = self.PUCM_filenameTextEnter.GetPath()
-        print(self.pucm_filename)
 
     def on_rescale_button(self, event):
-        print(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filedir, self.pucm_filename)
         threading.Thread(marxanconpy.rescale_matrix(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filedir, self.pucm_filename)).start()
 
-        print("rescaling!")
 
     def on_calc_metrics(self, event):
-        self.pucm_filepath = os.path.join(self.pucm_filedir, self.pucm_filename)
-        if self.ct_demo_vertex_degree.GetValue():
-            self.connectivityMetrics.vertexdegree = marxanconpy.conmat2vertexdegree(self.pucm_filepath)
+        # choose matrix
+        if(self.calc_metrics_type.GetCurrentSelection()==0):
+            self.calc_filepath = os.path.join(self.pucm_filedir, self.pucm_filename)
+            type='pu'
+        elif(self.calc_metrics_type.GetCurrentSelection()==1):
+            self.calc_filepath = self.cm_filepath
+            type='cu'
+            
+        #calculate
+        if(self.ct_demo_vertex_degree.GetValue()):
+            setattr(self.connectivityMetrics,'vertexdegree'+type,marxanconpy.conmat2vertexdegree(self.calc_filepath))
 
-        if self.ct_demo_between_cent.GetValue():
-            self.connectivityMetrics.betweencent = marxanconpy.conmat2betweencent(self.pucm_filepath)
+        if(self.ct_demo_between_cent.GetValue()):
+            setattr(self.connectivityMetrics,'betweencent'+type,marxanconpy.conmat2betweencent(self.calc_filepath))
 
-        if self.ct_demo_eig_vect_cent.GetValue():
-            self.connectivityMetrics.eigvectcent = marxanconpy.conmat2eigvectcent(self.pucm_filepath)
+        if(self.ct_demo_eig_vect_cent.GetValue()):
+            setattr(self.connectivityMetrics,'eigvectcent'+type,marxanconpy.conmat2eigvectcent(self.calc_filepath))
 
-        if self.ct_demo_self_recruit.GetValue():
-            self.connectivityMetrics.selfrecruit = marxanconpy.conmat2selfrecruit(self.pucm_filepath)
+        if(self.ct_demo_self_recruit.GetValue()):
+            setattr(self.connectivityMetrics,'selfrecruit'+type,marxanconpy.conmat2selfrecruit(self.calc_filepath))
 
-        if self.bd_demo_conn_boundary.GetValue():
-            self.connectivityMetrics.conmat = pandas.read_csv(os.path.join(self.pucm_filedir, self.pucm_filename))
+        if(self.bd_demo_conn_boundary.GetValue()):
+            self.connectivityMetrics.conmat = pandas.read_csv(self.calc_filepath)
             self.connectivityMetrics.boundary_dat = self.connectivityMetrics.conmat.melt(id_vars=['puID'])
             self.connectivityMetrics.boundary_dat.columns = ['id1', 'id2', 'boundary']
             
-    def testcolourbox(self, event):
-        print(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection())
+        
+    
+    def get_metric(self, type):
+        #choose metric
+        if(type=='pu'):
+            metricindex = self.pu_metric_choice.GetCurrentSelection()
+        elif(type=='cu'):
+            metricindex = self.cu_metric_choice.GetCurrentSelection()
 
+        #get metric
+        if(metricindex==0):
+            metric = getattr(self.connectivityMetrics,'vertexdegree'+type)
+        elif(metricindex==1):
+            metric = getattr(self.connectivityMetrics,'betweencent'+type)
+        elif(metricindex==2):
+            metric = getattr(self.connectivityMetrics,'eigvectcent'+type)
+        elif(metricindex==3):
+            metric = getattr(self.connectivityMetrics,'selfrecruit'+type)
+            
+        return(metric)
+
+
+###############################################################################################################################
 app = wx.App(False)
  
 #create an object of CalcFrame
@@ -257,5 +283,3 @@ frame = MarxanConnectGUI(None)
 frame.Show(True)
 #start the applications
 app.MainLoop()
-
-#make; echo "testing exemake"; ./dist/MarxanConnectGUI/MarxanConnectGUI.exe

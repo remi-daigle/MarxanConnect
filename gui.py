@@ -259,11 +259,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		bSizer9.Add( self.demo_ct, 0, wx.ALL, 5 )
 		
 		self.ct_demo_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ct_demo_vertex_degree.SetValue(True) 
 		self.ct_demo_vertex_degree.SetToolTipString( u"The vertex degree indicates the number of connections for each planning unit" )
 		
 		bSizer9.Add( self.ct_demo_vertex_degree, 0, wx.ALL, 5 )
 		
 		self.ct_demo_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ct_demo_between_cent.SetValue(True) 
 		self.ct_demo_between_cent.SetToolTipString( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit" )
 		
 		bSizer9.Add( self.ct_demo_between_cent, 0, wx.ALL, 5 )
@@ -275,6 +277,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		bSizer9.Add( self.ct_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
 		self.ct_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ct_demo_self_recruit.SetValue(True) 
 		self.ct_demo_self_recruit.SetToolTipString( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		bSizer9.Add( self.ct_demo_self_recruit, 0, wx.ALL, 5 )
@@ -366,8 +369,29 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.m_staticline5 = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		fgSizer9.Add( self.m_staticline5, 0, wx.EXPAND |wx.ALL, 5 )
 		
+		fgSizer20 = wx.FlexGridSizer( 0, 4, 0, 0 )
+		fgSizer20.AddGrowableCol( 0 )
+		fgSizer20.SetFlexibleDirection( wx.BOTH )
+		fgSizer20.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.spacertext = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spacertext.Wrap( -1 )
+		fgSizer20.Add( self.spacertext, 0, wx.ALL, 5 )
+		
 		self.calc_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Calculate Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer9.Add( self.calc_metrics, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		fgSizer20.Add( self.calc_metrics, 0, wx.ALL, 5 )
+		
+		self.m_staticText53 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"For:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText53.Wrap( -1 )
+		fgSizer20.Add( self.m_staticText53, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		calc_metrics_typeChoices = [ u"Planning Units", u"Connectivity Units" ]
+		self.calc_metrics_type = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, calc_metrics_typeChoices, 0 )
+		self.calc_metrics_type.SetSelection( 0 )
+		fgSizer20.Add( self.calc_metrics_type, 0, wx.ALL, 5 )
+		
+		
+		fgSizer9.Add( fgSizer20, 1, wx.EXPAND, 5 )
 		
 		
 		self.connectivityMetrics.SetSizer( fgSizer9 )
@@ -381,6 +405,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		demoMainSizer1 = wx.FlexGridSizer( 15, 0, 0, 0 )
 		demoMainSizer1.AddGrowableCol( 0 )
+		demoMainSizer1.AddGrowableRow( 2 )
+		demoMainSizer1.AddGrowableRow( 4 )
+		demoMainSizer1.AddGrowableRow( 6 )
 		demoMainSizer1.AddGrowableRow( 7 )
 		demoMainSizer1.AddGrowableRow( 10 )
 		demoMainSizer1.SetFlexibleDirection( wx.BOTH )
@@ -388,17 +415,26 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.mapoptions = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Map Plotting Options", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.mapoptions.Wrap( -1 )
+		self.mapoptions.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
+		
 		demoMainSizer1.Add( self.mapoptions, 0, wx.ALL, 5 )
+		
+		bSizer22 = wx.BoxSizer( wx.HORIZONTAL )
 		
 		self.bmap_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Basemap:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bmap_txt.Wrap( -1 )
-		demoMainSizer1.Add( self.bmap_txt, 0, wx.ALL, 5 )
+		self.bmap_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
-		bmap_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		bSizer22.Add( self.bmap_txt, 0, wx.ALL, 5 )
 		
 		self.bmap_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot?", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bmap_plot_check.SetValue(True) 
-		bmap_sizer.Add( self.bmap_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		bSizer22.Add( self.bmap_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		
+		demoMainSizer1.Add( bSizer22, 1, wx.EXPAND, 5 )
+		
+		bmap_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
 		fgSizer113 = wx.FlexGridSizer( 0, 4, 0, 0 )
 		fgSizer113.SetFlexibleDirection( wx.BOTH )
@@ -446,19 +482,26 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer1.Add( bmap_sizer, 1, wx.EXPAND, 5 )
 		
+		bSizer19 = wx.BoxSizer( wx.HORIZONTAL )
+		
 		self.lyr1_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"First Layer:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.lyr1_txt.Wrap( -1 )
-		demoMainSizer1.Add( self.lyr1_txt, 0, wx.ALL, 5 )
+		self.lyr1_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
-		lyr1_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		bSizer19.Add( self.lyr1_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		self.lyr1_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot?", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.lyr1_plot_check.SetValue(True) 
-		lyr1_sizer.Add( self.lyr1_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		bSizer19.Add( self.lyr1_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.lyr1_choice = wx.Choicebook( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.CHB_LEFT )
+		
+		demoMainSizer1.Add( bSizer19, 1, wx.EXPAND, 5 )
+		
+		lyr1_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.lyr1_choice = wx.Choicebook( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.CHB_TOP )
 		self.pu_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		fgSizer111 = wx.FlexGridSizer( 0, 4, 0, 0 )
+		fgSizer111 = wx.FlexGridSizer( 2, 5, 0, 0 )
 		fgSizer111.SetFlexibleDirection( wx.BOTH )
 		fgSizer111.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -478,9 +521,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.pu_metric_alpha_txt.Wrap( -1 )
 		fgSizer111.Add( self.pu_metric_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
+		self.pu_metric_legend_txt = wx.StaticText( self.pu_plot_opt, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.pu_metric_legend_txt.Wrap( -1 )
+		fgSizer111.Add( self.pu_metric_legend_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
 		pu_metric_choiceChoices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
 		self.pu_metric_choice = wx.Choice( self.pu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_choiceChoices, 0 )
-		self.pu_metric_choice.SetSelection( 0 )
+		self.pu_metric_choice.SetSelection( 2 )
 		fgSizer111.Add( self.pu_metric_choice, 0, wx.ALL, 5 )
 		
 		self.pu_metric_lowcol = wx.ColourPickerCtrl( self.pu_plot_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
@@ -496,13 +543,18 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.pu_metric_alpha = wx.Slider( self.pu_plot_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
 		fgSizer111.Add( self.pu_metric_alpha, 0, wx.ALL, 5 )
 		
+		pu_metric_legendChoices = [ u"Top", u"Bottom", u"None" ]
+		self.pu_metric_legend = wx.Choice( self.pu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_legendChoices, 0 )
+		self.pu_metric_legend.SetSelection( 1 )
+		fgSizer111.Add( self.pu_metric_legend, 0, wx.ALL, 5 )
+		
 		
 		self.pu_plot_opt.SetSizer( fgSizer111 )
 		self.pu_plot_opt.Layout()
 		fgSizer111.Fit( self.pu_plot_opt )
 		self.lyr1_choice.AddPage( self.pu_plot_opt, u"Planning Units", True )
 		self.cu_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		fgSizer11 = wx.FlexGridSizer( 0, 4, 0, 0 )
+		fgSizer11 = wx.FlexGridSizer( 0, 5, 0, 0 )
 		fgSizer11.SetFlexibleDirection( wx.BOTH )
 		fgSizer11.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -522,6 +574,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cu_metric_alpha_txt.Wrap( -1 )
 		fgSizer11.Add( self.cu_metric_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
+		self.cu_metric_legend_txt = wx.StaticText( self.cu_plot_opt, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cu_metric_legend_txt.Wrap( -1 )
+		fgSizer11.Add( self.cu_metric_legend_txt, 0, wx.ALL, 5 )
+		
 		cu_metric_choiceChoices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
 		self.cu_metric_choice = wx.Choice( self.cu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_choiceChoices, 0 )
 		self.cu_metric_choice.SetSelection( 0 )
@@ -539,6 +595,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cu_metric_alpha = wx.Slider( self.cu_plot_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
 		fgSizer11.Add( self.cu_metric_alpha, 0, wx.ALL, 5 )
+		
+		cu_metric_legendChoices = [ u"Top", u"Bottom", u"None" ]
+		self.cu_metric_legend = wx.Choice( self.cu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_legendChoices, 0 )
+		self.cu_metric_legend.SetSelection( 1 )
+		fgSizer11.Add( self.cu_metric_legend, 0, wx.ALL, 5 )
 		
 		
 		self.cu_plot_opt.SetSizer( fgSizer11 )
@@ -570,7 +631,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.pu_poly_plot_opt.SetSizer( fgSizer1112 )
 		self.pu_poly_plot_opt.Layout()
 		fgSizer1112.Fit( self.pu_poly_plot_opt )
-		self.lyr1_choice.AddPage( self.pu_poly_plot_opt, u"Planing Unit (polygons)", False )
+		self.lyr1_choice.AddPage( self.pu_poly_plot_opt, u"Planning Unit (polygons)", False )
 		self.cu_poly_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer11121 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer11121.SetFlexibleDirection( wx.BOTH )
@@ -602,19 +663,26 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer1.Add( lyr1_sizer, 1, wx.EXPAND, 5 )
 		
+		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
+		
 		self.lyr2_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Second Layer:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.lyr2_txt.Wrap( -1 )
-		demoMainSizer1.Add( self.lyr2_txt, 0, wx.ALL, 5 )
+		self.lyr2_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
-		lyr2_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		bSizer20.Add( self.lyr2_txt, 0, wx.ALL, 5 )
 		
 		self.lyr2_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot?", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.lyr2_plot_check.SetValue(True) 
-		lyr2_sizer.Add( self.lyr2_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		bSizer20.Add( self.lyr2_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.lyr2_choice = wx.Choicebook( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.CHB_LEFT )
+		
+		demoMainSizer1.Add( bSizer20, 1, wx.EXPAND, 5 )
+		
+		lyr2_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.lyr2_choice = wx.Choicebook( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.CHB_TOP )
 		self.pu_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		fgSizer1111 = wx.FlexGridSizer( 0, 4, 0, 0 )
+		fgSizer1111 = wx.FlexGridSizer( 0, 5, 0, 0 )
 		fgSizer1111.SetFlexibleDirection( wx.BOTH )
 		fgSizer1111.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -634,6 +702,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.pu_metric_alpha_txt1.Wrap( -1 )
 		fgSizer1111.Add( self.pu_metric_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
+		self.pu_metric_legend_txt1 = wx.StaticText( self.pu_plot_opt1, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.pu_metric_legend_txt1.Wrap( -1 )
+		fgSizer1111.Add( self.pu_metric_legend_txt1, 0, wx.ALL, 5 )
+		
 		pu_metric_choice1Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
 		self.pu_metric_choice1 = wx.Choice( self.pu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_choice1Choices, 0 )
 		self.pu_metric_choice1.SetSelection( 0 )
@@ -649,8 +721,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fgSizer1111.Add( self.pu_metric_hicol1, 0, wx.ALL, 5 )
 		
-		self.pu_metric_alpha1 = wx.Slider( self.pu_plot_opt1, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		self.pu_metric_alpha1 = wx.Slider( self.pu_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
 		fgSizer1111.Add( self.pu_metric_alpha1, 0, wx.ALL, 5 )
+		
+		pu_metric_legend1Choices = [ u"Top", u"Bottom", u"None" ]
+		self.pu_metric_legend1 = wx.Choice( self.pu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_legend1Choices, 0 )
+		self.pu_metric_legend1.SetSelection( 0 )
+		fgSizer1111.Add( self.pu_metric_legend1, 0, wx.ALL, 5 )
 		
 		
 		self.pu_plot_opt1.SetSizer( fgSizer1111 )
@@ -658,7 +735,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer1111.Fit( self.pu_plot_opt1 )
 		self.lyr2_choice.AddPage( self.pu_plot_opt1, u"Planning Units", False )
 		self.cu_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		fgSizer112 = wx.FlexGridSizer( 0, 4, 0, 0 )
+		fgSizer112 = wx.FlexGridSizer( 0, 5, 0, 0 )
 		fgSizer112.SetFlexibleDirection( wx.BOTH )
 		fgSizer112.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -678,9 +755,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cu_metric_alpha_txt1.Wrap( -1 )
 		fgSizer112.Add( self.cu_metric_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
+		self.cu_metric_legend_txt1 = wx.StaticText( self.cu_plot_opt1, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cu_metric_legend_txt1.Wrap( -1 )
+		fgSizer112.Add( self.cu_metric_legend_txt1, 0, wx.ALL, 5 )
+		
 		cu_metric_choice1Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
 		self.cu_metric_choice1 = wx.Choice( self.cu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_choice1Choices, 0 )
-		self.cu_metric_choice1.SetSelection( 0 )
+		self.cu_metric_choice1.SetSelection( 2 )
 		fgSizer112.Add( self.cu_metric_choice1, 0, wx.ALL, 5 )
 		
 		self.cu_metric_lowcol1 = wx.ColourPickerCtrl( self.cu_plot_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
@@ -693,14 +774,19 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fgSizer112.Add( self.cu_metric_hicol1, 0, wx.ALL, 5 )
 		
-		self.cu_metric_alpha1 = wx.Slider( self.cu_plot_opt1, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		self.cu_metric_alpha1 = wx.Slider( self.cu_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
 		fgSizer112.Add( self.cu_metric_alpha1, 0, wx.ALL, 5 )
+		
+		cu_metric_legend1Choices = [ u"Top", u"Bottom", u"None" ]
+		self.cu_metric_legend1 = wx.Choice( self.cu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_legend1Choices, 0 )
+		self.cu_metric_legend1.SetSelection( 0 )
+		fgSizer112.Add( self.cu_metric_legend1, 0, wx.ALL, 5 )
 		
 		
 		self.cu_plot_opt1.SetSizer( fgSizer112 )
 		self.cu_plot_opt1.Layout()
 		fgSizer112.Fit( self.cu_plot_opt1 )
-		self.lyr2_choice.AddPage( self.cu_plot_opt1, u"Connectivity Units", False )
+		self.lyr2_choice.AddPage( self.cu_plot_opt1, u"Connectivity Units", True )
 		self.pu_poly_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer11122 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer11122.SetFlexibleDirection( wx.BOTH )
@@ -719,14 +805,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fgSizer11122.Add( self.pu_poly_col1, 0, wx.ALL, 5 )
 		
-		self.pu_poly_alpha1 = wx.Slider( self.pu_poly_plot_opt1, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		self.pu_poly_alpha1 = wx.Slider( self.pu_poly_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
 		fgSizer11122.Add( self.pu_poly_alpha1, 0, wx.ALL, 5 )
 		
 		
 		self.pu_poly_plot_opt1.SetSizer( fgSizer11122 )
 		self.pu_poly_plot_opt1.Layout()
 		fgSizer11122.Fit( self.pu_poly_plot_opt1 )
-		self.lyr2_choice.AddPage( self.pu_poly_plot_opt1, u"Planing Unit (polygons)", False )
+		self.lyr2_choice.AddPage( self.pu_poly_plot_opt1, u"Planning Unit (polygons)", False )
 		self.cu_poly_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer111211 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer111211.SetFlexibleDirection( wx.BOTH )
@@ -745,14 +831,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fgSizer111211.Add( self.cu_poly_col1, 0, wx.ALL, 5 )
 		
-		self.cu_poly_alpha1 = wx.Slider( self.cu_poly_plot_opt1, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		self.cu_poly_alpha1 = wx.Slider( self.cu_poly_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
 		fgSizer111211.Add( self.cu_poly_alpha1, 0, wx.ALL, 5 )
 		
 		
 		self.cu_poly_plot_opt1.SetSizer( fgSizer111211 )
 		self.cu_poly_plot_opt1.Layout()
 		fgSizer111211.Fit( self.cu_poly_plot_opt1 )
-		self.lyr2_choice.AddPage( self.cu_poly_plot_opt1, u"Connectivity Unit (polygons)", True )
+		self.lyr2_choice.AddPage( self.cu_poly_plot_opt1, u"Connectivity Unit (polygons)", False )
 		lyr2_sizer.Add( self.lyr2_choice, 1, wx.EXPAND |wx.ALL, 5 )
 		
 		
