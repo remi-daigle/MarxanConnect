@@ -12,7 +12,7 @@ The app also includes be a fully functional python module (in progress) that is 
 
 (**WARNING! MarxanConnectGUI is 'pre-alpha' and is not yet fully operational, download at your own risk**)
 
-Please download the [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnectGUI/releases/download/0.0.0/MarxanConnectSetupWindows.exe) installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the [Building from source](https://github.com/remi-daigle/MarxanConnectGUI#building-from-source) instructions to use the latest bleeding edge version of the app.
+Please download the latest [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnectGUI/releases) installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the [Building from source](https://github.com/remi-daigle/MarxanConnectGUI#building-from-source) instructions to use the latest bleeding edge version of the app.
 
 ### Mac and Linux Installers:
 (in progress)
