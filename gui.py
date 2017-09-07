@@ -163,6 +163,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.CM_filetext = wx.StaticText( self.demographicInput, wx.ID_ANY, u"Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.CM_filetext.Wrap( -1 )
+		self.CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		
 		sizer7.Add( self.CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		self.CM_file = wx.FilePickerCtrl( self.demographicInput, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
@@ -199,23 +201,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		sizer10.SetFlexibleDirection( wx.HORIZONTAL )
 		sizer10.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.PUCM_filedirtext = wx.StaticText( self.demographicInput, wx.ID_ANY, u"Output Directory", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.PUCM_filedirtext.Wrap( -1 )
-		self.PUCM_filedirtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
-		
-		sizer10.Add( self.PUCM_filedirtext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.PUCM_filedir = wx.DirPickerCtrl( self.demographicInput, wx.ID_ANY, u"~\\documents", u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
-		sizer10.Add( self.PUCM_filedir, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		self.PUCM_filetext = wx.StaticText( self.demographicInput, wx.ID_ANY, u"Output Filename", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PUCM_filetext = wx.StaticText( self.demographicInput, wx.ID_ANY, u"Output Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.PUCM_filetext.Wrap( -1 )
 		self.PUCM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		
-		sizer10.Add( self.PUCM_filetext, 0, wx.ALL, 5 )
+		sizer10.Add( self.PUCM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.PUCM_filename = wx.TextCtrl( self.demographicInput, wx.ID_ANY, u"PU_connectivity_matrix.csv", wx.DefaultPosition, wx.DefaultSize, 0 )
-		sizer10.Add( self.PUCM_filename, 0, wx.ALL|wx.EXPAND, 5 )
+		self.PUCM_file = wx.FilePickerCtrl( self.demographicInput, wx.ID_ANY, u"~\\Documents\\PU_connectivity_matrix.csv", u"Select a file", u"\"Comma Seperated Values (*.csv)|*.csv|\" \\n            \"All files (*.*)|*.*\"", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
+		sizer10.Add( self.PUCM_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		demoMainSizer.Add( sizer10, 1, wx.EXPAND, 5 )
@@ -908,8 +901,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.unitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
 		self.matrixRadioBox4.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
 		self.CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CM_file )
-		self.PUCM_filedir.Bind( wx.EVT_DIRPICKER_CHANGED, self.on_PUCM_filedir )
-		self.PUCM_filename.Bind( wx.EVT_TEXT_ENTER, self.on_PUCM_filenameTextEnter )
+		self.PUCM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCM_file )
 		self.rescale_button.Bind( wx.EVT_BUTTON, self.on_rescale_button )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.lyr1_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
@@ -950,10 +942,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_CM_file( self, event ):
 		event.Skip()
 	
-	def on_PUCM_filedir( self, event ):
-		event.Skip()
-	
-	def on_PUCM_filenameTextEnter( self, event ):
+	def on_PUCM_file( self, event ):
 		event.Skip()
 	
 	def on_rescale_button( self, event ):
