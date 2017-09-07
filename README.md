@@ -86,6 +86,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 
 ## Acknowledgments
 
+* Funding for the development of this sotware was provided Canadian Healthy Oceans Network [(CHONe)](https://chone2.ca/) a Natural Sciences and Engineering Research Council of Canada [(NSERC)](http://www.nserc-crsng.gc.ca/index_eng.asp) Strategic Network.
 * This project builds on the existing [Marxan](http://marxan.net/) (Ball et al. 2009) software and would not be possible without the hard work of Ian Ball, Hugh Possingham, and Matt Watts.
 
 ## References
