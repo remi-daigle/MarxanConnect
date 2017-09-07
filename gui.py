@@ -24,13 +24,16 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.m_menubar1 = wx.MenuBar( 0 )
 		self.m_menu2 = wx.Menu()
-		self.new_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"New Project", wx.EmptyString, wx.ITEM_NORMAL )
+		self.new_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"New Project"+ u"\t" + u"Ctrl+N", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu2.Append( self.new_project )
 		
-		self.save_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Save Project", wx.EmptyString, wx.ITEM_NORMAL )
+		self.save_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Save Project"+ u"\t" + u"Ctrl+S", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu2.Append( self.save_project )
 		
-		self.load_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Load Project", wx.EmptyString, wx.ITEM_NORMAL )
+		self.save_project_as = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Save Project As..."+ u"\t" + u"Ctrl+Shift+S", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu2.Append( self.save_project_as )
+		
+		self.load_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Load Project"+ u"\t" + u"Ctrl+L", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu2.Append( self.load_project )
 		
 		self.m_menubar1.Append( self.m_menu2, u"File" ) 
@@ -897,6 +900,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		# Connect Events
 		self.Bind( wx.EVT_MENU, self.on_new_project, id = self.new_project.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_save_project, id = self.save_project.GetId() )
+		self.Bind( wx.EVT_MENU, self.on_save_project_as, id = self.save_project_as.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_load_project, id = self.load_project.GetId() )
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
 		self.rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_rescaleRadioBox )
@@ -922,6 +926,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_save_project( self, event ):
+		event.Skip()
+	
+	def on_save_project_as( self, event ):
 		event.Skip()
 	
 	def on_load_project( self, event ):

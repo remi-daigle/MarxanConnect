@@ -24,15 +24,21 @@ import pandas
 import numpy
 import networkx as nx
 import threading
+import json
+
 
 # import MarxanConnectPy from https://github.com/remi-daigle/MarxanConnectPy
 # MarxanConnectPy and MarxanConnectGUI must be in the same folder (i.e. Github/MarxanConnectPy/ and Github/MarxanConnectGUI/)
 sys.path.append('../MarxanConnectPy/')
 import marxanconpy
 
-# define current working directory
-cwd = os.getcwd()
 
+# define wildcards
+wc_MarCon = "Marxan with Connectivity Project (*.MarCon)|*.MarCon|" \
+            "All files (*.*)|*.*"
+
+wc_csv = "Comma Seperated Values (*.csv)|*.csv|" \
+            "All files (*.*)|*.*"
 
 #inherit from the MainFrame created in wxFowmBuilder and create CalcFrame
 class MarxanConnectGUI(gui.MarxanConnectGUI):
@@ -43,11 +49,28 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
-                icon = wx.Icon(os.path.join(cwd,'icon_bundle.ico'), wx.BITMAP_TYPE_ICO, desiredWidth=sz, desiredHeight=sz)
+                icon = wx.Icon(os.path.join(os.getcwd(),'icon_bundle.ico'), wx.BITMAP_TYPE_ICO, desiredWidth=sz, desiredHeight=sz)
                 icons.AddIcon(icon) 
             except: 
                 pass 
                 self.SetIcons(icons)
+        self.on_new_project(event=None, launch = True)
+                
+    def on_new_project( self, event, launch = False):
+        # create project list to store project specific data
+        self.project = {}
+        self.project['wd'] = os.path.join(os.environ['USERPROFILE'], "My Documents")
+        self.project['projfile'] = 'NewProject.MarCon'
+        if(not launch):
+            dlg = wx.FileDialog(self, "Create a new project file:",style=wx.FD_SAVE,wildcard=wc_MarCon)
+            if dlg.ShowModal() == wx.ID_OK:
+                self.project['projfile'] = dlg.GetPath()
+                self.project['projfilename'] = dlg.GetFilename()
+                self.project['wd'] = dlg.GetDirectory() 
+                with open(self.project['projfile'], 'w') as fp:
+                    json.dump(self.project, fp, indent=4, sort_keys=True)
+                frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
+            dlg.Destroy()
 
         # set default file paths
 
@@ -56,13 +79,51 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             pfdir = os.path.join(os.environ['ProgramFiles'], "MarxanConnect")
 
-        self.pu_filepath = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
-        self.cu_filepath = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
-        self.cm_filepath = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
-        self.pucm_filename = self.PUCM_filename.GetValue()
-        self.pucm_filedir = os.path.join(os.environ['USERPROFILE'], "My Documents")
+        self.project['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
+        self.project['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
+        self.project['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
+        self.project['pucm_filename'] = self.PUCM_filename.GetValue()
+        self.project['pucm_filedir'] = self.project['wd']
+        
+        
+    def on_load_project(self, event):
+        """
+        Create and show the Open FileDialog
+        """
+        dlg = wx.FileDialog(
+            self, message="Choose a file",
+            defaultDir=self.project['wd'], 
+            defaultFile="",
+            wildcard=wc_MarCon,
+            style=wx.FD_OPEN | wx.FD_CHANGE_DIR
+            )
+        if dlg.ShowModal() == wx.ID_OK:
+            self.project['projfile'] = dlg.GetPath()
+            with open(self.project['projfile'], 'r') as fp:
+                self.project=json.loads(fp.read())
+        dlg.Destroy()
+        frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
 
+ 
+    def on_save_project_as(self, event):
+        dlg = wx.FileDialog(
+            self, message="Save file as ...", 
+            defaultDir=self.project['wd'], 
+            defaultFile="", wildcard=wc_MarCon, style=wx.FD_SAVE
+            )
+        if dlg.ShowModal() == wx.ID_OK:
+            self.project['projfile'] = dlg.GetPath()
+            with open(self.project['projfile'], 'w') as fp:
+                json.dump(self.project, fp, indent=4, sort_keys=True)
+        dlg.Destroy()
+        frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
 
+        
+
+	
+    def on_save_project( self, event ):
+        with open(self.project['projfile'], 'w') as fp:
+            json.dump(self.project, fp, indent=4, sort_keys=True)
 
     def on_plot_map_button(self, event):
         if not hasattr(self, 'plot'):
@@ -76,8 +137,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
         
-        pu = gpd.GeoDataFrame.from_file(self.pu_filepath)
-        cu = gpd.GeoDataFrame.from_file(self.cu_filepath)
+        pu = gpd.GeoDataFrame.from_file(self.project.pu_filepath)
+        cu = gpd.GeoDataFrame.from_file(self.project.cu_filepath)
         
         lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],float(self.bmap_buffer.GetValue()))
 
@@ -88,7 +149,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         #plot basemap
         if(self.bmap_plot_check.GetValue()):
             self.plot.map.drawmapboundary(fill_color=tuple(c/255 for c in self.bmap_oceancol.GetColour()))
-            self.plot.map.fillcontinents(color=tuple(c/255 for c in self.bmap_landcol.GetColour()), lake_color=tuple(c/255 for c in self.bmap_lakecol.GetColour()))
+            self.plot.map.fillcontinents(color=tuple(c/255 for c in self.bmap_landcol.GetColour()),
+                                         lake_color=tuple(c/255 for c in self.bmap_lakecol.GetColour()))
             self.plot.map.drawcoastlines()
         else:
             self.plot.map.drawmapboundary(fill_color='white')
@@ -97,10 +159,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if(self.lyr1_plot_check.GetValue()):
             if(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==0):
                 metric = self.get_metric(type = 'pu')
-                self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol.GetColour(), hicol = self.pu_metric_hicol.GetColour(), trans = self.pu_metric_alpha.GetValue()/100, legend = self.pu_metric_legend.GetCurrentSelection())
+                self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol.GetColour(),
+                                     hicol = self.pu_metric_hicol.GetColour(), trans = self.pu_metric_alpha.GetValue()/100, legend = self.pu_metric_legend.GetCurrentSelection())
             elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==1):
                 metric = self.get_metric(type = 'cu')
-                self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol.GetColour(), hicol = self.cu_metric_hicol.GetColour(), trans = self.cu_metric_alpha.GetValue()/100, legend = self.cu_metric_legend.GetCurrentSelection())
+                self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol.GetColour(),
+                                     hicol = self.cu_metric_hicol.GetColour(), trans = self.cu_metric_alpha.GetValue()/100, legend = self.cu_metric_legend.GetCurrentSelection())
             elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==2):
                 self.draw_shapefiles(sf = pu, colour = self.pu_poly_col.GetColour(), trans = self.pu_poly_alpha.GetValue()/100)
             else:
@@ -110,10 +174,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if(self.lyr2_plot_check.GetValue()):
             if(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==0):
                 metric = self.get_metric(type = 'pu')
-                self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol1.GetColour(), hicol = self.pu_metric_hicol1.GetColour(), trans = self.pu_metric_alpha1.GetValue()/100, legend = self.pu_metric_legend1.GetCurrentSelection())
+                self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol1.GetColour(),
+                                     hicol = self.pu_metric_hicol1.GetColour(), trans = self.pu_metric_alpha1.GetValue()/100, legend = self.pu_metric_legend1.GetCurrentSelection())
             elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==1):
                 metric = self.get_metric(type = 'cu')
-                self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol1.GetColour(), hicol = self.cu_metric_hicol1.GetColour(), trans = self.cu_metric_alpha1.GetValue()/100, legend = self.cu_metric_legend1.GetCurrentSelection())
+                self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol1.GetColour(),
+                                     hicol = self.cu_metric_hicol1.GetColour(), trans = self.cu_metric_alpha1.GetValue()/100, legend = self.cu_metric_legend1.GetCurrentSelection())
             elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==2):
                 self.draw_shapefiles(sf = pu, colour = self.pu_poly_col1.GetColour(), trans = self.pu_poly_alpha1.GetValue()/100)
             else:
@@ -135,7 +201,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
-        self.on_draw_graph(pucm_filedir=self.pucm_filedir, pucm_filename=self.pucm_filename)
+        self.on_draw_graph(pucm_filedir=self.project.pucm_filedir, pucm_filename=self.project.pucm_filename)
         for i in range(self.m_auinotebook1.GetPageCount()):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
@@ -197,7 +263,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         
     def on_PU_file(self, event):
-        self.pu_filepath = self.PU_file.GetPath()
+        self.project.pu_filepath = self.PU_file.GetPath()
 
     def on_rescaleRadioBox(self, event):
         if(self.CU_def.Hide()==True):
@@ -210,19 +276,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.CU_file.Show()
 
     def on_CU_file(self, event):
-        self.cu_filepath=self.CU_file.GetPath()
+        self.project.cu_filepath=self.CU_file.GetPath()
 
     def on_CM_file(self, event ):
-        self.cm_filepath = self.CM_file.GetPath()
+        self.project.cm_filepath = self.CM_file.GetPath()
 
     def on_PUCM_filedir(self, event):
-        self.pucm_filedir=self.PUCM_filedir.GetPath()
+        self.project.pucm_filedir=self.PUCM_filedir.GetPath()
 
     def on_PUCM_filenameTextEnter(self, event):
-        self.pucm_filename = self.PUCM_filenameTextEnter.GetPath()
+        self.project.pucm_filename = self.PUCM_filenameTextEnter.GetPath()
 
     def on_rescale_button(self, event):
-        threading.Thread(marxanconpy.rescale_matrix(self.pu_filepath, self.cu_filepath, self.cm_filepath, self.pucm_filedir, self.pucm_filename)).start()
+        threading.Thread(marxanconpy.rescale_matrix(self.project.pu_filepath, self.project.cu_filepath, self.project.cm_filepath, self.project.pucm_filedir, self.project.pucm_filename)).start()
 
 
     def on_calc_metrics(self, event):
