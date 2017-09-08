@@ -29,7 +29,6 @@ import shapely
 
 #import system helper modules
 import os
-import sys
 import pandas
 import numpy
 import networkx as nx
@@ -37,9 +36,7 @@ import threading
 import json
 
 
-# import MarxanConnectPy from https://github.com/remi-daigle/MarxanConnectPy
-# MarxanConnectPy and MarxanConnectGUI must be in the same folder (i.e. Github/MarxanConnectPy/ and Github/MarxanConnectGUI/)
-sys.path.append('../MarxanConnectPy/')
+# import MarxanConnect python module
 import marxanconpy
 
 
@@ -423,3 +420,5 @@ frame = MarxanConnectGUI(None)
 frame.Show(True)
 #start the applications
 app.MainLoop()
+
+app.Destroy()
