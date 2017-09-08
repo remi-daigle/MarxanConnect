@@ -2,7 +2,17 @@
 import wx
 import wx.lib.agw.aui as aui
 
-#import the newly created GUI file
+#import the GUI file after editing out deprecated functions
+# Read in the file
+with open('gui.py', 'r') as file :
+  filedata = file.read()
+
+# Replace the target string
+filedata = filedata.replace('SetToolTipString', 'SetToolTip')
+
+# Write the file out again
+with open('gui.py', 'w') as file:
+  file.write(filedata)
 import gui
 
 #import matplotlib
@@ -40,12 +50,15 @@ wc_MarCon = "Marxan with Connectivity Project (*.MarCon)|*.MarCon|" \
 wc_csv = "Comma Seperated Values (*.csv)|*.csv|" \
             "All files (*.*)|*.*"
 
-#inherit from the MainFrame created in wxFowmBuilder and create CalcFrame
 class MarxanConnectGUI(gui.MarxanConnectGUI):
-    #constructor
+    
     def __init__(self,parent):
-        #initialize parent class
+        """
+        initialize parent class (the entire GUI)
+        """
         gui.MarxanConnectGUI.__init__(self,parent)
+        
+        # set the icon
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
@@ -54,12 +67,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             except: 
                 pass 
                 self.SetIcons(icons)
+        
+        # launch a blank new project
         self.on_new_project(event=None, launch = True)
-                
+    
+###########################  project managment functions ######################        
     def on_new_project( self, event, launch = False):
+        """
+        open a new project and name/save a new project file
+        """
         # create project list to store project specific data
         self.project = {}
         self.project['wd'] = os.path.join(os.environ['USERPROFILE'], "Documents")
+        
         # set default file paths
         if(os.path.isdir(os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect"))):
             pfdir = os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect")
@@ -69,6 +89,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
         self.project['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
         self.project['pucm_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
+        
+        # if called at launch time, no need to ask users to create a new project file right away
         if(not launch):
             dlg = wx.FileDialog(self, "Create a new project file:",style=wx.FD_SAVE,wildcard=wc_MarCon)
             if dlg.ShowModal() == wx.ID_OK:
@@ -78,13 +100,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 with open(self.project['projfile'], 'w') as fp:
                     json.dump(self.project, fp, indent=4, sort_keys=True)
                 frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
-            dlg.Destroy()
-
-        
+            dlg.Destroy()       
         
     def on_load_project(self, event):
         """
-        Create and show the Open FileDialog
+        Create and show the Open FileDialog to load a project
         """
         self.project = {}
         dlg = wx.FileDialog(
@@ -103,6 +123,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
  
     def on_save_project_as(self, event):
+        """
+        Create and show the Open FileDialog to save a project
+        """
         dlg = wx.FileDialog(
             self, message="Save file as ...", 
             defaultDir=self.project['wd'], 
@@ -116,18 +139,30 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 json.dump(self.project, fp, indent=4, sort_keys=True)
         dlg.Destroy()
         frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
-
-        
-
 	
     def on_save_project( self, event ):
+        """
+        save a project, but call 'on_save_project_as' if project file has not previously been defined
+        """
         if 'projfile' in self.project:
             with open(self.project['projfile'], 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
         else:
             self.on_save_project_as(event=None)
 
+###########################  warning functions ################################
+    def Warn(parent, message, caption = 'Warning!'):
+        """
+        Warning
+        """
+        dlg = wx.MessageDialog(parent, message, caption, wx.OK | wx.ICON_WARNING)
+        dlg.Destroy()
+
+###########################  map plotting functions ###########################
     def on_plot_map_button(self, event):
+        """
+        Initiates map plotting. Creates a 'Plot' tab, plots the basemap (if desired) and calls 'draw_shapefiles' to plot up to 2 other shapefiles
+        """
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
             self.m_auinotebook1.AddPage(self.plot, u"Plot", False, wx.NullBitmap)
@@ -192,23 +227,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
 
-    def on_plot_graph_button(self, event):
-        if not hasattr(self, 'plot'):
-            self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-            self.m_auinotebook1.AddPage(self.plot, u"Plot", False, wx.NullBitmap)
-        self.plot.figure = plt.figure()
-        self.plot.axes = self.plot.figure.gca()
-        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
-        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
-        self.plot.SetSizer(self.plot.sizer)
-        self.plot.Fit()
-        self.on_draw_graph(pucm_filedir=self.project['pucm_filedir'], pucm_filename=self.project['pucm_filename'])
-        for i in range(self.m_auinotebook1.GetPageCount()):
-            if self.m_auinotebook1.GetPageText(i) == "Plot":
-                self.m_auinotebook1.ChangeSelection(i)
-
     def draw_shapefiles(self, sf, colour = None, trans = None, metric = None, lowcol = None, hicol = None, legend = None):
+        """
+        Draws the desired shapefile on the plot created by 'on_plot_map_button'
+        """
         if(metric==None):
             patches = []
             colour=tuple(c/255 for c in tuple(c/255 for c in colour))
@@ -252,10 +274,31 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
                 
 
-
+###########################  graph plotting functions #########################
+    def on_plot_graph_button(self, event):
+        """
+        Warning
+        """
+        if not hasattr(self, 'plot'):
+            self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+            self.m_auinotebook1.AddPage(self.plot, u"Plot", False, wx.NullBitmap)
+        self.plot.figure = plt.figure()
+        self.plot.axes = self.plot.figure.gca()
+        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
+        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        self.plot.SetSizer(self.plot.sizer)
+        self.plot.Fit()
+        self.on_draw_graph(pucm_filedir=self.project['pucm_filedir'], pucm_filename=self.project['pucm_filename'])
+        for i in range(self.m_auinotebook1.GetPageCount()):
+            if self.m_auinotebook1.GetPageText(i) == "Plot":
+                self.m_auinotebook1.ChangeSelection(i)
         
 
     def on_draw_graph(self,pucm_filedir, pucm_filename):
+        """
+        Warning
+        """
         pucm_filepath = os.path.join(pucm_filedir, pucm_filename)
         conmat = pandas.read_csv(pucm_filepath, index_col=0)
         g1 = nx.from_numpy_matrix(conmat.as_matrix())
@@ -263,11 +306,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         g1 = nx.relabel_nodes(g1, mapping)
         nx.draw_networkx(g1,with_labels=True,edge_color='lightgray')
 
-        
+###########################  file management functions ########################
     def on_PU_file(self, event):
+        """
+        Defines Planning Unit file path
+        """
         self.project['pu_filepath'] = self.PU_file.GetPath()
 
+    def on_CU_file(self, event):
+        """
+        Defines Connectivity Unit file path
+        """
+        self.project['cu_filepath']=self.CU_file.GetPath()
+
+    def on_CM_file(self, event ):
+        """
+        Defines Connectivity Matrix file path
+        """
+        self.project['cm_filepath'] = self.CM_file.GetPath()
+
+    def on_PUCM_file(self, event):
+        """
+        Defines Planning Unit scaled Connectivity Matrix file path
+        """
+        self.project['pucm_filepath'] = self.PUCM_file.GetPath()
+        
+    def on_FA_file(self, event):
+        """
+        Defines Focus Areas file path
+        """
+        self.project['fa_filepath'] = self.FA_file.GetPath()
+
+###########################  GUI 'wiring' functions ###########################
     def on_rescaleRadioBox(self, event):
+        """
+        Hides unnecessary options if rescaling is not necessary
+        """
         if(self.CU_def.Hide()==True):
             self.CU_def.Hide()
             self.CU_filetext.Hide()
@@ -276,24 +350,20 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.CU_def.Show()
             self.CU_filetext.Show()
             self.CU_file.Show()
-
-    def on_CU_file(self, event):
-        self.project['cu_filepath']=self.CU_file.GetPath()
-
-    def on_CM_file(self, event ):
-        self.project['cm_filepath'] = self.CM_file.GetPath()
-
-    def on_PUCM_file(self, event):
-        self.project['pucm_filepath'] = self.PUCM_file.GetPath()
-        
-    def on_FA_file(self, event):
-        self.project['fa_filepath'] = self.FA_file.GetPath()
-
+            
     def on_rescale_button(self, event):
-        threading.Thread(marxanconpy.rescale_matrix(self.project['pu_filepath'], self.project['cu_filepath'], self.project['cm_filepath'], self.project['pucm_filepath'])).start()
+        """
+        Rescales the connectivity matrix to match the scale of the planning units
+        """
+        threading.Thread(
+                marxanconpy.rescale_matrix(self.project['pu_filepath'], self.project['cu_filepath'], self.project['cm_filepath'], self.project['pucm_filepath'])
+                ).start()
 
-
+###########################  metric related functions #########################
     def on_calc_metrics(self, event):
+        """
+        calculates the selected metrics
+        """
         # choose matrix
         if(self.calc_metrics_type.GetCurrentSelection()==0):
             self.calc_filepath = self.project['pucm_filepath']
@@ -320,9 +390,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.connectivityMetrics.boundary_dat = self.connectivityMetrics.conmat.melt(id_vars=['puID'])
             self.connectivityMetrics.boundary_dat.columns = ['id1', 'id2', 'boundary']
             
-        
-    
     def get_metric(self, type):
+        """
+        returns the pre-calculated metric for plotting
+        """
         #choose metric
         if(type=='pu'):
             metricindex = self.pu_metric_choice.GetCurrentSelection()
@@ -343,6 +414,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 
 ###############################################################################################################################
+###########################  run the GUI ######################################
 app = wx.App(False)
  
 #create an object of CalcFrame
