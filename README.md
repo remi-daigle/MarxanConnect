@@ -10,21 +10,21 @@ The app also includes be a fully functional python module (in progress) that is 
 
 ### Windows Installer:
 
-(**WARNING! MarxanConnectGUI is 'pre-alpha' and is not yet fully operational, download at your own risk**)
+(**WARNING! Marxan with Connectivity is 'pre-alpha' and is not yet fully operational, download at your own risk**)
 
-Please download the latest [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnectGUI/releases) installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the [Building from source](https://github.com/remi-daigle/MarxanConnectGUI#building-from-source) instructions to use the latest bleeding edge version of the app.
+Please download the latest [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnect/releases) installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the [Building from source](https://github.com/remi-daigle/MarxanConnect#building-from-source) instructions to use the latest bleeding edge version of the app.
 
 ### Mac and Linux Installers:
 (in progress)
 
 ## Building from source
 
-Building from source is only necessary if you plan to contribute to the project (see [Contributing](https://github.com/remi-daigle/MarxanConnectGUI/blob/master/README.md#Contributing) section below) or if you want to use the bleeding edge version of the app
+Building from source is only necessary if you plan to contribute to the project (see [Contributing](https://github.com/remi-daigle/MarxanConnect/blob/master/README.md#Contributing) section below) or if you want to use the bleeding edge version of the app
 
 Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (*Please note, I could not build the repository using Anaconda*). 
 
 * Download this repository
-* If necessary, edit the hard coded file paths in [setup.py](https://github.com/remi-daigle/MarxanConnectGUI/blob/master/setup.py) and [Marxan with Connectivity.nsi](https://github.com/remi-daigle/MarxanConnectGUI/blob/master/Marxan%20with%20Connectivity.nsi)
+* If necessary, edit the hard coded file paths in [setup.py](https://github.com/remi-daigle/MarxanConnect/blob/master/setup.py) and [Marxan with Connectivity.nsi](https://github.com/remi-daigle/MarxanConnect/blob/master/Marxan%20with%20Connectivity.nsi)
 * open a terminal or `cmd` window (or git bash) in the project directory and type:
 
 ```
