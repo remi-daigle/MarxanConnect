@@ -44,7 +44,7 @@ import marxanconpy
 wc_MarCon = "Marxan with Connectivity Project (*.MarCon)|*.MarCon|" \
             "All files (*.*)|*.*"
 
-wc_csv = "Comma Seperated Values (*.csv)|*.csv|" \
+wc_csv = "Comma Separated Values (*.csv)|*.csv|" \
             "All files (*.*)|*.*"
 
 class MarxanConnectGUI(gui.MarxanConnectGUI):
@@ -75,28 +75,29 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         # create project list to store project specific data
         self.project = {}
-        self.project['wd'] = os.path.join(os.environ['USERPROFILE'], "Documents")
+        self.project['workingdirectory'] = os.path.join(os.environ['USERPROFILE'], "Documents")
+        self.project['filepaths'] = {}
         
         # set default file paths
         if(os.path.isdir(os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect"))):
             pfdir = os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect")
         else:
             pfdir = os.path.join(os.environ['ProgramFiles'], "MarxanConnect")
-        self.project['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
-        self.project['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
-        self.project['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
-        self.project['pucm_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
+        self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
+        self.project['filepaths']['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
+        self.project['filepaths']['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
+        self.project['filepaths']['pucm_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
         
         # if called at launch time, no need to ask users to create a new project file right away
         if(not launch):
             dlg = wx.FileDialog(self, "Create a new project file:",style=wx.FD_SAVE,wildcard=wc_MarCon)
             if dlg.ShowModal() == wx.ID_OK:
-                self.project['projfile'] = dlg.GetPath()
-                self.project['projfilename'] = dlg.GetFilename()
-                self.project['wd'] = dlg.GetDirectory() 
-                with open(self.project['projfile'], 'w') as fp:
+                self.project['filepaths']['projfile'] = dlg.GetPath()
+                self.project['filepaths']['projfilename'] = dlg.GetFilename()
+                self.project['workingdirectory'] = dlg.GetDirectory() 
+                with open(self.project['filepaths']['projfile'], 'w') as fp:
                     json.dump(self.project, fp, indent=4, sort_keys=True)
-                frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
+                frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
             dlg.Destroy()       
         
     def on_load_project(self, event):
@@ -106,17 +107,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project = {}
         dlg = wx.FileDialog(
             self, message="Choose a file",
-            defaultDir=self.project['wd'], 
+            defaultDir=self.project['workingdirectory'], 
             defaultFile="",
             wildcard=wc_MarCon,
             style=wx.FD_OPEN | wx.FD_CHANGE_DIR
             )
         if dlg.ShowModal() == wx.ID_OK:
-            self.project['projfile'] = dlg.GetPath()
-            with open(self.project['projfile'], 'r') as fp:
+            self.project['filepaths']['projfile'] = dlg.GetPath()
+            with open(self.project['filepaths']['projfile'], 'r') as fp:
                 self.project=json.loads(fp.read())
         dlg.Destroy()
-        frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
+        frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
  
     def on_save_project_as(self, event):
@@ -125,34 +126,34 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         dlg = wx.FileDialog(
             self, message="Save file as ...", 
-            defaultDir=self.project['wd'], 
+            defaultDir=self.project['workingdirectory'], 
             defaultFile="", wildcard=wc_MarCon, style=wx.FD_SAVE
             )
         if dlg.ShowModal() == wx.ID_OK:
-            self.project['projfile'] = dlg.GetPath()
-            self.project['projfilename'] = dlg.GetFilename()
-            self.project['wd'] = dlg.GetDirectory()
-            with open(self.project['projfile'], 'w') as fp:
+            self.project['filepaths']['projfile'] = dlg.GetPath()
+            self.project['filepaths']['projfilename'] = dlg.GetFilename()
+            self.project['workingdirectory'] = dlg.GetDirectory()
+            with open(self.project['filepaths']['projfile'], 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
         dlg.Destroy()
-        frame.SetTitle('Marxan with Connectivity (Project: '+self.project['projfilename']+')')
+        frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 	
     def on_save_project( self, event ):
         """
         save a project, but call 'on_save_project_as' if project file has not previously been defined
         """
-        if 'projfile' in self.project:
-            with open(self.project['projfile'], 'w') as fp:
+        if 'projfile' in self.project['filepaths']:
+            with open(self.project['filepaths']['projfile'], 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
         else:
             self.on_save_project_as(event=None)
 
 ###########################  warning functions ################################
-    def Warn(parent, message, caption = 'Warning!'):
+    def warn_dialog(self, message, caption = "Warning!"):
         """
         Warning
         """
-        dlg = wx.MessageDialog(parent, message, caption, wx.OK | wx.ICON_WARNING)
+        dlg = wx.MessageBox(message, caption, style=wx.OK | wx.ICON_WARNING)
         dlg.Destroy()
 
 ###########################  map plotting functions ###########################
@@ -171,8 +172,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
         
-        pu = gpd.GeoDataFrame.from_file(self.project['pu_filepath'])
-        cu = gpd.GeoDataFrame.from_file(self.project['cu_filepath'])
+        pu = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])
+        cu = gpd.GeoDataFrame.from_file(self.project['filepaths']['cu_filepath'])
         
         lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],float(self.bmap_buffer.GetValue()))
 
@@ -274,7 +275,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 ###########################  graph plotting functions #########################
     def on_plot_graph_button(self, event):
         """
-        Warning
+        Initiates graph plotting. Creates a 'Plot' tab, and call 'on_draw_graph' to plot the graph
         """
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
@@ -286,7 +287,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
-        self.on_draw_graph(pucm_filedir=self.project['pucm_filedir'], pucm_filename=self.project['pucm_filename'])
+        self.on_draw_graph(pucm_filedir=self.project['filepaths']['pucm_filedir'], pucm_filename=self.project['filepaths']['pucm_filename'])
         for i in range(self.m_auinotebook1.GetPageCount()):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
@@ -294,7 +295,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_draw_graph(self,pucm_filedir, pucm_filename):
         """
-        Warning
+        Draws the desired graph on the plot created by 'on_plot_graph_button'
         """
         pucm_filepath = os.path.join(pucm_filedir, pucm_filename)
         conmat = pandas.read_csv(pucm_filepath, index_col=0)
@@ -308,31 +309,31 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Defines Planning Unit file path
         """
-        self.project['pu_filepath'] = self.PU_file.GetPath()
+        self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
 
     def on_CU_file(self, event):
         """
         Defines Connectivity Unit file path
         """
-        self.project['cu_filepath']=self.CU_file.GetPath()
+        self.project['filepaths']['cu_filepath']=self.CU_file.GetPath()
 
     def on_CM_file(self, event ):
         """
         Defines Connectivity Matrix file path
         """
-        self.project['cm_filepath'] = self.CM_file.GetPath()
+        self.project['filepaths']['cm_filepath'] = self.CM_file.GetPath()
 
     def on_PUCM_file(self, event):
         """
         Defines Planning Unit scaled Connectivity Matrix file path
         """
-        self.project['pucm_filepath'] = self.PUCM_file.GetPath()
+        self.project['filepaths']['pucm_filepath'] = self.PUCM_file.GetPath()
         
     def on_FA_file(self, event):
         """
         Defines Focus Areas file path
         """
-        self.project['fa_filepath'] = self.FA_file.GetPath()
+        self.project['filepaths']['fa_filepath'] = self.FA_file.GetPath()
 
 ###########################  GUI 'wiring' functions ###########################
     def on_rescaleRadioBox(self, event):
@@ -353,7 +354,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Rescales the connectivity matrix to match the scale of the planning units
         """
         threading.Thread(
-                marxanconpy.rescale_matrix(self.project['pu_filepath'], self.project['cu_filepath'], self.project['cm_filepath'], self.project['pucm_filepath'])
+                marxanconpy.rescale_matrix(self.project['filepaths']['pu_filepath'], self.project['filepaths']['cu_filepath'], self.project['filepaths']['cm_filepath'], self.project['filepaths']['pucm_filepath'])
                 ).start()
 
 ###########################  metric related functions #########################
@@ -361,31 +362,41 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         calculates the selected metrics
         """
+        if not 'connectivityMetrics' in self.project:
+            self.project['connectivityMetrics']={}
+            
         # choose matrix
         if(self.calc_metrics_type.GetCurrentSelection()==0):
-            self.calc_filepath = self.project['pucm_filepath']
+            if(os.path.isfile(self.project['filepaths']['pucm_filepath'])):
+                self.calc_filepath = self.project['filepaths']['pucm_filepath']
+            else:
+                self.warn_dialog(message="File not found: "+self.project['filepaths']['pucm_filepath'])
             type='pu'
         elif(self.calc_metrics_type.GetCurrentSelection()==1):
-            self.calc_filepath = self.project['cm_filepath']
+            if(os.path.isfile(self.project['filepaths']['pucm_filepath'])):
+                self.calc_filepath = self.project['filepaths']['cm_filepath']
+            else:
+                self.warn_dialog()
             type='cu'
             
         #calculate
         if(self.ct_demo_vertex_degree.GetValue()):
-            setattr(self.connectivityMetrics,'vertexdegree'+type,marxanconpy.conmat2vertexdegree(self.calc_filepath))
+            self.project['connectivityMetrics']['vertexdegree'+type] = marxanconpy.conmat2vertexdegree(self.calc_filepath)
 
         if(self.ct_demo_between_cent.GetValue()):
-            setattr(self.connectivityMetrics,'betweencent'+type,marxanconpy.conmat2betweencent(self.calc_filepath))
+            self.project['connectivityMetrics']['betweencent'+type] = marxanconpy.conmat2betweencent(self.calc_filepath)
 
         if(self.ct_demo_eig_vect_cent.GetValue()):
-            setattr(self.connectivityMetrics,'eigvectcent'+type,marxanconpy.conmat2eigvectcent(self.calc_filepath))
+            self.project['connectivityMetrics']['eigvectcent'+type] = marxanconpy.conmat2eigvectcent(self.calc_filepath)
 
         if(self.ct_demo_self_recruit.GetValue()):
-            setattr(self.connectivityMetrics,'selfrecruit'+type,marxanconpy.conmat2selfrecruit(self.calc_filepath))
+            self.project['connectivityMetrics']['selfrecruit'+type] = marxanconpy.conmat2selfrecruit(self.calc_filepath)
 
         if(self.bd_demo_conn_boundary.GetValue()):
-            self.connectivityMetrics.conmat = pandas.read_csv(self.calc_filepath)
-            self.connectivityMetrics.boundary_dat = self.connectivityMetrics.conmat.melt(id_vars=['puID'])
-            self.connectivityMetrics.boundary_dat.columns = ['id1', 'id2', 'boundary']
+            self.project['connectivityMetrics']['conmat'] = pandas.read_csv(self.calc_filepath).to_json(orient='split')
+            self.project['connectivityMetrics']['boundary_dat'] = pandas.read_json(self.project['connectivityMetrics']['conmat'],orient='split').melt(id_vars=['puID'])
+            self.project['connectivityMetrics']['boundary_dat'].columns = ['id1', 'id2', 'boundary']
+            self.project['connectivityMetrics']['boundary_dat'] = self.project['connectivityMetrics']['boundary_dat'].to_json(orient='split')
             
     def get_metric(self, type):
         """
@@ -399,13 +410,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         #get metric
         if(metricindex==0):
-            metric = getattr(self.connectivityMetrics,'vertexdegree'+type)
+            metric = self.project['connectivityMetrics']['vertexdegree'+type]
         elif(metricindex==1):
-            metric = getattr(self.connectivityMetrics,'betweencent'+type)
+            metric = self.project['connectivityMetrics']['betweencent'+type]
         elif(metricindex==2):
-            metric = getattr(self.connectivityMetrics,'eigvectcent'+type)
+            metric = self.project['connectivityMetrics']['eigvectcent'+type]
         elif(metricindex==3):
-            metric = getattr(self.connectivityMetrics,'selfrecruit'+type)
+            metric = self.project['connectivityMetrics']['selfrecruit'+type]
             
         return(metric)
 
@@ -421,4 +432,5 @@ frame.Show(True)
 #start the applications
 app.MainLoop()
 
+#stop the app
 app.Destroy()
