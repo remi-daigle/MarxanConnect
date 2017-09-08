@@ -121,7 +121,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 	
     def on_save_project( self, event ):
-        print('projfile' in self.project)
         if 'projfile' in self.project:
             with open(self.project['projfile'], 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
@@ -286,6 +285,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_PUCM_file(self, event):
         self.project['pucm_filepath'] = self.PUCM_file.GetPath()
+        
+    def on_FA_file(self, event):
+        self.project['fa_filepath'] = self.FA_file.GetPath()
 
     def on_rescale_button(self, event):
         threading.Thread(marxanconpy.rescale_matrix(self.project['pu_filepath'], self.project['cu_filepath'], self.project['cm_filepath'], self.project['pucm_filepath'])).start()

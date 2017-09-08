@@ -138,7 +138,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer.Add( sizer5, 1, wx.EXPAND, 5 )
 		
-		sizer6 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		sizer6 = wx.FlexGridSizer( 0, 3, 0, 0 )
 		sizer6.AddGrowableCol( 1 )
 		sizer6.SetFlexibleDirection( wx.HORIZONTAL )
 		sizer6.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -152,6 +152,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.matrixRadioBox4 = wx.RadioBox( self.demographicInput, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, matrixRadioBox4Choices, 3, wx.RA_SPECIFY_COLS )
 		self.matrixRadioBox4.SetSelection( 1 )
 		sizer6.Add( self.matrixRadioBox4, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		formatRadioBoxChoices = [ u"Matrix", u"List" ]
+		self.formatRadioBox = wx.RadioBox( self.demographicInput, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, formatRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.formatRadioBox.SetSelection( 1 )
+		sizer6.Add( self.formatRadioBox, 0, wx.ALL, 5 )
 		
 		
 		demoMainSizer.Add( sizer6, 1, wx.ALIGN_CENTER, 5 )
@@ -220,11 +225,56 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demographicInput.SetSizer( demoMainSizer )
 		self.demographicInput.Layout()
 		demoMainSizer.Fit( self.demographicInput )
-		self.m_auinotebook1.AddPage( self.demographicInput, u"Demographic Input", False, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.demographicInput, u"Demographic Input", True, wx.NullBitmap )
 		self.geneticInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.m_auinotebook1.AddPage( self.geneticInput, u"Genetic Input", False, wx.NullBitmap )
 		self.landscapeInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.m_auinotebook1.AddPage( self.landscapeInput, u"Landscape Input", False, wx.NullBitmap )
+		self.ExistingInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		demoMainSizer2 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		demoMainSizer2.AddGrowableCol( 0 )
+		demoMainSizer2.AddGrowableRow( 1 )
+		demoMainSizer2.AddGrowableRow( 2 )
+		demoMainSizer2.SetFlexibleDirection( wx.VERTICAL )
+		demoMainSizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
+		
+		self.m_staticText391 = wx.StaticText( self.ExistingInput, wx.ID_ANY, u"Focus Areas:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText391.Wrap( -1 )
+		self.m_staticText391.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		
+		demoMainSizer2.Add( self.m_staticText391, 0, wx.ALL, 5 )
+		
+		sizer01 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.PU_def1 = wx.StaticText( self.ExistingInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PU_def1.Wrap( -1 )
+		sizer01.Add( self.PU_def1, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		demoMainSizer2.Add( sizer01, 1, wx.EXPAND, 5 )
+		
+		sizer11 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		sizer11.AddGrowableCol( 1 )
+		sizer11.SetFlexibleDirection( wx.HORIZONTAL )
+		sizer11.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.FA_filetext = wx.StaticText( self.ExistingInput, wx.ID_ANY, u"Focus Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.FA_filetext.Wrap( -1 )
+		self.FA_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		
+		sizer11.Add( self.FA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.FA_file = wx.FilePickerCtrl( self.ExistingInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		sizer11.Add( self.FA_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		demoMainSizer2.Add( sizer11, 1, wx.EXPAND, 5 )
+		
+		
+		self.ExistingInput.SetSizer( demoMainSizer2 )
+		self.ExistingInput.Layout()
+		demoMainSizer2.Fit( self.ExistingInput )
+		self.m_auinotebook1.AddPage( self.ExistingInput, u"Focus Areas", False, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer9 = wx.FlexGridSizer( 0, 1, 0, 0 )
 		fgSizer9.AddGrowableCol( 0 )
@@ -277,6 +327,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.ct_demo_self_recruit.SetToolTipString( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		bSizer9.Add( self.ct_demo_self_recruit, 0, wx.ALL, 5 )
+		
+		self.ct_demo_stochasticity = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Temporal Connectivity Correlation", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ct_demo_stochasticity.SetValue(True) 
+		bSizer9.Add( self.ct_demo_stochasticity, 0, wx.ALL, 5 )
 		
 		
 		fgSizer8.Add( bSizer9, 1, wx.EXPAND, 5 )
@@ -333,6 +387,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.bd_demo_conn_boundary = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Connectivity as boundary", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bd_demo_conn_boundary.SetValue(True) 
 		bSizer131.Add( self.bd_demo_conn_boundary, 0, wx.ALL, 5 )
+		
+		self.m_checkBox10 = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Check Me!", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer131.Add( self.m_checkBox10, 0, wx.ALL, 5 )
 		
 		
 		fgSizer81.Add( bSizer131, 1, wx.EXPAND, 5 )
@@ -880,7 +937,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( demoMainSizer1 )
 		self.plottingOptions.Layout()
 		demoMainSizer1.Fit( self.plottingOptions )
-		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", True, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", False, wx.NullBitmap )
 		
 		bSizer3.Add( self.m_auinotebook1, 1, wx.EXPAND, 5 )
 		
@@ -900,9 +957,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
 		self.unitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
 		self.matrixRadioBox4.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
+		self.formatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_formatRadioBox )
 		self.CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CM_file )
 		self.PUCM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCM_file )
 		self.rescale_button.Bind( wx.EVT_BUTTON, self.on_rescale_button )
+		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.lyr1_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
 		self.lyr2_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
@@ -939,6 +998,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	
+	def on_formatRadioBox( self, event ):
+		event.Skip()
+	
 	def on_CM_file( self, event ):
 		event.Skip()
 	
@@ -946,6 +1008,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_rescale_button( self, event ):
+		event.Skip()
+	
+	def on_FA_file( self, event ):
 		event.Skip()
 	
 	def on_calc_metrics( self, event ):
