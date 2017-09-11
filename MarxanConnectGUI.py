@@ -163,7 +163,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         wx.LaunchDefaultBrowser("contributing.html")
 
     def on_license( self, event ):
-        wx.LaunchDefaultBrowser("LICENSE.html")
+        wx.LaunchDefaultBrowser("https://github.com/remi-daigle/MarxanConnect/blob/master/LICENSE")
         
 ###########################  warning functions ################################
     def warn_dialog(self, message, caption = "Warning!"):
