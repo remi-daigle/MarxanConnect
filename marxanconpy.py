@@ -92,7 +92,10 @@ def conmat2connboundary(pucm_filepath):
     connboundary.columns = ['id1', 'id2', 'boundary']
     return connboundary
 
-
+def conmat2minplanargraph(pucm_filepath):
+        conmat = pandas.read_csv(pucm_filepath,index_col= 0)
+        g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree()
+        return g
 
 
 

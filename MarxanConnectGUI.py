@@ -4,14 +4,14 @@ import wx.lib.agw.aui as aui
 
 #import the GUI file after editing out deprecated functions
 # Read in the file
-with open('gui.py', 'r') as file :
+with open('gui.py', 'r', encoding="utf8") as file :
   filedata = file.read()
 
 # Replace the target string
 filedata = filedata.replace('SetToolTipString', 'SetToolTip')
 
 # Write the file out again
-with open('gui.py', 'w') as file:
+with open('gui.py', 'w', encoding="utf8") as file:
   file.write(filedata)
 import gui
 
@@ -148,6 +148,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             self.on_save_project_as(event=None)
 
+###########################  html pop-up functions ################################
+
+    def on_glossary( self, event ):
+        wx.LaunchDefaultBrowser("glossary.html")
+	
+    def on_tutorial( self, event ):
+        wx.LaunchDefaultBrowser("tutorial.html")
+	
+    def on_github( self, event ):
+        wx.LaunchDefaultBrowser("https://github.com/remi-daigle/MarxanConnect/issues")
+	
+    def on_contributing( self, event ):
+        wx.LaunchDefaultBrowser("contributing.html")
+
+    def on_license( self, event ):
+        wx.LaunchDefaultBrowser("LICENSE.html")
+        
 ###########################  warning functions ################################
     def warn_dialog(self, message, caption = "Warning!"):
         """
@@ -340,14 +357,24 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Hides unnecessary options if rescaling is not necessary
         """
-        if(self.CU_def.Hide()==True):
-            self.CU_def.Hide()
-            self.CU_filetext.Hide()
-            self.CU_file.Hide()
+        if(self.CU_def.Enabled==True):
+            self.CU_def.Enable(enable = False)
+            self.CU_filetext.Enable(enable = False)
+            self.CU_file.Enable(enable = False)
+            self.PUCM_outputtext.Enable(enable = False)
+            self.PUCM_def.Enable(enable = False)
+            self.PUCM_filetext.Enable(enable = False)
+            self.PUCM_file.Enable(enable = False)
+            self.rescale_button.Enable(enable = False)
         else:
-            self.CU_def.Show()
-            self.CU_filetext.Show()
-            self.CU_file.Show()
+            self.CU_def.Enable(enable = True)
+            self.CU_filetext.Enable(enable = True)
+            self.CU_file.Enable(enable = True)
+            self.PUCM_outputtext.Enable(enable = True)
+            self.PUCM_def.Enable(enable = True)
+            self.PUCM_filetext.Enable(enable = True)
+            self.PUCM_file.Enable(enable = True)
+            self.rescale_button.Enable(enable = True)
             
     def on_rescale_button(self, event):
         """
