@@ -218,7 +218,215 @@ div.tocify {
 </div>
 
 
-<p>Coming Soon!</p>
+<p><strong>More Coming Soon!</strong></p>
+<div id="boundary-definitions" class="section level1">
+<h1><span class="header-section-number">1</span> Boundary Definitions</h1>
+<p>Alternative <code>boundary.dat</code> calculations</p>
+<div id="connectivity-as-boundary" class="section level2">
+<h2><span class="header-section-number">1.1</span> Connectivity as Boundary</h2>
+<p>description</p>
+</div>
+<div id="minimum-planar-graph" class="section level2">
+<h2><span class="header-section-number">1.2</span> Minimum Planar Graph</h2>
+<p>description</p>
+</div>
+</div>
+<div id="connectivity" class="section level1">
+<h1><span class="header-section-number">2</span> Connectivity</h1>
+<p>description (with units)</p>
+<div id="connectivity-categories" class="section level2">
+<h2><span class="header-section-number">2.1</span> Connectivity Categories</h2>
+<div id="demographic-connectivity" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Demographic Connectivity</h3>
+<p>description</p>
+</div>
+<div id="genetic-connectivity" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Genetic Connectivity</h3>
+<p>description</p>
+</div>
+<div id="landscape-connectivity" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Landscape Connectivity</h3>
+<p>description</p>
+</div>
+</div>
+<div id="connectivity-types" class="section level2">
+<h2><span class="header-section-number">2.2</span> Connectivity Types</h2>
+<p>Each connectivity category has multiple types of data that can be used by Marxan with Connectivity:</p>
+<div id="settlement" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Settlement</h3>
+<p>description</p>
+</div>
+<div id="local-immigration" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> Local Immigration</h3>
+<p>description</p>
+</div>
+<div id="dispersal-flux" class="section level3">
+<h3><span class="header-section-number">2.2.3</span> Dispersal Flux</h3>
+<p>description</p>
+</div>
+<div id="migration" class="section level3">
+<h3><span class="header-section-number">2.2.4</span> Migration</h3>
+<p>description</p>
+</div>
+</div>
+<div id="data-formats" class="section level2">
+<h2><span class="header-section-number">2.3</span> Data Formats</h2>
+<p>Marxan with Connectivity can accept 2 types of connectivity data, Matrices and Lists:</p>
+<div id="connectivity-matrix" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Connectivity Matrix</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">0.1</td>
+<td align="center">0.02</td>
+<td align="center">0.005</td>
+<td align="center">0.01</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center">0.006</td>
+<td align="center">0.2</td>
+<td align="center">0.007</td>
+<td align="center">0.009</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center">0.01</td>
+<td align="center">0.003</td>
+<td align="center">0.25</td>
+<td align="center">0.02</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center">0.022</td>
+<td align="center">0.017</td>
+<td align="center">0.001</td>
+<td align="center">0.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="connectivity-list" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Connectivity List</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="center">id1</th>
+<th align="center">id2</th>
+<th align="center">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0.1</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">0.02</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">0.005</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">0.01</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="connectivity-list-with-time" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> Connectivity List with Time</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="center">time</th>
+<th align="center">id1</th>
+<th align="center">id2</th>
+<th align="center">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0.1</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">0.02</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">0.005</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">0.01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="conservation-targets" class="section level1">
+<h1><span class="header-section-number">3</span> Conservation Targets</h1>
+<p>description</p>
+<div id="vertex-degree" class="section level2">
+<h2><span class="header-section-number">3.1</span> Vertex Degree</h2>
+<p>The vertex degree indicates the number of connections for each planning unit</p>
+</div>
+<div id="betweenness-centrality" class="section level2">
+<h2><span class="header-section-number">3.2</span> Betweenness Centrality</h2>
+<p>Betweenness Centrality is an indicator of a planning unit’s centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit.</p>
+</div>
+<div id="eigen-vector-centrality" class="section level2">
+<h2><span class="header-section-number">3.3</span> Eigen Vector Centrality</h2>
+<p>Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes</p>
+</div>
+<div id="self-recruitment" class="section level2">
+<h2><span class="header-section-number">3.4</span> Self-Recruitment</h2>
+<p>Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit.</p>
+</div>
+<div id="temporal-connectivity-correlation" class="section level2">
+<h2><span class="header-section-number">3.5</span> Temporal Connectivity Correlation</h2>
+<p>description</p>
+</div>
+</div>
+<div id="focus-areas" class="section level1">
+<h1><span class="header-section-number">4</span> Focus Areas</h1>
+<p>For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider ‘focus areas’ for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds). Marxan with Connectivity assumes that the planning units within the ‘focus areas’ will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the ‘focus areas’.</p>
+</div>
+<div id="planning-units" class="section level1">
+<h1><span class="header-section-number">5</span> Planning Units</h1>
+<p>description</p>
+</div>
+<div id="shapefile" class="section level1">
+<h1><span class="header-section-number">6</span> Shapefile</h1>
+<p>description</p>
+</div>
 
 
 
