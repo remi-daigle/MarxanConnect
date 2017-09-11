@@ -1,10 +1,4 @@
----
-title: "Marxan with Connectivity"
-output:
-  html_document:
-    toc: yes
-    toc_float: yes
----
+# Marxan with Connectivity
 
 Marxan with Connectivity (henceforth the "app") is a Graphical User Interface (GUI) to help conservationists include "connectivity" in their protected area network planning.
 
