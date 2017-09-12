@@ -101,6 +101,7 @@ ENV/
 .mypy_cache/
 .idea*
 toymap.py
-MarxanConnectSetupWindows.exe
-Marxan with Connectivity.nsi.bak
+*.exe
+*.bak
 .Rproj.user
+*.Rhistory
