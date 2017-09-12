@@ -23,41 +23,44 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
 		self.m_menubar1 = wx.MenuBar( 0 )
-		self.m_menu2 = wx.Menu()
-		self.new_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"New Project"+ u"\t" + u"Ctrl+N", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu2.Append( self.new_project )
+		self.file = wx.Menu()
+		self.new_project = wx.MenuItem( self.file, wx.ID_ANY, u"New Project"+ u"\t" + u"Ctrl+N", wx.EmptyString, wx.ITEM_NORMAL )
+		self.file.Append( self.new_project )
 		
-		self.save_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Save Project"+ u"\t" + u"Ctrl+S", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu2.Append( self.save_project )
+		self.save_project = wx.MenuItem( self.file, wx.ID_ANY, u"Save Project"+ u"\t" + u"Ctrl+S", wx.EmptyString, wx.ITEM_NORMAL )
+		self.file.Append( self.save_project )
 		
-		self.save_project_as = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Save Project As..."+ u"\t" + u"Ctrl+Shift+S", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu2.Append( self.save_project_as )
+		self.save_project_as = wx.MenuItem( self.file, wx.ID_ANY, u"Save Project As..."+ u"\t" + u"Ctrl+Shift+S", wx.EmptyString, wx.ITEM_NORMAL )
+		self.file.Append( self.save_project_as )
 		
-		self.load_project = wx.MenuItem( self.m_menu2, wx.ID_ANY, u"Load Project"+ u"\t" + u"Ctrl+L", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu2.Append( self.load_project )
+		self.load_project = wx.MenuItem( self.file, wx.ID_ANY, u"Load Project"+ u"\t" + u"Ctrl+L", wx.EmptyString, wx.ITEM_NORMAL )
+		self.file.Append( self.load_project )
 		
-		self.m_menubar1.Append( self.m_menu2, u"File" ) 
+		self.m_menubar1.Append( self.file, u"File" ) 
 		
-		self.m_menu3 = wx.Menu()
-		self.glossary = wx.MenuItem( self.m_menu3, wx.ID_ANY, u"Glossary", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu3.Append( self.glossary )
+		self.help = wx.Menu()
+		self.glossary = wx.MenuItem( self.help, wx.ID_ANY, u"Glossary", wx.EmptyString, wx.ITEM_NORMAL )
+		self.help.Append( self.glossary )
 		
-		self.tutorial = wx.MenuItem( self.m_menu3, wx.ID_ANY, u"Tutorial", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu3.Append( self.tutorial )
+		self.tutorial = wx.MenuItem( self.help, wx.ID_ANY, u"Tutorial", wx.EmptyString, wx.ITEM_NORMAL )
+		self.help.Append( self.tutorial )
 		
-		self.github = wx.MenuItem( self.m_menu3, wx.ID_ANY, u"GitHub issues", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu3.Append( self.github )
+		self.github = wx.MenuItem( self.help, wx.ID_ANY, u"GitHub issues", wx.EmptyString, wx.ITEM_NORMAL )
+		self.help.Append( self.github )
 		
-		self.contributing = wx.MenuItem( self.m_menu3, wx.ID_ANY, u"Contributing", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu3.Append( self.contributing )
+		self.contributing = wx.MenuItem( self.help, wx.ID_ANY, u"Contributing", wx.EmptyString, wx.ITEM_NORMAL )
+		self.help.Append( self.contributing )
 		
-		self.license = wx.MenuItem( self.m_menu3, wx.ID_ANY, u"License", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu3.Append( self.license )
+		self.license = wx.MenuItem( self.help, wx.ID_ANY, u"License", wx.EmptyString, wx.ITEM_NORMAL )
+		self.help.Append( self.license )
 		
-		self.about = wx.MenuItem( self.m_menu3, wx.ID_ANY, u"About", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu3.Append( self.about )
+		self.about = wx.MenuItem( self.help, wx.ID_ANY, u"About", wx.EmptyString, wx.ITEM_NORMAL )
+		self.help.Append( self.about )
 		
-		self.m_menubar1.Append( self.m_menu3, u"Help" ) 
+		self.start = wx.MenuItem( self.help, wx.ID_ANY, u"Getting Started", wx.EmptyString, wx.ITEM_NORMAL )
+		self.help.Append( self.start )
+		
+		self.m_menubar1.Append( self.help, u"Help" ) 
 		
 		self.SetMenuBar( self.m_menubar1 )
 		
@@ -142,7 +145,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.SpatialInput.SetSizer( demoMainSizer2 )
 		self.SpatialInput.Layout()
 		demoMainSizer2.Fit( self.SpatialInput )
-		self.m_auinotebook1.AddPage( self.SpatialInput, u"Spatial Input", True, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.SpatialInput, u"Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer25 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer25.AddGrowableCol( 0 )
@@ -339,25 +342,25 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.ct_demo_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.ct_demo_vertex_degree.SetValue(True) 
-		self.ct_demo_vertex_degree.SetToolTip( u"The vertex degree indicates the number of connections for each planning unit" )
+		self.ct_demo_vertex_degree.SetToolTipString( u"The vertex degree indicates the number of connections for each planning unit" )
 		
 		bSizer9.Add( self.ct_demo_vertex_degree, 0, wx.ALL, 5 )
 		
 		self.ct_demo_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.ct_demo_between_cent.SetValue(True) 
-		self.ct_demo_between_cent.SetToolTip( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
+		self.ct_demo_between_cent.SetToolTipString( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
 		
 		bSizer9.Add( self.ct_demo_between_cent, 0, wx.ALL, 5 )
 		
 		self.ct_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.ct_demo_eig_vect_cent.SetValue(True) 
-		self.ct_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
+		self.ct_demo_eig_vect_cent.SetToolTipString( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
 		
 		bSizer9.Add( self.ct_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
 		self.ct_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.ct_demo_self_recruit.SetValue(True) 
-		self.ct_demo_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		self.ct_demo_self_recruit.SetToolTipString( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		bSizer9.Add( self.ct_demo_self_recruit, 0, wx.ALL, 5 )
 		
@@ -483,7 +486,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.m_auinotebook1.AddPage( self.connectivityMetrics, u"Connectivity Metrics", False, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.connectivityMetrics, u"Connectivity Metrics", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.m_auinotebook1.AddPage( self.marxanAnalysis, u"Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -543,22 +546,22 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer113.Add( self.bmap_buffer_txt, 0, wx.ALL, 5 )
 		
 		self.bmap_landcol = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.Colour( 221, 170, 102 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.bmap_landcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.bmap_landcol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer113.Add( self.bmap_landcol, 0, wx.ALL, 5 )
 		
 		self.bmap_lakecol = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.Colour( 176, 196, 222 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.bmap_lakecol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.bmap_lakecol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer113.Add( self.bmap_lakecol, 0, wx.ALL, 5 )
 		
 		self.bmap_oceancol = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.Colour( 135, 206, 250 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.bmap_oceancol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.bmap_oceancol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer113.Add( self.bmap_oceancol, 0, wx.ALL, 5 )
 		
 		self.bmap_buffer = wx.TextCtrl( self.plottingOptions, wx.ID_ANY, u"1.0", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bmap_buffer.SetToolTip( u"Spatial Buffer around the shapefiles measured in decimal degrees" )
+		self.bmap_buffer.SetToolTipString( u"Spatial Buffer around the shapefiles measured in decimal degrees" )
 		
 		fgSizer113.Add( self.bmap_buffer, 0, wx.ALL, 5 )
 		
@@ -617,12 +620,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer111.Add( self.pu_metric_choice, 0, wx.ALL, 5 )
 		
 		self.pu_metric_lowcol = wx.ColourPickerCtrl( self.pu_plot_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_lowcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_lowcol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer111.Add( self.pu_metric_lowcol, 0, wx.ALL, 5 )
 		
 		self.pu_metric_hicol = wx.ColourPickerCtrl( self.pu_plot_opt, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_hicol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_hicol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer111.Add( self.pu_metric_hicol, 0, wx.ALL, 5 )
 		
@@ -670,12 +673,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer11.Add( self.cu_metric_choice, 0, wx.ALL, 5 )
 		
 		self.cu_metric_lowcol = wx.ColourPickerCtrl( self.cu_plot_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_lowcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_lowcol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11.Add( self.cu_metric_lowcol, 0, wx.ALL, 5 )
 		
 		self.cu_metric_hicol = wx.ColourPickerCtrl( self.cu_plot_opt, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_hicol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_hicol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11.Add( self.cu_metric_hicol, 0, wx.ALL, 5 )
 		
@@ -706,7 +709,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer1112.Add( self.pu_poly_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.pu_poly_col = wx.ColourPickerCtrl( self.pu_poly_plot_opt, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_poly_col.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_poly_col.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer1112.Add( self.pu_poly_col, 0, wx.ALL, 5 )
 		
@@ -732,7 +735,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer11121.Add( self.cu_poly_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.cu_poly_col = wx.ColourPickerCtrl( self.cu_poly_plot_opt, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_poly_col.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_poly_col.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11121.Add( self.cu_poly_col, 0, wx.ALL, 5 )
 		
@@ -798,12 +801,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer1111.Add( self.pu_metric_choice1, 0, wx.ALL, 5 )
 		
 		self.pu_metric_lowcol1 = wx.ColourPickerCtrl( self.pu_plot_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_lowcol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_lowcol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer1111.Add( self.pu_metric_lowcol1, 0, wx.ALL, 5 )
 		
 		self.pu_metric_hicol1 = wx.ColourPickerCtrl( self.pu_plot_opt1, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_hicol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_hicol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer1111.Add( self.pu_metric_hicol1, 0, wx.ALL, 5 )
 		
@@ -851,12 +854,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer112.Add( self.cu_metric_choice1, 0, wx.ALL, 5 )
 		
 		self.cu_metric_lowcol1 = wx.ColourPickerCtrl( self.cu_plot_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_lowcol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_lowcol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer112.Add( self.cu_metric_lowcol1, 0, wx.ALL, 5 )
 		
 		self.cu_metric_hicol1 = wx.ColourPickerCtrl( self.cu_plot_opt1, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_hicol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_hicol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer112.Add( self.cu_metric_hicol1, 0, wx.ALL, 5 )
 		
@@ -887,7 +890,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer11122.Add( self.pu_poly_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.pu_poly_col1 = wx.ColourPickerCtrl( self.pu_poly_plot_opt1, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_poly_col1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_poly_col1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11122.Add( self.pu_poly_col1, 0, wx.ALL, 5 )
 		
@@ -913,7 +916,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer111211.Add( self.cu_poly_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.cu_poly_col1 = wx.ColourPickerCtrl( self.cu_poly_plot_opt1, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_poly_col1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_poly_col1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer111211.Add( self.cu_poly_col1, 0, wx.ALL, 5 )
 		
@@ -991,6 +994,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.on_contributing, id = self.contributing.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_license, id = self.license.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_about, id = self.about.GetId() )
+		self.Bind( wx.EVT_MENU, self.on_getting_started, id = self.start.GetId() )
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
 		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
 		self.unitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
@@ -1040,6 +1044,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_about( self, event ):
+		event.Skip()
+	
+	def on_getting_started( self, event ):
 		event.Skip()
 	
 	def on_PU_file( self, event ):
