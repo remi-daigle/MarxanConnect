@@ -5,15 +5,15 @@ import wx.adv
 
 #import the GUI file after editing out deprecated functions
 # Read in the file
-#with open('gui.py', 'r', encoding="utf8") as file :
-#  filedata = file.read()
-#
-## Replace the target string
-#filedata = filedata.replace('SetToolTipString', 'SetToolTip')
-#
-## Write the file out again
-#with open('gui.py', 'w', encoding="utf8") as file:
-#  file.write(filedata)
+with open('gui.py', 'r', encoding="utf8") as file :
+  filedata = file.read()
+
+# Replace the target string
+filedata = filedata.replace('SetToolTipString', 'SetToolTip')
+
+# Write the file out again
+with open('gui.py', 'w', encoding="utf8") as file:
+  file.write(filedata)
 import gui
 
 #import matplotlib
@@ -86,10 +86,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         startMainSizer.Add( sizer02, 1, wx.EXPAND, 5 )
 		
         hyperlinksizer = wx.BoxSizer( wx.VERTICAL )
-        self.tutoriallink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"Tutorial", u"https://remi-daigle.github.io/MarxanConnect/tutorial", wx.DefaultPosition, wx.DefaultSize)
+        self.tutoriallink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"Tutorial", u"tutorial.html", wx.DefaultPosition, wx.DefaultSize)
         hyperlinksizer.Add( self.tutoriallink, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
     		
-        self.glossarylink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"Glossary", u"https://remi-daigle.github.io/MarxanConnect/glossary", wx.DefaultPosition, wx.DefaultSize)
+        self.glossarylink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"Glossary", u"glossary.html", wx.DefaultPosition, wx.DefaultSize)
         hyperlinksizer.Add( self.glossarylink, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
     		
         self.githublink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"GitHub Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize)
