@@ -45,9 +45,6 @@ import marxanconpy
 wc_MarCon = "Marxan with Connectivity Project (*.MarCon)|*.MarCon|" \
             "All files (*.*)|*.*"
 
-wc_csv = "Comma Separated Values (*.csv)|*.csv|" \
-            "All files (*.*)|*.*"
-
 class MarxanConnectGUI(gui.MarxanConnectGUI):
     
     def __init__(self,parent):
@@ -70,8 +67,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_new_project(event=None, launch = True)
         
         # launch Getting started window
-        frame = getting_started(parent=self)
-        frame.Show()
+#        frame = getting_started(parent=self)
+#        frame.Show()
+        
+        # set opening tab to SPatial Input (0)
+        self.m_auinotebook1.ChangeSelection(2)
     
 ###########################  project managment functions ######################        
     def on_new_project( self, event, launch = False):
@@ -92,6 +92,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
         self.project['filepaths']['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
         self.project['filepaths']['pucm_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
+        self.project['filepaths']['cf_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","puvspr.dat")
+        self.project['filepaths']['spec_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
+        self.project['filepaths']['bd_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
         
         # if called at launch time, no need to ask users to create a new project file right away
         if(not launch):
@@ -368,6 +371,24 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Focus Areas file path
         """
         self.project['filepaths']['fa_filepath'] = self.FA_file.GetPath()
+        
+    def on_CF_file(self, event):
+        """
+        Defines Focus Areas file path
+        """
+        self.project['filepaths']['cf_filepath'] = self.CF_file.GetPath()
+        
+    def on_SPEC_file(self, event):
+        """
+        Defines Focus Areas file path
+        """
+        self.project['filepaths']['spec_filepath'] = self.SPEC_file.GetPath()
+        
+    def on_BD_file(self, event):
+        """
+        Defines Focus Areas file path
+        """
+        self.project['filepaths']['BD_filepath'] = self.BD_file.GetPath()
 
 ###########################  GUI 'wiring' functions ###########################
     def on_rescaleRadioBox(self, event):
@@ -408,39 +429,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics']={}
+        if not 'spec' in self.project['connectivityMetrics']:
+            self.project['connectivityMetrics']['spec']={}
+            self.customize_spec.Enable(enable=True)
             
         # choose matrix
         if(self.calc_metrics_type.GetCurrentSelection()==0):
             if(os.path.isfile(self.project['filepaths']['pucm_filepath'])):
-                self.calc_filepath = self.project['filepaths']['pucm_filepath']
+                self.conmat = pandas.read_csv(self.project['filepaths']['pucm_filepath'],index_col= 0)
+                self.project['connectivityMetrics']['pucm_conmat'] = self.conmat.to_json(orient='split')
             else:
                 self.warn_dialog(message="File not found: "+self.project['filepaths']['pucm_filepath'])
             type='pu'
         elif(self.calc_metrics_type.GetCurrentSelection()==1):
             if(os.path.isfile(self.project['filepaths']['pucm_filepath'])):
-                self.calc_filepath = self.project['filepaths']['cm_filepath']
+                self.conmat = pandas.read_csv(self.project['filepaths']['cm_filepath'],index_col= 0)
+                self.project['connectivityMetrics']['cm_conmat'] = self.conmat.to_json(orient='split')
             else:
-                self.warn_dialog()
+                self.warn_dialog(message="File not found: "+self.project['filepaths']['cm_filepath'])
             type='cu'
             
         #calculate
-        if(self.ct_demo_vertex_degree.GetValue()):
-            self.project['connectivityMetrics']['vertexdegree'+type] = marxanconpy.conmat2vertexdegree(self.calc_filepath)
+        if(self.cf_demo_vertex_degree.GetValue()):
+            self.project['connectivityMetrics']['spec']['vertexdegree'+type] = marxanconpy.conmat2vertexdegree(self.conmat)
 
-        if(self.ct_demo_between_cent.GetValue()):
-            self.project['connectivityMetrics']['betweencent'+type] = marxanconpy.conmat2betweencent(self.calc_filepath)
+        if(self.cf_demo_between_cent.GetValue()):
+            self.project['connectivityMetrics']['spec']['betweencent'+type] = marxanconpy.conmat2betweencent(self.conmat)
 
-        if(self.ct_demo_eig_vect_cent.GetValue()):
-            self.project['connectivityMetrics']['eigvectcent'+type] = marxanconpy.conmat2eigvectcent(self.calc_filepath)
+        if(self.cf_demo_eig_vect_cent.GetValue()):
+            self.project['connectivityMetrics']['spec']['eigvectcent'+type] = marxanconpy.conmat2eigvectcent(self.conmat)
 
-        if(self.ct_demo_self_recruit.GetValue()):
-            self.project['connectivityMetrics']['selfrecruit'+type] = marxanconpy.conmat2selfrecruit(self.calc_filepath)
+        if(self.cf_demo_self_recruit.GetValue()):
+            self.project['connectivityMetrics']['spec']['selfrecruit'+type] = marxanconpy.conmat2selfrecruit(self.conmat)
 
         if(self.bd_demo_conn_boundary.GetValue()):
-            self.project['connectivityMetrics']['conmat'] = pandas.read_csv(self.calc_filepath).to_json(orient='split')
-            self.project['connectivityMetrics']['boundary_dat'] = pandas.read_json(self.project['connectivityMetrics']['conmat'],orient='split').melt(id_vars=['puID'])
-            self.project['connectivityMetrics']['boundary_dat'].columns = ['id1', 'id2', 'boundary']
-            self.project['connectivityMetrics']['boundary_dat'] = self.project['connectivityMetrics']['boundary_dat'].to_json(orient='split')
+            
+            self.project['connectivityMetrics']['conn_boundary_dat'] = marxanconpy.conmat2connboundary(self.conmat)
             
     def get_metric(self, type):
         """
@@ -454,15 +478,53 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         #get metric
         if(metricindex==0):
-            metric = self.project['connectivityMetrics']['vertexdegree'+type]
+            metric = self.project['connectivityMetrics']['spec']['vertexdegree'+type]
         elif(metricindex==1):
-            metric = self.project['connectivityMetrics']['betweencent'+type]
+            metric = self.project['connectivityMetrics']['spec']['betweencent'+type]
         elif(metricindex==2):
-            metric = self.project['connectivityMetrics']['eigvectcent'+type]
+            metric = self.project['connectivityMetrics']['spec']['eigvectcent'+type]
         elif(metricindex==3):
-            metric = self.project['connectivityMetrics']['selfrecruit'+type]
+            metric = self.project['connectivityMetrics']['spec']['selfrecruit'+type]
             
         return(metric)
+
+###########################  spec grid popup functions #########################
+
+    def on_customize_spec( self, event ):
+        spec_frame=spec_customizer(parent=self)
+        spec_frame.keys = list(self.project['connectivityMetrics']['spec'])
+        
+        for i in range(len(spec_frame.keys)):
+            spec_frame.spec_grid.InsertRows(i)
+            spec_frame.spec_grid.SetCellValue(i,0,str(i+1))
+            spec_frame.spec_grid.SetCellValue(i,1,str(sum(self.project['connectivityMetrics']['spec'][spec_frame.keys[i]])))
+            spec_frame.spec_grid.SetCellValue(i,2,str(1000))
+            spec_frame.spec_grid.SetCellValue(i,3,spec_frame.keys[i])
+            w,h = spec_frame.GetClientSize()
+            print(w)
+            print(h)
+            spec_frame.SetSize((w+16, h+39+20))
+            spec_frame.Layout()
+        spec_frame.Show()
+        
+
+class spec_customizer (gui.spec_customizer):
+    def __init__( self, parent ):
+        gui.spec_customizer.__init__(self,parent)
+        self.parent = parent
+        
+    def on_spec_ok( self, event ): 
+        self.parent.project['spec_dat'] = pandas.DataFrame(numpy.full((self.spec_grid.GetNumberCols(),self.spec_grid.GetNumberRows()),None))
+        self.parent.project['spec_dat'].columns = ["id","target","spf","name"]
+
+        for c in range(self.spec_grid.GetNumberCols()):
+            for r in range(self.spec_grid.GetNumberRows()):
+                self.parent.project['spec_dat'].iloc[r,c] = self.spec_grid.GetCellValue(r,c)
+        self.parent.project['spec_dat'] = self.parent.project['spec_dat'].to_json()
+        self.Destroy()
+	
+    def on_spec_cancel( self, event ):
+        self.Destroy()
 
 ###########################  getting started popup functions #########################
 class getting_started(wx.Frame):
@@ -519,7 +581,6 @@ class getting_started(wx.Frame):
         startMainSizer.Fit( self.gettingStarted )        
 
 
-   
 
 ###############################################################################################################################
 ###########################  run the GUI ######################################

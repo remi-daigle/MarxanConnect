@@ -10,6 +10,7 @@
 import wx
 import wx.xrc
 import wx.aui
+import wx.grid
 
 ###########################################################################
 ## Class MarxanConnectGUI
@@ -67,7 +68,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
 		
 		self.m_auinotebook1 = wx.aui.AuiNotebook( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.aui.AUI_NB_TAB_EXTERNAL_MOVE|wx.aui.AUI_NB_TAB_MOVE|wx.aui.AUI_NB_TAB_SPLIT|wx.aui.AUI_NB_TOP|wx.aui.AUI_NB_WINDOWLIST_BUTTON )
-		self.SpatialInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.spatialInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		demoMainSizer2 = wx.FlexGridSizer( 0, 1, 0, 0 )
 		demoMainSizer2.AddGrowableCol( 0 )
 		demoMainSizer2.AddGrowableRow( 1 )
@@ -77,7 +78,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		demoMainSizer2.SetFlexibleDirection( wx.VERTICAL )
 		demoMainSizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
-		self.m_staticText392 = wx.StaticText( self.SpatialInput, wx.ID_ANY, u"Planning Units", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText392 = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Planning Units", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText392.Wrap( -1 )
 		self.m_staticText392.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
 		
@@ -85,7 +86,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		sizer0 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.PU_def = wx.StaticText( self.SpatialInput, wx.ID_ANY, u"Describe Planning Units ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PU_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Describe Planning Units ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.PU_def.Wrap( -1 )
 		sizer0.Add( self.PU_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -97,19 +98,19 @@ class MarxanConnectGUI ( wx.Frame ):
 		sizer1.SetFlexibleDirection( wx.HORIZONTAL )
 		sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.PU_filetext = wx.StaticText( self.SpatialInput, wx.ID_ANY, u"Planning Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PU_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Planning Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.PU_filetext.Wrap( -1 )
 		self.PU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		
 		sizer1.Add( self.PU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.PU_file = wx.FilePickerCtrl( self.SpatialInput, wx.ID_ANY, u"~\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.PU_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, u"~\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		sizer1.Add( self.PU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
 		demoMainSizer2.Add( sizer1, 1, wx.EXPAND, 5 )
 		
-		self.m_staticText391 = wx.StaticText( self.SpatialInput, wx.ID_ANY, u"Focus Areas:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText391 = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Focus Areas:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText391.Wrap( -1 )
 		self.m_staticText391.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
 		
@@ -117,7 +118,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		sizer01 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.PU_def1 = wx.StaticText( self.SpatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PU_def1 = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.PU_def1.Wrap( -1 )
 		sizer01.Add( self.PU_def1, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -129,23 +130,23 @@ class MarxanConnectGUI ( wx.Frame ):
 		sizer11.SetFlexibleDirection( wx.HORIZONTAL )
 		sizer11.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.FA_filetext = wx.StaticText( self.SpatialInput, wx.ID_ANY, u"Focus Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.FA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Focus Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.FA_filetext.Wrap( -1 )
 		self.FA_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		
 		sizer11.Add( self.FA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.FA_file = wx.FilePickerCtrl( self.SpatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.FA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		sizer11.Add( self.FA_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
 		demoMainSizer2.Add( sizer11, 1, wx.EXPAND, 5 )
 		
 		
-		self.SpatialInput.SetSizer( demoMainSizer2 )
-		self.SpatialInput.Layout()
-		demoMainSizer2.Fit( self.SpatialInput )
-		self.m_auinotebook1.AddPage( self.SpatialInput, u"Spatial Input", False, wx.NullBitmap )
+		self.spatialInput.SetSizer( demoMainSizer2 )
+		self.spatialInput.Layout()
+		demoMainSizer2.Fit( self.spatialInput )
+		self.m_auinotebook1.AddPage( self.spatialInput, u"Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer25 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer25.AddGrowableCol( 0 )
@@ -187,8 +188,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.matrixRadioBox4.SetSelection( 1 )
 		sizer6.Add( self.matrixRadioBox4, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		formatRadioBoxChoices = [ u"Matrix", u"List" ]
-		self.formatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, formatRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		formatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
+		self.formatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, formatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
 		self.formatRadioBox.SetSelection( 0 )
 		sizer6.Add( self.formatRadioBox, 0, wx.ALL, 5 )
 		
@@ -315,11 +316,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
 		metricsMainSizer.AddGrowableRow( 1 )
-		metricsMainSizer.AddGrowableRow( 4 )
+		metricsMainSizer.AddGrowableRow( 5 )
 		metricsMainSizer.SetFlexibleDirection( wx.BOTH )
 		metricsMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_staticText19 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Targets", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText19 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Features", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText19.Wrap( -1 )
 		self.m_staticText19.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
@@ -334,39 +335,40 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		bSizer9 = wx.BoxSizer( wx.VERTICAL )
 		
-		self.demo_ct = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Demographic", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.demo_ct.Wrap( -1 )
-		self.demo_ct.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		self.demo_cf = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Demographic", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_cf.Wrap( -1 )
+		self.demo_cf.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
-		bSizer9.Add( self.demo_ct, 0, wx.ALL, 5 )
+		bSizer9.Add( self.demo_cf, 0, wx.ALL, 5 )
 		
-		self.ct_demo_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.ct_demo_vertex_degree.SetValue(True) 
-		self.ct_demo_vertex_degree.SetToolTipString( u"The vertex degree indicates the number of connections for each planning unit" )
+		self.cf_demo_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_vertex_degree.SetValue(True) 
+		self.cf_demo_vertex_degree.SetToolTip( u"The vertex degree indicates the number of connections for each planning unit" )
 		
-		bSizer9.Add( self.ct_demo_vertex_degree, 0, wx.ALL, 5 )
+		bSizer9.Add( self.cf_demo_vertex_degree, 0, wx.ALL, 5 )
 		
-		self.ct_demo_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.ct_demo_between_cent.SetValue(True) 
-		self.ct_demo_between_cent.SetToolTipString( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
+		self.cf_demo_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_between_cent.SetValue(True) 
+		self.cf_demo_between_cent.SetToolTip( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
 		
-		bSizer9.Add( self.ct_demo_between_cent, 0, wx.ALL, 5 )
+		bSizer9.Add( self.cf_demo_between_cent, 0, wx.ALL, 5 )
 		
-		self.ct_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.ct_demo_eig_vect_cent.SetValue(True) 
-		self.ct_demo_eig_vect_cent.SetToolTipString( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
+		self.cf_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_eig_vect_cent.SetValue(True) 
+		self.cf_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
 		
-		bSizer9.Add( self.ct_demo_eig_vect_cent, 0, wx.ALL, 5 )
+		bSizer9.Add( self.cf_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
-		self.ct_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.ct_demo_self_recruit.SetValue(True) 
-		self.ct_demo_self_recruit.SetToolTipString( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		self.cf_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_self_recruit.SetValue(True) 
+		self.cf_demo_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
-		bSizer9.Add( self.ct_demo_self_recruit, 0, wx.ALL, 5 )
+		bSizer9.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
-		self.ct_demo_stochasticity = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Temporal Connectivity Correlation", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.ct_demo_stochasticity.SetValue(True) 
-		bSizer9.Add( self.ct_demo_stochasticity, 0, wx.ALL, 5 )
+		self.cf_demo_stochasticity = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Temporal Connectivity Correlation", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_stochasticity.Enable( False )
+		
+		bSizer9.Add( self.cf_demo_stochasticity, 0, wx.ALL, 5 )
 		
 		
 		fgSizer8.Add( bSizer9, 1, wx.EXPAND, 5 )
@@ -395,6 +397,63 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		
 		metricsMainSizer.Add( fgSizer8, 1, wx.EXPAND, 5 )
+		
+		fgSizer24 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer24.AddGrowableCol( 1 )
+		fgSizer24.SetFlexibleDirection( wx.BOTH )
+		fgSizer24.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		m_radioBox5Choices = [ u"Calculate", u"Export", u"Append" ]
+		self.m_radioBox5 = wx.RadioBox( self.connectivityMetrics, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, m_radioBox5Choices, 1, wx.RA_SPECIFY_COLS )
+		self.m_radioBox5.SetSelection( 0 )
+		fgSizer24.Add( self.m_radioBox5, 0, wx.ALL, 5 )
+		
+		fgSizer28 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer28.AddGrowableCol( 1 )
+		fgSizer28.SetFlexibleDirection( wx.BOTH )
+		fgSizer28.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_staticText65 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Planning Unit versus Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText65.Wrap( -1 )
+		fgSizer28.Add( self.m_staticText65, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.CF_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		fgSizer28.Add( self.CF_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		self.m_staticText69 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Feature Targets:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText69.Wrap( -1 )
+		fgSizer28.Add( self.m_staticText69, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		bSizer27 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.m_staticText70 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Percent of Feature Targeted:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText70.Wrap( -1 )
+		bSizer27.Add( self.m_staticText70, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.CFT_percent_slider = wx.Slider( self.connectivityMetrics, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		bSizer27.Add( self.CFT_percent_slider, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.customize_spec = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Customize Conservation Feature File", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.customize_spec.Enable( False )
+		self.customize_spec.SetToolTip( u"To enable, please calculate  any Conservation Feature metrics" )
+		
+		bSizer27.Add( self.customize_spec, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		
+		fgSizer28.Add( bSizer27, 1, wx.EXPAND, 5 )
+		
+		self.SPEC_filetxt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.SPEC_filetxt.Wrap( -1 )
+		fgSizer28.Add( self.SPEC_filetxt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.SPEC_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		fgSizer28.Add( self.SPEC_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		fgSizer24.Add( fgSizer28, 1, wx.EXPAND, 5 )
+		
+		
+		metricsMainSizer.Add( fgSizer24, 1, wx.EXPAND, 5 )
 		
 		self.m_staticline12 = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metricsMainSizer.Add( self.m_staticline12, 0, wx.EXPAND |wx.ALL, 5 )
@@ -455,6 +514,21 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		metricsMainSizer.Add( fgSizer81, 1, wx.EXPAND, 5 )
 		
+		fgSizer241 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer241.AddGrowableCol( 1 )
+		fgSizer241.SetFlexibleDirection( wx.BOTH )
+		fgSizer241.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.BD_filecheck = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Export Boundary Definition to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.BD_filecheck.SetValue(True) 
+		fgSizer241.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.BD_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		fgSizer241.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		metricsMainSizer.Add( fgSizer241, 1, wx.EXPAND, 5 )
+		
 		self.m_staticline5 = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metricsMainSizer.Add( self.m_staticline5, 0, wx.EXPAND |wx.ALL, 5 )
 		
@@ -467,7 +541,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spacertext.Wrap( -1 )
 		fgSizer20.Add( self.spacertext, 0, wx.ALL, 5 )
 		
-		self.calc_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Calculate Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.calc_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Calculate and Export Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer20.Add( self.calc_metrics, 0, wx.ALL, 5 )
 		
 		self.m_staticText53 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"For:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -486,7 +560,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.m_auinotebook1.AddPage( self.connectivityMetrics, u"Connectivity Metrics", True, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.connectivityMetrics, u"Connectivity Metrics", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.m_auinotebook1.AddPage( self.marxanAnalysis, u"Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -546,22 +620,22 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer113.Add( self.bmap_buffer_txt, 0, wx.ALL, 5 )
 		
 		self.bmap_landcol = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.Colour( 221, 170, 102 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.bmap_landcol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.bmap_landcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer113.Add( self.bmap_landcol, 0, wx.ALL, 5 )
 		
 		self.bmap_lakecol = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.Colour( 176, 196, 222 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.bmap_lakecol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.bmap_lakecol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer113.Add( self.bmap_lakecol, 0, wx.ALL, 5 )
 		
 		self.bmap_oceancol = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.Colour( 135, 206, 250 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.bmap_oceancol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.bmap_oceancol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer113.Add( self.bmap_oceancol, 0, wx.ALL, 5 )
 		
 		self.bmap_buffer = wx.TextCtrl( self.plottingOptions, wx.ID_ANY, u"1.0", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bmap_buffer.SetToolTipString( u"Spatial Buffer around the shapefiles measured in decimal degrees" )
+		self.bmap_buffer.SetToolTip( u"Spatial Buffer around the shapefiles measured in decimal degrees" )
 		
 		fgSizer113.Add( self.bmap_buffer, 0, wx.ALL, 5 )
 		
@@ -620,12 +694,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer111.Add( self.pu_metric_choice, 0, wx.ALL, 5 )
 		
 		self.pu_metric_lowcol = wx.ColourPickerCtrl( self.pu_plot_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_lowcol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_lowcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer111.Add( self.pu_metric_lowcol, 0, wx.ALL, 5 )
 		
 		self.pu_metric_hicol = wx.ColourPickerCtrl( self.pu_plot_opt, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_hicol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_hicol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer111.Add( self.pu_metric_hicol, 0, wx.ALL, 5 )
 		
@@ -673,12 +747,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer11.Add( self.cu_metric_choice, 0, wx.ALL, 5 )
 		
 		self.cu_metric_lowcol = wx.ColourPickerCtrl( self.cu_plot_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_lowcol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_lowcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11.Add( self.cu_metric_lowcol, 0, wx.ALL, 5 )
 		
 		self.cu_metric_hicol = wx.ColourPickerCtrl( self.cu_plot_opt, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_hicol.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_hicol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11.Add( self.cu_metric_hicol, 0, wx.ALL, 5 )
 		
@@ -709,7 +783,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer1112.Add( self.pu_poly_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.pu_poly_col = wx.ColourPickerCtrl( self.pu_poly_plot_opt, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_poly_col.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_poly_col.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer1112.Add( self.pu_poly_col, 0, wx.ALL, 5 )
 		
@@ -735,7 +809,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer11121.Add( self.cu_poly_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.cu_poly_col = wx.ColourPickerCtrl( self.cu_poly_plot_opt, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_poly_col.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_poly_col.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11121.Add( self.cu_poly_col, 0, wx.ALL, 5 )
 		
@@ -801,12 +875,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer1111.Add( self.pu_metric_choice1, 0, wx.ALL, 5 )
 		
 		self.pu_metric_lowcol1 = wx.ColourPickerCtrl( self.pu_plot_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_lowcol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_lowcol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer1111.Add( self.pu_metric_lowcol1, 0, wx.ALL, 5 )
 		
 		self.pu_metric_hicol1 = wx.ColourPickerCtrl( self.pu_plot_opt1, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_hicol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_metric_hicol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer1111.Add( self.pu_metric_hicol1, 0, wx.ALL, 5 )
 		
@@ -854,12 +928,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer112.Add( self.cu_metric_choice1, 0, wx.ALL, 5 )
 		
 		self.cu_metric_lowcol1 = wx.ColourPickerCtrl( self.cu_plot_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_lowcol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_lowcol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer112.Add( self.cu_metric_lowcol1, 0, wx.ALL, 5 )
 		
 		self.cu_metric_hicol1 = wx.ColourPickerCtrl( self.cu_plot_opt1, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_hicol1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_metric_hicol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer112.Add( self.cu_metric_hicol1, 0, wx.ALL, 5 )
 		
@@ -890,7 +964,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer11122.Add( self.pu_poly_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.pu_poly_col1 = wx.ColourPickerCtrl( self.pu_poly_plot_opt1, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_poly_col1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.pu_poly_col1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer11122.Add( self.pu_poly_col1, 0, wx.ALL, 5 )
 		
@@ -916,7 +990,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer111211.Add( self.cu_poly_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.cu_poly_col1 = wx.ColourPickerCtrl( self.cu_poly_plot_opt1, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_poly_col1.SetToolTipString( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.cu_poly_col1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
 		fgSizer111211.Add( self.cu_poly_col1, 0, wx.ALL, 5 )
 		
@@ -973,7 +1047,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( demoMainSizer1 )
 		self.plottingOptions.Layout()
 		demoMainSizer1.Fit( self.plottingOptions )
-		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", False, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", True, wx.NullBitmap )
 		
 		bSizer3.Add( self.m_auinotebook1, 1, wx.EXPAND, 5 )
 		
@@ -1005,6 +1079,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
 		self.PUCM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCM_file )
 		self.rescale_button.Bind( wx.EVT_BUTTON, self.on_rescale_button )
+		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
+		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
+		self.SPEC_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file_append )
+		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.lyr1_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
 		self.lyr2_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
@@ -1077,6 +1155,18 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_rescale_button( self, event ):
 		event.Skip()
 	
+	def on_CT_file( self, event ):
+		event.Skip()
+	
+	def on_customize_spec( self, event ):
+		event.Skip()
+	
+	def on_CT_file_append( self, event ):
+		event.Skip()
+	
+	def on_BD_file( self, event ):
+		event.Skip()
+	
 	def on_calc_metrics( self, event ):
 		event.Skip()
 	
@@ -1088,6 +1178,92 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_plot_graph_button( self, event ):
+		event.Skip()
+	
+
+###########################################################################
+## Class spec_customizer
+###########################################################################
+
+class spec_customizer ( wx.Dialog ):
+	
+	def __init__( self, parent ):
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
+		
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+		
+		fgSizer29 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		fgSizer29.SetFlexibleDirection( wx.BOTH )
+		fgSizer29.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.spec_grid = wx.grid.Grid( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		
+		# Grid
+		self.spec_grid.CreateGrid( 0, 4 )
+		self.spec_grid.EnableEditing( True )
+		self.spec_grid.EnableGridLines( True )
+		self.spec_grid.EnableDragGridSize( False )
+		self.spec_grid.SetMargins( 0, 0 )
+		
+		# Columns
+		self.spec_grid.EnableDragColMove( False )
+		self.spec_grid.EnableDragColSize( True )
+		self.spec_grid.SetColLabelSize( 30 )
+		self.spec_grid.SetColLabelValue( 0, u"id" )
+		self.spec_grid.SetColLabelValue( 1, u"target" )
+		self.spec_grid.SetColLabelValue( 2, u"spf" )
+		self.spec_grid.SetColLabelValue( 3, u"name" )
+		self.spec_grid.SetColLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Rows
+		self.spec_grid.EnableDragRowSize( True )
+		self.spec_grid.SetRowLabelSize( 80 )
+		self.spec_grid.SetRowLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Label Appearance
+		
+		# Cell Defaults
+		self.spec_grid.SetDefaultCellAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		fgSizer29.Add( self.spec_grid, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		
+		fgSizer31 = wx.FlexGridSizer( 0, 3, 0, 0 )
+		fgSizer31.AddGrowableCol( 0 )
+		fgSizer31.SetFlexibleDirection( wx.BOTH )
+		fgSizer31.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.spacer_text = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spacer_text.Wrap( -1 )
+		fgSizer31.Add( self.spacer_text, 0, wx.ALL, 5 )
+		
+		self.ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer31.Add( self.ok, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
+		self.cancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer31.Add( self.cancel, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
+		
+		fgSizer29.Add( fgSizer31, 1, wx.EXPAND, 5 )
+		
+		
+		self.SetSizer( fgSizer29 )
+		self.Layout()
+		fgSizer29.Fit( self )
+		
+		self.Centre( wx.BOTH )
+		
+		# Connect Events
+		self.ok.Bind( wx.EVT_BUTTON, self.on_spec_ok )
+		self.cancel.Bind( wx.EVT_BUTTON, self.on_spec_cancel )
+	
+	def __del__( self ):
+		pass
+	
+	
+	# Virtual event handlers, overide them in your derived class
+	def on_spec_ok( self, event ):
+		event.Skip()
+	
+	def on_spec_cancel( self, event ):
 		event.Skip()
 	
 

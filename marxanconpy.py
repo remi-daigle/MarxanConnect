@@ -63,39 +63,35 @@ def buffer_shp_corners(gdf_list, bufferwidth = 0):
         if(latmaxtemp>latmax): latmax = latmaxtemp
     return lonmin, lonmax, latmin, latmax
 
-def conmat2vertexdegree(pucm_filepath):
-    conmat = pandas.read_csv(pucm_filepath,index_col= 0)
+def conmat2vertexdegree(conmat):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
     vertexdegree = g.degree()
     return vertexdegree
 
-def conmat2betweencent(pucm_filepath):
-    conmat = pandas.read_csv(pucm_filepath,index_col= 0)
+def conmat2betweencent(conmat):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
     betweencent = g.betweenness()
     return betweencent
 
-def conmat2eigvectcent(pucm_filepath):
-    conmat = pandas.read_csv(pucm_filepath,index_col= 0)
+def conmat2eigvectcent(conmat):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
     eigvectcent = g.evcent()
     return eigvectcent
 
-def conmat2selfrecruit(pucm_filepath):
-    conmat = pandas.read_csv(pucm_filepath,index_col= 0)
+def conmat2selfrecruit(conmat):
     selfrecruit = numpy.diag(conmat.as_matrix()).tolist()
     return selfrecruit
 
-def conmat2connboundary(pucm_filepath):
-    conmat = pandas.read_csv(pucm_filepath,index_col= 0)
-    connboundary = conmat.melt(id_vars=['puID'])
-    connboundary.columns = ['id1', 'id2', 'boundary']
-    return connboundary
+def conmat2connboundary(conmat):
+    conmat['id1'] = conmat.index
+    boundary_dat = conmat.melt(id_vars=['id1'])
+    boundary_dat.columns = ['id1', 'id2', 'boundary']
+    boundary_dat = boundary_dat.to_json(orient='split')
+    return boundary_dat
 
-def conmat2minplanargraph(pucm_filepath):
-        conmat = pandas.read_csv(pucm_filepath,index_col= 0)
-        g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree()
-        return g
+def conmat2minplanargraph(conmat):
+    g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree()
+    return g
 
 
 
