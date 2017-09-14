@@ -1,7 +1,6 @@
 import numpy
 import geopandas as gpd
 import pandas
-import os
 import igraph
 
 
@@ -83,15 +82,24 @@ def conmat2selfrecruit(conmat):
     return selfrecruit
 
 def conmat2connboundary(conmat):
-    conmat['id1'] = conmat.index
-    boundary_dat = conmat.melt(id_vars=['id1'])
+    print(conmat.shape)
+    cm = conmat.copy()
+    cm['id1'] = cm.index
+    boundary_dat = cm.melt(id_vars=['id1'])
+    boundary_dat.columns = ['id1', 'id2', 'boundary']
+    boundary_dat = boundary_dat.to_json(orient='split')
+    print(conmat.shape)
+    return boundary_dat
+
+def conmat2minplanarboundary(conmat):
+    g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree()
+    mpgmat = g.get_adjacency().data
+    mpgmat = pandas.DataFrame(mpgmat)
+    mpgmat['id1'] = mpgmat.index
+    boundary_dat = mpgmat.melt(id_vars=['id1'])
     boundary_dat.columns = ['id1', 'id2', 'boundary']
     boundary_dat = boundary_dat.to_json(orient='split')
     return boundary_dat
-
-def conmat2minplanargraph(conmat):
-    g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree()
-    return g
 
 
 

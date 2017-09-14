@@ -118,7 +118,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		sizer01 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.PU_def1 = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PU_def1 = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.PU_def1.Wrap( -1 )
 		sizer01.Add( self.PU_def1, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -146,7 +146,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( demoMainSizer2 )
 		self.spatialInput.Layout()
 		demoMainSizer2.Fit( self.spatialInput )
-		self.m_auinotebook1.AddPage( self.spatialInput, u"Spatial Input", False, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.spatialInput, u"Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer25 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer25.AddGrowableCol( 0 )
@@ -178,20 +178,20 @@ class MarxanConnectGUI ( wx.Frame ):
 		sizer6.SetFlexibleDirection( wx.HORIZONTAL )
 		sizer6.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		unitsRadioBoxChoices = [ u"Probability", u"Individuals" ]
-		self.unitsRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, unitsRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.unitsRadioBox.SetSelection( 0 )
-		sizer6.Add( self.unitsRadioBox, 0, wx.ALL, 5 )
+		demo_unitsRadioBoxChoices = [ u"Probability", u"Individuals" ]
+		self.demo_unitsRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, demo_unitsRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_unitsRadioBox.SetSelection( 0 )
+		sizer6.Add( self.demo_unitsRadioBox, 0, wx.ALL, 5 )
 		
-		matrixRadioBox4Choices = [ u"Settlement", u"Connectivity", u"Migration", u"Local Immigration", u"Dispersal Flux" ]
-		self.matrixRadioBox4 = wx.RadioBox( self.demographic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, matrixRadioBox4Choices, 3, wx.RA_SPECIFY_COLS )
-		self.matrixRadioBox4.SetSelection( 1 )
-		sizer6.Add( self.matrixRadioBox4, 0, wx.ALL|wx.EXPAND, 5 )
+		demo_matrixRadioBoxChoices = [ u"Settlement", u"Connectivity", u"Migration", u"Local Immigration", u"Dispersal Flux" ]
+		self.demo_matrixRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, demo_matrixRadioBoxChoices, 3, wx.RA_SPECIFY_COLS )
+		self.demo_matrixRadioBox.SetSelection( 1 )
+		sizer6.Add( self.demo_matrixRadioBox, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		formatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
-		self.formatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, formatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
-		self.formatRadioBox.SetSelection( 0 )
-		sizer6.Add( self.formatRadioBox, 0, wx.ALL, 5 )
+		demo_formatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
+		self.demo_formatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, demo_formatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
+		self.demo_formatRadioBox.SetSelection( 0 )
+		sizer6.Add( self.demo_formatRadioBox, 0, wx.ALL, 5 )
 		
 		
 		connMainSizer.Add( sizer6, 1, wx.ALIGN_CENTER, 5 )
@@ -403,10 +403,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		fgSizer24.SetFlexibleDirection( wx.BOTH )
 		fgSizer24.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		m_radioBox5Choices = [ u"Calculate", u"Export", u"Append" ]
-		self.m_radioBox5 = wx.RadioBox( self.connectivityMetrics, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, m_radioBox5Choices, 1, wx.RA_SPECIFY_COLS )
-		self.m_radioBox5.SetSelection( 0 )
-		fgSizer24.Add( self.m_radioBox5, 0, wx.ALL, 5 )
+		cf_export_radioBoxChoices = [ u"Calculate", u"Export", u"Append" ]
+		self.cf_export_radioBox = wx.RadioBox( self.connectivityMetrics, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, cf_export_radioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.cf_export_radioBox.SetSelection( 1 )
+		fgSizer24.Add( self.cf_export_radioBox, 0, wx.ALL, 5 )
 		
 		fgSizer28 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer28.AddGrowableCol( 1 )
@@ -433,11 +433,23 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.CFT_percent_slider = wx.Slider( self.connectivityMetrics, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
 		bSizer27.Add( self.CFT_percent_slider, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.customize_spec = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Customize Conservation Feature File", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.customize_spec.Enable( False )
-		self.customize_spec.SetToolTip( u"To enable, please calculate  any Conservation Feature metrics" )
+		self.custom_spec_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.custom_spec_panel.SetToolTip( u"To enable, please calculate  any Conservation Feature metrics" )
 		
-		bSizer27.Add( self.customize_spec, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		fgSizer32 = wx.FlexGridSizer( 1, 1, 0, 0 )
+		fgSizer32.SetFlexibleDirection( wx.BOTH )
+		fgSizer32.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.customize_spec = wx.Button( self.custom_spec_panel, wx.ID_ANY, u"Customize Conservation Feature File", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.customize_spec.Enable( False )
+		
+		fgSizer32.Add( self.customize_spec, 0, wx.ALL, 14 )
+		
+		
+		self.custom_spec_panel.SetSizer( fgSizer32 )
+		self.custom_spec_panel.Layout()
+		fgSizer32.Fit( self.custom_spec_panel )
+		bSizer27.Add( self.custom_spec_panel, 1, wx.ALL, 5 )
 		
 		
 		fgSizer28.Add( bSizer27, 1, wx.EXPAND, 5 )
@@ -1047,7 +1059,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( demoMainSizer1 )
 		self.plottingOptions.Layout()
 		demoMainSizer1.Fit( self.plottingOptions )
-		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", True, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.plottingOptions, u"Plotting Options", False, wx.NullBitmap )
 		
 		bSizer3.Add( self.m_auinotebook1, 1, wx.EXPAND, 5 )
 		
@@ -1071,9 +1083,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.on_getting_started, id = self.start.GetId() )
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
 		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
-		self.unitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
-		self.matrixRadioBox4.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
-		self.formatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_formatRadioBox )
+		self.demo_unitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
+		self.demo_matrixRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
+		self.demo_formatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_formatRadioBox )
 		self.CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CM_file )
 		self.rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_rescaleRadioBox )
 		self.CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
@@ -1192,9 +1204,9 @@ class spec_customizer ( wx.Dialog ):
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
-		fgSizer29 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		fgSizer29.SetFlexibleDirection( wx.BOTH )
-		fgSizer29.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		fgSizer291 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		fgSizer291.SetFlexibleDirection( wx.BOTH )
+		fgSizer291.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.spec_grid = wx.grid.Grid( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		
@@ -1224,7 +1236,7 @@ class spec_customizer ( wx.Dialog ):
 		
 		# Cell Defaults
 		self.spec_grid.SetDefaultCellAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
-		fgSizer29.Add( self.spec_grid, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		fgSizer291.Add( self.spec_grid, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 		
 		fgSizer31 = wx.FlexGridSizer( 0, 3, 0, 0 )
 		fgSizer31.AddGrowableCol( 0 )
@@ -1242,12 +1254,12 @@ class spec_customizer ( wx.Dialog ):
 		fgSizer31.Add( self.cancel, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
 		
-		fgSizer29.Add( fgSizer31, 1, wx.EXPAND, 5 )
+		fgSizer291.Add( fgSizer31, 1, wx.EXPAND, 5 )
 		
 		
-		self.SetSizer( fgSizer29 )
+		self.SetSizer( fgSizer291 )
 		self.Layout()
-		fgSizer29.Fit( self )
+		fgSizer291.Fit( self )
 		
 		self.Centre( wx.BOTH )
 		
