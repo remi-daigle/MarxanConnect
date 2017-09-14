@@ -95,7 +95,8 @@ def conmat2minplanarboundary(conmat):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree()
     mpgmat = g.get_adjacency().data
     mpgmat = pandas.DataFrame(mpgmat)
-    mpgmat['id1'] = mpgmat.index
+    mpgmat.columns = conmat.columns
+    mpgmat['id1'] = conmat.index
     boundary_dat = mpgmat.melt(id_vars=['id1'])
     boundary_dat.columns = ['id1', 'id2', 'boundary']
     boundary_dat = boundary_dat.to_json(orient='split')
@@ -103,22 +104,4 @@ def conmat2minplanarboundary(conmat):
 
 
 
-# pu_filepath = r'C:\Program Files (x86)\MarxanConnect\data\shapefiles\marxan_pu.shp'
-# cu_filepath = r'C:\Program Files (x86)\MarxanConnect\data\shapefiles\connectivity_grid.shp'
-
-# pu = gpd.GeoDataFrame.from_file(pu_filepath)
-#
-# cm_filedir = r'C:\Program Files (x86)\MarxanConnect\data'
-# cm_filename='connectivity_matrix.csv'
-# cm_filepath = os.path.join(pucm_filedir, pucm_filename)
-#
-
-# pucm_filedir=r'C:\Users\Remi-Work\Documents'
-# pucm_filename='PU_connectivity_matrix.csv'
-# pucm_filepath = os.path.join(pucm_filedir, pucm_filename)
-# conmat = pandas.read_csv(os.path.join(pucm_filedir, pucm_filename),index_col=0)
-# eigvectcent=conmat2eigvectcent(conmat)
-#
-# conmat = pandas.read_csv(os.path.join(pucm_filedir, pucm_filename))
-# boundary_dat = conmat.melt(id_vars=['puID'])
-# boundary_dat.columns = ['id1', 'id2', 'boundary']
+# conmat = pandas.read_csv('C:\\Users\\Remi-Work\\Documents\\PU_connectivity_matrix.csv',index_col= 0)

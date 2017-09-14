@@ -468,12 +468,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         if(self.bd_demo_conn_boundary.GetValue()):
 #            print(self.conmat.shape)
-            self.project['connectivityMetrics']['boundary']['demo_conn_boundary'] = marxanconpy.conmat2connboundary(self.conmat)
+            self.project['connectivityMetrics']['boundary']['demo_conn_boundary'+type] = marxanconpy.conmat2connboundary(self.conmat)
 #            print(self.conmat.shape)
             
         if(self.bd_demo_min_plan_graph.GetValue()):
 #            print(self.conmat.shape)
-            self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'] = marxanconpy.conmat2minplanarboundary(self.conmat)
+            self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'+type] = marxanconpy.conmat2minplanarboundary(self.conmat)
             
         # choose correct matrix for genetic metrics
         # insert stuff here!
@@ -489,15 +489,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.cf_export_radioBox.GetSelection()==1:
             # export
             print('export!')
+            filtered_dict = {k:v for k,v in self.project['connectivityMetrics']['spec'].items() if type in k}
+            self.export_feature_files(filtered_dict)
+
         elif self.cf_export_radioBox.GetSelection()==2: 
             #append
             print('append!')
         
         if self.BD_filecheck.GetValue():
+            
             self.export_boundary_file(BD_filepath = self.project['filepaths']['bd_filepath'])
         
-#    def export_feature_files(self):
-#        
+    def export_feature_files(self, filtered_dict):
+        pandas.DataFrame(filtered_dict).to_csv( self.project['filepaths']['cf_filepath'], index = False)
 #    def append_feature_files(self):
         
     def export_boundary_file(self, BD_filepath):
@@ -513,15 +517,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Export each selected boundary definition            
         if self.bd_demo_conn_boundary.GetValue():
             if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary'], orient='split').to_csv(str.replace(BD_filepath,".dat","_demo_conn_boundary_"+type+".dat"), index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary'+type], orient='split').to_csv(str.replace(BD_filepath,".dat","_demo_conn_boundary_"+type+".dat"), index = False)
             else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary'], orient='split').to_csv(BD_filepath, index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary'+type], orient='split').to_csv(BD_filepath, index = False)
         
         if self.bd_demo_min_plan_graph.GetValue():
             if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'], orient='split').to_csv(str.replace(BD_filepath,".dat","_demo_min_plan_graph_"+type+".dat"), index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'+type], orient='split').to_csv(str.replace(BD_filepath,".dat","_demo_min_plan_graph_"+type+".dat"), index = False)
             else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'], orient='split').to_csv(BD_filepath, index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'+type], orient='split').to_csv(BD_filepath, index = False)
         
         # warn when multiple boundary definitions
         if multiple:
