@@ -36,6 +36,7 @@ import networkx as nx
 import threading
 import json
 
+import time
 
 # import MarxanConnect python module
 import marxanconpy
@@ -74,7 +75,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # frame.Show()
         
         # set opening tab to SPatial Input (0)
-        self.m_auinotebook1.ChangeSelection(2)
+        self.auinotebook.ChangeSelection(2)
     
 ###########################  project managment functions ######################        
     def on_new_project( self, event, launch = False):
@@ -131,7 +132,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
         frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
- 
     def on_save_project_as(self, event):
         """
         Create and show the Open FileDialog to save a project
@@ -208,8 +208,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
          up to 2 other shapefiles
         """
         if not hasattr(self, 'plot'):
-            self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-            self.m_auinotebook1.AddPage(self.plot, u"Plot", False, wx.NullBitmap)
+            self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+            self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
         self.plot.figure = plt.figure()
         self.plot.axes = self.plot.figure.gca()
         self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
@@ -281,9 +281,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                      trans = self.cu_poly_alpha1.GetValue()/100)
         
         #change selection to plot tab
-        for i in range(self.m_auinotebook1.GetPageCount()):
-            if self.m_auinotebook1.GetPageText(i) == "Plot":
-                self.m_auinotebook1.ChangeSelection(i)
+        for i in range(self.auinotebook.GetPageCount()):
+            if self.auinotebook.GetPageText(i) == "7) Plot":
+                self.auinotebook.ChangeSelection(i)
 
     def draw_shapefiles(self, sf, colour=None, trans=None, metric=None, lowcol=None, hicol=None, legend=None):
         """
@@ -341,13 +341,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 
 
 ###########################  graph plotting functions #########################
+
     def on_plot_graph_button(self, event):
         """
         Initiates graph plotting. Creates a 'Plot' tab, and call 'on_draw_graph' to plot the graph
         """
         if not hasattr(self, 'plot'):
-            self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-            self.m_auinotebook1.AddPage(self.plot, u"Plot", False, wx.NullBitmap)
+            self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+            self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
         self.plot.figure = plt.figure()
         self.plot.axes = self.plot.figure.gca()
         self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
@@ -357,10 +358,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.Fit()
         self.on_draw_graph(pucm_filedir=self.project['filepaths']['pucm_filedir'],
                            pucm_filename=self.project['filepaths']['pucm_filename'])
-        for i in range(self.m_auinotebook1.GetPageCount()):
-            if self.m_auinotebook1.GetPageText(i) == "Plot":
-                self.m_auinotebook1.ChangeSelection(i)
-        
+        for i in range(self.auinotebook.GetPageCount()):
+            if self.auinotebook.GetPageText(i) == "7) Plot":
+                self.auinotebook.ChangeSelection(i)
 
     def on_draw_graph(self,pucm_filedir, pucm_filename):
         """
@@ -433,6 +433,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.CU_file.Enable(enable = False)
             self.PUCM_outputtext.Enable(enable = False)
             self.PUCM_def.Enable(enable = False)
+            self.PUCM_check.Enable(enable=False)
             self.PUCM_filetext.Enable(enable = False)
             self.PUCM_file.Enable(enable = False)
             self.rescale_button.Enable(enable = False)
@@ -442,20 +443,28 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.CU_file.Enable(enable = True)
             self.PUCM_outputtext.Enable(enable = True)
             self.PUCM_def.Enable(enable = True)
-            self.PUCM_filetext.Enable(enable = True)
-            self.PUCM_file.Enable(enable = True)
+            self.PUCM_check.Enable(enable=True)
+            if self.PUCM_check.GetValue():
+                self.PUCM_filetext.Enable(enable = True)
+                self.PUCM_file.Enable(enable = True)
             self.rescale_button.Enable(enable = True)
             
     def on_rescale_button(self, event):
         """
         Rescales the connectivity matrix to match the scale of the planning units
         """
-        threading.Thread(
-                marxanconpy.rescale_matrix(self.project['filepaths']['pu_filepath'],
-                                           self.project['filepaths']['cu_filepath'],
-                                           self.project['filepaths']['cm_filepath'],
-                                           self.project['filepaths']['pucm_filepath'])
-                ).start()
+        ProcessThreading(parent=self, rescale_matrix = True)
+
+    def on_PUCM_check( self, event ):
+        """
+        Checks if the planning unit connectivity matrix should be exported when rescaling
+        """
+        if self.PUCM_check.GetValue():
+            self.PUCM_filetext.Enable(enable=True)
+            self.PUCM_file.Enable(enable=True)
+        else:
+            self.PUCM_filetext.Enable(enable = False)
+            self.PUCM_file.Enable(enable = False)
 
 ###########################  metric related functions #########################
     def on_calc_metrics(self, event):
@@ -538,7 +547,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             type='cu'
 
         # Export or append feature files
-        if self.cf_export_radioBox.GetSelection()==1:
+        if self.cf_export_radioBox.GetSelection()==0:
             # export spec
             spec = pandas.read_json(self.project['spec_'+type+'_dat'], orient = 'split')
             spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
@@ -550,7 +559,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             cf = cf.rename(columns = {'id':'species'}).sort_values(['species','pu'])
             cf[['species','pu','amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
 
-        elif self.cf_export_radioBox.GetSelection()==2:
+        elif self.cf_export_radioBox.GetSelection()==1:
             # append
             old_spec = pandas.read_csv(self.project['filepaths']['spec_filepath'])
             old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
@@ -575,8 +584,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.BD_filecheck.GetValue():
 
             self.export_boundary_file(BD_filepath = self.project['filepaths']['bd_filepath'])
-
-
 
     def export_boundary_file(self, BD_filepath):
         # choose type
@@ -615,9 +622,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if multiple:
             self.warn_dialog(message = "Multiple Boundary Definitions were selected. Boundary file names have been"
                                        " edited to include type.", caption = "Warning!")
-    
-    
-        
         
     def get_con_feature_data(self, type):
         """
@@ -677,7 +681,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         elif(self.calc_metrics_type.GetCurrentSelection()==1):
             type='cu'
         self.on_new_spec(type)
-        
 
 class spec_customizer (gui.spec_customizer):
     def __init__( self, parent ):
@@ -810,6 +813,35 @@ class getting_started(wx.Frame):
 
 
 ########################################################################################################################
+
+###########################  threading #########################
+class ProcessThreading(object):
+    """
+    The run() method will be started and it will run in the background
+    until the application exits.
+    """
+
+    def __init__(self, parent, rescale_matrix = False):
+        self.parent = parent
+        self.rescale_matrix = rescale_matrix
+
+        thread = threading.Thread(target=self.run, args=())
+        thread.daemon = True  # Daemonize thread
+        thread.start()  # Start the execution
+
+    def run(self):
+        if self.rescale_matrix:
+            print('rescaling')
+            self.parent.project['connectivityMetrics']['pucm_conmat'] = marxanconpy.rescale_matrix(
+                self.parent.project['filepaths']['pu_filepath'],
+                self.parent.project['filepaths']['cu_filepath'],
+                self.parent.project['filepaths']['cm_filepath'],
+                self.parent.project['filepaths']['pucm_filepath']).to_json(orient='split')
+
+            if self.parent.PUCM_check.GetValue():
+                pandas.read_json(self.parent.project['connectivityMetrics']['pucm_conmat']).to_csv(
+                    pucm_filepath, index=True, header=True, sep=",")
+            print("done!")
 ###########################  run the GUI ######################################
 app = wx.App(False)
  

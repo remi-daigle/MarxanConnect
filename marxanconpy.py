@@ -41,7 +41,8 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,pucm_filepath):
 
     pu_conmat = pandas.DataFrame(pu_conmat, index=pu.ID, columns=pu.ID)
     pu_conmat.index.name = "puID"
-    pu_conmat.to_csv(pucm_filepath, index=True, header=True, sep=",")
+    return pu_conmat
+
 
 def buffer_shp_corners(gdf_list, bufferwidth = 0):
     """
