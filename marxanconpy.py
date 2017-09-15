@@ -82,13 +82,11 @@ def conmat2selfrecruit(conmat):
     return selfrecruit
 
 def conmat2connboundary(conmat):
-    print(conmat.shape)
     cm = conmat.copy()
     cm['id1'] = cm.index
     boundary_dat = cm.melt(id_vars=['id1'])
     boundary_dat.columns = ['id1', 'id2', 'boundary']
     boundary_dat = boundary_dat.to_json(orient='split')
-    print(conmat.shape)
     return boundary_dat
 
 def conmat2minplanarboundary(conmat):
@@ -104,4 +102,6 @@ def conmat2minplanarboundary(conmat):
 
 
 
-# conmat = pandas.read_csv('C:\\Users\\Remi-Work\\Documents\\PU_connectivity_matrix.csv',index_col= 0)
+conmat = pandas.read_csv('C:\\Users\\Remi-Work\\Documents\\PU_connectivity_matrix.csv',index_col= 0)
+cm2 = conmat.to_json(orient='split')
+pandas.read_json(cm2)['index']

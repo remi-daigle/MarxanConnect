@@ -57,7 +57,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
-                icon = wx.Icon(os.path.join(os.getcwd(),'icon_bundle.ico'), wx.BITMAP_TYPE_ICO, desiredWidth=sz, desiredHeight=sz)
+                icon = wx.Icon(os.path.join(os.getcwd(),'icon_bundle.ico'),
+                               wx.BITMAP_TYPE_ICO,
+                               desiredWidth=sz,
+                               desiredHeight=sz)
                 icons.AddIcon(icon) 
             except: 
                 pass 
@@ -67,8 +70,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_new_project(event=None, launch = True)
         
         # launch Getting started window
-#        frame = getting_started(parent=self)
-#        frame.Show()
+        frame = getting_started(parent=self)
+        # frame.Show()
         
         # set opening tab to SPatial Input (0)
         self.m_auinotebook1.ChangeSelection(2)
@@ -91,9 +94,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
         self.project['filepaths']['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
         self.project['filepaths']['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
-        self.project['filepaths']['pucm_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
+        self.project['filepaths']['pucm_filepath'] = os.path.join(os.environ['USERPROFILE'],
+                                                                  "Documents","PU_connectivity_matrix.csv")
         self.project['filepaths']['cf_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","puvspr.dat")
-        self.project['filepaths']['spec_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","PU_connectivity_matrix.csv")
+        self.project['filepaths']['spec_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","spec.dat")
         self.project['filepaths']['bd_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","boundary.dat")
         
         # if called at launch time, no need to ask users to create a new project file right away
@@ -173,16 +177,20 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_license( self, event ):
         with open('LICENSE', 'r', encoding="utf8") as file :
             filedata = file.read()
-        dlg = wx.MessageBox(message = filedata, caption = "Marxan with Connectivity License", style=wx.OK)
+        dlg = wx.MessageBox(message = filedata,
+                            caption = "Marxan with Connectivity License",
+                            style=wx.OK)
         dlg.Destroy()
     
     def on_about( self, event ):
-        dlg = wx.MessageBox(message = "Version: v0.0.2\n(C) 2017 Remi Daigle\n", caption = "About Marxan with Connectivity", style=wx.OK)
+        dlg = wx.MessageBox(message = "Version: v0.0.2\n(C) 2017 Remi Daigle\n",
+                            caption = "About Marxan with Connectivity",
+                            style=wx.OK)
         dlg.Destroy()
 
     def on_getting_started( self, event ):
         # insert getting started tab and hyperlinks (wxFormBuilder can't handle hyperlinks)
-        frame = getting_started()
+        frame = getting_started(parent = self)
         frame.Show()
      
 ###########################  warning functions ################################
@@ -196,7 +204,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 ###########################  map plotting functions ###########################
     def on_plot_map_button(self, event):
         """
-        Initiates map plotting. Creates a 'Plot' tab, plots the basemap (if desired) and calls 'draw_shapefiles' to plot up to 2 other shapefiles
+        Initiates map plotting. Creates a 'Plot' tab, plots the basemap (if desired) and calls 'draw_shapefiles' to plot
+         up to 2 other shapefiles
         """
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
@@ -232,37 +241,51 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==0):
                 metric = self.get_con_feature_data(type = 'pu')
                 self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol.GetColour(),
-                                     hicol = self.pu_metric_hicol.GetColour(), trans = self.pu_metric_alpha.GetValue()/100, legend = self.pu_metric_legend.GetCurrentSelection())
+                                     hicol = self.pu_metric_hicol.GetColour(),
+                                     trans = self.pu_metric_alpha.GetValue()/100,
+                                     legend = self.pu_metric_legend.GetCurrentSelection())
             elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==1):
                 metric = self.get_con_feature_data(type = 'cu')
                 self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol.GetColour(),
-                                     hicol = self.cu_metric_hicol.GetColour(), trans = self.cu_metric_alpha.GetValue()/100, legend = self.cu_metric_legend.GetCurrentSelection())
+                                     hicol = self.cu_metric_hicol.GetColour(),
+                                     trans = self.cu_metric_alpha.GetValue()/100,
+                                     legend = self.cu_metric_legend.GetCurrentSelection())
             elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==2):
-                self.draw_shapefiles(sf = pu, colour = self.pu_poly_col.GetColour(), trans = self.pu_poly_alpha.GetValue()/100)
+                self.draw_shapefiles(sf = pu, colour = self.pu_poly_col.GetColour(),
+                                     trans = self.pu_poly_alpha.GetValue()/100)
             else:
-                self.draw_shapefiles(sf = cu, colour = self.cu_poly_col.GetColour(), trans = self.cu_poly_alpha.GetValue()/100)
+                self.draw_shapefiles(sf = cu, colour = self.cu_poly_col.GetColour(),
+                                     trans = self.cu_poly_alpha.GetValue()/100)
         
         #plot second layer
         if(self.lyr2_plot_check.GetValue()):
             if(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==0):
                 metric = self.get_con_feature_data(type = 'pu')
                 self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol1.GetColour(),
-                                     hicol = self.pu_metric_hicol1.GetColour(), trans = self.pu_metric_alpha1.GetValue()/100, legend = self.pu_metric_legend1.GetCurrentSelection())
+                                     hicol = self.pu_metric_hicol1.GetColour(),
+                                     trans = self.pu_metric_alpha1.GetValue()/100,
+                                     legend = self.pu_metric_legend1.GetCurrentSelection())
             elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==1):
                 metric = self.get_con_feature_data(type = 'cu')
                 self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol1.GetColour(),
-                                     hicol = self.cu_metric_hicol1.GetColour(), trans = self.cu_metric_alpha1.GetValue()/100, legend = self.cu_metric_legend1.GetCurrentSelection())
+                                     hicol = self.cu_metric_hicol1.GetColour(),
+                                     trans = self.cu_metric_alpha1.GetValue()/100,
+                                     legend = self.cu_metric_legend1.GetCurrentSelection())
             elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==2):
-                self.draw_shapefiles(sf = pu, colour = self.pu_poly_col1.GetColour(), trans = self.pu_poly_alpha1.GetValue()/100)
+                self.draw_shapefiles(sf = pu,
+                                     colour = self.pu_poly_col1.GetColour(),
+                                     trans = self.pu_poly_alpha1.GetValue()/100)
             else:
-                self.draw_shapefiles(sf = cu, colour = self.cu_poly_col1.GetColour(), trans = self.cu_poly_alpha1.GetValue()/100)
+                self.draw_shapefiles(sf = cu,
+                                     colour = self.cu_poly_col1.GetColour(),
+                                     trans = self.cu_poly_alpha1.GetValue()/100)
         
         #change selection to plot tab
         for i in range(self.m_auinotebook1.GetPageCount()):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
 
-    def draw_shapefiles(self, sf, colour = None, trans = None, metric = None, lowcol = None, hicol = None, legend = None):
+    def draw_shapefiles(self, sf, colour=None, trans=None, metric=None, lowcol=None, hicol=None, legend=None):
         """
         Draws the desired shapefile on the plot created by 'on_plot_map_button'
         """
@@ -301,11 +324,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.plot.axes.add_collection(PatchCollection(patches, match_original=True, alpha=trans))
             if(legend==0):
                 self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.8, 0.2, 0.04], zorder=3)
-                self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend, cmap=cmap, ticks=bins, boundaries=bins, orientation='horizontal')
+                self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend,
+                                                                cmap=cmap,
+                                                                ticks=bins,
+                                                                boundaries=bins,
+                                                                orientation='horizontal')
                 self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
             elif(legend==1):
                 self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.15, 0.2, 0.04], zorder=3)
-                self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend, cmap=cmap, ticks=bins, boundaries=bins, orientation='horizontal')
+                self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend,
+                                                                cmap=cmap,
+                                                                ticks=bins,
+                                                                boundaries=bins,
+                                                                orientation='horizontal')
                 self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
                 
 
@@ -324,7 +355,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
-        self.on_draw_graph(pucm_filedir=self.project['filepaths']['pucm_filedir'], pucm_filename=self.project['filepaths']['pucm_filename'])
+        self.on_draw_graph(pucm_filedir=self.project['filepaths']['pucm_filedir'],
+                           pucm_filename=self.project['filepaths']['pucm_filename'])
         for i in range(self.m_auinotebook1.GetPageCount()):
             if self.m_auinotebook1.GetPageText(i) == "Plot":
                 self.m_auinotebook1.ChangeSelection(i)
@@ -419,7 +451,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Rescales the connectivity matrix to match the scale of the planning units
         """
         threading.Thread(
-                marxanconpy.rescale_matrix(self.project['filepaths']['pu_filepath'], self.project['filepaths']['cu_filepath'], self.project['filepaths']['cm_filepath'], self.project['filepaths']['pucm_filepath'])
+                marxanconpy.rescale_matrix(self.project['filepaths']['pu_filepath'],
+                                           self.project['filepaths']['cu_filepath'],
+                                           self.project['filepaths']['cm_filepath'],
+                                           self.project['filepaths']['pucm_filepath'])
                 ).start()
 
 ###########################  metric related functions #########################
@@ -427,16 +462,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         calculates the selected metrics
         """
-        #create dict entries for connectivityMetrics, boundary and spec, also enable customize spec
+        #create dict entry for connectivityMetrics
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics']={}
-        if not 'spec' in self.project['connectivityMetrics']:
-            self.project['connectivityMetrics']['spec']={}
-            self.customize_spec.Enable(enable=True)
-            self.custom_spec_panel.SetToolTip(None)
-        if not 'boundary' in self.project['connectivityMetrics']:
-            self.project['connectivityMetrics']['boundary']={}
-            
+
         # choose correct matrix for demographic metrics
         if(self.calc_metrics_type.GetCurrentSelection()==0):
             if(os.path.isfile(self.project['filepaths']['pucm_filepath'])):
@@ -452,29 +481,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             else:
                 self.warn_dialog(message="File not found: "+self.project['filepaths']['cm_filepath'])
             type='cu'
-            
+
+        #create dict entries for boundary and spec, also enable customize spec
+        if not 'spec_'+type in self.project['connectivityMetrics']:
+            self.project['connectivityMetrics']['spec_'+type]={}
+            self.customize_spec.Enable(enable=True)
+            self.CFT_percent_slider.Enable(enable=True)
+            self.export_metrics.Enable(enable=True)
+            self.custom_spec_panel.SetToolTip(None)
+        if not 'boundary' in self.project['connectivityMetrics']:
+            self.project['connectivityMetrics']['boundary']={}
+
         # calculate demographic metrics
         if(self.cf_demo_vertex_degree.GetValue()):
-            self.project['connectivityMetrics']['spec']['demo_vertex_degree'+type] = marxanconpy.conmat2vertexdegree(self.conmat)
+            self.project['connectivityMetrics']['spec_'+type]['demo_vertex_degree_'+type] = \
+                marxanconpy.conmat2vertexdegree(self.conmat)
 
         if(self.cf_demo_between_cent.GetValue()):
-            self.project['connectivityMetrics']['spec']['demo_between_cent'+type] = marxanconpy.conmat2betweencent(self.conmat)
+            self.project['connectivityMetrics']['spec_'+type]['demo_between_cent_'+type] = \
+                marxanconpy.conmat2betweencent(self.conmat)
 
         if(self.cf_demo_eig_vect_cent.GetValue()):
-            self.project['connectivityMetrics']['spec']['demo_eig_vect_cent'+type] = marxanconpy.conmat2eigvectcent(self.conmat)
+            self.project['connectivityMetrics']['spec_'+type]['demo_eig_vect_cent_'+type] = \
+                marxanconpy.conmat2eigvectcent(self.conmat)
 
         if(self.cf_demo_self_recruit.GetValue()):
-            self.project['connectivityMetrics']['spec']['demo_self_recruit'+type] = marxanconpy.conmat2selfrecruit(self.conmat)
+            self.project['connectivityMetrics']['spec_'+type]['demo_self_recruit_'+type] = \
+                marxanconpy.conmat2selfrecruit(self.conmat)
 
         if(self.bd_demo_conn_boundary.GetValue()):
-#            print(self.conmat.shape)
-            self.project['connectivityMetrics']['boundary']['demo_conn_boundary'+type] = marxanconpy.conmat2connboundary(self.conmat)
-#            print(self.conmat.shape)
-            
+            self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+type] = \
+                marxanconpy.conmat2connboundary(self.conmat)
+
         if(self.bd_demo_min_plan_graph.GetValue()):
-#            print(self.conmat.shape)
-            self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'+type] = marxanconpy.conmat2minplanarboundary(self.conmat)
-            
+           self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+type] = \
+               marxanconpy.conmat2minplanarboundary(self.conmat)
+
         # choose correct matrix for genetic metrics
         # insert stuff here!
         # calculate genetic metrics
@@ -484,26 +526,58 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # insert stuff here!
         # calculate landscape metrics
         # insert stuff here!
-        
+
+        # create initial spec
+        self.on_new_spec(type)
+
+    def on_export_metrics(self, event):
+        # choose type
+        if(self.calc_metrics_type.GetCurrentSelection()==0):
+            type='pu'
+        elif(self.calc_metrics_type.GetCurrentSelection()==1):
+            type='cu'
+
         # Export or append feature files
         if self.cf_export_radioBox.GetSelection()==1:
-            # export
-            print('export!')
-            filtered_dict = {k:v for k,v in self.project['connectivityMetrics']['spec'].items() if type in k}
-            self.export_feature_files(filtered_dict)
+            # export spec
+            spec = pandas.read_json(self.project['spec_'+type+'_dat'], orient = 'split')
+            spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
+            # export conservation features
+            cf = self.project['connectivityMetrics']['spec_'+type].copy()
+            cf['pu'] = self.conmat.index
+            cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
+            cf = pandas.merge(cf,spec,how='outer',on='name')
+            cf = cf.rename(columns = {'id':'species'}).sort_values(['species','pu'])
+            cf[['species','pu','amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
 
-        elif self.cf_export_radioBox.GetSelection()==2: 
-            #append
-            print('append!')
-        
+        elif self.cf_export_radioBox.GetSelection()==2:
+            # append
+            old_spec = pandas.read_csv(self.project['filepaths']['spec_filepath'])
+            old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
+
+            # append spec
+            new_spec = pandas.read_json(self.project['spec_' + type + '_dat'], orient='split')
+            new_spec['id'] = new_spec['id']+max(old_spec['id'])
+
+            pandas.concat([old_spec,new_spec]).to_csv(str.replace(self.project['filepaths']['spec_filepath'],
+                                                                    ".dat",
+                                                                    "_appended.dat")
+                                                      , index=0)
+            # append conservation features
+            new_cf = self.project['connectivityMetrics']['spec_' + type].copy()
+            new_cf['pu'] = self.conmat.index
+            new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
+            new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
+            new_cf = new_cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])
+            pandas.concat([old_cf,new_cf[['species', 'pu', 'amount']]]).to_csv(
+                str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
+
         if self.BD_filecheck.GetValue():
-            
+
             self.export_boundary_file(BD_filepath = self.project['filepaths']['bd_filepath'])
-        
-    def export_feature_files(self, filtered_dict):
-        pandas.DataFrame(filtered_dict).to_csv( self.project['filepaths']['cf_filepath'], index = False)
-#    def append_feature_files(self):
-        
+
+
+
     def export_boundary_file(self, BD_filepath):
         # choose type
         if(self.calc_metrics_type.GetCurrentSelection()==0):
@@ -517,19 +591,30 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Export each selected boundary definition            
         if self.bd_demo_conn_boundary.GetValue():
             if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary'+type], orient='split').to_csv(str.replace(BD_filepath,".dat","_demo_conn_boundary_"+type+".dat"), index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+type],
+                                 orient='split').to_csv(str.replace(BD_filepath,
+                                                                    ".dat",
+                                                                    "_demo_conn_boundary_"+type+".dat"),
+                                                        index = False)
             else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary'+type], orient='split').to_csv(BD_filepath, index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+type],
+                                 orient='split').to_csv(BD_filepath, index = False)
         
         if self.bd_demo_min_plan_graph.GetValue():
             if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'+type], orient='split').to_csv(str.replace(BD_filepath,".dat","_demo_min_plan_graph_"+type+".dat"), index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+type],
+                                 orient='split').to_csv(str.replace(BD_filepath,
+                                                                    ".dat",
+                                                                    "_demo_min_plan_graph_"+type+".dat"),
+                                                        index = False)
             else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph'+type], orient='split').to_csv(BD_filepath, index = False)
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+type],
+                                 orient='split').to_csv(BD_filepath, index = False)
         
         # warn when multiple boundary definitions
         if multiple:
-            self.warn_dialog(message = "Multiple Boundary Definitions were selected. Boundary file names have been edited to include type.", caption = "Warning!")
+            self.warn_dialog(message = "Multiple Boundary Definitions were selected. Boundary file names have been"
+                                       " edited to include type.", caption = "Warning!")
     
     
         
@@ -546,34 +631,52 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         #get metric
         if(metricindex==0):
-            metric = self.project['connectivityMetrics']['spec']['demo_vertex_degree'+type]
+            metric = self.project['connectivityMetrics']['spec_'+type]['demo_vertex_degree_'+type]
         elif(metricindex==1):
-            metric = self.project['connectivityMetrics']['spec']['demo_between_cent'+type]
+            metric = self.project['connectivityMetrics']['spec_'+type]['demo_between_cent_'+type]
         elif(metricindex==2):
-            metric = self.project['connectivityMetrics']['spec']['demo_eig_vect_cent'+type]
+            metric = self.project['connectivityMetrics']['spec_'+type]['demo_eig_vect_cent_'+type]
         elif(metricindex==3):
-            metric = self.project['connectivityMetrics']['spec']['demo_self_recruit'+type]
+            metric = self.project['connectivityMetrics']['spec_'+type]['demo_self_recruit_'+type]
             
         return(metric)
 
 ###########################  spec grid popup functions #########################
+    def on_customize_spec(self, event):
+        self.spec_frame.Show()
 
-    def on_customize_spec( self, event ):
-        spec_frame=spec_customizer(parent=self)
-        spec_frame.keys = list(self.project['connectivityMetrics']['spec'])
+    def on_new_spec(self, type):
+        self.spec_frame=spec_customizer(parent=self)
+        self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_'+type])
         
-        for i in range(len(spec_frame.keys)):
-            spec_frame.spec_grid.InsertRows(i)
-            spec_frame.spec_grid.SetCellValue(i,0,str(i+1))
-            spec_frame.spec_grid.SetCellValue(i,1,str(sum(self.project['connectivityMetrics']['spec'][spec_frame.keys[i]])))
-            spec_frame.spec_grid.SetCellValue(i,2,str(1000))
-            spec_frame.spec_grid.SetCellValue(i,3,spec_frame.keys[i])
-            w,h = spec_frame.GetClientSize()
-            print(w)
-            print(h)
-            spec_frame.SetSize((w+16, h+39+20))
-            spec_frame.Layout()
-        spec_frame.Show()
+        for i in range(len(self.spec_frame.keys)):
+            self.spec_frame.spec_grid.InsertRows(i)
+            self.spec_frame.spec_grid.SetCellValue(i,0,str(i+1))
+            sum_metric = sum(self.project['connectivityMetrics']['spec_'+type][self.spec_frame.keys[i]])
+            self.spec_frame.spec_grid.SetCellValue(i,1,str(sum_metric*self.CFT_percent_slider.GetValue()/100))
+            self.spec_frame.spec_grid.SetCellValue(i,2,str(1000))
+            self.spec_frame.spec_grid.SetCellValue(i,3,self.spec_frame.keys[i])
+            w,h = self.spec_frame.GetClientSize()
+
+            self.spec_frame.SetSize((w+16, h+39+20))
+            self.spec_frame.Layout()
+
+        self.project['spec_'+type+'_dat'] = pandas.DataFrame(
+            numpy.full((self.spec_frame.spec_grid.GetNumberCols(), self.spec_frame.spec_grid.GetNumberRows()), None))
+        self.project['spec_'+type+'_dat'].columns = ["id", "target", "spf", "name"]
+
+        for c in range(self.spec_frame.spec_grid.GetNumberCols()):
+            for r in range(self.spec_frame.spec_grid.GetNumberRows()):
+                self.project['spec_'+type+'_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
+        self.project['spec_'+type+'_dat'] = self.project['spec_'+type+'_dat'].to_json(orient = 'split')
+
+    def on_CFT_percent_slider(self, event):
+        # choose type
+        if(self.calc_metrics_type.GetCurrentSelection()==0):
+            type='pu'
+        elif(self.calc_metrics_type.GetCurrentSelection()==1):
+            type='cu'
+        self.on_new_spec(type)
         
 
 class spec_customizer (gui.spec_customizer):
@@ -581,30 +684,42 @@ class spec_customizer (gui.spec_customizer):
         gui.spec_customizer.__init__(self,parent)
         self.parent = parent
         
-    def on_spec_ok( self, event ): 
-        self.parent.project['spec_dat'] = pandas.DataFrame(numpy.full((self.spec_grid.GetNumberCols(),self.spec_grid.GetNumberRows()),None))
-        self.parent.project['spec_dat'].columns = ["id","target","spf","name"]
+    def on_spec_ok( self, event ):
+        # choose type
+        if (self.parent.calc_metrics_type.GetCurrentSelection() == 0):
+            type = 'pu'
+        elif (self.parent.calc_metrics_type.GetCurrentSelection() == 1):
+            type = 'cu'
+        self.parent.project['spec_'+type+'_dat'] = pandas.DataFrame(numpy.full((self.spec_grid.GetNumberCols(),
+                                                                                self.spec_grid.GetNumberRows()),None))
+        self.parent.project['spec_'+type+'_dat'].columns = ["id","target","spf","name"]
 
         for c in range(self.spec_grid.GetNumberCols()):
             for r in range(self.spec_grid.GetNumberRows()):
-                self.parent.project['spec_dat'].iloc[r,c] = self.spec_grid.GetCellValue(r,c)
-        self.parent.project['spec_dat'] = self.parent.project['spec_dat'].to_json()
-        self.Destroy()
+                self.parent.project['spec_'+type+'_dat'].iloc[r,c] = self.spec_grid.GetCellValue(r,c)
+        self.parent.project['spec_'+type+'_dat'] = self.parent.project['spec_'+type+'_dat'].to_json()
+        self.Hide()
 	
     def on_spec_cancel( self, event ):
-        self.Destroy()
+        self.Hide()
 
 ###########################  getting started popup functions #########################
 class getting_started(wx.Frame):
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent, title="Marxan with Connectivity: Getting Started",pos = wx.DefaultPosition, size = wx.Size( 900,700 ),style=wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT)
+        wx.Frame.__init__(self, parent, title="Marxan with Connectivity: Getting Started",
+                          pos = wx.DefaultPosition,
+                          size = wx.Size( 900,700 ),
+                          style=wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT)
         self.gettingStarted = wx.Panel(self)
         self.Center()
         # set the icon
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
-                icon = wx.Icon(os.path.join(os.getcwd(),'icon_bundle.ico'), wx.BITMAP_TYPE_ICO, desiredWidth=sz, desiredHeight=sz)
+                icon = wx.Icon(os.path.join(os.getcwd(),'icon_bundle.ico'),
+                               wx.BITMAP_TYPE_ICO,
+                               desiredWidth=sz,
+                               desiredHeight=sz)
                 icons.AddIcon(icon) 
             except: 
                 pass 
@@ -619,27 +734,71 @@ class getting_started(wx.Frame):
 		
         sizer02 = wx.BoxSizer( wx.HORIZONTAL )
 		
-        self.gettingstartedtxt = wx.StaticText( self.gettingStarted, wx.ID_ANY, u"Welcome to Marxan with Connectivity!\n\nMarxan with Connectivity (henceforth the \"app\") is a Graphical User Interface (GUI) to help conservationists include “connectivity” in their protected area network planning.\n\nThe term \"connectivity\" has a variety of definitions (i.e. larval connectivity, genetic connectivity, landscape connectivity, etc) and protected area networks can be optimized for various connectivity objectives. The app is intended to guide conservationists through the process of identifying important aspects of connectivity for their conservation scenarios as well as highlighting the necessary data.\n\nThe app also includes be a fully functional python module (in progress) that is operated via command line that can be used to reproduce an analysis using the project file generated by the GUI.\n\nTo use this software, please visit the Tutorial and the Glossary which can be accessed under the help menu, or the links below (in progress). Otherwise, if you would just like to get started, please proceed through all the tabs from left to right starting the \"Spatial Input\". After calculating the \"Connectivity Metrics\", you can choose to conduct a Marxan analysis in the app (maybe), export the connectivity metrics for use in a standalone custom Marxan analysis, or you can visualize the Connectivity Metrics using the \"Plotting Options\" tab\n\nIf you would like to report any bugs or request a missing feature, please post an issue on the GitHub repository which is available in the help menu, or the link below.", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.gettingstartedtxt = wx.StaticText( self.gettingStarted,
+                                                wx.ID_ANY,
+                                                u"Welcome to Marxan with Connectivity!\n\nMarxan with Connectivity"
+                                                u" (henceforth the \"app\") is a Graphical User Interface (GUI) to help"
+                                                u" conservationists include “connectivity” in their protected area"
+                                                u" network planning.\n\nThe term \"connectivity\" has a variety of"
+                                                u" definitions (i.e. larval connectivity, genetic connectivity, "
+                                                u"landscape connectivity, etc) and protected area networks can be "
+                                                u"optimized for various connectivity objectives. The app is intended to"
+                                                u" guide conservationists through the process of identifying important"
+                                                u" aspects of connectivity for their conservation scenarios as well as"
+                                                u" highlighting the necessary data.\n\nThe app also includes be a fully"
+                                                u" functional python module (in progress) that is operated via command"
+                                                u" line that can be used to reproduce an analysis using the project"
+                                                u" file generated by the GUI.\n\nTo use this software, please visit the"
+                                                u" Tutorial and the Glossary which can be accessed under the help menu,"
+                                                u" or the links below (in progress). Otherwise, if you would just like "
+                                                u"to get started, please proceed through all the tabs from left to "
+                                                u"right starting the \"Spatial Input\". After calculating the"
+                                                u" \"Connectivity Metrics\", you can choose to conduct a Marxan"
+                                                u" analysis in the app (maybe), export the connectivity metrics for use"
+                                                u" in a standalone custom Marxan analysis, or you can visualize the"
+                                                u" Connectivity Metrics using the \"Plotting Options\" tab\n\nIf you"
+                                                u" would like to report any bugs or request a missing feature, please"
+                                                u" post an issue on the GitHub repository which is available in the"
+                                                u" help menu, or the link below.",
+                                                wx.DefaultPosition,
+                                                wx.DefaultSize, 0 )
         self.gettingstartedtxt.Wrap( -1 )
         sizer02.Add( self.gettingstartedtxt, 0, wx.ALL|wx.EXPAND, 5 )
 		
         startMainSizer.Add( sizer02, 1, wx.EXPAND, 5 )
 		
         hyperlinksizer = wx.BoxSizer( wx.VERTICAL )
-        self.tutoriallink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"Tutorial", u"tutorial.html", wx.DefaultPosition, wx.DefaultSize)
+        self.tutoriallink = wx.adv.HyperlinkCtrl( self.gettingStarted,
+                                                  wx.ID_ANY, u"Tutorial",
+                                                  u"tutorial.html",
+                                                  wx.DefaultPosition,
+                                                  wx.DefaultSize)
         hyperlinksizer.Add( self.tutoriallink, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
     		
-        self.glossarylink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"Glossary", u"glossary.html", wx.DefaultPosition, wx.DefaultSize)
+        self.glossarylink = wx.adv.HyperlinkCtrl( self.gettingStarted,
+                                                  wx.ID_ANY,
+                                                  u"Glossary",
+                                                  u"glossary.html",
+                                                  wx.DefaultPosition,
+                                                  wx.DefaultSize)
         hyperlinksizer.Add( self.glossarylink, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
     		
-        self.githublink = wx.adv.HyperlinkCtrl( self.gettingStarted, wx.ID_ANY, u"GitHub Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize)
+        self.githublink = wx.adv.HyperlinkCtrl( self.gettingStarted,
+                                                wx.ID_ANY,
+                                                u"GitHub Issues",
+                                                u"https://github.com/remi-daigle/MarxanConnect/issues",
+                                                wx.DefaultPosition,
+                                                wx.DefaultSize)
         hyperlinksizer.Add( self.githublink, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
         
         startMainSizer.Add( hyperlinksizer, 1, wx.EXPAND, 5 )
         
         iconsizer = wx.BoxSizer( wx.VERTICAL )
 		
-        self.m_bitmap1 = wx.StaticBitmap( self.gettingStarted, wx.ID_ANY, wx.Bitmap( u"icon_bundle.ico", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap1 = wx.StaticBitmap( self.gettingStarted,
+                                          wx.ID_ANY, wx.Bitmap( u"icon_bundle.ico",
+                                                                wx.BITMAP_TYPE_ANY ),
+                                          wx.DefaultPosition, wx.DefaultSize, 0 )
         iconsizer.Add( self.m_bitmap1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
         startMainSizer.Add( iconsizer, 1, wx.EXPAND, 5 )
@@ -650,7 +809,7 @@ class getting_started(wx.Frame):
 
 
 
-###############################################################################################################################
+########################################################################################################################
 ###########################  run the GUI ######################################
 app = wx.App(False)
  

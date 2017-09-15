@@ -146,7 +146,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( demoMainSizer2 )
 		self.spatialInput.Layout()
 		demoMainSizer2.Fit( self.spatialInput )
-		self.m_auinotebook1.AddPage( self.spatialInput, u"Spatial Input", True, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.spatialInput, u"Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		fgSizer25 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer25.AddGrowableCol( 0 )
@@ -417,7 +417,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.m_staticText65.Wrap( -1 )
 		fgSizer28.Add( self.m_staticText65, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.CF_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.CF_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		fgSizer28.Add( self.CF_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_staticText69 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Feature Targets:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -431,6 +431,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		bSizer27.Add( self.m_staticText70, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		self.CFT_percent_slider = wx.Slider( self.connectivityMetrics, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		self.CFT_percent_slider.Enable( False )
+		
 		bSizer27.Add( self.CFT_percent_slider, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		self.custom_spec_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -458,7 +460,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.SPEC_filetxt.Wrap( -1 )
 		fgSizer28.Add( self.SPEC_filetxt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.SPEC_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.SPEC_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		fgSizer28.Add( self.SPEC_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -535,7 +537,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.BD_filecheck.SetValue(True) 
 		fgSizer241.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.BD_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.BD_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		fgSizer241.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -544,7 +546,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.m_staticline5 = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metricsMainSizer.Add( self.m_staticline5, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		fgSizer20 = wx.FlexGridSizer( 0, 4, 0, 0 )
+		fgSizer20 = wx.FlexGridSizer( 0, 5, 0, 0 )
 		fgSizer20.AddGrowableCol( 0 )
 		fgSizer20.SetFlexibleDirection( wx.BOTH )
 		fgSizer20.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -553,8 +555,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spacertext.Wrap( -1 )
 		fgSizer20.Add( self.spacertext, 0, wx.ALL, 5 )
 		
-		self.calc_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Calculate and Export Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.calc_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Calculate Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer20.Add( self.calc_metrics, 0, wx.ALL, 5 )
+		
+		self.export_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Export Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.export_metrics.Enable( False )
+		
+		fgSizer20.Add( self.export_metrics, 0, wx.ALL, 5 )
 		
 		self.m_staticText53 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"For:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText53.Wrap( -1 )
@@ -572,7 +579,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.m_auinotebook1.AddPage( self.connectivityMetrics, u"Connectivity Metrics", False, wx.NullBitmap )
+		self.m_auinotebook1.AddPage( self.connectivityMetrics, u"Connectivity Metrics", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.m_auinotebook1.AddPage( self.marxanAnalysis, u"Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.m_auinotebook1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -1092,10 +1099,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.PUCM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCM_file )
 		self.rescale_button.Bind( wx.EVT_BUTTON, self.on_rescale_button )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
+		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
 		self.SPEC_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file_append )
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
+		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
 		self.lyr1_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
 		self.lyr2_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
@@ -1170,6 +1179,9 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_CT_file( self, event ):
 		event.Skip()
 	
+	def on_CFT_percent_slider( self, event ):
+		event.Skip()
+	
 	def on_customize_spec( self, event ):
 		event.Skip()
 	
@@ -1180,6 +1192,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_calc_metrics( self, event ):
+		event.Skip()
+	
+	def on_export_metrics( self, event ):
 		event.Skip()
 	
 	def testcolourbox( self, event ):
