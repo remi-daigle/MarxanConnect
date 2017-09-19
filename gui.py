@@ -203,20 +203,20 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_radio_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		demo_radio_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		demo_unitsRadioBoxChoices = [ u"Probability", u"Individuals" ]
-		self.demo_unitsRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, demo_unitsRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.demo_unitsRadioBox.SetSelection( 0 )
-		demo_radio_sizer.Add( self.demo_unitsRadioBox, 0, wx.ALL, 5 )
+		demo_matrixUnitsRadioBoxChoices = [ u"Probability", u"Individuals" ]
+		self.demo_matrixUnitsRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, demo_matrixUnitsRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_matrixUnitsRadioBox.SetSelection( 0 )
+		demo_radio_sizer.Add( self.demo_matrixUnitsRadioBox, 0, wx.ALL, 5 )
 		
-		demo_matrixRadioBoxChoices = [ u"Settlement", u"Connectivity", u"Migration", u"Local Immigration", u"Dispersal Flux" ]
-		self.demo_matrixRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, demo_matrixRadioBoxChoices, 3, wx.RA_SPECIFY_COLS )
-		self.demo_matrixRadioBox.SetSelection( 1 )
-		demo_radio_sizer.Add( self.demo_matrixRadioBox, 0, wx.ALL|wx.EXPAND, 5 )
+		demo_matrixTypeRadioBoxChoices = [ u"Settlement", u"Connectivity", u"Migration", u"Local Immigration", u"Dispersal Flux" ]
+		self.demo_matrixTypeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, demo_matrixTypeRadioBoxChoices, 3, wx.RA_SPECIFY_COLS )
+		self.demo_matrixTypeRadioBox.SetSelection( 1 )
+		demo_radio_sizer.Add( self.demo_matrixTypeRadioBox, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		demo_formatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
-		self.demo_formatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, demo_formatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
-		self.demo_formatRadioBox.SetSelection( 0 )
-		demo_radio_sizer.Add( self.demo_formatRadioBox, 0, wx.ALL, 5 )
+		demo_matrixFormatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
+		self.demo_matrixFormatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, demo_matrixFormatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
+		self.demo_matrixFormatRadioBox.SetSelection( 0 )
+		demo_radio_sizer.Add( self.demo_matrixFormatRadioBox, 0, wx.ALL, 5 )
 		
 		
 		demoMainSizer.Add( demo_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
@@ -249,10 +249,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		rescale_sizer.Add( rescale_def_sizer, 1, wx.EXPAND, 5 )
 		
-		rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
-		self.rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix?", wx.DefaultPosition, wx.DefaultSize, rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.rescaleRadioBox.SetSelection( 0 )
-		rescale_sizer.Add( self.rescaleRadioBox, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		demo_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
+		self.demo_rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix?", wx.DefaultPosition, wx.DefaultSize, demo_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_rescaleRadioBox.SetSelection( 0 )
+		rescale_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 		
 		
 		demoMainSizer.Add( rescale_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
@@ -1138,15 +1138,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.on_getting_started, id = self.start.GetId() )
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
 		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
-		self.demo_unitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
-		self.demo_matrixRadioBox.Bind( wx.EVT_RADIOBOX, self.on_unitsRadioBox )
-		self.demo_formatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_formatRadioBox )
+		self.demo_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
+		self.demo_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
+		self.demo_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
 		self.CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CM_file )
-		self.rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_rescaleRadioBox )
+		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
 		self.CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
 		self.PUCM_check.Bind( wx.EVT_CHECKBOX, self.on_PUCM_check )
 		self.PUCM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCM_file )
-		self.rescale_button.Bind( wx.EVT_BUTTON, self.on_rescale_button )
+		self.rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
@@ -1203,17 +1203,19 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_FA_file( self, event ):
 		event.Skip()
 	
-	def on_unitsRadioBox( self, event ):
+	def on_demo_matrixUnitsRadioBox( self, event ):
 		event.Skip()
 	
+	def on_demo_matrixTypeRadioBox( self, event ):
+		event.Skip()
 	
-	def on_formatRadioBox( self, event ):
+	def on_demo_matrixFormatRadioBox( self, event ):
 		event.Skip()
 	
 	def on_CM_file( self, event ):
 		event.Skip()
 	
-	def on_rescaleRadioBox( self, event ):
+	def on_demo_rescaleRadioBox( self, event ):
 		event.Skip()
 	
 	def on_CU_file( self, event ):
@@ -1225,7 +1227,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_PUCM_file( self, event ):
 		event.Skip()
 	
-	def on_rescale_button( self, event ):
+	def on_demo_rescale_button( self, event ):
 		event.Skip()
 	
 	def on_CT_file( self, event ):

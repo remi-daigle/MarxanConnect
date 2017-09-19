@@ -1831,7 +1831,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">demo_unitsRadioBox</property>
+                                                                        <property name="name">demo_matrixUnitsRadioBox</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -1870,7 +1870,7 @@
                                                                         <event name="OnMouseEvents"></event>
                                                                         <event name="OnMouseWheel"></event>
                                                                         <event name="OnPaint"></event>
-                                                                        <event name="OnRadioBox">on_unitsRadioBox</event>
+                                                                        <event name="OnRadioBox">on_demo_matrixUnitsRadioBox</event>
                                                                         <event name="OnRightDClick"></event>
                                                                         <event name="OnRightDown"></event>
                                                                         <event name="OnRightUp"></event>
@@ -1921,7 +1921,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">demo_matrixRadioBox</property>
+                                                                        <property name="name">demo_matrixTypeRadioBox</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -1960,7 +1960,7 @@
                                                                         <event name="OnMouseEvents"></event>
                                                                         <event name="OnMouseWheel"></event>
                                                                         <event name="OnPaint"></event>
-                                                                        <event name="OnRadioBox">on_unitsRadioBox</event>
+                                                                        <event name="OnRadioBox">on_demo_matrixTypeRadioBox</event>
                                                                         <event name="OnRightDClick"></event>
                                                                         <event name="OnRightDown"></event>
                                                                         <event name="OnRightUp"></event>
@@ -2011,7 +2011,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">demo_formatRadioBox</property>
+                                                                        <property name="name">demo_matrixFormatRadioBox</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2050,7 +2050,7 @@
                                                                         <event name="OnMouseEvents"></event>
                                                                         <event name="OnMouseWheel"></event>
                                                                         <event name="OnPaint"></event>
-                                                                        <event name="OnRadioBox">on_formatRadioBox</event>
+                                                                        <event name="OnRadioBox">on_demo_matrixFormatRadioBox</event>
                                                                         <event name="OnRightDClick"></event>
                                                                         <event name="OnRightDown"></event>
                                                                         <event name="OnRightUp"></event>
@@ -2396,7 +2396,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">rescaleRadioBox</property>
+                                                                        <property name="name">demo_rescaleRadioBox</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2435,7 +2435,7 @@
                                                                         <event name="OnMouseEvents"></event>
                                                                         <event name="OnMouseWheel"></event>
                                                                         <event name="OnPaint"></event>
-                                                                        <event name="OnRadioBox">on_rescaleRadioBox</event>
+                                                                        <event name="OnRadioBox">on_demo_rescaleRadioBox</event>
                                                                         <event name="OnRightDClick"></event>
                                                                         <event name="OnRightDown"></event>
                                                                         <event name="OnRightUp"></event>
@@ -3339,7 +3339,7 @@
                                                                 <property name="window_extra_style"></property>
                                                                 <property name="window_name"></property>
                                                                 <property name="window_style"></property>
-                                                                <event name="OnButtonClick">on_rescale_button</event>
+                                                                <event name="OnButtonClick">on_demo_rescale_button</event>
                                                                 <event name="OnChar"></event>
                                                                 <event name="OnEnterWindow"></event>
                                                                 <event name="OnEraseBackground"></event>

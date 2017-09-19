@@ -3,17 +3,7 @@ import wx
 import wx.lib.agw.aui as aui
 import wx.adv
 
-#import the GUI file after editing out deprecated functions
-# Read in the file
-with open('gui.py', 'r', encoding="utf8") as file :
-  filedata = file.read()
-
-# Replace the target string
-filedata = filedata.replace('SetToolTipString', 'SetToolTip')
-
-# Write the file out again
-with open('gui.py', 'w', encoding="utf8") as file:
-  file.write(filedata)
+# import gui
 import gui
 
 #import matplotlib
@@ -30,13 +20,12 @@ import shapely
 
 #import system helper modules
 import os
+import sys
 import pandas
 import numpy
 import networkx as nx
 import threading
 import json
-
-import time
 
 # import MarxanConnect python module
 import marxanconpy
@@ -53,12 +42,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         initialize parent class (the entire GUI)
         """
         gui.MarxanConnectGUI.__init__(self,parent)
-        
+        # self.warn_dialog(message = sys.path[0])
         # set the icon
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
-                icon = wx.Icon(os.path.join(os.getcwd(),'icon_bundle.ico'),
+                icon = wx.Icon(os.path.join(sys.path[0],'icon_bundle.ico'),
                                wx.BITMAP_TYPE_ICO,
                                desiredWidth=sz,
                                desiredHeight=sz)
@@ -69,13 +58,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         
         # launch a blank new project
         self.on_new_project(event=None, launch = True)
-        
+        print("This is the name of the script: ", sys.argv[0])
+        print("Number of arguments: ", len(sys.argv))
+        print("The arguments are: ", str(sys.argv))
         # launch Getting started window
         frame = getting_started(parent=self)
         # frame.Show()
         
-        # set opening tab to SPatial Input (0)
-        self.auinotebook.ChangeSelection(2)
+        # set opening tab to Spatial Input (0)
+        self.auinotebook.ChangeSelection(1)
     
 ###########################  project managment functions ######################        
     def on_new_project( self, event, launch = False):
@@ -86,12 +77,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project = {}
         self.project['workingdirectory'] = os.path.join(os.environ['USERPROFILE'], "Documents")
         self.project['filepaths'] = {}
-        
+        self.project['options'] = {}
+
+        # set default options
+        self.project['options']['pucm_export'] = self.PUCM_check.GetValue()
+        self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
+        self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
+        self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
+        self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
+
         # set default file paths
-        if(os.path.isdir(os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect"))):
-            pfdir = os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect")
-        else:
-            pfdir = os.path.join(os.environ['ProgramFiles'], "MarxanConnect")
+        # if(os.path.isdir(os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect"))):
+        #     pfdir = os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect")
+        # else:
+        #     pfdir = os.path.join(os.environ['ProgramFiles'], "MarxanConnect")
+        pfdir = sys.path[0]
         self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
         self.project['filepaths']['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
         self.project['filepaths']['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
@@ -100,7 +100,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['cf_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","puvspr.dat")
         self.project['filepaths']['spec_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","spec.dat")
         self.project['filepaths']['bd_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","boundary.dat")
-        
+
+        # set default file paths
+        self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
+        self.CU_file.SetPath(self.project['filepaths']['cu_filepath'])
+        self.CM_file.SetPath(self.project['filepaths']['cm_filepath'])
+        self.PUCM_file.SetPath(self.project['filepaths']['pucm_filepath'])
+        self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
+        self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
+        self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
+
         # if called at launch time, no need to ask users to create a new project file right away
         if(not launch):
             dlg = wx.FileDialog(self, "Create a new project file:",style=wx.FD_SAVE,wildcard=wc_MarCon)
@@ -132,6 +141,22 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
         frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
+        # set default options
+        self.PUCM_check.SetValue(self.project['options']['pucm_export'])
+        self.demo_matrixUnitsRadioBox.SetStringSelection(self.project['options']['demo_conmat_units'])
+        self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
+        self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
+        self.demo_rescaleRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale'])
+
+        # set default file paths
+        self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
+        self.CU_file.SetPath(self.project['filepaths']['cu_filepath'])
+        self.CM_file.SetPath(self.project['filepaths']['cm_filepath'])
+        self.PUCM_file.SetPath(self.project['filepaths']['pucm_filepath'])
+        self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
+        self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
+        self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
+
     def on_save_project_as(self, event):
         """
         Create and show the Open FileDialog to save a project
@@ -160,7 +185,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             self.on_save_project_as(event=None)
 
-###########################  html pop-up functions ################################
+########################### html pop-up functions ################################
 
     def on_glossary( self, event ):
         wx.LaunchDefaultBrowser("glossary.html")
@@ -422,11 +447,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['bd_filepath'] = self.BD_file.GetPath()
 
-###########################  GUI 'wiring' functions ###########################
-    def on_rescaleRadioBox(self, event):
+###########################  option setting functions ###########################
+    def on_demo_matrixUnitsRadioBox(self, event):
+        self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
+
+    def on_demo_matrixTypeRadioBox(self, event):
+        self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
+
+    def on_demo_matrixFormatRadioBox(self, event):
+        self.project['options']['demo_conmat_format'] =self.demo_matrixFormatRadioBox.GetStringSelection()
+
+    def on_demo_rescaleRadioBox(self, event):
         """
         Hides unnecessary options if rescaling is not necessary
         """
+        self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
         if(self.CU_def.Enabled==True):
             self.CU_def.Enable(enable = False)
             self.CU_filetext.Enable(enable = False)
@@ -449,7 +484,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.PUCM_file.Enable(enable = True)
             self.rescale_button.Enable(enable = True)
             
-    def on_rescale_button(self, event):
+    def on_demo_rescale_button(self, event):
         """
         Rescales the connectivity matrix to match the scale of the planning units
         """
@@ -459,6 +494,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Checks if the planning unit connectivity matrix should be exported when rescaling
         """
+        self.project['options']['pucm_export'] = self.PUCM_check.GetValue()
         if self.PUCM_check.GetValue():
             self.PUCM_filetext.Enable(enable=True)
             self.PUCM_file.Enable(enable=True)
@@ -719,7 +755,7 @@ class getting_started(wx.Frame):
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
             try: 
-                icon = wx.Icon(os.path.join(os.getcwd(),'icon_bundle.ico'),
+                icon = wx.Icon(os.path.join(sys.path[0],'icon_bundle.ico'),
                                wx.BITMAP_TYPE_ICO,
                                desiredWidth=sz,
                                desiredHeight=sz)
@@ -799,7 +835,7 @@ class getting_started(wx.Frame):
         iconsizer = wx.BoxSizer( wx.VERTICAL )
 		
         self.m_bitmap1 = wx.StaticBitmap( self.gettingStarted,
-                                          wx.ID_ANY, wx.Bitmap( u"icon_bundle.ico",
+                                          wx.ID_ANY, wx.Bitmap(os.path.join(sys.path[0],'icon_bundle.ico'),
                                                                 wx.BITMAP_TYPE_ANY ),
                                           wx.DefaultPosition, wx.DefaultSize, 0 )
         iconsizer.Add( self.m_bitmap1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
