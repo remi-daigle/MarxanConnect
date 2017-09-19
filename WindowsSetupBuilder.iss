@@ -28,6 +28,7 @@ OutputBaseFilename=MarxanConnect-v0-0-2-windows-setup.exe
 SetupIconFile=C:\Users\Remi-Work\Desktop\MarxanConnectGUI\icon_bundle.ico
 Compression=lzma
 SolidCompression=yes
+AlwaysRestart=True
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
