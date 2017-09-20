@@ -189,14 +189,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		demoMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		demoMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
-		cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		demo_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Dexcribe Connectivity Matrix .......................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.CM_def.Wrap( -1 )
-		cm_def_sizer.Add( self.CM_def, 0, wx.ALL|wx.EXPAND, 5 )
+		self.demo_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Dexcribe Connectivity Matrix .......................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CM_def.Wrap( -1 )
+		demo_cm_def_sizer.Add( self.demo_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		demoMainSizer.Add( cm_def_sizer, 1, wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_cm_def_sizer, 1, wx.EXPAND, 5 )
 		
 		demo_radio_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
 		demo_radio_sizer.AddGrowableCol( 1 )
@@ -221,128 +221,128 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer.Add( demo_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
 		
-		cm_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		cm_file_sizer.AddGrowableCol( 1 )
-		cm_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
-		cm_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		demo_cu_cm_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		demo_cu_cm_file_sizer.AddGrowableCol( 1 )
+		demo_cu_cm_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		demo_cu_cm_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.CM_filetext.Wrap( -1 )
-		self.CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		self.demo_CU_CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CU_CM_filetext.Wrap( -1 )
+		self.demo_CU_CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
-		cm_file_sizer.Add( self.CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		demo_cu_cm_file_sizer.Add( self.demo_CU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.CM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-		cm_file_sizer.Add( self.CM_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
-		
-		
-		demoMainSizer.Add( cm_file_sizer, 1, wx.EXPAND, 5 )
-		
-		rescale_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		rescale_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.rescale_def_txt = wx.StaticText( self.demographic, wx.ID_ANY, u"The demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below.", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.rescale_def_txt.Wrap( -1 )
-		rescale_def_sizer.Add( self.rescale_def_txt, 0, wx.ALL|wx.EXPAND, 5 )
+		self.demo_CU_CM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		demo_cu_cm_file_sizer.Add( self.demo_CU_CM_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
-		rescale_sizer.Add( rescale_def_sizer, 1, wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_cu_cm_file_sizer, 1, wx.EXPAND, 5 )
+		
+		demo_rescale_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		demo_rescale_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.demo_rescale_def_txt = wx.StaticText( self.demographic, wx.ID_ANY, u"The demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_rescale_def_txt.Wrap( -1 )
+		demo_rescale_def_sizer.Add( self.demo_rescale_def_txt, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		demo_rescale_sizer.Add( demo_rescale_def_sizer, 1, wx.EXPAND, 5 )
 		
 		demo_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
 		self.demo_rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix?", wx.DefaultPosition, wx.DefaultSize, demo_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
 		self.demo_rescaleRadioBox.SetSelection( 0 )
-		rescale_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		demo_rescale_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 		
 		
-		demoMainSizer.Add( rescale_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_rescale_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 		
-		cu_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		demo_cu_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.CU_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Describe Connectivity Matrix Shapefile ....................................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.CU_def.Wrap( -1 )
-		self.CU_def.Enable( False )
+		self.demo_CU_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Describe Connectivity Matrix Shapefile ....................................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CU_def.Wrap( -1 )
+		self.demo_CU_def.Enable( False )
 		
-		cu_def_sizer.Add( self.CU_def, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		
-		demoMainSizer.Add( cu_def_sizer, 1, wx.EXPAND, 5 )
-		
-		cu_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		cu_file_sizer.AddGrowableCol( 1 )
-		cu_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
-		cu_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.CU_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.CU_filetext.Wrap( -1 )
-		self.CU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
-		self.CU_filetext.Enable( False )
-		
-		cu_file_sizer.Add( self.CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.CU_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-		self.CU_file.Enable( False )
-		
-		cu_file_sizer.Add( self.CU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		demo_cu_def_sizer.Add( self.demo_CU_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		demoMainSizer.Add( cu_file_sizer, 1, wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_cu_def_sizer, 1, wx.EXPAND, 5 )
 		
-		pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
+		demo_cu_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		demo_cu_file_sizer.AddGrowableCol( 1 )
+		demo_cu_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		demo_cu_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.pucm_seperator = wx.StaticLine( self.demographic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		pucm_output_txt_sizer.Add( self.pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		self.demo_CU_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CU_filetext.Wrap( -1 )
+		self.demo_CU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.demo_CU_filetext.Enable( False )
 		
-		self.PUCM_outputtext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.PUCM_outputtext.Wrap( -1 )
-		self.PUCM_outputtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
-		self.PUCM_outputtext.Enable( False )
+		demo_cu_file_sizer.Add( self.demo_CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		pucm_output_txt_sizer.Add( self.PUCM_outputtext, 0, wx.ALL, 5 )
+		self.demo_CU_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.demo_CU_file.Enable( False )
 		
-		
-		demoMainSizer.Add( pucm_output_txt_sizer, 1, wx.EXPAND, 5 )
-		
-		pucm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.PUCM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Describe Planning Unit Connectivity Matrix ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.PUCM_def.Wrap( -1 )
-		self.PUCM_def.Enable( False )
-		
-		pucm_def_sizer.Add( self.PUCM_def, 0, wx.ALL|wx.EXPAND, 5 )
+		demo_cu_file_sizer.Add( self.demo_CU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
-		demoMainSizer.Add( pucm_def_sizer, 1, wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_cu_file_sizer, 1, wx.EXPAND, 5 )
 		
-		pucm_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
-		pucm_sizer.AddGrowableCol( 2 )
-		pucm_sizer.SetFlexibleDirection( wx.HORIZONTAL )
-		pucm_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		demo_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.PUCM_check = wx.CheckBox( self.demographic, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.PUCM_check.Enable( False )
+		self.demo_pucm_seperator = wx.StaticLine( self.demographic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		demo_pucm_output_txt_sizer.Add( self.demo_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		pucm_sizer.Add( self.PUCM_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		self.demo_PU_CM_outputtext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_outputtext.Wrap( -1 )
+		self.demo_PU_CM_outputtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.demo_PU_CM_outputtext.Enable( False )
 		
-		self.PUCM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.PUCM_filetext.Wrap( -1 )
-		self.PUCM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
-		self.PUCM_filetext.Enable( False )
-		
-		pucm_sizer.Add( self.PUCM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.PUCM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\Documents\\PU_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
-		self.PUCM_file.Enable( False )
-		
-		pucm_sizer.Add( self.PUCM_file, 0, wx.ALL|wx.EXPAND, 5 )
+		demo_pucm_output_txt_sizer.Add( self.demo_PU_CM_outputtext, 0, wx.ALL, 5 )
 		
 		
-		demoMainSizer.Add( pucm_sizer, 1, wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_pucm_output_txt_sizer, 1, wx.EXPAND, 5 )
 		
-		self.rescale_button = wx.Button( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.rescale_button.Enable( False )
+		demo_pucm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		demoMainSizer.Add( self.rescale_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		self.demo_PU_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Describe Planning Unit Connectivity Matrix ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_def.Wrap( -1 )
+		self.demo_PU_CM_def.Enable( False )
+		
+		demo_pucm_def_sizer.Add( self.demo_PU_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		demoMainSizer.Add( demo_pucm_def_sizer, 1, wx.EXPAND, 5 )
+		
+		demo_pucm_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		demo_pucm_sizer.AddGrowableCol( 2 )
+		demo_pucm_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		demo_pucm_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.demo_PU_CM_check = wx.CheckBox( self.demographic, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_check.Enable( False )
+		
+		demo_pucm_sizer.Add( self.demo_PU_CM_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.demo_PU_CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_filetext.Wrap( -1 )
+		self.demo_PU_CM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.demo_PU_CM_filetext.Enable( False )
+		
+		demo_pucm_sizer.Add( self.demo_PU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.demo_PU_CM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\Documents\\PU_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
+		self.demo_PU_CM_file.Enable( False )
+		
+		demo_pucm_sizer.Add( self.demo_PU_CM_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		demoMainSizer.Add( demo_pucm_sizer, 1, wx.EXPAND, 5 )
+		
+		self.demo_rescale_button = wx.Button( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_rescale_button.Enable( False )
+		
+		demoMainSizer.Add( self.demo_rescale_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
 		
 		self.demographic.SetSizer( demoMainSizer )
@@ -359,7 +359,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -627,7 +627,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -1141,12 +1141,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
 		self.demo_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
 		self.demo_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
-		self.CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CM_file )
+		self.demo_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
-		self.CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
-		self.PUCM_check.Bind( wx.EVT_CHECKBOX, self.on_PUCM_check )
-		self.PUCM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCM_file )
-		self.rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
+		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
+		self.demo_PU_CM_check.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_check )
+		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
+		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
@@ -1210,7 +1210,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_demo_matrixFormatRadioBox( self, event ):
 		event.Skip()
 	
-	def on_CM_file( self, event ):
+	def on_demo_CU_CM_file( self, event ):
 		event.Skip()
 	
 	def on_demo_rescaleRadioBox( self, event ):
@@ -1219,10 +1219,10 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_CU_file( self, event ):
 		event.Skip()
 	
-	def on_PUCM_check( self, event ):
+	def on_demo_PU_CM_check( self, event ):
 		event.Skip()
 	
-	def on_PUCM_file( self, event ):
+	def on_demo_PU_CM_file( self, event ):
 		event.Skip()
 	
 	def on_demo_rescale_button( self, event ):

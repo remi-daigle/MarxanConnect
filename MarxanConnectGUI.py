@@ -42,7 +42,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         initialize parent class (the entire GUI)
         """
         gui.MarxanConnectGUI.__init__(self,parent)
-        # self.warn_dialog(message = sys.path[0])
         # set the icon
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]: 
@@ -80,7 +79,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options'] = {}
 
         # set default options
-        self.project['options']['pucm_export'] = self.PUCM_check.GetValue()
+        self.project['options']['pucm_export'] = self.demo_PU_CM_check.GetValue()
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
@@ -93,9 +92,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         #     pfdir = os.path.join(os.environ['ProgramFiles'], "MarxanConnect")
         pfdir = sys.path[0]
         self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
-        self.project['filepaths']['cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
-        self.project['filepaths']['cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
-        self.project['filepaths']['pucm_filepath'] = os.path.join(os.environ['USERPROFILE'],
+        self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
+        self.project['filepaths']['demo_cu_cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
+        self.project['filepaths']['demo_pu_cm_filepath'] = os.path.join(os.environ['USERPROFILE'],
                                                                   "Documents","PU_connectivity_matrix.csv")
         self.project['filepaths']['cf_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","puvspr.dat")
         self.project['filepaths']['spec_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","spec.dat")
@@ -103,9 +102,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # set default file paths
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
-        self.CU_file.SetPath(self.project['filepaths']['cu_filepath'])
-        self.CM_file.SetPath(self.project['filepaths']['cm_filepath'])
-        self.PUCM_file.SetPath(self.project['filepaths']['pucm_filepath'])
+        self.demo_CU_file.SetPath(self.project['filepaths']['demo_cu_filepath'])
+        self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
+        self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
         self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
         self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
@@ -142,7 +141,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
         # set default options
-        self.PUCM_check.SetValue(self.project['options']['pucm_export'])
+        self.demo_PU_CM_check.SetValue(self.project['options']['pucm_export'])
         self.demo_matrixUnitsRadioBox.SetStringSelection(self.project['options']['demo_conmat_units'])
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
         self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
@@ -150,9 +149,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # set default file paths
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
-        self.CU_file.SetPath(self.project['filepaths']['cu_filepath'])
-        self.CM_file.SetPath(self.project['filepaths']['cm_filepath'])
-        self.PUCM_file.SetPath(self.project['filepaths']['pucm_filepath'])
+        self.demo_demo_CU_file.SetPath(self.project['filepaths']['demo_cu_filepath'])
+        self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
+        self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
         self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
         self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
@@ -224,7 +223,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Warning
         """
         dlg = wx.MessageBox(message, caption, style=wx.OK | wx.ICON_WARNING)
-        dlg.Destroy()
 
 ###########################  map plotting functions ###########################
     def on_plot_map_button(self, event):
@@ -244,7 +242,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.Fit()
         
         pu = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])
-        cu = gpd.GeoDataFrame.from_file(self.project['filepaths']['cu_filepath'])
+        cu = gpd.GeoDataFrame.from_file(self.project['filepaths']['demo_cu_filepath'])
         
         lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners([pu,cu],float(self.bmap_buffer.GetValue()))
 
@@ -391,8 +389,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Draws the desired graph on the plot created by 'on_plot_graph_button'
         """
-        pucm_filepath = os.path.join(pucm_filedir, pucm_filename)
-        conmat = pandas.read_csv(pucm_filepath, index_col=0)
+        demo_cu_cm_filepath = os.path.join(pucm_filedir, pucm_filename)
+        conmat = pandas.read_csv(demo_cu_cm_filepath, index_col=0)
         g1 = nx.from_numpy_matrix(conmat.as_matrix())
         mapping = dict(zip(g1.nodes(), conmat.index))
         g1 = nx.relabel_nodes(g1, mapping)
@@ -405,23 +403,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
 
-    def on_CU_file(self, event):
+    def on_demo_CU_file(self, event):
         """
         Defines Connectivity Unit file path
         """
-        self.project['filepaths']['cu_filepath']=self.CU_file.GetPath()
+        self.project['filepaths']['demo_cu_filepath']=self.demo_CU_file.GetPath()
 
-    def on_CM_file(self, event ):
+    def on_demo_CU_CM_file(self, event ):
         """
         Defines Connectivity Matrix file path
         """
-        self.project['filepaths']['cm_filepath'] = self.CM_file.GetPath()
+        self.project['filepaths']['demo_cu_cm_filepath'] = self.demo_CU_CM_file.GetPath()
 
-    def on_PUCM_file(self, event):
+    def on_demo_PU_CM_file(self, event):
         """
         Defines Planning Unit scaled Connectivity Matrix file path
         """
-        self.project['filepaths']['pucm_filepath'] = self.PUCM_file.GetPath()
+        self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_PU_CM_file.GetPath()
         
     def on_FA_file(self, event):
         """
@@ -462,27 +460,27 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Hides unnecessary options if rescaling is not necessary
         """
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
-        if(self.CU_def.Enabled==True):
-            self.CU_def.Enable(enable = False)
-            self.CU_filetext.Enable(enable = False)
-            self.CU_file.Enable(enable = False)
-            self.PUCM_outputtext.Enable(enable = False)
-            self.PUCM_def.Enable(enable = False)
-            self.PUCM_check.Enable(enable=False)
-            self.PUCM_filetext.Enable(enable = False)
-            self.PUCM_file.Enable(enable = False)
-            self.rescale_button.Enable(enable = False)
+        if(self.demo_rescaleRadioBox.GetStringSelection()=="Identical Grids"):
+            self.demo_CU_def.Enable(enable = False)
+            self.demo_CU_filetext.Enable(enable = False)
+            self.demo_CU_file.Enable(enable = False)
+            self.demo_PU_CM_outputtext.Enable(enable = False)
+            self.demo_PU_CM_def.Enable(enable = False)
+            self.demo_PU_CM_check.Enable(enable=False)
+            self.demo_PU_CM_filetext.Enable(enable = False)
+            self.demo_PU_CM_file.Enable(enable = False)
+            self.demo_rescale_button.Enable(enable = False)
         else:
-            self.CU_def.Enable(enable = True)
-            self.CU_filetext.Enable(enable = True)
-            self.CU_file.Enable(enable = True)
-            self.PUCM_outputtext.Enable(enable = True)
-            self.PUCM_def.Enable(enable = True)
-            self.PUCM_check.Enable(enable=True)
-            if self.PUCM_check.GetValue():
-                self.PUCM_filetext.Enable(enable = True)
-                self.PUCM_file.Enable(enable = True)
-            self.rescale_button.Enable(enable = True)
+            self.demo_CU_def.Enable(enable = True)
+            self.demo_CU_filetext.Enable(enable = True)
+            self.demo_CU_file.Enable(enable = True)
+            self.demo_PU_CM_outputtext.Enable(enable = True)
+            self.demo_PU_CM_def.Enable(enable = True)
+            self.demo_PU_CM_check.Enable(enable=True)
+            if self.demo_PU_CM_check.GetValue():
+                self.demo_PU_CM_filetext.Enable(enable = True)
+                self.demo_PU_CM_file.Enable(enable = True)
+            self.demo_rescale_button.Enable(enable = True)
             
     def on_demo_rescale_button(self, event):
         """
@@ -490,17 +488,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         ProcessThreading(parent=self, rescale_matrix = True)
 
-    def on_PUCM_check( self, event ):
+    def on_demo_PU_CM_check( self, event ):
         """
         Checks if the planning unit connectivity matrix should be exported when rescaling
         """
-        self.project['options']['pucm_export'] = self.PUCM_check.GetValue()
-        if self.PUCM_check.GetValue():
-            self.PUCM_filetext.Enable(enable=True)
-            self.PUCM_file.Enable(enable=True)
+        self.project['options']['pucm_export'] = self.demo_PU_CM_check.GetValue()
+        if self.demo_PU_CM_check.GetValue():
+            self.demo_PU_CM_filetext.Enable(enable=True)
+            self.demo_PU_CM_file.Enable(enable=True)
         else:
-            self.PUCM_filetext.Enable(enable = False)
-            self.PUCM_file.Enable(enable = False)
+            self.demo_PU_CM_filetext.Enable(enable = False)
+            self.demo_PU_CM_file.Enable(enable = False)
 
 ###########################  metric related functions #########################
     def on_calc_metrics(self, event):
@@ -513,19 +511,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # choose correct matrix for demographic metrics
         if(self.calc_metrics_type.GetCurrentSelection()==0):
-            if(os.path.isfile(self.project['filepaths']['pucm_filepath'])):
-                self.conmat = pandas.read_csv(self.project['filepaths']['pucm_filepath'],index_col= 0)
+            type = 'pu'
+            if(os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath'])):
+                self.conmat = pandas.read_csv(self.project['filepaths']['demo_pu_cm_filepath'],index_col= 0)
                 self.project['connectivityMetrics']['pucm_conmat'] = self.conmat.to_json(orient='split')
             else:
-                self.warn_dialog(message="File not found: "+self.project['filepaths']['pucm_filepath'])
-            type='pu'
+                self.warn_dialog(message="File not found: "+self.project['filepaths']['demo_pu_cm_filepath'])
+            
         elif(self.calc_metrics_type.GetCurrentSelection()==1):
-            if(os.path.isfile(self.project['filepaths']['pucm_filepath'])):
-                self.conmat = pandas.read_csv(self.project['filepaths']['cm_filepath'],index_col= 0)
+            type = 'cu'
+            if(os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath'])):
+                self.conmat = pandas.read_csv(self.project['filepaths']['demo_cu_cm_filepath'],index_col= 0)
                 self.project['connectivityMetrics']['cm_conmat'] = self.conmat.to_json(orient='split')
             else:
-                self.warn_dialog(message="File not found: "+self.project['filepaths']['cm_filepath'])
-            type='cu'
+                self.warn_dialog(message="File not found: "+self.project['filepaths']['demo_cu_cm_filepath'])
+            
 
         #create dict entries for boundary and spec, also enable customize spec
         if not 'spec_'+type in self.project['connectivityMetrics']:
@@ -873,16 +873,18 @@ class ProcessThreading(object):
 
     def run(self):
         if self.rescale_matrix:
+            # create dict entry for connectivityMetrics
+            if not 'connectivityMetrics' in self.parent.project:
+                self.parent.project['connectivityMetrics'] = {}
             print('rescaling')
             self.parent.project['connectivityMetrics']['pucm_conmat'] = marxanconpy.rescale_matrix(
                 self.parent.project['filepaths']['pu_filepath'],
-                self.parent.project['filepaths']['cu_filepath'],
-                self.parent.project['filepaths']['cm_filepath'],
-                self.parent.project['filepaths']['pucm_filepath']).to_json(orient='split')
+                self.parent.project['filepaths']['demo_cu_filepath'],
+                self.parent.project['filepaths']['demo_cu_cm_filepath']).to_json(orient='split')
 
-            if self.parent.PUCM_check.GetValue():
-                pandas.read_json(self.parent.project['connectivityMetrics']['pucm_conmat']).to_csv(
-                    pucm_filepath, index=True, header=True, sep=",")
+            if self.parent.demo_PU_CM_check.GetValue():
+                pandas.read_json(self.parent.project['connectivityMetrics']['pucm_conmat'],orient='split').to_csv(
+                    self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
             print("done!")
 ###########################  run the GUI ######################################
 app = wx.App(False)

@@ -1234,7 +1234,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">2) Connectivity Input</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -1685,7 +1685,7 @@
                                                             <property name="proportion">1</property>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cm_def_sizer</property>
+                                                                <property name="name">demo_cm_def_sizer</property>
                                                                 <property name="orient">wxHORIZONTAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -1728,7 +1728,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">CM_def</property>
+                                                                        <property name="name">demo_CM_def</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2072,7 +2072,7 @@
                                                                 <property name="growablerows"></property>
                                                                 <property name="hgap">0</property>
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cm_file_sizer</property>
+                                                                <property name="name">demo_cu_cm_file_sizer</property>
                                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                                 <property name="permission">none</property>
                                                                 <property name="rows">0</property>
@@ -2117,7 +2117,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">CM_filetext</property>
+                                                                        <property name="name">demo_CU_CM_filetext</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2200,7 +2200,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">CM_file</property>
+                                                                        <property name="name">demo_CU_CM_file</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2226,7 +2226,7 @@
                                                                         <event name="OnChar"></event>
                                                                         <event name="OnEnterWindow"></event>
                                                                         <event name="OnEraseBackground"></event>
-                                                                        <event name="OnFileChanged">on_CM_file</event>
+                                                                        <event name="OnFileChanged">on_demo_CU_CM_file</event>
                                                                         <event name="OnKeyDown"></event>
                                                                         <event name="OnKeyUp"></event>
                                                                         <event name="OnKillFocus"></event>
@@ -2257,7 +2257,7 @@
                                                             <property name="proportion">1</property>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">rescale_sizer</property>
+                                                                <property name="name">demo_rescale_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -2266,7 +2266,7 @@
                                                                     <property name="proportion">1</property>
                                                                     <object class="wxBoxSizer" expanded="0">
                                                                         <property name="minimum_size"></property>
-                                                                        <property name="name">rescale_def_sizer</property>
+                                                                        <property name="name">demo_rescale_def_sizer</property>
                                                                         <property name="orient">wxHORIZONTAL</property>
                                                                         <property name="permission">none</property>
                                                                         <object class="sizeritem" expanded="0">
@@ -2309,7 +2309,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">rescale_def_txt</property>
+                                                                                <property name="name">demo_rescale_def_txt</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2452,7 +2452,7 @@
                                                             <property name="proportion">1</property>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cu_def_sizer</property>
+                                                                <property name="name">demo_cu_def_sizer</property>
                                                                 <property name="orient">wxHORIZONTAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -2495,7 +2495,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">CU_def</property>
+                                                                        <property name="name">demo_CU_def</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2551,7 +2551,7 @@
                                                                 <property name="growablerows"></property>
                                                                 <property name="hgap">0</property>
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cu_file_sizer</property>
+                                                                <property name="name">demo_cu_file_sizer</property>
                                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                                 <property name="permission">none</property>
                                                                 <property name="rows">0</property>
@@ -2596,7 +2596,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">CU_filetext</property>
+                                                                        <property name="name">demo_CU_filetext</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2679,7 +2679,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">CU_file</property>
+                                                                        <property name="name">demo_CU_file</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2736,7 +2736,7 @@
                                                             <property name="proportion">1</property>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">pucm_output_txt_sizer</property>
+                                                                <property name="name">demo_pucm_output_txt_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -2778,7 +2778,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">pucm_seperator</property>
+                                                                        <property name="name">demo_pucm_seperator</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2860,7 +2860,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">PUCM_outputtext</property>
+                                                                        <property name="name">demo_PU_CM_outputtext</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -2911,7 +2911,7 @@
                                                             <property name="proportion">1</property>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">pucm_def_sizer</property>
+                                                                <property name="name">demo_pucm_def_sizer</property>
                                                                 <property name="orient">wxHORIZONTAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -2954,7 +2954,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">PUCM_def</property>
+                                                                        <property name="name">demo_PU_CM_def</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -3010,7 +3010,7 @@
                                                                 <property name="growablerows"></property>
                                                                 <property name="hgap">0</property>
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">pucm_sizer</property>
+                                                                <property name="name">demo_pucm_sizer</property>
                                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                                 <property name="permission">none</property>
                                                                 <property name="rows">0</property>
@@ -3056,7 +3056,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">PUCM_check</property>
+                                                                        <property name="name">demo_PU_CM_check</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -3078,7 +3078,7 @@
                                                                         <property name="window_name"></property>
                                                                         <property name="window_style"></property>
                                                                         <event name="OnChar"></event>
-                                                                        <event name="OnCheckBox">on_PUCM_check</event>
+                                                                        <event name="OnCheckBox">on_demo_PU_CM_check</event>
                                                                         <event name="OnEnterWindow"></event>
                                                                         <event name="OnEraseBackground"></event>
                                                                         <event name="OnKeyDown"></event>
@@ -3143,7 +3143,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">PUCM_filetext</property>
+                                                                        <property name="name">demo_PU_CM_filetext</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -3226,7 +3226,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">PUCM_file</property>
+                                                                        <property name="name">demo_PU_CM_file</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -3252,7 +3252,7 @@
                                                                         <event name="OnChar"></event>
                                                                         <event name="OnEnterWindow"></event>
                                                                         <event name="OnEraseBackground"></event>
-                                                                        <event name="OnFileChanged">on_PUCM_file</event>
+                                                                        <event name="OnFileChanged">on_demo_PU_CM_file</event>
                                                                         <event name="OnKeyDown"></event>
                                                                         <event name="OnKeyUp"></event>
                                                                         <event name="OnKillFocus"></event>
@@ -3318,7 +3318,7 @@
                                                                 <property name="minimize_button">0</property>
                                                                 <property name="minimum_size"></property>
                                                                 <property name="moveable">1</property>
-                                                                <property name="name">rescale_button</property>
+                                                                <property name="name">demo_rescale_button</property>
                                                                 <property name="pane_border">1</property>
                                                                 <property name="pane_position"></property>
                                                                 <property name="pane_size"></property>
@@ -3534,7 +3534,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">3) Connectivity Metrics</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>

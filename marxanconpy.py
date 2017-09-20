@@ -4,7 +4,7 @@ import pandas
 import igraph
 
 
-def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,pucm_filepath):
+def rescale_matrix(pu_filepath,cu_filepath,cm_filepath):
     """
     rescale the connectivity matrix to match the scale of the planning units
     """
@@ -103,6 +103,6 @@ def conmat2minplanarboundary(conmat):
 
 
 
-conmat = pandas.read_csv('C:\\Users\\Remi-Work\\Documents\\PU_connectivity_matrix.csv',index_col= 0)
-cm2 = conmat.to_json(orient='split')
-pandas.read_json(cm2)['index']
+# conmat = pandas.read_csv('C:\\Users\\Remi-Work\\Documents\\PU_connectivity_matrix.csv',index_col= 0)
+# cm2 = conmat.to_json(orient='split')
+# pandas.read_json(cm2)['index']
