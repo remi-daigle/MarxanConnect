@@ -1234,7 +1234,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">2) Connectivity Input</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -3534,7 +3534,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">3) Connectivity Metrics</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -6717,7 +6717,7 @@
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
                                                     <event name="OnChar"></event>
-                                                    <event name="OnChoice"></event>
+                                                    <event name="OnChoice">on_calc_metrics_type</event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
                                                     <event name="OnKeyDown"></event>

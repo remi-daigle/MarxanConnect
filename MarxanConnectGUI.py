@@ -84,12 +84,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
+        self.project['options']['calc_metrics_type'] = self.calc_metrics_type.GetStringSelection()
+        self.on_calc_metrics_type(event = None)
 
         # set default file paths
-        # if(os.path.isdir(os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect"))):
-        #     pfdir = os.path.join(os.environ['ProgramFiles(x86)'], "MarxanConnect")
-        # else:
-        #     pfdir = os.path.join(os.environ['ProgramFiles'], "MarxanConnect")
         pfdir = sys.path[0]
         self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
         self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
@@ -100,7 +98,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['spec_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","spec.dat")
         self.project['filepaths']['bd_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","boundary.dat")
 
-        # set default file paths
+        # set default file paths in the GUI
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
         self.demo_CU_file.SetPath(self.project['filepaths']['demo_cu_filepath'])
         self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
@@ -146,6 +144,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
         self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
         self.demo_rescaleRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale'])
+        self.calc_metrics_type.SetStringSelection(self.project['options']['calc_metrics_type'])
+
 
         # set default file paths
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
@@ -262,13 +262,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         #plot first layer
         if(self.lyr1_plot_check.GetValue()):
             if(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==0):
-                metric = self.get_con_feature_data(type = 'pu')
+                metric = self.get_con_feature_data()
                 self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol.GetColour(),
                                      hicol = self.pu_metric_hicol.GetColour(),
                                      trans = self.pu_metric_alpha.GetValue()/100,
                                      legend = self.pu_metric_legend.GetCurrentSelection())
             elif(self.lyr1_choice.GetChoiceCtrl().GetCurrentSelection()==1):
-                metric = self.get_con_feature_data(type = 'cu')
+                metric = self.get_con_feature_data()
                 self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol.GetColour(),
                                      hicol = self.cu_metric_hicol.GetColour(),
                                      trans = self.cu_metric_alpha.GetValue()/100,
@@ -283,13 +283,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         #plot second layer
         if(self.lyr2_plot_check.GetValue()):
             if(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==0):
-                metric = self.get_con_feature_data(type = 'pu')
+                metric = self.get_con_feature_data()
                 self.draw_shapefiles(sf = pu, metric = metric, lowcol = self.pu_metric_lowcol1.GetColour(),
                                      hicol = self.pu_metric_hicol1.GetColour(),
                                      trans = self.pu_metric_alpha1.GetValue()/100,
                                      legend = self.pu_metric_legend1.GetCurrentSelection())
             elif(self.lyr2_choice.GetChoiceCtrl().GetCurrentSelection()==1):
-                metric = self.get_con_feature_data(type = 'cu')
+                metric = self.get_con_feature_data()
                 self.draw_shapefiles(sf = cu, metric = metric, lowcol = self.cu_metric_lowcol1.GetColour(),
                                      hicol = self.cu_metric_hicol1.GetColour(),
                                      trans = self.cu_metric_alpha1.GetValue()/100,
@@ -488,7 +488,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         ProcessThreading(parent=self, rescale_matrix = True)
 
-    def on_demo_PU_CM_check( self, event ):
+    def on_demo_PU_CM_check(self, event):
         """
         Checks if the planning unit connectivity matrix should be exported when rescaling
         """
@@ -500,6 +500,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.demo_PU_CM_filetext.Enable(enable = False)
             self.demo_PU_CM_file.Enable(enable = False)
 
+    def on_calc_metrics_type(self, event):
+        """
+        Choose correct matrix for demographic metrics
+        """
+        if(self.calc_metrics_type.GetCurrentSelection()==0):
+            self.type = 'pu'
+        elif (self.calc_metrics_type.GetCurrentSelection() == 1):
+            self.type = 'cu'
 ###########################  metric related functions #########################
     def on_calc_metrics(self, event):
         """
@@ -509,27 +517,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics']={}
 
-        # choose correct matrix for demographic metrics
-        if(self.calc_metrics_type.GetCurrentSelection()==0):
-            type = 'pu'
-            if(os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath'])):
-                self.conmat = pandas.read_csv(self.project['filepaths']['demo_pu_cm_filepath'],index_col= 0)
-                self.project['connectivityMetrics']['pucm_conmat'] = self.conmat.to_json(orient='split')
-            else:
-                self.warn_dialog(message="File not found: "+self.project['filepaths']['demo_pu_cm_filepath'])
-            
-        elif(self.calc_metrics_type.GetCurrentSelection()==1):
-            type = 'cu'
-            if(os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath'])):
-                self.conmat = pandas.read_csv(self.project['filepaths']['demo_cu_cm_filepath'],index_col= 0)
-                self.project['connectivityMetrics']['cm_conmat'] = self.conmat.to_json(orient='split')
-            else:
-                self.warn_dialog(message="File not found: "+self.project['filepaths']['demo_cu_cm_filepath'])
+
+
+        if(os.path.isfile(self.project['filepaths']['demo_'+self.type+'_cm_filepath'])):
+            self.conmat = pandas.read_csv(self.project['filepaths']['demo_'+self.type+'_cm_filepath'],index_col= 0)
+            self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'] = self.conmat.to_json(orient='split')
+        else:
+            self.warn_dialog(message="File not found: "+self.project['filepaths']['demo_'+self.type+'_cm_filepath'])
             
 
         #create dict entries for boundary and spec, also enable customize spec
-        if not 'spec_'+type in self.project['connectivityMetrics']:
-            self.project['connectivityMetrics']['spec_'+type]={}
+        if not 'spec_'+self.type in self.project['connectivityMetrics']:
+            self.project['connectivityMetrics']['spec_'+self.type]={}
             self.customize_spec.Enable(enable=True)
             self.CFT_percent_slider.Enable(enable=True)
             self.export_metrics.Enable(enable=True)
@@ -539,27 +538,27 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # calculate demographic metrics
         if(self.cf_demo_vertex_degree.GetValue()):
-            self.project['connectivityMetrics']['spec_'+type]['demo_vertex_degree_'+type] = \
+            self.project['connectivityMetrics']['spec_'+self.type]['demo_vertex_degree_'+self.type] = \
                 marxanconpy.conmat2vertexdegree(self.conmat)
 
         if(self.cf_demo_between_cent.GetValue()):
-            self.project['connectivityMetrics']['spec_'+type]['demo_between_cent_'+type] = \
+            self.project['connectivityMetrics']['spec_'+self.type]['demo_between_cent_'+self.type] = \
                 marxanconpy.conmat2betweencent(self.conmat)
 
         if(self.cf_demo_eig_vect_cent.GetValue()):
-            self.project['connectivityMetrics']['spec_'+type]['demo_eig_vect_cent_'+type] = \
+            self.project['connectivityMetrics']['spec_'+self.type]['demo_eig_vect_cent_'+self.type] = \
                 marxanconpy.conmat2eigvectcent(self.conmat)
 
         if(self.cf_demo_self_recruit.GetValue()):
-            self.project['connectivityMetrics']['spec_'+type]['demo_self_recruit_'+type] = \
+            self.project['connectivityMetrics']['spec_'+self.type]['demo_self_recruit_'+self.type] = \
                 marxanconpy.conmat2selfrecruit(self.conmat)
 
         if(self.bd_demo_conn_boundary.GetValue()):
-            self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+type] = \
+            self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+self.type] = \
                 marxanconpy.conmat2connboundary(self.conmat)
 
         if(self.bd_demo_min_plan_graph.GetValue()):
-           self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+type] = \
+           self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+self.type] = \
                marxanconpy.conmat2minplanarboundary(self.conmat)
 
         # choose correct matrix for genetic metrics
@@ -573,26 +572,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # insert stuff here!
 
         # create initial spec
-        self.on_new_spec(type)
+        self.on_new_spec()
 
     def on_export_metrics(self, event):
-        # choose type
-        if(self.calc_metrics_type.GetCurrentSelection()==0):
-            type='pu'
-        elif(self.calc_metrics_type.GetCurrentSelection()==1):
-            type='cu'
-
         # Export or append feature files
         if self.cf_export_radioBox.GetSelection()==0:
             # export spec
-            spec = pandas.read_json(self.project['spec_'+type+'_dat'], orient = 'split')
+            spec = pandas.read_json(self.project['spec_'+self.type+'_dat'], orient = 'split')
             spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
             # export conservation features
-            cf = self.project['connectivityMetrics']['spec_'+type].copy()
-            if type=='pu':
-                cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['pucm_conmat'], orient = 'split').index
-            else:
-                cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['cm_conmat'], orient = 'split').index
+            cf = self.project['connectivityMetrics']['spec_'+self.type].copy()
+            cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'], orient = 'split').index
             cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             cf = pandas.merge(cf,spec,how='outer',on='name')
             cf = cf.rename(columns = {'id':'species'}).sort_values(['species','pu'])
@@ -604,7 +594,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
 
             # append spec
-            new_spec = pandas.read_json(self.project['spec_'+type+'_dat'], orient='split')
+            new_spec = pandas.read_json(self.project['spec_'+self.type+'_dat'], orient='split')
             new_spec['id'] = new_spec['id']+max(old_spec['id'])
 
             pandas.concat([old_spec,new_spec]).to_csv(str.replace(self.project['filepaths']['spec_filepath'],
@@ -612,11 +602,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                     "_appended.dat")
                                                       , index=0)
             # append conservation features
-            new_cf = self.project['connectivityMetrics']['spec_'+type].copy()
-            if type=='pu':
-                new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['pucm_conmat'], orient = 'split').index
-            else:
-                new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['cm_conmat'], orient = 'split').index
+            new_cf = self.project['connectivityMetrics']['spec_'+self.type].copy()
+            new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'], orient = 'split').index
             new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
             new_cf = new_cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])
@@ -624,40 +611,34 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
 
         if self.BD_filecheck.GetValue():
-
             self.export_boundary_file(BD_filepath = self.project['filepaths']['bd_filepath'])
 
     def export_boundary_file(self, BD_filepath):
-        # choose type
-        if(self.calc_metrics_type.GetCurrentSelection()==0):
-            type='pu'
-        elif(self.calc_metrics_type.GetCurrentSelection()==1):
-            type='cu'
-        
+
         multiple = [self.bd_demo_conn_boundary.GetValue(),
                     self.bd_demo_min_plan_graph.GetValue()].count(True)>1
         
         # Export each selected boundary definition            
         if self.bd_demo_conn_boundary.GetValue():
             if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+type],
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+self.type],
                                  orient='split').to_csv(str.replace(BD_filepath,
                                                                     ".dat",
-                                                                    "_demo_conn_boundary_"+type+".dat"),
+                                                                    "_demo_conn_boundary_"+self.type+".dat"),
                                                         index = False)
             else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+type],
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_conn_boundary_'+self.type],
                                  orient='split').to_csv(BD_filepath, index = False)
         
         if self.bd_demo_min_plan_graph.GetValue():
             if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+type],
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+self.type],
                                  orient='split').to_csv(str.replace(BD_filepath,
                                                                     ".dat",
-                                                                    "_demo_min_plan_graph_"+type+".dat"),
+                                                                    "_demo_min_plan_graph_"+self.type+".dat"),
                                                         index = False)
             else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+type],
+                pandas.read_json(self.project['connectivityMetrics']['boundary']['demo_min_plan_graph_'+self.type],
                                  orient='split').to_csv(BD_filepath, index = False)
         
         # warn when multiple boundary definitions
@@ -665,25 +646,25 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.warn_dialog(message = "Multiple Boundary Definitions were selected. Boundary file names have been"
                                        " edited to include type.", caption = "Warning!")
         
-    def get_con_feature_data(self, type):
+    def get_con_feature_data(self):
         """
         returns the pre-calculated metric for plotting
         """
         #choose metric
-        if(type=='pu'):
+        if(self.type=='pu'):
             metricindex = self.pu_metric_choice.GetCurrentSelection()
-        elif(type=='cu'):
+        elif(self.type=='cu'):
             metricindex = self.cu_metric_choice.GetCurrentSelection()
 
         #get metric
         if(metricindex==0):
-            metric = self.project['connectivityMetrics']['spec_'+type]['demo_vertex_degree_'+type]
+            metric = self.project['connectivityMetrics']['spec_'+self.type]['demo_vertex_degree_'+self.type]
         elif(metricindex==1):
-            metric = self.project['connectivityMetrics']['spec_'+type]['demo_between_cent_'+type]
+            metric = self.project['connectivityMetrics']['spec_'+self.type]['demo_between_cent_'+self.type]
         elif(metricindex==2):
-            metric = self.project['connectivityMetrics']['spec_'+type]['demo_eig_vect_cent_'+type]
+            metric = self.project['connectivityMetrics']['spec_'+self.type]['demo_eig_vect_cent_'+self.type]
         elif(metricindex==3):
-            metric = self.project['connectivityMetrics']['spec_'+type]['demo_self_recruit_'+type]
+            metric = self.project['connectivityMetrics']['spec_'+self.type]['demo_self_recruit_'+self.type]
             
         return(metric)
 
@@ -691,14 +672,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_customize_spec(self, event):
         self.spec_frame.Show()
 
-    def on_new_spec(self, type):
+    def on_new_spec(self):
         self.spec_frame=spec_customizer(parent=self)
-        self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_'+type])
+        self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_'+self.type])
         
         for i in range(len(self.spec_frame.keys)):
             self.spec_frame.spec_grid.InsertRows(i)
             self.spec_frame.spec_grid.SetCellValue(i,0,str(i+1))
-            sum_metric = sum(self.project['connectivityMetrics']['spec_'+type][self.spec_frame.keys[i]])
+            sum_metric = sum(self.project['connectivityMetrics']['spec_'+self.type][self.spec_frame.keys[i]])
             self.spec_frame.spec_grid.SetCellValue(i,1,str(sum_metric*self.CFT_percent_slider.GetValue()/100))
             self.spec_frame.spec_grid.SetCellValue(i,2,str(1000))
             self.spec_frame.spec_grid.SetCellValue(i,3,self.spec_frame.keys[i])
@@ -707,22 +688,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.spec_frame.SetSize((w+16, h+39+20))
             self.spec_frame.Layout()
 
-        self.project['spec_'+type+'_dat'] = pandas.DataFrame(
+        self.project['spec_'+self.type+'_dat'] = pandas.DataFrame(
             numpy.full((self.spec_frame.spec_grid.GetNumberCols(), self.spec_frame.spec_grid.GetNumberRows()), None))
-        self.project['spec_'+type+'_dat'].columns = ["id", "target", "spf", "name"]
+        self.project['spec_'+self.type+'_dat'].columns = ["id", "target", "spf", "name"]
 
         for c in range(self.spec_frame.spec_grid.GetNumberCols()):
             for r in range(self.spec_frame.spec_grid.GetNumberRows()):
-                self.project['spec_'+type+'_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
-        self.project['spec_'+type+'_dat'] = self.project['spec_'+type+'_dat'].to_json(orient = 'split')
+                self.project['spec_'+self.type+'_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
+        self.project['spec_'+self.type+'_dat'] = self.project['spec_'+self.type+'_dat'].to_json(orient = 'split')
 
     def on_CFT_percent_slider(self, event):
-        # choose type
-        if(self.calc_metrics_type.GetCurrentSelection()==0):
-            type='pu'
-        elif(self.calc_metrics_type.GetCurrentSelection()==1):
-            type='cu'
-        self.on_new_spec(type)
+        self.on_new_spec()
 
 class spec_customizer (gui.spec_customizer):
     def __init__( self, parent ):
@@ -730,19 +706,14 @@ class spec_customizer (gui.spec_customizer):
         self.parent = parent
         
     def on_spec_ok( self, event ):
-        # choose type
-        if (self.parent.calc_metrics_type.GetCurrentSelection() == 0):
-            type = 'pu'
-        elif (self.parent.calc_metrics_type.GetCurrentSelection() == 1):
-            type = 'cu'
-        self.parent.project['spec_'+type+'_dat'] = pandas.DataFrame(numpy.full((self.spec_grid.GetNumberCols(),
+        self.parent.project['spec_'+self.parent.type+'_dat'] = pandas.DataFrame(numpy.full((self.spec_grid.GetNumberCols(),
                                                                                 self.spec_grid.GetNumberRows()),None))
-        self.parent.project['spec_'+type+'_dat'].columns = ["id","target","spf","name"]
+        self.parent.project['spec_'+self.parent.type+'_dat'].columns = ["id","target","spf","name"]
 
         for c in range(self.spec_grid.GetNumberCols()):
             for r in range(self.spec_grid.GetNumberRows()):
-                self.parent.project['spec_'+type+'_dat'].iloc[r,c] = self.spec_grid.GetCellValue(r,c)
-        self.parent.project['spec_'+type+'_dat'] = self.parent.project['spec_'+type+'_dat'].to_json()
+                self.parent.project['spec_'+self.parent.type+'_dat'].iloc[r,c] = self.spec_grid.GetCellValue(r,c)
+        self.parent.project['spec_'+self.parent.type+'_dat'] = self.parent.project['spec_'+self.parent.type+'_dat'].to_json()
         self.Hide()
 	
     def on_spec_cancel( self, event ):
@@ -877,13 +848,13 @@ class ProcessThreading(object):
             if not 'connectivityMetrics' in self.parent.project:
                 self.parent.project['connectivityMetrics'] = {}
             print('rescaling')
-            self.parent.project['connectivityMetrics']['pucm_conmat'] = marxanconpy.rescale_matrix(
+            self.parent.project['connectivityMetrics']['demo_pu_cm_conmat'] = marxanconpy.rescale_matrix(
                 self.parent.project['filepaths']['pu_filepath'],
                 self.parent.project['filepaths']['demo_cu_filepath'],
                 self.parent.project['filepaths']['demo_cu_cm_filepath']).to_json(orient='split')
 
             if self.parent.demo_PU_CM_check.GetValue():
-                pandas.read_json(self.parent.project['connectivityMetrics']['pucm_conmat'],orient='split').to_csv(
+                pandas.read_json(self.parent.project['connectivityMetrics']['demo_pu_cm_conmat'],orient='split').to_csv(
                     self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
             print("done!")
 ###########################  run the GUI ######################################

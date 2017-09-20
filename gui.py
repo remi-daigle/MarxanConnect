@@ -359,7 +359,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -627,7 +627,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -1154,6 +1154,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
+		self.calc_metrics_type.Bind( wx.EVT_CHOICE, self.on_calc_metrics_type )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
 		self.plot_graph_button.Bind( wx.EVT_BUTTON, self.on_plot_graph_button )
 	
@@ -1247,6 +1248,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_export_metrics( self, event ):
+		event.Skip()
+	
+	def on_calc_metrics_type( self, event ):
 		event.Skip()
 	
 	def on_plot_map_button( self, event ):
