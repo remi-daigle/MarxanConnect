@@ -66,7 +66,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # frame.Show()
         
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(1)
+        self.auinotebook.ChangeSelection(2)
     
 ###########################  project managment functions ######################        
     def on_new_project( self, event, launch = False):
@@ -589,7 +589,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
             # export conservation features
             cf = self.project['connectivityMetrics']['spec_'+type].copy()
-            cf['pu'] = self.conmat.index
+            if type=='pu':
+                cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['pucm_conmat'], orient = 'split').index
+            else:
+                cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['cm_conmat'], orient = 'split').index
             cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             cf = pandas.merge(cf,spec,how='outer',on='name')
             cf = cf.rename(columns = {'id':'species'}).sort_values(['species','pu'])
@@ -601,7 +604,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
 
             # append spec
-            new_spec = pandas.read_json(self.project['spec_' + type + '_dat'], orient='split')
+            new_spec = pandas.read_json(self.project['spec_'+type+'_dat'], orient='split')
             new_spec['id'] = new_spec['id']+max(old_spec['id'])
 
             pandas.concat([old_spec,new_spec]).to_csv(str.replace(self.project['filepaths']['spec_filepath'],
@@ -609,8 +612,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                     "_appended.dat")
                                                       , index=0)
             # append conservation features
-            new_cf = self.project['connectivityMetrics']['spec_' + type].copy()
-            new_cf['pu'] = self.conmat.index
+            new_cf = self.project['connectivityMetrics']['spec_'+type].copy()
+            if type=='pu':
+                new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['pucm_conmat'], orient = 'split').index
+            else:
+                new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['cm_conmat'], orient = 'split').index
             new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
             new_cf = new_cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])

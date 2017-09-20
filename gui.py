@@ -1154,8 +1154,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
-		self.lyr1_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
-		self.lyr2_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.testcolourbox )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
 		self.plot_graph_button.Bind( wx.EVT_BUTTON, self.on_plot_graph_button )
 	
@@ -1250,10 +1248,6 @@ class MarxanConnectGUI ( wx.Frame ):
 	
 	def on_export_metrics( self, event ):
 		event.Skip()
-	
-	def testcolourbox( self, event ):
-		event.Skip()
-	
 	
 	def on_plot_map_button( self, event ):
 		event.Skip()

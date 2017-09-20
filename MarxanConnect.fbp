@@ -8223,7 +8223,7 @@
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
                                                     <event name="OnChar"></event>
-                                                    <event name="OnChoicebookPageChanged">testcolourbox</event>
+                                                    <event name="OnChoicebookPageChanged"></event>
                                                     <event name="OnChoicebookPageChanging"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
@@ -11335,7 +11335,7 @@
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
                                                     <event name="OnChar"></event>
-                                                    <event name="OnChoicebookPageChanged">testcolourbox</event>
+                                                    <event name="OnChoicebookPageChanged"></event>
                                                     <event name="OnChoicebookPageChanging"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
