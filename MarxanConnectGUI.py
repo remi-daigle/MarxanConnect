@@ -79,21 +79,24 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options'] = {}
 
         # set default options
-        self.project['options']['pucm_export'] = self.demo_PU_CM_check.GetValue()
+        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_check.GetValue()
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
         self.project['options']['calc_metrics_type'] = self.calc_metrics_type.GetStringSelection()
+
+        # trigger functions which enable/disable options
         self.on_calc_metrics_type(event = None)
+        self.on_demo_matrixFormatRadioBox(event = None)
+        self.on_demo_rescaleRadioBox(event = None)
 
         # set default file paths
         pfdir = sys.path[0]
         self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
         self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
         self.project['filepaths']['demo_cu_cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
-        self.project['filepaths']['demo_pu_cm_filepath'] = os.path.join(os.environ['USERPROFILE'],
-                                                                  "Documents","PU_connectivity_matrix.csv")
+        self.project['filepaths']['demo_pu_cm_filepath'] = self.project['filepaths']['demo_cu_cm_filepath']
         self.project['filepaths']['cf_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","puvspr.dat")
         self.project['filepaths']['spec_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","spec.dat")
         self.project['filepaths']['bd_filepath'] = os.path.join(os.environ['USERPROFILE'], "Documents","boundary.dat")
@@ -139,13 +142,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
         # set default options
-        self.demo_PU_CM_check.SetValue(self.project['options']['pucm_export'])
+        self.demo_PU_CM_check.SetValue(self.project['options']['demo_pu_cm_export'])
         self.demo_matrixUnitsRadioBox.SetStringSelection(self.project['options']['demo_conmat_units'])
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
         self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
         self.demo_rescaleRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale'])
         self.calc_metrics_type.SetStringSelection(self.project['options']['calc_metrics_type'])
 
+        # trigger functions which enable/disable options
+        self.on_calc_metrics_type(event = None)
+        self.on_demo_matrixFormatRadioBox(event = None)
+        self.on_demo_rescaleRadioBox(event = None)
 
         # set default file paths
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
@@ -414,6 +421,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Connectivity Matrix file path
         """
         self.project['filepaths']['demo_cu_cm_filepath'] = self.demo_CU_CM_file.GetPath()
+        # reset filepaths
+        if self.demo_rescaleRadioBox.GetStringSelection() == "Identical Grids":
+            self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_CU_CM_file.GetPath()
+            self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
 
     def on_demo_PU_CM_file(self, event):
         """
@@ -454,11 +465,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_demo_matrixFormatRadioBox(self, event):
         self.project['options']['demo_conmat_format'] =self.demo_matrixFormatRadioBox.GetStringSelection()
+        if self.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
+            self.cf_demo_stochasticity.Enable(enable=True)
+        else:
+            self.cf_demo_stochasticity.Enable(enable=False)
 
     def on_demo_rescaleRadioBox(self, event):
         """
         Hides unnecessary options if rescaling is not necessary
         """
+        # hide or unhide
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
         if(self.demo_rescaleRadioBox.GetStringSelection()=="Identical Grids"):
             self.demo_CU_def.Enable(enable = False)
@@ -481,7 +497,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.demo_PU_CM_filetext.Enable(enable = True)
                 self.demo_PU_CM_file.Enable(enable = True)
             self.demo_rescale_button.Enable(enable = True)
-            
+
+        # reset filepaths
+        if self.demo_rescaleRadioBox.GetStringSelection()=="Identical Grids":
+            self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_CU_CM_file.GetPath()
+            self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
+        else:
+            self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_PU_CM_file.GetPath()
+
     def on_demo_rescale_button(self, event):
         """
         Rescales the connectivity matrix to match the scale of the planning units
@@ -492,7 +515,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Checks if the planning unit connectivity matrix should be exported when rescaling
         """
-        self.project['options']['pucm_export'] = self.demo_PU_CM_check.GetValue()
+        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_check.GetValue()
         if self.demo_PU_CM_check.GetValue():
             self.demo_PU_CM_filetext.Enable(enable=True)
             self.demo_PU_CM_file.Enable(enable=True)
@@ -508,25 +531,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.type = 'pu'
         elif (self.calc_metrics_type.GetCurrentSelection() == 1):
             self.type = 'cu'
+
 ###########################  metric related functions #########################
     def on_calc_metrics(self, event):
         """
         calculates the selected metrics
         """
-        #create dict entry for connectivityMetrics
+        # create dict entry for connectivityMetrics
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics']={}
 
+        # load correct matrix and transform if necessary
+        if os.path.isfile(self.project['filepaths']['demo_'+self.type+'_cm_filepath']):
+            if self.demo_matrixFormatRadioBox.GetStringSelection()=="Matrix":
+                self.conmat = pandas.read_csv(self.project['filepaths']['demo_'+self.type+'_cm_filepath'],index_col= 0)
+                self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'] = self.conmat.to_json(orient='split')
+            elif self.demo_matrixFormatRadioBox.GetStringSelection()=="List":
+                self.conmat = pandas.read_csv(self.project['filepaths']['demo_'+self.type+'_cm_filepath'])
+                self.conmat = self.conmat.pivot_table(values = 'value', index = 'id1', columns = 'id2')
+                self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'] = self.conmat.to_json(orient='split')
+            elif self.demo_matrixFormatRadioBox.GetStringSelection()=="List with Time":
+                self.conmat_time = pandas.read_csv(self.project['filepaths']['demo_' + self.type + '_cm_filepath'])
+                self.conmat = self.conmat_time[['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
+                self.conmat = self.conmat.pivot_table(values='value', index='id1', columns='id2')
+                self.project['connectivityMetrics']['demo_' + self.type + '_cm_conmat'] = self.conmat.to_json(
+                    orient='split')
+                self.project['connectivityMetrics']['demo_' + self.type + '_cm_conmat_time'] = self.conmat_time.to_json(
+                    orient='split')
 
-
-        if(os.path.isfile(self.project['filepaths']['demo_'+self.type+'_cm_filepath'])):
-            self.conmat = pandas.read_csv(self.project['filepaths']['demo_'+self.type+'_cm_filepath'],index_col= 0)
-            self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'] = self.conmat.to_json(orient='split')
+                self.warn_dialog(message = "A connectivity 'List with Time' was provided; however, all metrics except "
+                                           "'Temporal Connectivity Correlation' will be calculated from the temporal"
+                                           "mean of connectivity")
         else:
             self.warn_dialog(message="File not found: "+self.project['filepaths']['demo_'+self.type+'_cm_filepath'])
             
 
-        #create dict entries for boundary and spec, also enable customize spec
+        # create dict entries for boundary and spec, also enable customize spec
         if not 'spec_'+self.type in self.project['connectivityMetrics']:
             self.project['connectivityMetrics']['spec_'+self.type]={}
             self.customize_spec.Enable(enable=True)
@@ -582,7 +622,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
             # export conservation features
             cf = self.project['connectivityMetrics']['spec_'+self.type].copy()
-            cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'], orient = 'split').index
+            cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'],
+                                        orient = 'split').index
             cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             cf = pandas.merge(cf,spec,how='outer',on='name')
             cf = cf.rename(columns = {'id':'species'}).sort_values(['species','pu'])
@@ -603,7 +644,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       , index=0)
             # append conservation features
             new_cf = self.project['connectivityMetrics']['spec_'+self.type].copy()
-            new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'], orient = 'split').index
+            new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['demo_'+self.type+'_cm_conmat'],
+                                            orient = 'split').index
             new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
             new_cf = new_cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])

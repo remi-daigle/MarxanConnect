@@ -104,5 +104,7 @@ def conmat2minplanarboundary(conmat):
 
 
 # conmat = pandas.read_csv('C:\\Users\\Remi-Work\\Documents\\PU_connectivity_matrix.csv',index_col= 0)
+# conmat['index'] = conmat.index
+# conmat.melt(id_vars=['index'], var_name='id2', value_name='value').to_csv('connectivity_list.csv',index=0)
 # cm2 = conmat.to_json(orient='split')
 # pandas.read_json(cm2)['index']

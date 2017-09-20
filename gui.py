@@ -359,7 +359,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -413,10 +413,21 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
-		self.cf_demo_stochasticity = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Temporal Connectivity Correlation", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_stochasticity_panel.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided unde Demographic Input in the Connectivity Input tab." )
+		
+		cf_demo_stochasticity_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_stochasticity = wx.CheckBox( self.cf_demo_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Correlation", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_stochasticity.Enable( False )
 		
-		demo_cf_sizer.Add( self.cf_demo_stochasticity, 0, wx.ALL, 5 )
+		cf_demo_stochasticity_sizer.Add( self.cf_demo_stochasticity, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_stochasticity_panel.SetSizer( cf_demo_stochasticity_sizer )
+		self.cf_demo_stochasticity_panel.Layout()
+		cf_demo_stochasticity_sizer.Fit( self.cf_demo_stochasticity_panel )
+		demo_cf_sizer.Add( self.cf_demo_stochasticity_panel, 1, wx.EXPAND, 5 )
 		
 		
 		cf_sizer.Add( demo_cf_sizer, 1, wx.EXPAND, 5 )
@@ -627,7 +638,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
