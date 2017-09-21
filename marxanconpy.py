@@ -19,17 +19,18 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,progressbar=False):
                                 "Please wait while the rescaled connectivity matrix is being generated.",
                                 maximum = pu.shape[0]*10,
                                 parent=None,
-                                style = wx.PD_CAN_ABORT
-                                | wx.PD_APP_MODAL
+                                style = wx.PD_AUTO_HIDE
                                 | wx.PD_ELAPSED_TIME
                                 | wx.PD_ESTIMATED_TIME
                                 | wx.PD_REMAINING_TIME
                                 )
+        count = 0
+
     con_mat_pu = []
-    count=0
     for index, puID in pu.iterrows():
-        count += 1
-        dlg.Update(count)
+        if progressbar:
+            count += 1
+            dlg.Update(count)
         for index2, connID in cu.iterrows():
            if puID.geometry.intersects(connID.geometry):
                con_mat_pu.append({'geometry': puID.geometry.intersection(connID.geometry), 'puID':puID.ID, 'connID': connID.ID, 'puIndex': index, 'connIndex': index2,'int_area': puID.geometry.intersection(connID.geometry).area, 'conn_area': connID.geometry.area, 'pu_area': puID.geometry.area})
@@ -44,8 +45,9 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,progressbar=False):
     # populate rescaled pu connecectivity matrix
     pu_conmat = numpy.zeros((len(pu),len(pu)))
     for source in pu.ID:
-        count += 9
-        dlg.Update(count)
+        if progressbar:
+            count += 9
+            dlg.Update(count)
         for sink in pu.ID:
             sources=df.puID==source
             sinks=df.puID==sink

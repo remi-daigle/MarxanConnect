@@ -79,7 +79,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options'] = {}
 
         # set default options
-        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_check.GetValue()
+        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_export.GetValue()
+        self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
@@ -142,7 +143,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
         # set default options
-        self.demo_PU_CM_check.SetValue(self.project['options']['demo_pu_cm_export'])
+        self.demo_PU_CM_export.SetValue(self.project['options']['demo_pu_cm_export'])
+        self.demo_PU_CM_progress.SetValue(self.project['options']['demo_pu_cm_progress'])
         self.demo_matrixUnitsRadioBox.SetStringSelection(self.project['options']['demo_conmat_units'])
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
         self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
@@ -156,7 +158,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # set default file paths
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
-        self.demo_demo_CU_file.SetPath(self.project['filepaths']['demo_cu_filepath'])
+        self.demo_CU_file.SetPath(self.project['filepaths']['demo_cu_filepath'])
         self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
         self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
@@ -518,7 +520,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.demo_CU_file.Enable(enable = False)
             self.demo_PU_CM_outputtext.Enable(enable = False)
             self.demo_PU_CM_def.Enable(enable = False)
-            self.demo_PU_CM_check.Enable(enable=False)
+            self.demo_PU_CM_export.Enable(enable=False)
+            self.demo_PU_CM_progress.Enable(enable=False)
             self.demo_PU_CM_filetext.Enable(enable = False)
             self.demo_PU_CM_file.Enable(enable = False)
             self.demo_rescale_button.Enable(enable = False)
@@ -528,8 +531,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.demo_CU_file.Enable(enable = True)
             self.demo_PU_CM_outputtext.Enable(enable = True)
             self.demo_PU_CM_def.Enable(enable = True)
-            self.demo_PU_CM_check.Enable(enable=True)
-            if self.demo_PU_CM_check.GetValue():
+            self.demo_PU_CM_export.Enable(enable=True)
+            self.demo_PU_CM_progress.Enable(enable=True)
+            if self.demo_PU_CM_export.GetValue():
                 self.demo_PU_CM_filetext.Enable(enable = True)
                 self.demo_PU_CM_file.Enable(enable = True)
             self.demo_rescale_button.Enable(enable = True)
@@ -547,17 +551,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         ProcessThreading(parent=self, rescale_matrix = True)
 
-    def on_demo_PU_CM_check(self, event):
+    def on_demo_PU_CM_export(self, event):
         """
         Checks if the planning unit connectivity matrix should be exported when rescaling
         """
-        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_check.GetValue()
-        if self.demo_PU_CM_check.GetValue():
+        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_export.GetValue()
+        if self.demo_PU_CM_export.GetValue():
             self.demo_PU_CM_filetext.Enable(enable=True)
             self.demo_PU_CM_file.Enable(enable=True)
         else:
             self.demo_PU_CM_filetext.Enable(enable = False)
             self.demo_PU_CM_file.Enable(enable = False)
+
+    def on_demo_PU_CM_progress(self, event):
+        """
+        Checks if the planning unit connectivity matrix progress bar should be activated. (It freezes up the GUI)
+        """
+        self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
 
     def on_calc_metrics_type(self, event):
         """
@@ -934,9 +944,9 @@ class ProcessThreading(object):
                 self.parent.project['filepaths']['pu_filepath'],
                 self.parent.project['filepaths']['demo_cu_filepath'],
                 self.parent.project['filepaths']['demo_cu_cm_filepath'],
-                progressbar=True).to_json(orient='split')
+                progressbar=self.parent.project['options']['demo_pu_cm_progress']).to_json(orient='split')
 
-            if self.parent.demo_PU_CM_check.GetValue():
+            if self.parent.demo_PU_CM_export.GetValue():
                 pandas.read_json(self.parent.project['connectivityMetrics']['demo_pu_cm_conmat'],orient='split').to_csv(
                     self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
             print("done!")

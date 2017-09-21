@@ -314,17 +314,23 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer.Add( demo_pucm_def_sizer, 1, wx.EXPAND, 5 )
 		
-		demo_pucm_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
-		demo_pucm_sizer.AddGrowableCol( 2 )
+		demo_pucm_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
+		demo_pucm_sizer.AddGrowableCol( 3 )
 		demo_pucm_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		demo_pucm_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.demo_PU_CM_check = wx.CheckBox( self.demographic, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.demo_PU_CM_check.Enable( False )
+		self.demo_PU_CM_export = wx.CheckBox( self.demographic, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_export.Enable( False )
 		
-		demo_pucm_sizer.Add( self.demo_PU_CM_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		demo_pucm_sizer.Add( self.demo_PU_CM_export, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.demo_PU_CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_progress = wx.CheckBox( self.demographic, wx.ID_ANY, u"Progress Bar", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_progress.SetValue(True) 
+		self.demo_PU_CM_progress.Enable( False )
+		
+		demo_pucm_sizer.Add( self.demo_PU_CM_progress, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.demo_PU_CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_PU_CM_filetext.Wrap( -1 )
 		self.demo_PU_CM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		self.demo_PU_CM_filetext.Enable( False )
@@ -359,7 +365,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -638,7 +644,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -1155,7 +1161,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
 		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
-		self.demo_PU_CM_check.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_check )
+		self.demo_PU_CM_export.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_export )
+		self.demo_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
@@ -1231,7 +1238,10 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_CU_file( self, event ):
 		event.Skip()
 	
-	def on_demo_PU_CM_check( self, event ):
+	def on_demo_PU_CM_export( self, event ):
+		event.Skip()
+	
+	def on_demo_PU_CM_progress( self, event ):
 		event.Skip()
 	
 	def on_demo_PU_CM_file( self, event ):
