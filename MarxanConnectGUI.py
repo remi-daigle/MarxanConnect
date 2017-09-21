@@ -421,10 +421,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Connectivity Matrix file path
         """
         self.project['filepaths']['demo_cu_cm_filepath'] = self.demo_CU_CM_file.GetPath()
+
         # reset filepaths
         if self.demo_rescaleRadioBox.GetStringSelection() == "Identical Grids":
             self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_CU_CM_file.GetPath()
             self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
+
+        # check format
+        self.check_matrix_list_format(format = self.demo_matrixFormatRadioBox.GetStringSelection(),
+                                      filepath = self.demo_CU_CM_file.GetPath())
 
     def on_demo_PU_CM_file(self, event):
         """
@@ -456,7 +461,38 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['bd_filepath'] = self.BD_file.GetPath()
 
-###########################  option setting functions ###########################
+    def check_matrix_list_format(self, format, filepath):
+        print('checking')
+        # warn if matrix is wrong format
+        if format == "Matrix":
+            print('matrix')
+            self.conmat = pandas.read_csv(filepath, index_col=0)
+        else:
+            if format == "List":
+                self.ncol = 3
+                self.expected = numpy.array(['id1', 'id2', 'value'])
+            elif format == "List with Time":
+                self.ncol = 3
+                self.expected = numpy.array(['time','id1', 'id2', 'value'])
+            self.conmat = pandas.read_csv(filepath)
+            self.message = "See the Glossary for 'Data Formats' under 'Connectivity'."
+            self.warn = False
+            if not self.conmat.shape[1]==self.ncol:
+                self.message=self.message+" The "+format+" Data Format expects exactly "+self.ncol+" columns, not "+\
+                             str(self.conmat.shape[1])+" in the file."
+                self.warn = True
+
+            self.missing = [c not in self.conmat.columns for c in self.expected]
+            if any(self.missing):
+                self.message = self.message + " The "+format+" Data Format expects column header(s) '"+\
+                               str(self.expected[self.missing]) +\
+                               "' which may be missing in the file."
+                self.warn = True
+            if self.warn:
+                self.warn_dialog(message = self.message)
+
+
+    ###########################  option setting functions ###########################
     def on_demo_matrixUnitsRadioBox(self, event):
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
 
@@ -540,6 +576,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # create dict entry for connectivityMetrics
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics']={}
+
+        # check format
+        self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+                                          filepath=self.project['filepaths']['demo_'+self.type+'_cm_filepath'])
 
         # load correct matrix and transform if necessary
         if os.path.isfile(self.project['filepaths']['demo_'+self.type+'_cm_filepath']):
