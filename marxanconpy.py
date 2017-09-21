@@ -2,9 +2,10 @@ import numpy
 import geopandas as gpd
 import pandas
 import igraph
+import wx
 
 
-def rescale_matrix(pu_filepath,cu_filepath,cm_filepath):
+def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,progressbar=False):
     """
     rescale the connectivity matrix to match the scale of the planning units
     """
@@ -13,11 +14,26 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath):
     cu = gpd.GeoDataFrame.from_file(cu_filepath)
 
     # quantify intersectional area
+    if progressbar:
+        dlg = wx.ProgressDialog("Rescale Connectivity Matrix",
+                                "Please wait while the rescaled connectivity matrix is being generated.",
+                                maximum = pu.shape[0]*10,
+                                parent=None,
+                                style = wx.PD_CAN_ABORT
+                                | wx.PD_APP_MODAL
+                                | wx.PD_ELAPSED_TIME
+                                | wx.PD_ESTIMATED_TIME
+                                | wx.PD_REMAINING_TIME
+                                )
     con_mat_pu = []
+    count=0
     for index, puID in pu.iterrows():
+        count += 1
+        dlg.Update(count)
         for index2, connID in cu.iterrows():
            if puID.geometry.intersects(connID.geometry):
                con_mat_pu.append({'geometry': puID.geometry.intersection(connID.geometry), 'puID':puID.ID, 'connID': connID.ID, 'puIndex': index, 'connIndex': index2,'int_area': puID.geometry.intersection(connID.geometry).area, 'conn_area': connID.geometry.area, 'pu_area': puID.geometry.area})
+
 
     # make intersection GeoDataFrame
     df = gpd.GeoDataFrame(con_mat_pu,columns=['geometry', 'puID', 'connID', 'puIndex', 'connIndex', 'int_area', 'conn_area', 'pu_area'])
@@ -28,6 +44,8 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath):
     # populate rescaled pu connecectivity matrix
     pu_conmat = numpy.zeros((len(pu),len(pu)))
     for source in pu.ID:
+        count += 9
+        dlg.Update(count)
         for sink in pu.ID:
             sources=df.puID==source
             sinks=df.puID==sink
@@ -41,6 +59,8 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath):
 
     pu_conmat = pandas.DataFrame(pu_conmat, index=pu.ID, columns=pu.ID)
     pu_conmat.index.name = "puID"
+    if progressbar:
+        dlg.Destroy()
     return pu_conmat
 
 
@@ -100,11 +120,3 @@ def conmat2minplanarboundary(conmat):
     boundary_dat.columns = ['id1', 'id2', 'boundary']
     boundary_dat = boundary_dat.to_json(orient='split')
     return boundary_dat
-
-
-
-# conmat = pandas.read_csv('C:\\Users\\Remi-Work\\Documents\\PU_connectivity_matrix.csv',index_col= 0)
-# conmat['index'] = conmat.index
-# conmat.melt(id_vars=['index'], var_name='id2', value_name='value').to_csv('connectivity_list.csv',index=0)
-# cm2 = conmat.to_json(orient='split')
-# pandas.read_json(cm2)['index']

@@ -933,7 +933,8 @@ class ProcessThreading(object):
             self.parent.project['connectivityMetrics']['demo_pu_cm_conmat'] = marxanconpy.rescale_matrix(
                 self.parent.project['filepaths']['pu_filepath'],
                 self.parent.project['filepaths']['demo_cu_filepath'],
-                self.parent.project['filepaths']['demo_cu_cm_filepath']).to_json(orient='split')
+                self.parent.project['filepaths']['demo_cu_cm_filepath'],
+                progressbar=True).to_json(orient='split')
 
             if self.parent.demo_PU_CM_check.GetValue():
                 pandas.read_json(self.parent.project['connectivityMetrics']['demo_pu_cm_conmat'],orient='split').to_csv(
