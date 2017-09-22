@@ -40,7 +40,6 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "C:\Users\Remi-Work\Desktop\MarxanConnectGUI\build\exe.win-amd64-3.5\MarxanConnectGUI.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Remi-Work\Desktop\MarxanConnectGUI\build\exe.win-amd64-3.5\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Remi-Work\Desktop\MarxanConnectGUI\data\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -58,3 +57,10 @@ Root: HKCR; SubKey: ".MarCon"; ValueType: string; ValueData: "MarxanConnectProje
 Root: HKCR; SubKey: "MarxanConnectProject"; ValueType: string; ValueData: "Marxan with Connectivity Project File"; Flags: uninsdeletekey
 Root: HKCR; SubKey: "MarxanConnectProject\Shell\Open\Command"; ValueType: string; ValueData: """{app}\MarxanConnectGUI.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; Subkey: "MarxanConnectProject\DefaultIcon"; ValueType: string; ValueData: "{app}\MarxanConnectGUI.exe,0"; Flags: uninsdeletevalue
+
+[Dirs]
+Name: "{app}\data\shapefiles\"
+Name: "{app}\data\"
+Name: "{app}\data\shapefiles\"
+Name: "{app}\data\"
+Name: "{app}\data\shapefiles\"

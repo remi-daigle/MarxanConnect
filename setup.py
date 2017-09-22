@@ -23,7 +23,7 @@ os.environ['TK_LIBRARY'] = os.path.join(os.environ['LOCALAPPDATA'],'Programs','P
 build_exe_options = {'includes': ['numpy.core._methods', 'numpy.lib.format','matplotlib.backends.backend_qt5agg',
                                   'matplotlib.backends.backend_tkagg','tkinter','tkinter.filedialog','igraph',
                                   'igraph.vendor.texttable'],
-                     'include_files': ['gui.py','glossary.html','tutorial.html','contributing.html',
+                     'include_files': ['data/','gui.py','glossary.html','tutorial.html','contributing.html',
                                        os.path.join(os.environ['LOCALAPPDATA'],
                                                     'Programs','Python','Python35','DLLs','tcl86t.dll'),
                                        os.path.join(os.environ['LOCALAPPDATA'],

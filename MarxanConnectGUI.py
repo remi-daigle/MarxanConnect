@@ -44,18 +44,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         gui.MarxanConnectGUI.__init__(self,parent)
         # set the icon
         self.set_icon(frame=self)
-        
-        # launch a blank new project
-        self.on_new_project(event=None, launch = True)
 
         # start up log
         self.log = LogForm(parent=self)
-        print("This is the name of the script: ", sys.argv[0])
-        print("Number of arguments: ", len(sys.argv))
-        print("The arguments are: ", str(sys.argv))
-        # launch Getting started window
-        frame = getting_started(parent=self)
-        # frame.Show()
+
+        # Either load or launch new project
+        if len(sys.argv)>1:
+            self.project = {}
+            self.project['filepaths'] = {}
+            self.project['filepaths']['projfile'] = str(sys.argv[1])
+            self.load_project_function()
+        else:
+            # launch a blank new project
+            self.on_new_project(event=None, launch=True)
+
+            # launch Getting started window
+            frame = getting_started(parent=self)
+            frame.Show()
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(2)
@@ -144,10 +149,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             )
         if dlg.ShowModal() == wx.ID_OK:
             self.project['filepaths']['projfile'] = dlg.GetPath()
-            with open(self.project['filepaths']['projfile'], 'r') as fp:
-                self.project=json.loads(fp.read())
         dlg.Destroy()
-        frame.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
+        self.load_project_function()
+
+    def load_project_function(self):
+        with open(self.project['filepaths']['projfile'], 'r') as fp:
+            self.project = json.loads(fp.read())
+
+        self.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
         # set default options
         self.demo_PU_CM_export.SetValue(self.project['options']['demo_pu_cm_export'])
@@ -587,13 +596,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_debug_mode(self, event):
         if self.log.IsShown():
-
-            print('shown')
-
             self.log.Hide()
         else:
-            print('hidden')
-
             self.log.Show()
 
 ###########################  metric related functions #########################
