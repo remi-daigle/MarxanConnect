@@ -39,15 +39,21 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.menu.Append( self.file, u"File" ) 
 		
+		self.debug = wx.Menu()
+		self.github = wx.MenuItem( self.debug, wx.ID_ANY, u"GitHub issues", wx.EmptyString, wx.ITEM_NORMAL )
+		self.debug.Append( self.github )
+		
+		self.debug_mode = wx.MenuItem( self.debug, wx.ID_ANY, u"Debug Mode", wx.EmptyString, wx.ITEM_NORMAL )
+		self.debug.Append( self.debug_mode )
+		
+		self.menu.Append( self.debug, u"Debug" ) 
+		
 		self.help = wx.Menu()
 		self.glossary = wx.MenuItem( self.help, wx.ID_ANY, u"Glossary", wx.EmptyString, wx.ITEM_NORMAL )
 		self.help.Append( self.glossary )
 		
 		self.tutorial = wx.MenuItem( self.help, wx.ID_ANY, u"Tutorial", wx.EmptyString, wx.ITEM_NORMAL )
 		self.help.Append( self.tutorial )
-		
-		self.github = wx.MenuItem( self.help, wx.ID_ANY, u"GitHub issues", wx.EmptyString, wx.ITEM_NORMAL )
-		self.help.Append( self.github )
 		
 		self.contributing = wx.MenuItem( self.help, wx.ID_ANY, u"Contributing", wx.EmptyString, wx.ITEM_NORMAL )
 		self.help.Append( self.contributing )
@@ -1146,9 +1152,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.on_save_project, id = self.save_project.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_save_project_as, id = self.save_project_as.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_load_project, id = self.load_project.GetId() )
+		self.Bind( wx.EVT_MENU, self.on_github, id = self.github.GetId() )
+		self.Bind( wx.EVT_MENU, self.on_debug_mode, id = self.debug_mode.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_glossary, id = self.glossary.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_tutorial, id = self.tutorial.GetId() )
-		self.Bind( wx.EVT_MENU, self.on_github, id = self.github.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_contributing, id = self.contributing.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_license, id = self.license.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_about, id = self.about.GetId() )
@@ -1193,13 +1200,16 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_load_project( self, event ):
 		event.Skip()
 	
+	def on_github( self, event ):
+		event.Skip()
+	
+	def on_debug_mode( self, event ):
+		event.Skip()
+	
 	def on_glossary( self, event ):
 		event.Skip()
 	
 	def on_tutorial( self, event ):
-		event.Skip()
-	
-	def on_github( self, event ):
 		event.Skip()
 	
 	def on_contributing( self, event ):

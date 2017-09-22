@@ -43,29 +43,36 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         gui.MarxanConnectGUI.__init__(self,parent)
         # set the icon
-        icons = wx.IconBundle()
-        for sz in [16, 32, 48, 96, 256]: 
-            try: 
-                icon = wx.Icon(os.path.join(sys.path[0],'icon_bundle.ico'),
-                               wx.BITMAP_TYPE_ICO,
-                               desiredWidth=sz,
-                               desiredHeight=sz)
-                icons.AddIcon(icon) 
-            except: 
-                pass 
-                self.SetIcons(icons)
+        self.set_icon(frame=self)
         
         # launch a blank new project
         self.on_new_project(event=None, launch = True)
+
+        # start up log
+        self.log = LogForm(parent=self)
         print("This is the name of the script: ", sys.argv[0])
         print("Number of arguments: ", len(sys.argv))
         print("The arguments are: ", str(sys.argv))
         # launch Getting started window
         frame = getting_started(parent=self)
         # frame.Show()
-        
+
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(2)
+
+    def set_icon(self, frame):
+        # set the icon
+        icons = wx.IconBundle()
+        for sz in [16, 32, 48, 96, 256]:
+            try:
+                icon = wx.Icon(os.path.join(sys.path[0], 'icon_bundle.ico'),
+                               wx.BITMAP_TYPE_ICO,
+                               desiredWidth=sz,
+                               desiredHeight=sz)
+                icons.AddIcon(icon)
+            except:
+                pass
+                frame.SetIcons(icons)
     
 ###########################  project managment functions ######################        
     def on_new_project( self, event, launch = False):
@@ -578,6 +585,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         elif (self.calc_metrics_type.GetCurrentSelection() == 1):
             self.type = 'cu'
 
+    def on_debug_mode(self, event):
+        if self.log.IsShown():
+
+            print('shown')
+
+            self.log.Hide()
+        else:
+            print('hidden')
+
+            self.log.Show()
+
 ###########################  metric related functions #########################
     def on_calc_metrics(self, event):
         """
@@ -821,17 +839,7 @@ class getting_started(wx.Frame):
         self.gettingStarted = wx.Panel(self)
         self.Center()
         # set the icon
-        icons = wx.IconBundle()
-        for sz in [16, 32, 48, 96, 256]: 
-            try: 
-                icon = wx.Icon(os.path.join(sys.path[0],'icon_bundle.ico'),
-                               wx.BITMAP_TYPE_ICO,
-                               desiredWidth=sz,
-                               desiredHeight=sz)
-                icons.AddIcon(icon) 
-            except: 
-                pass 
-                self.SetIcons(icons)
+        parent.set_icon(frame = self)
         
         startMainSizer = wx.FlexGridSizer( 3, 1, 0, 0 )
         startMainSizer.AddGrowableRow( 0 )
@@ -950,6 +958,41 @@ class ProcessThreading(object):
                 pandas.read_json(self.parent.project['connectivityMetrics']['demo_pu_cm_conmat'],orient='split').to_csv(
                     self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
             print("done!")
+
+########################### debug mode ########################################
+
+class RedirectText(object):
+    def __init__(self, aWxTextCtrl):
+        self.out = aWxTextCtrl
+
+
+    def write(self, string):
+        wx.CallAfter(self.out.WriteText, string)
+
+
+class LogForm(wx.Frame):
+    def __init__(self, parent):
+        wx.Frame.__init__(self, parent, wx.ID_ANY, "Debbuging Console")
+        self.Bind(wx.EVT_CLOSE, self.__close)
+        parent.set_icon(frame=self)
+
+        # Add a panel
+        panel = wx.Panel(self, wx.ID_ANY)
+        log = wx.TextCtrl(panel, wx.ID_ANY, size=(350, 350), style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL)
+
+        # Add widgets to a sizer
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(log, 1, wx.ALL | wx.EXPAND, 5)
+        panel.SetSizer(sizer)
+
+        # redirect text here
+        redir = RedirectText(log)
+        sys.stdout = redir
+        sys.stderr = redir
+
+    def __close(self, event):
+        self.Hide()
+
 ###########################  run the GUI ######################################
 app = wx.App(False)
  
