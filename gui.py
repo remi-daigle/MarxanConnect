@@ -19,7 +19,7 @@ import wx.grid
 class MarxanConnectGUI ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1005,786 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1053,786 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -371,7 +371,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -617,7 +617,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metrics_buttons_seperator = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metricsMainSizer.Add( self.metrics_buttons_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		metrics_buttons_sizer = wx.FlexGridSizer( 0, 5, 0, 0 )
+		metrics_buttons_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
 		metrics_buttons_sizer.AddGrowableCol( 0 )
 		metrics_buttons_sizer.SetFlexibleDirection( wx.BOTH )
 		metrics_buttons_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -638,10 +638,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metrics_for_txt.Wrap( -1 )
 		metrics_buttons_sizer.Add( self.metrics_for_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		calc_metrics_typeChoices = [ u"Planning Units", u"Connectivity Units" ]
-		self.calc_metrics_type = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, calc_metrics_typeChoices, 0 )
-		self.calc_metrics_type.SetSelection( 0 )
-		metrics_buttons_sizer.Add( self.calc_metrics_type, 0, wx.ALL, 5 )
+		self.calc_metrics_pu = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Planning Units", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.calc_metrics_pu.SetValue(True) 
+		metrics_buttons_sizer.Add( self.calc_metrics_pu, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.calc_metrics_cu = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Connectivity Units", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.calc_metrics_cu.SetToolTip( u"Calculating Connectivity Metrics is for plotting purposes only. These metrics will not be exported or appended to the Marxan input files." )
+		
+		metrics_buttons_sizer.Add( self.calc_metrics_cu, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		
 		metricsMainSizer.Add( metrics_buttons_sizer, 1, wx.EXPAND, 5 )
@@ -753,164 +757,103 @@ class MarxanConnectGUI ( wx.Frame ):
 		lyr1_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
 		self.lyr1_choice = wx.Choicebook( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.CHB_TOP )
-		self.pu_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		pu_plot_opt_sizer = wx.FlexGridSizer( 2, 5, 0, 0 )
-		pu_plot_opt_sizer.SetFlexibleDirection( wx.BOTH )
-		pu_plot_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		self.metrics_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		metrics_opt_sizer = wx.FlexGridSizer( 2, 6, 0, 0 )
+		metrics_opt_sizer.SetFlexibleDirection( wx.BOTH )
+		metrics_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.pu_metric_txt = wx.StaticText( self.pu_plot_opt, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_txt.Wrap( -1 )
-		pu_plot_opt_sizer.Add( self.pu_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_shp_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_shp_txt.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_hicol_txt = wx.StaticText( self.pu_plot_opt, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_hicol_txt.Wrap( -1 )
-		pu_plot_opt_sizer.Add( self.pu_metric_hicol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_txt.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_hicol_txt = wx.StaticText( self.pu_plot_opt, wx.ID_ANY, u"High Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_hicol_txt.Wrap( -1 )
-		pu_plot_opt_sizer.Add( self.pu_metric_hicol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_lowcol_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_lowcol_txt.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_lowcol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_alpha_txt = wx.StaticText( self.pu_plot_opt, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_alpha_txt.Wrap( -1 )
-		pu_plot_opt_sizer.Add( self.pu_metric_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_hicol_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"High Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_hicol_txt.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_hicol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_legend_txt = wx.StaticText( self.pu_plot_opt, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_legend_txt.Wrap( -1 )
-		pu_plot_opt_sizer.Add( self.pu_metric_legend_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_alpha_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_alpha_txt.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		pu_metric_choiceChoices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
-		self.pu_metric_choice = wx.Choice( self.pu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_choiceChoices, 0 )
-		self.pu_metric_choice.SetSelection( 2 )
-		pu_plot_opt_sizer.Add( self.pu_metric_choice, 0, wx.ALL, 5 )
+		self.metric_legend_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_legend_txt.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_legend_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_lowcol = wx.ColourPickerCtrl( self.pu_plot_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_lowcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		metric_shp_choiceChoices = [ u"Planning Units (Demographic Data)", u"Planning Units (Genetic Data)", u"Planning Units (Landscape Data)", u"Demographic Units", u"Genetic Units", u"Landscape Units" ]
+		self.metric_shp_choice = wx.Choice( self.metrics_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_shp_choiceChoices, 0 )
+		self.metric_shp_choice.SetSelection( 0 )
+		metrics_opt_sizer.Add( self.metric_shp_choice, 0, wx.ALL, 5 )
 		
-		pu_plot_opt_sizer.Add( self.pu_metric_lowcol, 0, wx.ALL, 5 )
+		metric_choiceChoices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
+		self.metric_choice = wx.Choice( self.metrics_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_choiceChoices, 0 )
+		self.metric_choice.SetSelection( 2 )
+		metrics_opt_sizer.Add( self.metric_choice, 0, wx.ALL, 5 )
 		
-		self.pu_metric_hicol = wx.ColourPickerCtrl( self.pu_plot_opt, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_hicol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.metric_lowcol = wx.ColourPickerCtrl( self.metrics_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
+		self.metric_lowcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
-		pu_plot_opt_sizer.Add( self.pu_metric_hicol, 0, wx.ALL, 5 )
+		metrics_opt_sizer.Add( self.metric_lowcol, 0, wx.ALL, 5 )
 		
-		self.pu_metric_alpha = wx.Slider( self.pu_plot_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		pu_plot_opt_sizer.Add( self.pu_metric_alpha, 0, wx.ALL, 5 )
+		self.metric_hicol = wx.ColourPickerCtrl( self.metrics_opt, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
+		self.metric_hicol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
-		pu_metric_legendChoices = [ u"Top", u"Bottom", u"None" ]
-		self.pu_metric_legend = wx.Choice( self.pu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_legendChoices, 0 )
-		self.pu_metric_legend.SetSelection( 1 )
-		pu_plot_opt_sizer.Add( self.pu_metric_legend, 0, wx.ALL, 5 )
+		metrics_opt_sizer.Add( self.metric_hicol, 0, wx.ALL, 5 )
 		
+		self.metric_alpha = wx.Slider( self.metrics_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		metrics_opt_sizer.Add( self.metric_alpha, 0, wx.ALL, 5 )
 		
-		self.pu_plot_opt.SetSizer( pu_plot_opt_sizer )
-		self.pu_plot_opt.Layout()
-		pu_plot_opt_sizer.Fit( self.pu_plot_opt )
-		self.lyr1_choice.AddPage( self.pu_plot_opt, u"Planning Units", True )
-		self.cu_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		cu_plot_opt_sizer = wx.FlexGridSizer( 0, 5, 0, 0 )
-		cu_plot_opt_sizer.SetFlexibleDirection( wx.BOTH )
-		cu_plot_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.cu_metric_txt = wx.StaticText( self.cu_plot_opt, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_txt.Wrap( -1 )
-		cu_plot_opt_sizer.Add( self.cu_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_hicol_txt = wx.StaticText( self.cu_plot_opt, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_hicol_txt.Wrap( -1 )
-		cu_plot_opt_sizer.Add( self.cu_metric_hicol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_hicol_txt = wx.StaticText( self.cu_plot_opt, wx.ID_ANY, u"High Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_hicol_txt.Wrap( -1 )
-		cu_plot_opt_sizer.Add( self.cu_metric_hicol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_alpha_txt = wx.StaticText( self.cu_plot_opt, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_alpha_txt.Wrap( -1 )
-		cu_plot_opt_sizer.Add( self.cu_metric_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_legend_txt = wx.StaticText( self.cu_plot_opt, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_legend_txt.Wrap( -1 )
-		cu_plot_opt_sizer.Add( self.cu_metric_legend_txt, 0, wx.ALL, 5 )
-		
-		cu_metric_choiceChoices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
-		self.cu_metric_choice = wx.Choice( self.cu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_choiceChoices, 0 )
-		self.cu_metric_choice.SetSelection( 0 )
-		cu_plot_opt_sizer.Add( self.cu_metric_choice, 0, wx.ALL, 5 )
-		
-		self.cu_metric_lowcol = wx.ColourPickerCtrl( self.cu_plot_opt, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_lowcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
-		
-		cu_plot_opt_sizer.Add( self.cu_metric_lowcol, 0, wx.ALL, 5 )
-		
-		self.cu_metric_hicol = wx.ColourPickerCtrl( self.cu_plot_opt, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_hicol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
-		
-		cu_plot_opt_sizer.Add( self.cu_metric_hicol, 0, wx.ALL, 5 )
-		
-		self.cu_metric_alpha = wx.Slider( self.cu_plot_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		cu_plot_opt_sizer.Add( self.cu_metric_alpha, 0, wx.ALL, 5 )
-		
-		cu_metric_legendChoices = [ u"Top", u"Bottom", u"None" ]
-		self.cu_metric_legend = wx.Choice( self.cu_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_legendChoices, 0 )
-		self.cu_metric_legend.SetSelection( 1 )
-		cu_plot_opt_sizer.Add( self.cu_metric_legend, 0, wx.ALL, 5 )
+		metric_legendChoices = [ u"Top", u"Bottom", u"None" ]
+		self.metric_legend = wx.Choice( self.metrics_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_legendChoices, 0 )
+		self.metric_legend.SetSelection( 1 )
+		metrics_opt_sizer.Add( self.metric_legend, 0, wx.ALL, 5 )
 		
 		
-		self.cu_plot_opt.SetSizer( cu_plot_opt_sizer )
-		self.cu_plot_opt.Layout()
-		cu_plot_opt_sizer.Fit( self.cu_plot_opt )
-		self.lyr1_choice.AddPage( self.cu_plot_opt, u"Connectivity Units", False )
-		self.pu_poly_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		pu_poly_plot_opt_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		pu_poly_plot_opt_sizer.SetFlexibleDirection( wx.BOTH )
-		pu_poly_plot_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		self.metrics_opt.SetSizer( metrics_opt_sizer )
+		self.metrics_opt.Layout()
+		metrics_opt_sizer.Fit( self.metrics_opt )
+		self.lyr1_choice.AddPage( self.metrics_opt, u"Colormap of connectivity metrics", True )
+		self.poly_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		poly_plot_opt_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		poly_plot_opt_sizer.SetFlexibleDirection( wx.BOTH )
+		poly_plot_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.pu_poly_col_txt = wx.StaticText( self.pu_poly_plot_opt, wx.ID_ANY, u"Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_poly_col_txt.Wrap( -1 )
-		pu_poly_plot_opt_sizer.Add( self.pu_poly_col_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.poly_shp_txt = wx.StaticText( self.poly_plot_opt, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.poly_shp_txt.Wrap( -1 )
+		poly_plot_opt_sizer.Add( self.poly_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_poly_alpha_txt = wx.StaticText( self.pu_poly_plot_opt, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_poly_alpha_txt.Wrap( -1 )
-		pu_poly_plot_opt_sizer.Add( self.pu_poly_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.poly_col_txt = wx.StaticText( self.poly_plot_opt, wx.ID_ANY, u"Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.poly_col_txt.Wrap( -1 )
+		poly_plot_opt_sizer.Add( self.poly_col_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_poly_col = wx.ColourPickerCtrl( self.pu_poly_plot_opt, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_poly_col.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.poly_alpha_txt = wx.StaticText( self.poly_plot_opt, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.poly_alpha_txt.Wrap( -1 )
+		poly_plot_opt_sizer.Add( self.poly_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		pu_poly_plot_opt_sizer.Add( self.pu_poly_col, 0, wx.ALL, 5 )
+		poly_shp_choiceChoices = [ u"Planning Units", u"Demographic Units", u"Genetic Units", u"Landscape Units" ]
+		self.poly_shp_choice = wx.Choice( self.poly_plot_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, poly_shp_choiceChoices, 0 )
+		self.poly_shp_choice.SetSelection( 2 )
+		poly_plot_opt_sizer.Add( self.poly_shp_choice, 0, wx.ALL, 5 )
 		
-		self.pu_poly_alpha = wx.Slider( self.pu_poly_plot_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		pu_poly_plot_opt_sizer.Add( self.pu_poly_alpha, 0, wx.ALL, 5 )
+		self.poly_col = wx.ColourPickerCtrl( self.poly_plot_opt, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
+		self.poly_col.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
+		poly_plot_opt_sizer.Add( self.poly_col, 0, wx.ALL, 5 )
 		
-		self.pu_poly_plot_opt.SetSizer( pu_poly_plot_opt_sizer )
-		self.pu_poly_plot_opt.Layout()
-		pu_poly_plot_opt_sizer.Fit( self.pu_poly_plot_opt )
-		self.lyr1_choice.AddPage( self.pu_poly_plot_opt, u"Planning Unit (polygons)", False )
-		self.cu_poly_plot_opt = wx.Panel( self.lyr1_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		cu_poly_plot_opt_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		cu_poly_plot_opt_sizer.SetFlexibleDirection( wx.BOTH )
-		cu_poly_plot_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.cu_poly_col_txt = wx.StaticText( self.cu_poly_plot_opt, wx.ID_ANY, u"Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_poly_col_txt.Wrap( -1 )
-		cu_poly_plot_opt_sizer.Add( self.cu_poly_col_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_poly_alpha_txt = wx.StaticText( self.cu_poly_plot_opt, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_poly_alpha_txt.Wrap( -1 )
-		cu_poly_plot_opt_sizer.Add( self.cu_poly_alpha_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_poly_col = wx.ColourPickerCtrl( self.cu_poly_plot_opt, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_poly_col.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
-		
-		cu_poly_plot_opt_sizer.Add( self.cu_poly_col, 0, wx.ALL, 5 )
-		
-		self.cu_poly_alpha = wx.Slider( self.cu_poly_plot_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		cu_poly_plot_opt_sizer.Add( self.cu_poly_alpha, 0, wx.ALL, 5 )
+		self.poly_alpha = wx.Slider( self.poly_plot_opt, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		poly_plot_opt_sizer.Add( self.poly_alpha, 0, wx.ALL, 5 )
 		
 		
-		self.cu_poly_plot_opt.SetSizer( cu_poly_plot_opt_sizer )
-		self.cu_poly_plot_opt.Layout()
-		cu_poly_plot_opt_sizer.Fit( self.cu_poly_plot_opt )
-		self.lyr1_choice.AddPage( self.cu_poly_plot_opt, u"Connectivity Unit (polygons)", False )
+		self.poly_plot_opt.SetSizer( poly_plot_opt_sizer )
+		self.poly_plot_opt.Layout()
+		poly_plot_opt_sizer.Fit( self.poly_plot_opt )
+		self.lyr1_choice.AddPage( self.poly_plot_opt, u"Outline of shapefile", False )
 		lyr1_sizer.Add( self.lyr1_choice, 1, wx.EXPAND |wx.ALL, 5 )
 		
 		
@@ -934,164 +877,103 @@ class MarxanConnectGUI ( wx.Frame ):
 		lyr2_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
 		self.lyr2_choice = wx.Choicebook( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.CHB_TOP )
-		self.pu_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		pu_plot_opt1_sizer = wx.FlexGridSizer( 0, 5, 0, 0 )
-		pu_plot_opt1_sizer.SetFlexibleDirection( wx.BOTH )
-		pu_plot_opt1_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		self.metrics_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		metrics_opt_sizer1 = wx.FlexGridSizer( 2, 6, 0, 0 )
+		metrics_opt_sizer1.SetFlexibleDirection( wx.BOTH )
+		metrics_opt_sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.pu_metric_txt1 = wx.StaticText( self.pu_plot_opt1, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_txt1.Wrap( -1 )
-		pu_plot_opt1_sizer.Add( self.pu_metric_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_shp_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_shp_txt1.Wrap( -1 )
+		metrics_opt_sizer1.Add( self.metric_shp_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_hicol_txt1 = wx.StaticText( self.pu_plot_opt1, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_hicol_txt1.Wrap( -1 )
-		pu_plot_opt1_sizer.Add( self.pu_metric_hicol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_txt1.Wrap( -1 )
+		metrics_opt_sizer1.Add( self.metric_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_hicol_txt1 = wx.StaticText( self.pu_plot_opt1, wx.ID_ANY, u"High Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_hicol_txt1.Wrap( -1 )
-		pu_plot_opt1_sizer.Add( self.pu_metric_hicol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_lowcol_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_lowcol_txt1.Wrap( -1 )
+		metrics_opt_sizer1.Add( self.metric_lowcol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_alpha_txt1 = wx.StaticText( self.pu_plot_opt1, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_alpha_txt1.Wrap( -1 )
-		pu_plot_opt1_sizer.Add( self.pu_metric_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.metric_hicol_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"High Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_hicol_txt1.Wrap( -1 )
+		metrics_opt_sizer1.Add( self.metric_hicol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_legend_txt1 = wx.StaticText( self.pu_plot_opt1, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_metric_legend_txt1.Wrap( -1 )
-		pu_plot_opt1_sizer.Add( self.pu_metric_legend_txt1, 0, wx.ALL, 5 )
+		self.metric_alpha_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_alpha_txt1.Wrap( -1 )
+		metrics_opt_sizer1.Add( self.metric_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		pu_metric_choice1Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
-		self.pu_metric_choice1 = wx.Choice( self.pu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_choice1Choices, 0 )
-		self.pu_metric_choice1.SetSelection( 0 )
-		pu_plot_opt1_sizer.Add( self.pu_metric_choice1, 0, wx.ALL, 5 )
+		self.metric_legend_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_legend_txt1.Wrap( -1 )
+		metrics_opt_sizer1.Add( self.metric_legend_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_metric_lowcol1 = wx.ColourPickerCtrl( self.pu_plot_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_lowcol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		metric_shp_choice1Choices = [ u"Planning Units (Demographic Data)", u"Planning Units (Genetic Data)", u"Planning Units (Landscape Data)", u"Demographic Units", u"Genetic Units", u"Landscape Units" ]
+		self.metric_shp_choice1 = wx.Choice( self.metrics_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_shp_choice1Choices, 0 )
+		self.metric_shp_choice1.SetSelection( 0 )
+		metrics_opt_sizer1.Add( self.metric_shp_choice1, 0, wx.ALL, 5 )
 		
-		pu_plot_opt1_sizer.Add( self.pu_metric_lowcol1, 0, wx.ALL, 5 )
+		metric_choice1Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
+		self.metric_choice1 = wx.Choice( self.metrics_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_choice1Choices, 0 )
+		self.metric_choice1.SetSelection( 2 )
+		metrics_opt_sizer1.Add( self.metric_choice1, 0, wx.ALL, 5 )
 		
-		self.pu_metric_hicol1 = wx.ColourPickerCtrl( self.pu_plot_opt1, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_metric_hicol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.metric_lowcol1 = wx.ColourPickerCtrl( self.metrics_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
+		self.metric_lowcol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
-		pu_plot_opt1_sizer.Add( self.pu_metric_hicol1, 0, wx.ALL, 5 )
+		metrics_opt_sizer1.Add( self.metric_lowcol1, 0, wx.ALL, 5 )
 		
-		self.pu_metric_alpha1 = wx.Slider( self.pu_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		pu_plot_opt1_sizer.Add( self.pu_metric_alpha1, 0, wx.ALL, 5 )
+		self.metric_hicol1 = wx.ColourPickerCtrl( self.metrics_opt1, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
+		self.metric_hicol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
-		pu_metric_legend1Choices = [ u"Top", u"Bottom", u"None" ]
-		self.pu_metric_legend1 = wx.Choice( self.pu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, pu_metric_legend1Choices, 0 )
-		self.pu_metric_legend1.SetSelection( 0 )
-		pu_plot_opt1_sizer.Add( self.pu_metric_legend1, 0, wx.ALL, 5 )
+		metrics_opt_sizer1.Add( self.metric_hicol1, 0, wx.ALL, 5 )
 		
+		self.metric_alpha1 = wx.Slider( self.metrics_opt1, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		metrics_opt_sizer1.Add( self.metric_alpha1, 0, wx.ALL, 5 )
 		
-		self.pu_plot_opt1.SetSizer( pu_plot_opt1_sizer )
-		self.pu_plot_opt1.Layout()
-		pu_plot_opt1_sizer.Fit( self.pu_plot_opt1 )
-		self.lyr2_choice.AddPage( self.pu_plot_opt1, u"Planning Units", False )
-		self.cu_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		cu_plot_opt1_sizer = wx.FlexGridSizer( 0, 5, 0, 0 )
-		cu_plot_opt1_sizer.SetFlexibleDirection( wx.BOTH )
-		cu_plot_opt1_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.cu_metric_txt1 = wx.StaticText( self.cu_plot_opt1, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_txt1.Wrap( -1 )
-		cu_plot_opt1_sizer.Add( self.cu_metric_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_hicol_txt1 = wx.StaticText( self.cu_plot_opt1, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_hicol_txt1.Wrap( -1 )
-		cu_plot_opt1_sizer.Add( self.cu_metric_hicol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_hicol_txt1 = wx.StaticText( self.cu_plot_opt1, wx.ID_ANY, u"High Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_hicol_txt1.Wrap( -1 )
-		cu_plot_opt1_sizer.Add( self.cu_metric_hicol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_alpha_txt1 = wx.StaticText( self.cu_plot_opt1, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_alpha_txt1.Wrap( -1 )
-		cu_plot_opt1_sizer.Add( self.cu_metric_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_metric_legend_txt1 = wx.StaticText( self.cu_plot_opt1, wx.ID_ANY, u"Legend", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_metric_legend_txt1.Wrap( -1 )
-		cu_plot_opt1_sizer.Add( self.cu_metric_legend_txt1, 0, wx.ALL, 5 )
-		
-		cu_metric_choice1Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
-		self.cu_metric_choice1 = wx.Choice( self.cu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_choice1Choices, 0 )
-		self.cu_metric_choice1.SetSelection( 2 )
-		cu_plot_opt1_sizer.Add( self.cu_metric_choice1, 0, wx.ALL, 5 )
-		
-		self.cu_metric_lowcol1 = wx.ColourPickerCtrl( self.cu_plot_opt1, wx.ID_ANY, wx.Colour( 255, 247, 236 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_lowcol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
-		
-		cu_plot_opt1_sizer.Add( self.cu_metric_lowcol1, 0, wx.ALL, 5 )
-		
-		self.cu_metric_hicol1 = wx.ColourPickerCtrl( self.cu_plot_opt1, wx.ID_ANY, wx.Colour( 127, 0, 0 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_metric_hicol1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
-		
-		cu_plot_opt1_sizer.Add( self.cu_metric_hicol1, 0, wx.ALL, 5 )
-		
-		self.cu_metric_alpha1 = wx.Slider( self.cu_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		cu_plot_opt1_sizer.Add( self.cu_metric_alpha1, 0, wx.ALL, 5 )
-		
-		cu_metric_legend1Choices = [ u"Top", u"Bottom", u"None" ]
-		self.cu_metric_legend1 = wx.Choice( self.cu_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, cu_metric_legend1Choices, 0 )
-		self.cu_metric_legend1.SetSelection( 0 )
-		cu_plot_opt1_sizer.Add( self.cu_metric_legend1, 0, wx.ALL, 5 )
+		metric_legend1Choices = [ u"Top", u"Bottom", u"None" ]
+		self.metric_legend1 = wx.Choice( self.metrics_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_legend1Choices, 0 )
+		self.metric_legend1.SetSelection( 1 )
+		metrics_opt_sizer1.Add( self.metric_legend1, 0, wx.ALL, 5 )
 		
 		
-		self.cu_plot_opt1.SetSizer( cu_plot_opt1_sizer )
-		self.cu_plot_opt1.Layout()
-		cu_plot_opt1_sizer.Fit( self.cu_plot_opt1 )
-		self.lyr2_choice.AddPage( self.cu_plot_opt1, u"Connectivity Units", True )
-		self.pu_poly_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		pu_poly_plot_opt1_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		pu_poly_plot_opt1_sizer.SetFlexibleDirection( wx.BOTH )
-		pu_poly_plot_opt1_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		self.metrics_opt1.SetSizer( metrics_opt_sizer1 )
+		self.metrics_opt1.Layout()
+		metrics_opt_sizer1.Fit( self.metrics_opt1 )
+		self.lyr2_choice.AddPage( self.metrics_opt1, u"Colormap of connectivity metrics", False )
+		self.poly_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		poly_plot_opt_sizer1 = wx.FlexGridSizer( 0, 3, 0, 0 )
+		poly_plot_opt_sizer1.SetFlexibleDirection( wx.BOTH )
+		poly_plot_opt_sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.pu_poly_col_txt1 = wx.StaticText( self.pu_poly_plot_opt1, wx.ID_ANY, u"Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_poly_col_txt1.Wrap( -1 )
-		pu_poly_plot_opt1_sizer.Add( self.pu_poly_col_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.poly_shp_txt1 = wx.StaticText( self.poly_plot_opt1, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.poly_shp_txt1.Wrap( -1 )
+		poly_plot_opt_sizer1.Add( self.poly_shp_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_poly_alpha_txt1 = wx.StaticText( self.pu_poly_plot_opt1, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pu_poly_alpha_txt1.Wrap( -1 )
-		pu_poly_plot_opt1_sizer.Add( self.pu_poly_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.poly_col_txt1 = wx.StaticText( self.poly_plot_opt1, wx.ID_ANY, u"Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.poly_col_txt1.Wrap( -1 )
+		poly_plot_opt_sizer1.Add( self.poly_col_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.pu_poly_col1 = wx.ColourPickerCtrl( self.pu_poly_plot_opt1, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.pu_poly_col1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
+		self.poly_alpha_txt1 = wx.StaticText( self.poly_plot_opt1, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.poly_alpha_txt1.Wrap( -1 )
+		poly_plot_opt_sizer1.Add( self.poly_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		pu_poly_plot_opt1_sizer.Add( self.pu_poly_col1, 0, wx.ALL, 5 )
+		poly_shp_choice1Choices = [ u"Planning Units", u"Demographic Units", u"Genetic Units", u"Landscape Units" ]
+		self.poly_shp_choice1 = wx.Choice( self.poly_plot_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, poly_shp_choice1Choices, 0 )
+		self.poly_shp_choice1.SetSelection( 1 )
+		poly_plot_opt_sizer1.Add( self.poly_shp_choice1, 0, wx.ALL, 5 )
 		
-		self.pu_poly_alpha1 = wx.Slider( self.pu_poly_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		pu_poly_plot_opt1_sizer.Add( self.pu_poly_alpha1, 0, wx.ALL, 5 )
+		self.poly_col1 = wx.ColourPickerCtrl( self.poly_plot_opt1, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
+		self.poly_col1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
 		
+		poly_plot_opt_sizer1.Add( self.poly_col1, 0, wx.ALL, 5 )
 		
-		self.pu_poly_plot_opt1.SetSizer( pu_poly_plot_opt1_sizer )
-		self.pu_poly_plot_opt1.Layout()
-		pu_poly_plot_opt1_sizer.Fit( self.pu_poly_plot_opt1 )
-		self.lyr2_choice.AddPage( self.pu_poly_plot_opt1, u"Planning Unit (polygons)", False )
-		self.cu_poly_plot_opt1 = wx.Panel( self.lyr2_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		cu_poly_plot_opt1_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		cu_poly_plot_opt1_sizer.SetFlexibleDirection( wx.BOTH )
-		cu_poly_plot_opt1_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.cu_poly_col_txt1 = wx.StaticText( self.cu_poly_plot_opt1, wx.ID_ANY, u"Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_poly_col_txt1.Wrap( -1 )
-		cu_poly_plot_opt1_sizer.Add( self.cu_poly_col_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_poly_alpha_txt1 = wx.StaticText( self.cu_poly_plot_opt1, wx.ID_ANY, u"Transparency", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cu_poly_alpha_txt1.Wrap( -1 )
-		cu_poly_plot_opt1_sizer.Add( self.cu_poly_alpha_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-		
-		self.cu_poly_col1 = wx.ColourPickerCtrl( self.cu_poly_plot_opt1, wx.ID_ANY, wx.Colour( 153, 142, 195 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
-		self.cu_poly_col1.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
-		
-		cu_poly_plot_opt1_sizer.Add( self.cu_poly_col1, 0, wx.ALL, 5 )
-		
-		self.cu_poly_alpha1 = wx.Slider( self.cu_poly_plot_opt1, wx.ID_ANY, 10, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-		cu_poly_plot_opt1_sizer.Add( self.cu_poly_alpha1, 0, wx.ALL, 5 )
+		self.poly_alpha1 = wx.Slider( self.poly_plot_opt1, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
+		poly_plot_opt_sizer1.Add( self.poly_alpha1, 0, wx.ALL, 5 )
 		
 		
-		self.cu_poly_plot_opt1.SetSizer( cu_poly_plot_opt1_sizer )
-		self.cu_poly_plot_opt1.Layout()
-		cu_poly_plot_opt1_sizer.Fit( self.cu_poly_plot_opt1 )
-		self.lyr2_choice.AddPage( self.cu_poly_plot_opt1, u"Connectivity Unit (polygons)", False )
+		self.poly_plot_opt1.SetSizer( poly_plot_opt_sizer1 )
+		self.poly_plot_opt1.Layout()
+		poly_plot_opt_sizer1.Fit( self.poly_plot_opt1 )
+		self.lyr2_choice.AddPage( self.poly_plot_opt1, u"Outline of shapefile", True )
 		lyr2_sizer.Add( self.lyr2_choice, 1, wx.EXPAND |wx.ALL, 5 )
 		
 		
@@ -1137,7 +1019,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -1179,7 +1061,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
-		self.calc_metrics_type.Bind( wx.EVT_CHOICE, self.on_calc_metrics_type )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
 		self.plot_graph_button.Bind( wx.EVT_BUTTON, self.on_plot_graph_button )
 	
@@ -1279,9 +1160,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_export_metrics( self, event ):
-		event.Skip()
-	
-	def on_calc_metrics_type( self, event ):
 		event.Skip()
 	
 	def on_plot_map_button( self, event ):
