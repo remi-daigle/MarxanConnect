@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">MarxanConnectGUI</property>
             <property name="pos"></property>
-            <property name="size">1053,786</property>
+            <property name="size">1053,655</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Marxan with Connectivity</property>

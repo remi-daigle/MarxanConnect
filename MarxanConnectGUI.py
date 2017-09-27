@@ -8,6 +8,7 @@ import gui
 
 #import matplotlib
 import matplotlib
+matplotlib.use('WXAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.collections import PatchCollection
@@ -86,7 +87,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         # create project list to store project specific data
         self.project = {}
-        self.project['workingdirectory'] = os.path.join(os.environ['USERPROFILE'], "Documents")
+        self.project['workingdirectory'] = os.path.join("~", "Documents")
         self.project['filepaths'] = {}
         self.project['options'] = {}
 
@@ -107,7 +108,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # set default file paths
         pfdir = sys.path[0]
-        docdir = os.path.join(os.environ['USERPROFILE'], "Documents")
+        docdir = os.path.join("~", "Documents")
         self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
         self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
         self.project['filepaths']['demo_cu_cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
