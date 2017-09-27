@@ -213,18 +213,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.on_save_project_as(event=None)
 
 ########################### html pop-up functions ################################
+    def openhtml(self,html):
+        if os.name=='nt':
+            wx.LaunchDefaultBrowser(html)
+        else:
+            os.system("open "+html)
 
     def on_glossary( self, event ):
-        wx.LaunchDefaultBrowser("glossary.html")
+        self.openhtml("glossary.html")
 	
     def on_tutorial( self, event ):
-        wx.LaunchDefaultBrowser("tutorial.html")
+        self.openhtml("tutorial.html")
 	
     def on_github( self, event ):
-        wx.LaunchDefaultBrowser("https://github.com/remi-daigle/MarxanConnect/issues")
+        self.openhtml("https://github.com/remi-daigle/MarxanConnect/issues")
 	
     def on_contributing( self, event ):
-        wx.LaunchDefaultBrowser("contributing.html")
+        self.openhtml("contributing.html")
 
     def on_license( self, event ):
         with open('LICENSE', 'r', encoding="utf8") as file :
@@ -908,7 +913,7 @@ class getting_started(wx.Frame):
                                                 wx.ID_ANY,
                                                 u"Welcome to Marxan with Connectivity!\n\nMarxan with Connectivity"
                                                 u" (henceforth the \"app\") is a Graphical User Interface (GUI) to help"
-                                                u" conservationists include “connectivity” in their protected area"
+                                                u" conservationists include \"connectivity\" in their protected area"
                                                 u" network planning.\n\nThe term \"connectivity\" has a variety of"
                                                 u" definitions (i.e. larval connectivity, genetic connectivity, "
                                                 u"landscape connectivity, etc) and protected area networks can be "
