@@ -658,10 +658,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 
     def on_debug_mode(self, event):
+        """
+        Shows/Hides the debug window.
+        """
         if self.log.IsShown():
             self.log.Hide()
         else:
             self.log.Show()
+
 
 ###########################  metric related functions #########################
     def on_calc_metrics(self, event):
