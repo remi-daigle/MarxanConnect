@@ -24,12 +24,13 @@ If you would like to report any bugs or request a missing feature, please post a
 
 Please download the latest [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnect/releases) installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the [Building from source](https://remi-daigle.github.io/MarxanConnect/#building-from-source) instructions to use the latest bleeding edge version of the app.
 
-### Mac and Linux Installers:
-(in progress)
+### Windows Zipped Bundle
+
+If you cannot use the installer because you do not have administrative priviledges, we've provided a zipped bundle of the app to allow users to bypass that problem. To use, download the latest [MarxanConnectWindows.zip](https://github.com/remi-daigle/MarxanConnect/releases), unzip it to your preferred destination (e.g. `~/Desktop`), and double-click `MarxanConnectGUI.exe`. In this case you will have to generate any start menu shorcuts, or file associations (i.e. `.MarCon`) manually.
 
 ## Building from source
 
-Building from source is only necessary if you plan to contribute to the project (see [Contributing](https://remi-daigle.github.io/MarxanConnect/#contributing) section below) or if you want to use the bleeding edge version of the app
+Building from source is only necessary if you plan to contribute to the project (see [Contributing](https://remi-daigle.github.io/MarxanConnect/#contributing) section below) or if you want to use the bleeding edge version of the app.
 
 Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (*Please note, I could not build the repository using Anaconda*). 
 
@@ -45,8 +46,7 @@ make
 
 * [Python 3.5.2 64-bit](https://www.python.org/downloads/release/python-352/)
 * [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder)
-* [NSIS](http://nsis.sourceforge.net/Main_Page)
-* [NSIS Quick Setup Script Generator](http://nsis.sourceforge.net/NSIS_Quick_Setup_Script_Generator)
+-   [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 
 It also assumes you have all the pre-requisite python modules installed, i.e.:
 
@@ -63,19 +63,17 @@ pip install networkx
 
 # for compiling executable
 pip install cx_Freeze
-pip install sys
-pip install os
 ```
 
 ## Built With
 
 The `gui.py` file was built using the fantastic [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).
 
-The windows installer was built using [NSIS](http://nsis.sourceforge.net/Main_Page) and the [NSIS Quick Setup Script Generator](http://nsis.sourceforge.net/NSIS_Quick_Setup_Script_Generator)
+The windows installer was built using [Inno Setup](http://www.jrsoftware.org/isinfo.php).
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://remi-daigle.github.io/MarxanConnect/CONTRIBUTING) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://remi-daigle.github.io/MarxanConnect/CONTRIBUTING) for details on our code of conduct, and the process for submitting pull requests or issues to us.
 
 ## Versioning
 
@@ -84,7 +82,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Authors
 
 * **Remi Daigle** - *Initial work, development, maintenance* - [remi-daigle](https://github.com/remi-daigle)
-* **Arieanna Balbar** - *Consultation, Mac installer development*
+* **Arieanna Balbar** - *Consultation*
 * **Anna Metaxas** - *Consultation*
 * **Maria Beger** - *Consultation*
 
