@@ -22,7 +22,7 @@ Please download the latest [MarxanConnectSetupWindows.exe](https://github.com/re
 
 ### Windows Zipped Bundle
 
-If you cannot use the installer because you do not have administrative priviledges, we've provided a zipped bundle of the app to allow users to bypass that problem. To use, download the latest [MarxanConnectWindows.zip](https://github.com/remi-daigle/MarxanConnect/releases), unzip it to your preferred destination (e.g. `~/Desktop`), and double-click `MarxanConnectGUI.exe`. In this case you will have to generate any start menu shorcuts, or file associations (i.e. `.MarCon`) manually.
+If you cannot use the installer because you do not have administrative privileges, we've provided a zipped bundle of the app to allow users to bypass that problem. To use, download the latest [MarxanConnectWindows.zip](https://github.com/remi-daigle/MarxanConnect/releases), unzip it to your preferred destination (e.g. `~/Desktop`), and double-click `MarxanConnectGUI.exe`. In this case you will have to generate any start menu shortcuts, or file associations (i.e. `.MarCon`) manually.
 
 Building from source
 --------------------
@@ -95,7 +95,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 Acknowledgments
 ---------------
 
--   Funding for the development of this sotware was provided Canadian Healthy Oceans Network [(CHONe)](https://chone2.ca/) a Natural Sciences and Engineering Research Council of Canada [(NSERC)](http://www.nserc-crsng.gc.ca/index_eng.asp) Strategic Network.
+-   Funding for the development of this software was provided Canadian Healthy Oceans Network [(CHONe)](https://chone2.ca/) a Natural Sciences and Engineering Research Council of Canada [(NSERC)](http://www.nserc-crsng.gc.ca/index_eng.asp) Strategic Network.
 -   This project builds on the existing [Marxan](http://marxan.net/) (Ball et al. 2009) software and would not be possible without the hard work of Ian Ball, Hugh Possingham, and Matt Watts.
 
 References
