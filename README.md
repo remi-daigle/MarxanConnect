@@ -43,8 +43,7 @@ Building this repository has only been tested on Python 3.5.2 64-bit on a machin
 
 -   [Python 3.5.2 64-bit](https://www.python.org/downloads/release/python-352/)
 -   [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder)
--   [NSIS](http://nsis.sourceforge.net/Main_Page)
--   [NSIS Quick Setup Script Generator](http://nsis.sourceforge.net/NSIS_Quick_Setup_Script_Generator)
+-   [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 
 It also assumes you have all the pre-requisite python modules installed, i.e.:
 
