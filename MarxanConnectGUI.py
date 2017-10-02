@@ -61,7 +61,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = getting_started(parent=self)
-            frame.Show()
+            # frame.Show()
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(2)
@@ -303,8 +303,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             else:
                 sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type1+'_filepath'])
 
-                # warn and break if shapefile not the same size as metrics
+            # warn and break if shapefile not the same size as metrics
+            if self.lyr1_choice.GetChoiceCtrl().GetStringSelection() =="Colormap of connectivity metrics":
+                print("yeah, has metrics")
                 if not sf1.shape[0] == len(metric1):
+                    print("not same length")
                     self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
                                              "are " + str(len(metric1)) + " rows in the selected metric and " + str(
                         sf1.shape[0]) +
@@ -335,12 +338,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type2+'_filepath'])
 
             # warn and break if shapefile not the same size as metrics
-            if not sf2.shape[0] == len(metric2):
-                self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
-                                         "are " + str(len(metric2)) + " rows in the selected metric and " + str(
-                    sf2.shape[0]) +
-                                         " rows in the shapefile")
-                return
+            if self.lyr2_choice.GetChoiceCtrl().GetStringSelection()=="Colormap of connectivity metrics":
+                if not sf2.shape[0] == len(metric2):
+                    self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
+                                             "are " + str(len(metric2)) + " rows in the selected metric and " + str(
+                        sf2.shape[0]) +
+                                             " rows in the shapefile")
+                    return
 
 
         if(self.lyr1_plot_check.GetValue() and self.lyr2_plot_check.GetValue()):
@@ -695,8 +699,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         calculates the selected metrics
         """
         # create dict entry for connectivityMetrics
-        if not 'connectivityMetrics' in self.project:
-            self.project['connectivityMetrics']={}
+        # if not 'connectivityMetrics' in self.project:
+        self.project['connectivityMetrics']={}
         self.temp={}
 
         if self.calc_metrics_pu.GetValue() and self.calc_metrics_cu.GetValue():
