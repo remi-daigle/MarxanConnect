@@ -122,3 +122,36 @@ def conmat2minplanarboundary(conmat):
     boundary_dat.columns = ['id1', 'id2', 'boundary']
     boundary_dat = boundary_dat.to_json(orient='split')
     return boundary_dat
+
+def conmattime2covariancescore(conmat_time, fa_filepath, pu_filepath):
+    fa = gpd.GeoDataFrame.from_file(fa_filepath)
+    pu = gpd.GeoDataFrame.from_file(pu_filepath)
+
+
+    fa_id = ()
+    for index, farow in fa.iterrows():
+        for index, purow in pu.iterrows():
+            if purow.geometry.intersects(farow.geometry):
+                fa_id = fa_id + (purow.ID,)
+                break
+    print(fa_id)
+    if any([fid in conmat_time.id2.unique().tolist() for fid in fa_id]):
+        cov_list = []
+        for fa1 in fa_id:
+            for fa2 in fa_id:
+                if not fa1 == fa2:
+                    con_fa = conmat_time.value[(conmat_time.id1 == fa1) & (conmat_time.id2 == fa2)]
+                    for id1 in fa_id:
+                        for id2 in conmat_time.id2.unique():
+                            if not id1 == id2:
+                                cov = \
+                                numpy.cov(con_fa, conmat_time.value[(conmat_time.id1 == id1) &
+                                                                    (conmat_time.id2 == id2)])[0, 1]
+                                cov_list.append({'id2': id2, 'cov': cov})
+        cov_list = pandas.DataFrame.from_dict(cov_list)
+
+        score = -cov_list.groupby('id2').sum()
+        return score['cov'].tolist()
+    else:
+        print("no IDs match")
+        return [0] * len(conmat_time.id2.unique())
