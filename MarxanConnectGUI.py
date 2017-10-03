@@ -99,6 +99,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
         self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
+        self.project['options']['metricsCalculated'] = False
 
 
         # trigger functions which enable/disable options
@@ -141,7 +142,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Create and show the Open FileDialog to load a project
         """
-        self.project = {}
         dlg = wx.FileDialog(
             self, message="Choose a file",
             defaultDir=self.project['workingdirectory'], 
@@ -150,8 +150,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             style=wx.FD_OPEN | wx.FD_CHANGE_DIR
             )
         if dlg.ShowModal() == wx.ID_OK:
+            self.project = {}
+            self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = dlg.GetPath()
         dlg.Destroy()
+
         self.load_project_function()
 
     def load_project_function(self):
@@ -172,6 +175,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event = None)
         self.on_demo_rescaleRadioBox(event = None)
+        if self.project['options']['metricsCalculated']:
+            self.customize_spec.Enable(enable=True)
+            self.CFT_percent_slider.Enable(enable=True)
+            self.export_metrics.Enable(enable=True)
+            self.custom_spec_panel.SetToolTip(None)
 
         # set default file paths
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
@@ -709,14 +717,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 if self.demo_matrixFormatRadioBox.GetStringSelection()=="Matrix":
                     self.temp[self.type + '_conmat'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'], index_col=0)
-                    self.project['connectivityMetrics'][self.type+'_conmat'] = self.conmat.to_json(orient='split')
+                    self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
+                        self.type + '_conmat'].to_json(orient='split')
                 elif self.demo_matrixFormatRadioBox.GetStringSelection()=="List":
                     self.temp[self.type + '_conmat'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat'].pivot_table(values='value',
                                                                                                     index='id1',
                                                                                                     columns='id2')
-                    self.project['connectivityMetrics'][self.type+'_conmat'] = self.conmat.to_json(orient='split')
+                    self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
+                        self.type + '_conmat'].to_json(orient='split')
                 elif self.demo_matrixFormatRadioBox.GetStringSelection()=="List with Time":
                     self.temp[self.type + '_conmat_time'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
@@ -725,10 +735,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat'].pivot_table(values='value',
                                                                                                     index='id1',
                                                                                                     columns='id2')
-                    self.project['connectivityMetrics']['demo_' + self.type + '_conmat'] = self.conmat.to_json(
-                        orient='split')
-                    self.project['connectivityMetrics']['demo_' + self.type + '_cm_conmat_time'] = \
-                        self.temp[self.type+'_conmat_time'].to_json(orient='split')
+                    self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
+                        self.type + '_conmat'].to_json(orient='split')
+                    self.project['connectivityMetrics'][self.type + '_conmat_time'] = self.temp[
+                        self.type + '_conmat_time'].to_json(orient='split')
 
                     self.warn_dialog(
                         message="A connectivity 'List with Time' was provided; however, all metrics except "
@@ -743,18 +753,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             else:
                 self.temp['shp_filepath'] = self.project['filepaths'][self.type+'_filepath']
 
-            # create dict entries for boundary and spec, also enable customize spec
-            if not 'spec_'+self.type in self.project['connectivityMetrics']:
-                self.project['connectivityMetrics']['spec_'+self.type]={}
-                self.customize_spec.Enable(enable=True)
-                self.CFT_percent_slider.Enable(enable=True)
-                self.export_metrics.Enable(enable=True)
-                self.custom_spec_panel.SetToolTip(None)
-            else:
-                self.project['connectivityMetrics']['spec_'+self.type]={}
-
-            if not 'boundary' in self.project['connectivityMetrics']:
-                self.project['connectivityMetrics']['boundary']={}
+            # create dict entries for boundary and spec
+            self.project['connectivityMetrics']['spec_'+self.type]={}
+            self.project['connectivityMetrics']['boundary']={}
 
             # calculate demographic metrics
             if(self.type[:4]=='demo'):
@@ -775,11 +776,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         marxanconpy.conmat2selfrecruit(self.temp[self.type+'_conmat'])
 
                 if (self.cf_demo_stochasticity.GetValue()):
-                    self.project['connectivityMetrics']['spec_'+self.type]['cov_score_'+self.type] = \
-                        marxanconpy.conmattime2covariancescore(self.temp[self.type+'_conmat_time'],
-                                                       self.project['filepaths']['fa_filepath'],
-                                                       self.temp['shp_filepath']
+                    if 'fa_filepath' in self.project['filepaths']:
+                        self.project['connectivityMetrics']['spec_'+self.type]['cov_score_'+self.type] = \
+                            marxanconpy.conmattime2covariancescore(self.temp[self.type+'_conmat_time'],
+                                                           self.project['filepaths']['fa_filepath'],
+                                                           self.temp['shp_filepath']
                                                        )
+                    else:
+                        self.warn_dialog(message="No 'Focus Area' has been specified. Please load a focus area file in "
+                                                 "the Spatial Input tab")
+                        return
 
                 if(self.bd_demo_conn_boundary.GetValue()):
                     self.project['connectivityMetrics']['boundary']['conn_boundary_'+self.type] = \
@@ -802,14 +808,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # create initial spec
         self.on_new_spec()
+        self.customize_spec.Enable(enable=True)
+        self.CFT_percent_slider.Enable(enable=True)
+        self.export_metrics.Enable(enable=True)
+        self.custom_spec_panel.SetToolTip(None)
+        self.project['options']['metricsCalculated'] = True
 
     def on_export_metrics(self, event):
         if self.calc_metrics_pu.GetValue():
-            self.type = ['demo_pu']
+            self.type = 'demo_pu'
         else:
             self.warn_dialog(message = "Conservation features can only be exported for planning units.")
             return
-
 
         # Export or append feature files
         if self.cf_export_radioBox.GetSelection()==0:
@@ -818,6 +828,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
             # export conservation features
             cf = self.project['connectivityMetrics']['spec_'+self.type].copy()
+            print(len(self.project['connectivityMetrics'][self.type + '_conmat']))
             cf['pu'] = pandas.read_json(self.project['connectivityMetrics'][self.type+'_conmat'],
                                         orient = 'split').index
             cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
@@ -840,7 +851,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       , index=0)
             # append conservation features
             new_cf = self.project['connectivityMetrics']['spec_'+self.type].copy()
-            new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics']['demo_'+self.type+'_conmat'],
+            new_cf['pu'] = pandas.read_json(self.project['connectivityMetrics'][self.type+'_conmat'],
                                             orient = 'split').index
             new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
@@ -853,7 +864,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def export_boundary_file(self, BD_filepath):
         if self.calc_metrics_pu.GetValue():
-            self.type = ['demo_pu']
+            self.type = 'demo_pu'
         else:
             self.warn_dialog(message = "Boundary files can only be exported for planning units.")
             return
@@ -892,16 +903,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 ###########################  spec grid popup functions #########################
     def on_customize_spec(self, event):
-        if self.calc_metrics_pu.GetValue() and self.calc_metrics_cu.GetValue():
-            self.type = 'demo_cu'
-            self.spec_frame.Show()
+        if self.calc_metrics_pu.GetValue():
             self.type = 'demo_pu'
-            self.spec_frame.Show()
-        elif self.calc_metrics_pu.GetValue():
-            self.type = 'demo_pu'
-            self.spec_frame.Show()
-        elif self.calc_metrics_cu.GetValue():
-            self.type = 'demo_cu'
             self.spec_frame.Show()
         else:
             self.warn_dialog(message = "No 'Units' selected for metric calculations.")
@@ -909,7 +912,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_new_spec(self):
         self.spec_frame=spec_customizer(parent=self)
         self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_'+self.type])
-        
+        if self.calc_metrics_pu.GetValue():
+            self.type = 'demo_pu'
+        else:
+            self.warn_dialog(message = "No 'Units' selected for metric calculations.")
+
         for i in range(len(self.spec_frame.keys)):
             self.spec_frame.spec_grid.InsertRows(i)
             self.spec_frame.spec_grid.SetCellValue(i,0,str(i+1))
@@ -929,7 +936,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         for c in range(self.spec_frame.spec_grid.GetNumberCols()):
             for r in range(self.spec_frame.spec_grid.GetNumberRows()):
                 self.project['spec_'+self.type+'_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
+
         self.project['spec_'+self.type+'_dat'] = self.project['spec_'+self.type+'_dat'].to_json(orient = 'split')
+
 
     def on_CFT_percent_slider(self, event):
         self.on_new_spec()
@@ -1099,7 +1108,7 @@ class ProcessThreading(object):
                     index=True, header=True, sep=",")
 
             else:
-                self.temp['demo_pu_conmat'].to_json(orient='split')
+                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
                 pandas.read_json(self.temp['demo_pu_conmat'],
                                  orient='split').to_csv(
                     self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
