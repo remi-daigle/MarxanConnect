@@ -64,7 +64,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # frame.Show()
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(2)
+        self.auinotebook.ChangeSelection(1)
 
     def set_icon(self, frame):
         # set the icon
@@ -92,7 +92,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options'] = {}
 
         # set default options
-        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_export.GetValue()
         self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
@@ -162,7 +161,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.SetTitle('Marxan with Connectivity (Project: '+self.project['filepaths']['projfilename']+')')
 
         # set default options
-        self.demo_PU_CM_export.SetValue(self.project['options']['demo_pu_cm_export'])
         self.demo_PU_CM_progress.SetValue(self.project['options']['demo_pu_cm_progress'])
         self.demo_matrixUnitsRadioBox.SetStringSelection(self.project['options']['demo_conmat_units'])
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
@@ -305,7 +303,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # warn and break if shapefile not the same size as metrics
             if self.lyr1_choice.GetChoiceCtrl().GetStringSelection() =="Colormap of connectivity metrics":
-                print("yeah, has metrics")
                 if not sf1.shape[0] == len(metric1):
                     print("not same length")
                     self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
@@ -576,6 +573,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def check_matrix_list_format(self, format, filepath):
         # warn if matrix is wrong format
+        print("check if "+filepath+" is in"+format)
         if format == "Matrix":
             self.conmat = pandas.read_csv(filepath, index_col=0)
         else:
@@ -629,7 +627,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.demo_CU_file.Enable(enable = False)
             self.demo_PU_CM_outputtext.Enable(enable = False)
             self.demo_PU_CM_def.Enable(enable = False)
-            self.demo_PU_CM_export.Enable(enable=False)
             self.demo_PU_CM_progress.Enable(enable=False)
             self.demo_PU_CM_filetext.Enable(enable = False)
             self.demo_PU_CM_file.Enable(enable = False)
@@ -640,11 +637,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.demo_CU_file.Enable(enable = True)
             self.demo_PU_CM_outputtext.Enable(enable = True)
             self.demo_PU_CM_def.Enable(enable = True)
-            self.demo_PU_CM_export.Enable(enable=True)
             self.demo_PU_CM_progress.Enable(enable=True)
-            if self.demo_PU_CM_export.GetValue():
-                self.demo_PU_CM_filetext.Enable(enable = True)
-                self.demo_PU_CM_file.Enable(enable = True)
+            self.demo_PU_CM_filetext.Enable(enable = True)
+            self.demo_PU_CM_file.Enable(enable = True)
             self.demo_rescale_button.Enable(enable = True)
 
         # reset filepaths
@@ -662,19 +657,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Rescales the connectivity matrix to match the scale of the planning units
         """
+        self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+                                      filepath=self.project['filepaths']['demo_cu_cm_filepath'])
         ProcessThreading(parent=self, rescale_matrix = True)
-
-    def on_demo_PU_CM_export(self, event):
-        """
-        Checks if the planning unit connectivity matrix should be exported when rescaling
-        """
-        self.project['options']['demo_pu_cm_export'] = self.demo_PU_CM_export.GetValue()
-        if self.demo_PU_CM_export.GetValue():
-            self.demo_PU_CM_filetext.Enable(enable=True)
-            self.demo_PU_CM_file.Enable(enable=True)
-        else:
-            self.demo_PU_CM_filetext.Enable(enable = False)
-            self.demo_PU_CM_file.Enable(enable = False)
 
     def on_demo_PU_CM_progress(self, event):
         """
@@ -704,7 +689,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.temp={}
 
         if self.calc_metrics_pu.GetValue() and self.calc_metrics_cu.GetValue():
-            self.all_types = ['demo_cu','demo_pu']
+            self.all_types = ['demo_pu','demo_cu']
         elif self.calc_metrics_pu.GetValue():
             self.all_types = ['demo_pu']
         elif self.calc_metrics_cu.GetValue():
@@ -715,30 +700,40 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         for self.type in self.all_types:
             # check format
-            self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+            if self.type[-2:]=='pu':
+                self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
                                               filepath=self.project['filepaths'][self.type+'_cm_filepath'])
 
             # load correct demographic matrix and transform if necessary
             if os.path.isfile(self.project['filepaths'][self.type+'_cm_filepath']):
                 if self.demo_matrixFormatRadioBox.GetStringSelection()=="Matrix":
-                    self.temp[self.type+'_conmat'] = pandas.read_csv(self.project['filepaths'][self.type+'_cm_filepath'],index_col= 0)
+                    self.temp[self.type + '_conmat'] = pandas.read_csv(
+                        self.project['filepaths'][self.type + '_cm_filepath'], index_col=0)
                     self.project['connectivityMetrics'][self.type+'_conmat'] = self.conmat.to_json(orient='split')
                 elif self.demo_matrixFormatRadioBox.GetStringSelection()=="List":
-                    self.temp[self.type+'_conmat'] = pandas.read_csv(self.project['filepaths'][self.type+'_cm_filepath'])
-                    self.temp[self.type+'_conmat'] = self.temp[self.type+'_conmat'].pivot_table(values = 'value', index = 'id1', columns = 'id2')
+                    self.temp[self.type + '_conmat'] = pandas.read_csv(
+                        self.project['filepaths'][self.type + '_cm_filepath'])
+                    self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat'].pivot_table(values='value',
+                                                                                                    index='id1',
+                                                                                                    columns='id2')
                     self.project['connectivityMetrics'][self.type+'_conmat'] = self.conmat.to_json(orient='split')
                 elif self.demo_matrixFormatRadioBox.GetStringSelection()=="List with Time":
-                    self.temp[self.type+'_conmat_time'] = pandas.read_csv(self.project['filepaths'][self.type + '_cm_filepath'])
-                    self.temp[self.type+'_conmat'] = self.temp[self.type+'_conmat_time'][['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
-                    self.temp[self.type+'_conmat'] = self.temp[self.type+'_conmat'].pivot_table(values='value', index='id1', columns='id2')
+                    self.temp[self.type + '_conmat_time'] = pandas.read_csv(
+                        self.project['filepaths'][self.type + '_cm_filepath'])
+                    self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat_time'][
+                        ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
+                    self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat'].pivot_table(values='value',
+                                                                                                    index='id1',
+                                                                                                    columns='id2')
                     self.project['connectivityMetrics']['demo_' + self.type + '_conmat'] = self.conmat.to_json(
                         orient='split')
                     self.project['connectivityMetrics']['demo_' + self.type + '_cm_conmat_time'] = \
                         self.temp[self.type+'_conmat_time'].to_json(orient='split')
 
-                    self.warn_dialog(message = "A connectivity 'List with Time' was provided; however, all metrics except "
-                                               "'Temporal Connectivity Correlation' will be calculated from the temporal"
-                                               "mean of connectivity")
+                    self.warn_dialog(
+                        message="A connectivity 'List with Time' was provided; however, all metrics except "
+                                "'Temporal Connectivity Correlation' will be calculated from the temporal"
+                                "mean of connectivity")
             else:
                 self.warn_dialog(message="File not found: "+self.project['filepaths'][self.type+'_cm_filepath'])
 
@@ -945,14 +940,16 @@ class spec_customizer (gui.spec_customizer):
         self.parent = parent
         
     def on_spec_ok( self, event ):
-        self.parent.project['spec_'+self.parent.type+'_dat'] = pandas.DataFrame(numpy.full((self.spec_grid.GetNumberRows(),
-                                                                                self.spec_grid.GetNumberCols()),None))
+        self.parent.project['spec_' + self.parent.type + '_dat'] = pandas.DataFrame(
+            numpy.full((self.spec_grid.GetNumberRows(),
+                        self.spec_grid.GetNumberCols()), None))
         self.parent.project['spec_'+self.parent.type+'_dat'].columns = ["id","target","spf","name"]
 
         for c in range(self.spec_grid.GetNumberCols()):
             for r in range(self.spec_grid.GetNumberRows()):
                 self.parent.project['spec_'+self.parent.type+'_dat'].iloc[r,c] = self.spec_grid.GetCellValue(r,c)
-        self.parent.project['spec_'+self.parent.type+'_dat'] = self.parent.project['spec_'+self.parent.type+'_dat'].to_json()
+        self.parent.project['spec_' + self.parent.type + '_dat'] = self.parent.project[
+            'spec_' + self.parent.type + '_dat'].to_json()
         self.Hide()
 	
     def on_spec_cancel( self, event ):
@@ -1073,17 +1070,38 @@ class ProcessThreading(object):
 
     def run(self):
         if self.rescale_matrix:
+            self.temp = {}
             # create dict entry for connectivityMetrics
             if not 'connectivityMetrics' in self.parent.project:
                 self.parent.project['connectivityMetrics'] = {}
-            self.parent.project['connectivityMetrics']['demo_pu_conmat'] = marxanconpy.rescale_matrix(
+
+            self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
                 self.parent.project['filepaths']['pu_filepath'],
                 self.parent.project['filepaths']['demo_cu_filepath'],
                 self.parent.project['filepaths']['demo_cu_cm_filepath'],
-                progressbar=self.parent.project['options']['demo_pu_cm_progress']).to_json(orient='split')
+                matrixformat=self.parent.demo_matrixFormatRadioBox.GetStringSelection(),
+                progressbar=self.parent.project['options']['demo_pu_cm_progress'])
 
-            if self.parent.demo_PU_CM_export.GetValue():
-                pandas.read_json(self.parent.project['connectivityMetrics']['demo_pu_conmat'],orient='split').to_csv(
+            if self.parent.demo_matrixFormatRadioBox.GetStringSelection()=="List with Time":
+                print(self.temp['demo_pu_conmat'].shape)
+                self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
+                    self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'], var_name='id2',
+                                                                               value_name='value').to_json(
+                    orient='split')
+                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
+                    self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(orient='split')
+                pandas.read_json(self.temp['demo_pu_conmat_time'],
+                                 orient='split').to_csv(
+                    self.parent.project['filepaths']['demo_pu_cm_filepath'],
+                    index=False,header=True, sep=",")
+                pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
+                    str.replace(self.parent.project['filepaths']['demo_pu_cm_filepath'], '.csv', '_mean_of_times.csv'),
+                    index=True, header=True, sep=",")
+
+            else:
+                self.temp['demo_pu_conmat'].to_json(orient='split')
+                pandas.read_json(self.temp['demo_pu_conmat'],
+                                 orient='split').to_csv(
                     self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
 
 ########################### debug mode ########################################

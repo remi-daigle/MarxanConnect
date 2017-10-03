@@ -320,15 +320,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer.Add( demo_pucm_def_sizer, 1, wx.EXPAND, 5 )
 		
-		demo_pucm_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
-		demo_pucm_sizer.AddGrowableCol( 3 )
+		demo_pucm_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		demo_pucm_sizer.AddGrowableCol( 2 )
 		demo_pucm_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		demo_pucm_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.demo_PU_CM_export = wx.CheckBox( self.demographic, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.demo_PU_CM_export.Enable( False )
-		
-		demo_pucm_sizer.Add( self.demo_PU_CM_export, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		self.demo_PU_CM_progress = wx.CheckBox( self.demographic, wx.ID_ANY, u"Progress Bar", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_PU_CM_progress.SetValue(True) 
@@ -1050,7 +1045,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
 		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
-		self.demo_PU_CM_export.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_export )
 		self.demo_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
@@ -1127,9 +1121,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_CU_file( self, event ):
-		event.Skip()
-	
-	def on_demo_PU_CM_export( self, event ):
 		event.Skip()
 	
 	def on_demo_PU_CM_progress( self, event ):

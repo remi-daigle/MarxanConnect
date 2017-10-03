@@ -3,9 +3,10 @@ import geopandas as gpd
 import pandas
 import igraph
 import wx
+import os
 
 
-def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,progressbar=False):
+def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,matrixformat,progressbar=False):
     """
     rescale the connectivity matrix to match the scale of the planning units
     """
@@ -13,11 +14,31 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,progressbar=False):
     pu = gpd.GeoDataFrame.from_file(pu_filepath)
     cu = gpd.GeoDataFrame.from_file(cu_filepath)
 
+    # load cu connectivity matrix
+    # load correct demographic matrix and transform if necessary
+    time=False
+    if os.path.isfile(cm_filepath):
+        if matrixformat == "Matrix":
+            grid_conmat = pandas.read_csv(cm_filepath,index_col=0).as_matrix()
+        elif matrixformat == "List":
+            grid_conmat = pandas.read_csv(cm_filepath)
+            grid_conmat = grid_conmat.pivot_table(values='value', index='id1',columns='id2').as_matrix()
+        elif matrixformat == "List with Time":
+            grid_conmat_time = pandas.read_csv(cm_filepath)
+            grid_conmat = grid_conmat_time[['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
+            grid_conmat = grid_conmat.pivot_table(values='value', index='id1',columns='id2').as_matrix()
+            time=True
+
+
     # quantify intersectional area
     if progressbar:
+        if time:
+            max = pu.shape[0] * 10 * len( grid_conmat_time['time'].unique())
+        else:
+            max = pu.shape[0] * 10
         dlg = wx.ProgressDialog("Rescale Connectivity Matrix",
                                 "Please wait while the rescaled connectivity matrix is being generated.",
-                                maximum = pu.shape[0]*10,
+                                maximum = max,
                                 parent=None,
                                 style = wx.PD_AUTO_HIDE
                                 | wx.PD_ELAPSED_TIME
@@ -39,10 +60,8 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,progressbar=False):
     # make intersection GeoDataFrame
     df = gpd.GeoDataFrame(con_mat_pu,columns=['geometry', 'puID', 'connID', 'puIndex', 'connIndex', 'int_area', 'conn_area', 'pu_area'])
 
-    # load cu connectivity matrix
-    grid_conmat = pandas.read_csv(cm_filepath,index_col= 0).as_matrix()
 
-    # populate rescaled pu connecectivity matrix
+    # populate rescaled pu connectivity matrix
     pu_conmat = numpy.zeros((len(pu),len(pu)))
     for source in pu.ID:
         if progressbar:
@@ -61,9 +80,41 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,progressbar=False):
 
     pu_conmat = pandas.DataFrame(pu_conmat, index=pu.ID, columns=pu.ID)
     pu_conmat.index.name = "puID"
+
+    if time:
+        # populate rescaled pu connectivity matrix
+        for t in grid_conmat_time['time'].unique():
+            pu_conmat_t = numpy.zeros((len(pu), len(pu)))
+            for source in pu.ID:
+                if progressbar:
+                    count += 9
+                    dlg.Update(count)
+                for sink in pu.ID:
+                    sources = df.puID == source
+                    sinks = df.puID == sink
+                    if any(sinks) and any(source):
+                        temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
+                        cov_source = df.int_area[sources] / sum(df.int_area[sources])
+                        cov_sink = df.int_area[sinks] / sum(df.int_area[sinks])
+                        pu_conmat_t[numpy.array(pu.ID == source), numpy.array(pu.ID == sink)] = sum(
+                            sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+                    else:
+                        pu_conmat_t[numpy.array(pu.ID == source), numpy.array(pu.ID == sink)] = 0
+
+            pu_conmat_t = pandas.DataFrame(pu_conmat_t, index=pu.ID, columns=pu.ID)
+            pu_conmat_t['id1'] = pu_conmat_t.index
+            pu_conmat_t['time'] = t
+            if t==grid_conmat_time['time'].unique()[0]:
+                pu_conmat['id1'] = pu_conmat.index
+                pu_conmat['time'] = 'mean'
+            pu_conmat = pu_conmat.append(pu_conmat_t)
+        # pu_conmat_time = pu_conmat.melt(id_vars=['time','id1'], var_name='id2', value_name='value')
+
     if progressbar:
         dlg.Destroy()
     return pu_conmat
+
+
 
 
 def buffer_shp_corners(gdf_list, bufferwidth = 0):
