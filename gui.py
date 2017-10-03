@@ -19,7 +19,7 @@ import wx.grid
 class MarxanConnectGUI ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1053,655 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1053,802 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -81,6 +81,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		spatialMainSizer.AddGrowableRow( 2 )
 		spatialMainSizer.AddGrowableRow( 4 )
 		spatialMainSizer.AddGrowableRow( 5 )
+		spatialMainSizer.AddGrowableRow( 7 )
+		spatialMainSizer.AddGrowableRow( 8 )
 		spatialMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		spatialMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -124,7 +126,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fa_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.FA_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.FA_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that are connected to the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.FA_def.Wrap( -1 )
 		fa_def_sizer.Add( self.FA_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -147,6 +149,38 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		
 		spatialMainSizer.Add( fa_file_sizer, 1, wx.EXPAND, 5 )
+		
+		self.aa_title = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Avoidance Areas:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.aa_title.Wrap( -1 )
+		self.aa_title.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		
+		spatialMainSizer.Add( self.aa_title, 0, wx.ALL, 5 )
+		
+		aa_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.AA_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. TBD), it is important to consider 'avoidance areas' for which connectivity should be avoided. Such avoidance areas could include areas heavily infested by invasive species, or areas that are more likely to be invaded (e.g. international shipping ports). Marxan with Connectivity assumes that the planning units within the 'avoidance areas' will otherwise be targeted as normal conservation targets in Marxan. Loading avoidance areas into Marxan with Connectivity allows users to set conservation targets for the areas connected to the 'avoidance areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.AA_def.Wrap( -1 )
+		aa_def_sizer.Add( self.AA_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		spatialMainSizer.Add( aa_def_sizer, 1, wx.EXPAND, 5 )
+		
+		aa_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		aa_file_sizer.AddGrowableCol( 1 )
+		aa_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		aa_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.AA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Focus Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.AA_filetext.Wrap( -1 )
+		self.AA_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		
+		aa_file_sizer.Add( self.AA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.AA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		aa_file_sizer.Add( self.AA_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		spatialMainSizer.Add( aa_file_sizer, 1, wx.EXPAND, 5 )
 		
 		
 		self.spatialInput.SetSizer( spatialMainSizer )
@@ -357,8 +391,352 @@ class MarxanConnectGUI ( wx.Frame ):
 		demoMainSizer.Fit( self.demographic )
 		self.conn_category_choicebook.AddPage( self.demographic, u"Demographic Input", True )
 		self.genetic = wx.Panel( self.conn_category_choicebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		genMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		genMainSizer.AddGrowableCol( 0 )
+		genMainSizer.AddGrowableRow( 0 )
+		genMainSizer.AddGrowableRow( 2 )
+		genMainSizer.AddGrowableRow( 3 )
+		genMainSizer.AddGrowableRow( 4 )
+		genMainSizer.AddGrowableRow( 5 )
+		genMainSizer.AddGrowableRow( 7 )
+		genMainSizer.AddGrowableRow( 8 )
+		genMainSizer.SetFlexibleDirection( wx.VERTICAL )
+		genMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
+		
+		gen_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.gen_CM_def = wx.StaticText( self.genetic, wx.ID_ANY, u"Dexcribe Connectivity Matrix .......................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_CM_def.Wrap( -1 )
+		gen_cm_def_sizer.Add( self.gen_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		genMainSizer.Add( gen_cm_def_sizer, 1, wx.EXPAND, 5 )
+		
+		gen_radio_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		gen_radio_sizer.AddGrowableCol( 1 )
+		gen_radio_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		gen_radio_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		gen_matrixUnitsRadioBoxChoices = [ u"TBD" ]
+		self.gen_matrixUnitsRadioBox = wx.RadioBox( self.genetic, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, gen_matrixUnitsRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.gen_matrixUnitsRadioBox.SetSelection( 0 )
+		gen_radio_sizer.Add( self.gen_matrixUnitsRadioBox, 0, wx.ALL, 5 )
+		
+		gen_matrixTypeRadioBoxChoices = [ u"TBD" ]
+		self.gen_matrixTypeRadioBox = wx.RadioBox( self.genetic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, gen_matrixTypeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.gen_matrixTypeRadioBox.SetSelection( 0 )
+		gen_radio_sizer.Add( self.gen_matrixTypeRadioBox, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		gen_matrixFormatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
+		self.gen_matrixFormatRadioBox = wx.RadioBox( self.genetic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, gen_matrixFormatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
+		self.gen_matrixFormatRadioBox.SetSelection( 0 )
+		gen_radio_sizer.Add( self.gen_matrixFormatRadioBox, 0, wx.ALL, 5 )
+		
+		
+		genMainSizer.Add( gen_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
+		
+		gen_cu_cm_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		gen_cu_cm_file_sizer.AddGrowableCol( 1 )
+		gen_cu_cm_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		gen_cu_cm_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.gen_CU_CM_filetext = wx.StaticText( self.genetic, wx.ID_ANY, u"Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_CU_CM_filetext.Wrap( -1 )
+		self.gen_CU_CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		
+		gen_cu_cm_file_sizer.Add( self.gen_CU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.gen_CU_CM_file = wx.FilePickerCtrl( self.genetic, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		gen_cu_cm_file_sizer.Add( self.gen_CU_CM_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		genMainSizer.Add( gen_cu_cm_file_sizer, 1, wx.EXPAND, 5 )
+		
+		gen_rescale_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		gen_rescale_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.gen_rescale_def_txt = wx.StaticText( self.genetic, wx.ID_ANY, u"The genetic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_rescale_def_txt.Wrap( -1 )
+		gen_rescale_def_sizer.Add( self.gen_rescale_def_txt, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		gen_rescale_sizer.Add( gen_rescale_def_sizer, 1, wx.EXPAND, 5 )
+		
+		gen_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
+		self.gen_rescaleRadioBox = wx.RadioBox( self.genetic, wx.ID_ANY, u"Rescale Connectivity Matrix?", wx.DefaultPosition, wx.DefaultSize, gen_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.gen_rescaleRadioBox.SetSelection( 1 )
+		gen_rescale_sizer.Add( self.gen_rescaleRadioBox, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		
+		
+		genMainSizer.Add( gen_rescale_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		
+		gen_cu_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.gen_CU_def = wx.StaticText( self.genetic, wx.ID_ANY, u"Describe Connectivity Matrix Shapefile ....................................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_CU_def.Wrap( -1 )
+		self.gen_CU_def.Enable( False )
+		
+		gen_cu_def_sizer.Add( self.gen_CU_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		genMainSizer.Add( gen_cu_def_sizer, 1, wx.EXPAND, 5 )
+		
+		gen_cu_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		gen_cu_file_sizer.AddGrowableCol( 1 )
+		gen_cu_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		gen_cu_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.gen_CU_filetext = wx.StaticText( self.genetic, wx.ID_ANY, u"Connectivity Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_CU_filetext.Wrap( -1 )
+		self.gen_CU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.gen_CU_filetext.Enable( False )
+		
+		gen_cu_file_sizer.Add( self.gen_CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.gen_CU_file = wx.FilePickerCtrl( self.genetic, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.gen_CU_file.Enable( False )
+		
+		gen_cu_file_sizer.Add( self.gen_CU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		genMainSizer.Add( gen_cu_file_sizer, 1, wx.EXPAND, 5 )
+		
+		gen_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.gen_pucm_seperator = wx.StaticLine( self.genetic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		gen_pucm_output_txt_sizer.Add( self.gen_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		self.gen_PU_CM_outputtext = wx.StaticText( self.genetic, wx.ID_ANY, u"Output:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_PU_CM_outputtext.Wrap( -1 )
+		self.gen_PU_CM_outputtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.gen_PU_CM_outputtext.Enable( False )
+		
+		gen_pucm_output_txt_sizer.Add( self.gen_PU_CM_outputtext, 0, wx.ALL, 5 )
+		
+		
+		genMainSizer.Add( gen_pucm_output_txt_sizer, 1, wx.EXPAND, 5 )
+		
+		gen_pucm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.gen_PU_CM_def = wx.StaticText( self.genetic, wx.ID_ANY, u"Describe Planning Unit Connectivity Matrix ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_PU_CM_def.Wrap( -1 )
+		self.gen_PU_CM_def.Enable( False )
+		
+		gen_pucm_def_sizer.Add( self.gen_PU_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		genMainSizer.Add( gen_pucm_def_sizer, 1, wx.EXPAND, 5 )
+		
+		gen_pucm_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		gen_pucm_sizer.AddGrowableCol( 2 )
+		gen_pucm_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		gen_pucm_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.gen_PU_CM_progress = wx.CheckBox( self.genetic, wx.ID_ANY, u"Progress Bar", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_PU_CM_progress.SetValue(True) 
+		self.gen_PU_CM_progress.Enable( False )
+		
+		gen_pucm_sizer.Add( self.gen_PU_CM_progress, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.gen_PU_CM_filetext = wx.StaticText( self.genetic, wx.ID_ANY, u"Output Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_PU_CM_filetext.Wrap( -1 )
+		self.gen_PU_CM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.gen_PU_CM_filetext.Enable( False )
+		
+		gen_pucm_sizer.Add( self.gen_PU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.gen_PU_CM_file = wx.FilePickerCtrl( self.genetic, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
+		self.gen_PU_CM_file.Enable( False )
+		
+		gen_pucm_sizer.Add( self.gen_PU_CM_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		genMainSizer.Add( gen_pucm_sizer, 1, wx.EXPAND, 5 )
+		
+		self.gen_rescale_button = wx.Button( self.genetic, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.gen_rescale_button.Enable( False )
+		
+		genMainSizer.Add( self.gen_rescale_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
+		
+		self.genetic.SetSizer( genMainSizer )
+		self.genetic.Layout()
+		genMainSizer.Fit( self.genetic )
 		self.conn_category_choicebook.AddPage( self.genetic, u"Genetic Input", False )
 		self.landscape = wx.Panel( self.conn_category_choicebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		landMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		landMainSizer.AddGrowableCol( 0 )
+		landMainSizer.AddGrowableRow( 0 )
+		landMainSizer.AddGrowableRow( 2 )
+		landMainSizer.AddGrowableRow( 3 )
+		landMainSizer.AddGrowableRow( 4 )
+		landMainSizer.AddGrowableRow( 5 )
+		landMainSizer.AddGrowableRow( 7 )
+		landMainSizer.AddGrowableRow( 8 )
+		landMainSizer.SetFlexibleDirection( wx.VERTICAL )
+		landMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
+		
+		land_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.land_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"Dexcribe Connectivity Matrix .......................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CM_def.Wrap( -1 )
+		land_cm_def_sizer.Add( self.land_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_cm_def_sizer, 1, wx.EXPAND, 5 )
+		
+		land_radio_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		land_radio_sizer.AddGrowableCol( 1 )
+		land_radio_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		land_radio_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		land_matrixUnitsRadioBoxChoices = [ u"TBD" ]
+		self.land_matrixUnitsRadioBox = wx.RadioBox( self.landscape, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, land_matrixUnitsRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.land_matrixUnitsRadioBox.SetSelection( 0 )
+		land_radio_sizer.Add( self.land_matrixUnitsRadioBox, 0, wx.ALL, 5 )
+		
+		land_matrixTypeRadioBoxChoices = [ u"TBD" ]
+		self.land_matrixTypeRadioBox = wx.RadioBox( self.landscape, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, land_matrixTypeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.land_matrixTypeRadioBox.SetSelection( 0 )
+		land_radio_sizer.Add( self.land_matrixTypeRadioBox, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		land_matrixFormatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
+		self.land_matrixFormatRadioBox = wx.RadioBox( self.landscape, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, land_matrixFormatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
+		self.land_matrixFormatRadioBox.SetSelection( 0 )
+		land_radio_sizer.Add( self.land_matrixFormatRadioBox, 0, wx.ALL, 5 )
+		
+		
+		landMainSizer.Add( land_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
+		
+		land_cu_cm_file_sizer2 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		land_cu_cm_file_sizer2.AddGrowableCol( 1 )
+		land_cu_cm_file_sizer2.SetFlexibleDirection( wx.HORIZONTAL )
+		land_cu_cm_file_sizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.land_CU_CM_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CU_CM_filetext.Wrap( -1 )
+		self.land_CU_CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		
+		land_cu_cm_file_sizer2.Add( self.land_CU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.land_CU_CM_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		land_cu_cm_file_sizer2.Add( self.land_CU_CM_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_cu_cm_file_sizer2, 1, wx.EXPAND, 5 )
+		
+		land_rescale_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		land_rescale_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.demo_rescale_def_txt2 = wx.StaticText( self.landscape, wx.ID_ANY, u"The landscape connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_rescale_def_txt2.Wrap( -1 )
+		land_rescale_def_sizer.Add( self.demo_rescale_def_txt2, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		land_rescale_sizer.Add( land_rescale_def_sizer, 1, wx.EXPAND, 5 )
+		
+		land_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
+		self.land_rescaleRadioBox = wx.RadioBox( self.landscape, wx.ID_ANY, u"Rescale Connectivity Matrix?", wx.DefaultPosition, wx.DefaultSize, land_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.land_rescaleRadioBox.SetSelection( 0 )
+		land_rescale_sizer.Add( self.land_rescaleRadioBox, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		
+		
+		landMainSizer.Add( land_rescale_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		
+		land_cu_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.land_CU_def = wx.StaticText( self.landscape, wx.ID_ANY, u"Describe Connectivity Matrix Shapefile ....................................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CU_def.Wrap( -1 )
+		self.land_CU_def.Enable( False )
+		
+		land_cu_def_sizer.Add( self.land_CU_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_cu_def_sizer, 1, wx.EXPAND, 5 )
+		
+		land_cu_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		land_cu_file_sizer.AddGrowableCol( 1 )
+		land_cu_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		land_cu_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.land_CU_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Connectivity Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CU_filetext.Wrap( -1 )
+		self.land_CU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.land_CU_filetext.Enable( False )
+		
+		land_cu_file_sizer.Add( self.land_CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.land_CU_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_CU_file.Enable( False )
+		
+		land_cu_file_sizer.Add( self.land_CU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_cu_file_sizer, 1, wx.EXPAND, 5 )
+		
+		land_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.land_pucm_seperator = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		land_pucm_output_txt_sizer.Add( self.land_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		self.land_PU_CM_outputtext = wx.StaticText( self.landscape, wx.ID_ANY, u"Output:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_outputtext.Wrap( -1 )
+		self.land_PU_CM_outputtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.land_PU_CM_outputtext.Enable( False )
+		
+		land_pucm_output_txt_sizer.Add( self.land_PU_CM_outputtext, 0, wx.ALL, 5 )
+		
+		
+		landMainSizer.Add( land_pucm_output_txt_sizer, 1, wx.EXPAND, 5 )
+		
+		land_pucm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.land_PU_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"Describe Planning Unit Connectivity Matrix ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_def.Wrap( -1 )
+		self.land_PU_CM_def.Enable( False )
+		
+		land_pucm_def_sizer.Add( self.land_PU_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_pucm_def_sizer, 1, wx.EXPAND, 5 )
+		
+		land_pucm_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		land_pucm_sizer.AddGrowableCol( 2 )
+		land_pucm_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		land_pucm_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.land_PU_CM_progress = wx.CheckBox( self.landscape, wx.ID_ANY, u"Progress Bar", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_progress.SetValue(True) 
+		self.land_PU_CM_progress.Enable( False )
+		
+		land_pucm_sizer.Add( self.land_PU_CM_progress, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.land_PU_CM_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Output Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_filetext.Wrap( -1 )
+		self.land_PU_CM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.land_PU_CM_filetext.Enable( False )
+		
+		land_pucm_sizer.Add( self.land_PU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.land_PU_CM_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
+		self.land_PU_CM_file.Enable( False )
+		
+		land_pucm_sizer.Add( self.land_PU_CM_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_pucm_sizer, 1, wx.EXPAND, 5 )
+		
+		self.land_rescale_button = wx.Button( self.landscape, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_rescale_button.Enable( False )
+		
+		landMainSizer.Add( self.land_rescale_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
+		
+		self.landscape.SetSizer( landMainSizer )
+		self.landscape.Layout()
+		landMainSizer.Fit( self.landscape )
 		self.conn_category_choicebook.AddPage( self.landscape, u"Landscape Input", False )
 		conn_input_mainsizer.Add( self.conn_category_choicebook, 1, wx.ALL|wx.EXPAND, 5 )
 		
@@ -420,12 +798,18 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
+		self.cf_demo_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_outflux.SetValue(True) 
+		self.cf_demo_outflux.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		
+		demo_cf_sizer.Add( self.cf_demo_outflux, 0, wx.ALL, 5 )
+		
 		self.cf_demo_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_stochasticity_panel.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided unde Demographic Input in the Connectivity Input tab." )
+		self.cf_demo_stochasticity_panel.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab." )
 		
 		cf_demo_stochasticity_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_demo_stochasticity = wx.CheckBox( self.cf_demo_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Correlation", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_stochasticity = wx.CheckBox( self.cf_demo_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_stochasticity.Enable( False )
 		
 		cf_demo_stochasticity_sizer.Add( self.cf_demo_stochasticity, 0, wx.ALL, 5 )
@@ -434,7 +818,71 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cf_demo_stochasticity_panel.SetSizer( cf_demo_stochasticity_sizer )
 		self.cf_demo_stochasticity_panel.Layout()
 		cf_demo_stochasticity_sizer.Fit( self.cf_demo_stochasticity_panel )
-		demo_cf_sizer.Add( self.cf_demo_stochasticity_panel, 1, wx.EXPAND, 5 )
+		demo_cf_sizer.Add( self.cf_demo_stochasticity_panel, 1, 0, 0 )
+		
+		self.cf_demo_fa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_fa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_fa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_fa_sink = wx.CheckBox( self.cf_demo_fa_sink_panel, wx.ID_ANY, u"Focus Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_fa_sink.Enable( False )
+		
+		cf_demo_fa_sink_sizer.Add( self.cf_demo_fa_sink, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_fa_sink_panel.SetSizer( cf_demo_fa_sink_sizer )
+		self.cf_demo_fa_sink_panel.Layout()
+		cf_demo_fa_sink_sizer.Fit( self.cf_demo_fa_sink_panel )
+		demo_cf_sizer.Add( self.cf_demo_fa_sink_panel, 1, 0, 0 )
+		
+		self.cf_demo_fa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_fa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_fa_source_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_fa_source = wx.CheckBox( self.cf_demo_fa_source_panel, wx.ID_ANY, u"Focus Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_fa_source.Enable( False )
+		
+		cf_demo_fa_source_sizer.Add( self.cf_demo_fa_source, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_fa_source_panel.SetSizer( cf_demo_fa_source_sizer )
+		self.cf_demo_fa_source_panel.Layout()
+		cf_demo_fa_source_sizer.Fit( self.cf_demo_fa_source_panel )
+		demo_cf_sizer.Add( self.cf_demo_fa_source_panel, 1, 0, 0 )
+		
+		self.cf_demo_aa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_aa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_aa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_aa_sink = wx.CheckBox( self.cf_demo_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_aa_sink.Enable( False )
+		
+		cf_demo_aa_sink_sizer.Add( self.cf_demo_aa_sink, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_aa_sink_panel.SetSizer( cf_demo_aa_sink_sizer )
+		self.cf_demo_aa_sink_panel.Layout()
+		cf_demo_aa_sink_sizer.Fit( self.cf_demo_aa_sink_panel )
+		demo_cf_sizer.Add( self.cf_demo_aa_sink_panel, 1, 0, 0 )
+		
+		self.cf_demo_aa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_aa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_aa_source_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_aa_source = wx.CheckBox( self.cf_demo_aa_source_panel, wx.ID_ANY, u"Avoidance Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_aa_source.Enable( False )
+		
+		cf_demo_aa_source_sizer.Add( self.cf_demo_aa_source, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_aa_source_panel.SetSizer( cf_demo_aa_source_sizer )
+		self.cf_demo_aa_source_panel.Layout()
+		cf_demo_aa_source_sizer.Fit( self.cf_demo_aa_source_panel )
+		demo_cf_sizer.Add( self.cf_demo_aa_source_panel, 1, 0, 0 )
 		
 		
 		cf_sizer.Add( demo_cf_sizer, 1, wx.EXPAND, 5 )
@@ -447,6 +895,117 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		gen_cf_sizer.Add( self.gen_cf_txt, 0, wx.ALL, 5 )
 		
+		self.cf_gen_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_vertex_degree.Enable( False )
+		self.cf_gen_vertex_degree.SetToolTip( u"The vertex degree indicates the number of connections for each planning unit" )
+		
+		gen_cf_sizer.Add( self.cf_gen_vertex_degree, 0, wx.ALL, 5 )
+		
+		self.cf_gen_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_between_cent.Enable( False )
+		self.cf_gen_between_cent.SetToolTip( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
+		
+		gen_cf_sizer.Add( self.cf_gen_between_cent, 0, wx.ALL, 5 )
+		
+		self.cf_gen_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_eig_vect_cent.Enable( False )
+		self.cf_gen_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
+		
+		gen_cf_sizer.Add( self.cf_gen_eig_vect_cent, 0, wx.ALL, 5 )
+		
+		self.cf_gen_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_self_recruit.Enable( False )
+		self.cf_gen_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		
+		gen_cf_sizer.Add( self.cf_gen_self_recruit, 0, wx.ALL, 5 )
+		
+		self.cf_gen_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_outflux.Enable( False )
+		self.cf_gen_outflux.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		
+		gen_cf_sizer.Add( self.cf_gen_outflux, 0, wx.ALL, 5 )
+		
+		self.cf_gen_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_stochasticity_panel.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab." )
+		
+		cf_gen_stochasticity_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_stochasticity = wx.CheckBox( self.cf_gen_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_stochasticity.Enable( False )
+		self.cf_gen_stochasticity.Hide()
+		
+		cf_gen_stochasticity_sizer.Add( self.cf_gen_stochasticity, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_stochasticity_panel.SetSizer( cf_gen_stochasticity_sizer )
+		self.cf_gen_stochasticity_panel.Layout()
+		cf_gen_stochasticity_sizer.Fit( self.cf_gen_stochasticity_panel )
+		gen_cf_sizer.Add( self.cf_gen_stochasticity_panel, 1, 0, 0 )
+		
+		self.cf_gen_fa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_fa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_fa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_fa_sink = wx.CheckBox( self.cf_gen_fa_sink_panel, wx.ID_ANY, u"Focus Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_fa_sink.Enable( False )
+		
+		cf_gen_fa_sink_sizer.Add( self.cf_gen_fa_sink, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_fa_sink_panel.SetSizer( cf_gen_fa_sink_sizer )
+		self.cf_gen_fa_sink_panel.Layout()
+		cf_gen_fa_sink_sizer.Fit( self.cf_gen_fa_sink_panel )
+		gen_cf_sizer.Add( self.cf_gen_fa_sink_panel, 1, 0, 0 )
+		
+		self.cf_gen_fa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_fa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_fa_source_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_fa_source = wx.CheckBox( self.cf_gen_fa_source_panel, wx.ID_ANY, u"Focus Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_fa_source.Enable( False )
+		
+		cf_gen_fa_source_sizer.Add( self.cf_gen_fa_source, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_fa_source_panel.SetSizer( cf_gen_fa_source_sizer )
+		self.cf_gen_fa_source_panel.Layout()
+		cf_gen_fa_source_sizer.Fit( self.cf_gen_fa_source_panel )
+		gen_cf_sizer.Add( self.cf_gen_fa_source_panel, 1, 0, 0 )
+		
+		self.cf_gen_aa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_aa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_aa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_aa_sink = wx.CheckBox( self.cf_gen_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_aa_sink.Enable( False )
+		
+		cf_gen_aa_sink_sizer.Add( self.cf_gen_aa_sink, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_aa_sink_panel.SetSizer( cf_gen_aa_sink_sizer )
+		self.cf_gen_aa_sink_panel.Layout()
+		cf_gen_aa_sink_sizer.Fit( self.cf_gen_aa_sink_panel )
+		gen_cf_sizer.Add( self.cf_gen_aa_sink_panel, 1, 0, 0 )
+		
+		self.cf_gen_aa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_aa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_aa_source_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_aa_source = wx.CheckBox( self.cf_gen_aa_source_panel, wx.ID_ANY, u"Avoidance Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_aa_source.Enable( False )
+		
+		cf_gen_aa_source_sizer.Add( self.cf_gen_aa_source, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_aa_source_panel.SetSizer( cf_gen_aa_source_sizer )
+		self.cf_gen_aa_source_panel.Layout()
+		cf_gen_aa_source_sizer.Fit( self.cf_gen_aa_source_panel )
+		gen_cf_sizer.Add( self.cf_gen_aa_source_panel, 1, 0, 0 )
+		
 		
 		cf_sizer.Add( gen_cf_sizer, 1, wx.EXPAND, 5 )
 		
@@ -457,6 +1016,125 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_cf_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
 		land_cf_sizer.Add( self.land_cf_txt, 0, wx.ALL, 5 )
+		
+		self.cf_land_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_vertex_degree.Enable( False )
+		self.cf_land_vertex_degree.SetToolTip( u"The vertex degree indicates the number of connections for each planning unit" )
+		
+		land_cf_sizer.Add( self.cf_land_vertex_degree, 0, wx.ALL, 5 )
+		
+		self.cf_land_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_between_cent.Enable( False )
+		self.cf_land_between_cent.SetToolTip( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
+		
+		land_cf_sizer.Add( self.cf_land_between_cent, 0, wx.ALL, 5 )
+		
+		self.cf_land_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_eig_vect_cent.Enable( False )
+		self.cf_land_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
+		
+		land_cf_sizer.Add( self.cf_land_eig_vect_cent, 0, wx.ALL, 5 )
+		
+		self.cf_land_recruit_spacer = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		land_cf_sizer.Add( self.cf_land_recruit_spacer, 1, wx.EXPAND |wx.ALL, 5 )
+		
+		self.cf_land_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_self_recruit.SetValue(True) 
+		self.cf_land_self_recruit.Hide()
+		self.cf_land_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		
+		land_cf_sizer.Add( self.cf_land_self_recruit, 0, wx.ALL, 5 )
+		
+		self.cf_land_outflux_spacer = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		land_cf_sizer.Add( self.cf_land_outflux_spacer, 1, wx.EXPAND |wx.ALL, 5 )
+		
+		self.cf_land_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_outflux.SetValue(True) 
+		self.cf_land_outflux.Hide()
+		self.cf_land_outflux.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		
+		land_cf_sizer.Add( self.cf_land_outflux, 0, wx.ALL, 5 )
+		
+		self.cf_land_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_stochasticity_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_stochasticity_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_stochasticity = wx.CheckBox( self.cf_land_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_stochasticity.Enable( False )
+		self.cf_land_stochasticity.Hide()
+		
+		cf_land_stochasticity_sizer.Add( self.cf_land_stochasticity, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_stochasticity_panel.SetSizer( cf_land_stochasticity_sizer )
+		self.cf_land_stochasticity_panel.Layout()
+		cf_land_stochasticity_sizer.Fit( self.cf_land_stochasticity_panel )
+		land_cf_sizer.Add( self.cf_land_stochasticity_panel, 1, 0, 0 )
+		
+		self.cf_land_fa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_fa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse to from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_fa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_fa_sink = wx.CheckBox( self.cf_land_fa_sink_panel, wx.ID_ANY, u"Focus Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_fa_sink.Enable( False )
+		
+		cf_land_fa_sink_sizer.Add( self.cf_land_fa_sink, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_fa_sink_panel.SetSizer( cf_land_fa_sink_sizer )
+		self.cf_land_fa_sink_panel.Layout()
+		cf_land_fa_sink_sizer.Fit( self.cf_land_fa_sink_panel )
+		land_cf_sizer.Add( self.cf_land_fa_sink_panel, 1, 0, 0 )
+		
+		self.cf_land_fa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_fa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_fa_source_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_fa_source = wx.CheckBox( self.cf_land_fa_source_panel, wx.ID_ANY, u"Focus Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_fa_source.Enable( False )
+		
+		cf_land_fa_source_sizer.Add( self.cf_land_fa_source, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_fa_source_panel.SetSizer( cf_land_fa_source_sizer )
+		self.cf_land_fa_source_panel.Layout()
+		cf_land_fa_source_sizer.Fit( self.cf_land_fa_source_panel )
+		land_cf_sizer.Add( self.cf_land_fa_source_panel, 1, 0, 0 )
+		
+		self.cf_land_aa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_aa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_aa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_aa_sink = wx.CheckBox( self.cf_land_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_aa_sink.Enable( False )
+		
+		cf_land_aa_sink_sizer.Add( self.cf_land_aa_sink, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_aa_sink_panel.SetSizer( cf_land_aa_sink_sizer )
+		self.cf_land_aa_sink_panel.Layout()
+		cf_land_aa_sink_sizer.Fit( self.cf_land_aa_sink_panel )
+		land_cf_sizer.Add( self.cf_land_aa_sink_panel, 1, 0, 0 )
+		
+		self.cf_land_aa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_aa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_aa_source_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_aa_source = wx.CheckBox( self.cf_land_aa_source_panel, wx.ID_ANY, u"Avoidance Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_aa_source.Enable( False )
+		
+		cf_land_aa_source_sizer.Add( self.cf_land_aa_source, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_aa_source_panel.SetSizer( cf_land_aa_source_sizer )
+		self.cf_land_aa_source_panel.Layout()
+		cf_land_aa_source_sizer.Fit( self.cf_land_aa_source_panel )
+		land_cf_sizer.Add( self.cf_land_aa_source_panel, 1, 0, 0 )
 		
 		
 		cf_sizer.Add( land_cf_sizer, 1, wx.EXPAND, 5 )
@@ -577,6 +1255,16 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		gen_bd_sizer.Add( self.gen_bd_txt, 0, wx.ALL, 5 )
 		
+		self.bd_gen_conn_boundary = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Connectivity as boundary", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_gen_conn_boundary.Enable( False )
+		
+		gen_bd_sizer.Add( self.bd_gen_conn_boundary, 0, wx.ALL, 5 )
+		
+		self.bd_gen_min_plan_graph = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Minimum Planar Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_gen_min_plan_graph.Enable( False )
+		
+		gen_bd_sizer.Add( self.bd_gen_min_plan_graph, 0, wx.ALL, 5 )
+		
 		
 		bd_sizer.Add( gen_bd_sizer, 1, wx.EXPAND, 5 )
 		
@@ -587,6 +1275,16 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_bd_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
 		land_bd_sizer.Add( self.land_bd_txt, 0, wx.ALL, 5 )
+		
+		self.bd_land_conn_boundary = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Connectivity as boundary", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_land_conn_boundary.Enable( False )
+		
+		land_bd_sizer.Add( self.bd_land_conn_boundary, 0, wx.ALL, 5 )
+		
+		self.bd_land_min_plan_graph = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Minimum Planar Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_land_min_plan_graph.Enable( False )
+		
+		land_bd_sizer.Add( self.bd_land_min_plan_graph, 0, wx.ALL, 5 )
 		
 		
 		bd_sizer.Add( land_bd_sizer, 1, wx.EXPAND, 5 )
@@ -649,7 +1347,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", False, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -786,7 +1484,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_shp_choice.SetSelection( 0 )
 		metrics_opt_sizer.Add( self.metric_shp_choice, 0, wx.ALL, 5 )
 		
-		metric_choiceChoices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
+		metric_choiceChoices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment", u"Outflux", u"Temporal Connectivity Covariance", u"Focus AreaSink", u"Focus Area Sink", u"Avoidance Area Sink", u"Avoidance Area Source", u"Focus Area Source" ]
 		self.metric_choice = wx.Choice( self.metrics_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_choiceChoices, 0 )
 		self.metric_choice.SetSelection( 2 )
 		metrics_opt_sizer.Add( self.metric_choice, 0, wx.ALL, 5 )
@@ -906,7 +1604,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_shp_choice1.SetSelection( 0 )
 		metrics_opt_sizer1.Add( self.metric_shp_choice1, 0, wx.ALL, 5 )
 		
-		metric_choice1Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment" ]
+		metric_choice1Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment", u"Outflux", u"Temporal Connectivity Covariance", u"Focus AreaSink", u"Focus Area Sink", u"Avoidance Area Sink", u"Avoidance Area Source", u"Focus Area Source" ]
 		self.metric_choice1 = wx.Choice( self.metrics_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_choice1Choices, 0 )
 		self.metric_choice1.SetSelection( 2 )
 		metrics_opt_sizer1.Add( self.metric_choice1, 0, wx.ALL, 5 )
@@ -1014,7 +1712,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -1039,6 +1737,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.on_getting_started, id = self.start.GetId() )
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
 		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
+		self.AA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_AA_file )
 		self.demo_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
 		self.demo_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
 		self.demo_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
@@ -1048,6 +1747,24 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
+		self.gen_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
+		self.gen_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
+		self.gen_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
+		self.gen_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
+		self.gen_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
+		self.gen_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
+		self.gen_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
+		self.gen_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
+		self.gen_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
+		self.land_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
+		self.land_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
+		self.land_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
+		self.land_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
+		self.land_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
+		self.land_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
+		self.land_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
+		self.land_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
+		self.land_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
@@ -1105,6 +1822,9 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_FA_file( self, event ):
 		event.Skip()
 	
+	def on_AA_file( self, event ):
+		event.Skip()
+	
 	def on_demo_matrixUnitsRadioBox( self, event ):
 		event.Skip()
 	
@@ -1131,6 +1851,24 @@ class MarxanConnectGUI ( wx.Frame ):
 	
 	def on_demo_rescale_button( self, event ):
 		event.Skip()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	def on_CT_file( self, event ):
 		event.Skip()
