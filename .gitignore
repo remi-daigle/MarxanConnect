@@ -105,3 +105,5 @@ toymap.py
 *.bak
 .Rproj.user
 *.Rhistory
+MarOptTotalAreas.csv
+DebugTraceFile_MarOpt.txt

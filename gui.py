@@ -1347,9 +1347,92 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", False, wx.NullBitmap )
+		spatialMainSizer1 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		spatialMainSizer1.AddGrowableCol( 0 )
+		spatialMainSizer1.AddGrowableRow( 1 )
+		spatialMainSizer1.AddGrowableRow( 2 )
+		spatialMainSizer1.AddGrowableRow( 3 )
+		spatialMainSizer1.AddGrowableRow( 4 )
+		spatialMainSizer1.SetFlexibleDirection( wx.VERTICAL )
+		spatialMainSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
+		
+		self.marxan_title = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Running Marxan", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.marxan_title.Wrap( -1 )
+		self.marxan_title.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		
+		spatialMainSizer1.Add( self.marxan_title, 0, wx.ALL, 5 )
+		
+		marxan_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.marxan_def = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Marxan with Connectivity needs a separate Marxan installation to run the analyses. Please download, unzip, and indicate the directory that contains Marxan below. If properly configured, a command terminal will open to display progress when the \"Run Marxan\" button is pressed", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.marxan_def.Wrap( -1 )
+		marxan_def_sizer.Add( self.marxan_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		spatialMainSizer1.Add( marxan_def_sizer, 1, wx.EXPAND, 5 )
+		
+		self.marxanwebsite = wx.adv.HyperlinkCtrl( self.marxanAnalysis, wx.ID_ANY, u"Marxan Website", u"http://marxan.net/index.php/marxan", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		spatialMainSizer1.Add( self.marxanwebsite, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		marxan_dir_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		marxan_dir_sizer.AddGrowableCol( 1 )
+		marxan_dir_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		marxan_dir_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.marxan_dirtext = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Marxan Directory:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.marxan_dirtext.Wrap( -1 )
+		self.marxan_dirtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		
+		marxan_dir_sizer.Add( self.marxan_dirtext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.marxan_dir = wx.DirPickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\Remi-Work\\Desktop\\Marxan243", u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
+		marxan_dir_sizer.Add( self.marxan_dir, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		spatialMainSizer1.Add( marxan_dir_sizer, 1, wx.EXPAND, 5 )
+		
+		inputdat_file_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		inputdat_file_sizer.AddGrowableCol( 1 )
+		inputdat_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		inputdat_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.inputdat_filetext = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Marxan Input File", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.inputdat_filetext.Wrap( -1 )
+		self.inputdat_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		
+		inputdat_file_sizer.Add( self.inputdat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.inputdat_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		inputdat_file_sizer.Add( self.inputdat_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		self.customize_inputdat = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Customize", wx.DefaultPosition, wx.DefaultSize, 0 )
+		inputdat_file_sizer.Add( self.customize_inputdat, 0, wx.ALL, 5 )
+		
+		
+		spatialMainSizer1.Add( inputdat_file_sizer, 1, wx.EXPAND, 5 )
+		
+		run_marxan_sizer = wx.FlexGridSizer( 1, 3, 0, 0 )
+		run_marxan_sizer.AddGrowableCol( 0 )
+		run_marxan_sizer.SetFlexibleDirection( wx.BOTH )
+		run_marxan_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.spacertextrunmarxan = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spacertextrunmarxan.Wrap( -1 )
+		run_marxan_sizer.Add( self.spacertextrunmarxan, 0, wx.ALL, 5 )
+		
+		self.run_marxan_button = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Run Marxan", wx.DefaultPosition, wx.DefaultSize, 0 )
+		run_marxan_sizer.Add( self.run_marxan_button, 0, wx.ALL, 5 )
+		
+		
+		spatialMainSizer1.Add( run_marxan_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		self.marxanAnalysis.SetSizer( spatialMainSizer1 )
+		self.marxanAnalysis.Layout()
+		spatialMainSizer1.Fit( self.marxanAnalysis )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", True, wx.NullBitmap )
 		self.postMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.auinotebook.AddPage( self.postMarxan, u"5) Post-Marxan Analysis", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -1772,6 +1855,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
+		self.marxan_dir.Bind( wx.EVT_DIRPICKER_CHANGED, self.on_marxan_dir )
+		self.inputdat_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_inputdat_file )
+		self.customize_inputdat.Bind( wx.EVT_BUTTON, self.on_inedit )
+		self.run_marxan_button.Bind( wx.EVT_BUTTON, self.on_run_marxan )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
 		self.plot_graph_button.Bind( wx.EVT_BUTTON, self.on_plot_graph_button )
 	
@@ -1889,6 +1976,18 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_export_metrics( self, event ):
+		event.Skip()
+	
+	def on_marxan_dir( self, event ):
+		event.Skip()
+	
+	def on_inputdat_file( self, event ):
+		event.Skip()
+	
+	def on_inedit( self, event ):
+		event.Skip()
+	
+	def on_run_marxan( self, event ):
 		event.Skip()
 	
 	def on_plot_map_button( self, event ):

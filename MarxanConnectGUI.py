@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # Either load or launch new project
         if len(sys.argv)>1:
@@ -64,7 +64,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # frame.Show()
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(1)
+        self.auinotebook.ChangeSelection(3)
 
     def set_icon(self, frame):
         # set the icon
@@ -579,6 +579,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['bd_filepath'] = self.BD_file.GetPath()
 
+    def on_marxan_dir(self, event):
+        """
+        Defines the directory that contains the Marxan application
+        """
+        self.project['filepaths']['marxan_dir'] = self.marxan_dir.GetPath()
+
+    def on_inputdat_file(self, event):
+        """
+        Defines the input file for Marxan
+        """
+        self.project['filepaths']['marxan_input'] = self.inputdat_file.GetPath()
+
+
     def check_matrix_list_format(self, format, filepath):
         # warn if matrix is wrong format
         print("check if "+filepath+" is in"+format)
@@ -900,6 +913,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.warn_dialog(message = "Multiple Boundary Definitions were selected. Boundary file names have been"
                                        " edited to include type.", caption = "Warning!")
 
+########################### marxan functions ###################################
+
+    def on_inedit(self, event):
+        """
+        Starts Inedit (will fail to load file if it is not named input.dat)
+        """
+        os.system('cd '+os.path.dirname(self.project['filepaths']['marxan_input'])+' && '+os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe'))
+
+    def on_run_marxan(self, event):
+        """
+        Starts Marxan
+        """
+        os.system("start /wait cmd /c " +
+                  os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' + self.project['filepaths'][
+                      'marxan_input'])
 
 ###########################  spec grid popup functions #########################
     def on_customize_spec(self, event):

@@ -11,6 +11,8 @@ if os.name=='nt':
 
     # Replace the target string
     filedata = filedata.replace('SetToolTipString', 'SetToolTip')
+    filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
+    filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
 
     # Write the file out again
     with open('gui.py', 'w', encoding="utf8") as file:
