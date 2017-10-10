@@ -107,3 +107,4 @@ toymap.py
 *.Rhistory
 MarOptTotalAreas.csv
 DebugTraceFile_MarOpt.txt
+data/GBR/output/*
