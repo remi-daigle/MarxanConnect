@@ -26,13 +26,13 @@ THRESHPEN2  1.00000000000000E+0000
 
 Input Files
 INPUTDIR C:\Users\Remi-Work\Desktop\MarxanConnectGUI\data\GBR\input
-SPECNAME spec.dat
+SPECNAME spec_appended.dat
 PUNAME pu.dat
-PUVSPRNAME puvspr2.dat
-BOUNDNAME assymbound.dat
+PUVSPRNAME puvspr2_appended.dat
+BOUNDNAME boundary.dat
 
 Save Files
-SCENNAME output
+SCENNAME test
 SAVERUN 2
 SAVEBEST 2
 SAVESUMMARY 2

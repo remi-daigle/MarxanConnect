@@ -160,7 +160,7 @@ def conmat2connboundary(conmat):
     cm['id1'] = cm.index
     boundary_dat = cm.melt(id_vars=['id1'])
     boundary_dat.columns = ['id1', 'id2', 'boundary']
-    boundary_dat = boundary_dat.to_json(orient='split')
+    boundary_dat = boundary_dat.query('boundary>0').to_json(orient='split')
     return boundary_dat
 
 def conmat2minplanarboundary(conmat):
@@ -171,7 +171,7 @@ def conmat2minplanarboundary(conmat):
     mpgmat['id1'] = conmat.index
     boundary_dat = mpgmat.melt(id_vars=['id1'])
     boundary_dat.columns = ['id1', 'id2', 'boundary']
-    boundary_dat = boundary_dat.to_json(orient='split')
+    boundary_dat = boundary_dat.query('boundary>0').to_json(orient='split')
     return boundary_dat
 
 def conmattime2covariancescore(conmat_time, fa_filepath, pu_filepath):

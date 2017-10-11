@@ -1,7 +1,19 @@
 {
+    "connectivityMetrics": {
+        "boundary": {
+            "min_plan_graph_demo_pu": "{\"columns\":[\"id1\",\"id2\",\"boundary\"],\"index\":[],\"data\":[]}"
+        },
+        "demo_pu_conmat": "{\"columns\":[],\"index\":[],\"data\":[]}",
+        "spec_demo_pu": {
+            "between_cent_demo_pu": [],
+            "eig_vect_cent_demo_pu": [],
+            "self_recruit_demo_pu": [],
+            "vertex_degree_demo_pu": []
+        }
+    },
     "filepaths": {
         "bd_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input\\boundary.dat",
-        "cf_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input\\puvspr2_.dat",
+        "cf_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input\\puvspr2.dat",
         "demo_cu_cm_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\reef_strengths.csv",
         "demo_cu_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\shapefiles\\reefs.shp",
         "demo_pu_cm_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\reef_strengths.csv",
@@ -20,7 +32,8 @@
         "demo_conmat_type": "Connectivity",
         "demo_conmat_units": "Probability",
         "demo_pu_cm_progress": true,
-        "metricsCalculated": false
+        "metricsCalculated": true
     },
+    "spec_demo_pu_dat": "{\"columns\":[\"id\",\"target\",\"spf\",\"name\"],\"index\":[0,1,2,3],\"data\":[[\"1\",\"0.0\",\"1000\",\"between_cent_demo_pu\"],[\"2\",\"0.0\",\"1000\",\"eig_vect_cent_demo_pu\"],[\"3\",\"0.0\",\"1000\",\"self_recruit_demo_pu\"],[\"4\",\"0.0\",\"1000\",\"vertex_degree_demo_pu\"]]}",
     "workingdirectory": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR"
 }
