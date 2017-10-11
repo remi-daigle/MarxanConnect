@@ -109,13 +109,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set default file paths
         pfdir = sys.path[0]
         docdir = self.project['workingdirectory']
-        self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","shapefiles","marxan_pu.shp")
-        self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir,"data","shapefiles","connectivity_grid.shp")
-        self.project['filepaths']['demo_cu_cm_filepath'] = os.path.join(pfdir,"data","grid_connectivity_matrix.csv")
-        self.project['filepaths']['demo_pu_cm_filepath'] = os.path.join(docdir,"PU_connectivity_matrix.csv")
-        self.project['filepaths']['cf_filepath'] = os.path.join(docdir,"puvspr.dat")
-        self.project['filepaths']['spec_filepath'] = os.path.join(docdir,"spec.dat")
-        self.project['filepaths']['bd_filepath'] = os.path.join(docdir,"boundary.dat")
+        self.project['filepaths']['pu_filepath'] = os.path.join(pfdir,"data","GBR","shapefiles","reefs.shp")
+        self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir,"data","GBR","shapefiles","reefs.shp")
+        self.project['filepaths']['demo_cu_cm_filepath'] = os.path.join(pfdir,"data","GBR","reef_strengths.csv")
+        self.project['filepaths']['demo_pu_cm_filepath'] = os.path.join(pfdir,"data","GBR","reef_strengths.csv")
+        self.project['filepaths']['cf_filepath'] = os.path.join(pfdir,"data","GBR","input","puvspr2_.dat")
+        self.project['filepaths']['spec_filepath'] = os.path.join(pfdir,"data","GBR","input","spec.dat")
+        self.project['filepaths']['bd_filepath'] = os.path.join(pfdir,"data","GBR","input","boundary.dat")
+        self.project['filepaths']['bd_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "boundary.dat")
+        self.project['filepaths']['marxan_input'] = os.path.join(pfdir, "data", "GBR", "input.dat")
+        self.project['filepaths']['marxan_dir'] = os.path.join(pfdir,"Marxan243")
 
         # set default file paths in the GUI
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
@@ -125,6 +128,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
         self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
         self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
+        self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
+        self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
+
 
         # if called at launch time, no need to ask users to create a new project file right away
         if(not launch):
@@ -189,6 +195,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
         self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
         self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
+        self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
+        self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
 
     def on_save_project_as(self, event):
         """

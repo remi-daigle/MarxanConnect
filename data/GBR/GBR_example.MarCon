@@ -1,0 +1,26 @@
+{
+    "filepaths": {
+        "bd_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input\\boundary.dat",
+        "cf_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input\\puvspr2_.dat",
+        "demo_cu_cm_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\reef_strengths.csv",
+        "demo_cu_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\shapefiles\\reefs.shp",
+        "demo_pu_cm_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\reef_strengths.csv",
+        "marxan_dir": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\Marxan243",
+        "marxan_input": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input.dat",
+        "projfile": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\GBR_example.MarCon",
+        "projfilename": "GBR_example.MarCon",
+        "pu_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\shapefiles\\reefs.shp",
+        "spec_filepath": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input\\spec.dat"
+    },
+    "options": {
+        "calc_metrics_cu": false,
+        "calc_metrics_pu": true,
+        "demo_conmat_format": "Matrix",
+        "demo_conmat_rescale": "Identical Grids",
+        "demo_conmat_type": "Connectivity",
+        "demo_conmat_units": "Probability",
+        "demo_pu_cm_progress": true,
+        "metricsCalculated": false
+    },
+    "workingdirectory": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR"
+}
