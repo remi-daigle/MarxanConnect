@@ -16,7 +16,7 @@ Installing
 
 ### Windows Installer:
 
-(**WARNING! Marxan with Connectivity is 'pre-alpha' and is not yet fully operational, download at your own risk**)
+(**WARNING! Marxan with Connectivity is in 'alpha' release and is not yet fully operational, download at your own risk**)
 
 Please download the latest [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnect/releases) installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the [Building from source](https://remi-daigle.github.io/MarxanConnect/#building-from-source) instructions to use the latest bleeding edge version of the app.
 
