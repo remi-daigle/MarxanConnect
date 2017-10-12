@@ -11,8 +11,8 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,matrixformat,progressbar=
     rescale the connectivity matrix to match the scale of the planning units
     """
     # load shapefiles
-    pu = gpd.GeoDataFrame.from_file(pu_filepath)
-    cu = gpd.GeoDataFrame.from_file(cu_filepath)
+    pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs({'init': 'epsg:4326'})
+    cu = gpd.GeoDataFrame.from_file(cu_filepath).to_crs({'init': 'epsg:4326'})
 
     # load cu connectivity matrix
     # load correct demographic matrix and transform if necessary
@@ -151,9 +151,42 @@ def conmat2eigvectcent(conmat):
     eigvectcent = g.evcent()
     return eigvectcent
 
+def conmat2outflux(conmat):
+    conmat.as_matrix().sum(1).tolist()
+    return conmat.as_matrix().sum(1).tolist()
+
 def conmat2selfrecruit(conmat):
     selfrecruit = numpy.diag(conmat.as_matrix()).tolist()
     return selfrecruit
+
+def get_intersect_id(area_filepath, pu_filepath,pu_id='ID'):
+    area = gpd.GeoDataFrame.from_file(area_filepath)
+    pu = gpd.GeoDataFrame.from_file(pu_filepath)
+
+    area_id = ()
+    for index, arearow in area.iterrows():
+        for index, purow in pu.iterrows():
+            if purow.geometry.intersects(arearow.geometry):
+                area_id = area_id + (purow[pu_id],)
+                break
+    return area_id
+
+def conmat2sink(conmat, area_filepath, pu_filepath, pu_id='ID'):
+    area_id = get_intersect_id(area_filepath, pu_filepath, pu_id)
+    cm = conmat.copy().as_matrix()
+    for i in conmat.index:
+        if i in area_id:
+            cm[conmat.index == i,:] = 0
+    return cm.sum(0).tolist()
+
+
+def conmat2source(conmat, area_filepath, pu_filepath, pu_id='ID'):
+    area_id = get_intersect_id(area_filepath, pu_filepath, pu_id)
+    cm = conmat.copy().as_matrix()
+    for i in conmat.index:
+        if i in area_id:
+            cm[:, conmat.index == i] = 0
+    return cm.sum(1).tolist()
 
 def conmat2connboundary(conmat):
     cm = conmat.copy()
@@ -174,7 +207,7 @@ def conmat2minplanarboundary(conmat):
     boundary_dat = boundary_dat.query('boundary>0').to_json(orient='split')
     return boundary_dat
 
-def conmattime2covariancescore(conmat_time, fa_filepath, pu_filepath):
+def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
     fa = gpd.GeoDataFrame.from_file(fa_filepath)
     pu = gpd.GeoDataFrame.from_file(pu_filepath)
 
