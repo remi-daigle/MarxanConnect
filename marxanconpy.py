@@ -70,7 +70,7 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
         for sink in pu[pu_id]:
             sources=df.puID==source
             sinks=df.puID==sink
-            if any(sinks) and any(source):
+            if any(sinks) and any(sources):
                 temp_conn=grid_conmat[df.connIndex[sources],:][:,df.connIndex[sinks]]
                 cov_source=df.int_area[sources]/sum(df.int_area[sources])
                 cov_sink=df.int_area[sinks]/sum(df.int_area[sinks])

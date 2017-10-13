@@ -202,7 +202,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set default file paths in GUI
         self.set_GUI_filepaths()
 
-
     def set_GUI_filepaths(self):
         # set default file paths
         # spatial input
@@ -233,7 +232,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Marxan analysis
         self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
         self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
-
 
     def on_save_project_as(self, event):
         """
@@ -1122,6 +1120,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 if self.cf_demo_outflux.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['outflux_' + self.type] = \
                         marxanconpy.conmat2outflux(self.temp[self.type + '_conmat'])
+
+                if self.demo_matrixUnitsRadioBox.GetStringSelection() != "Individuals":
+                    if self.cf_demo_fa_sink.GetValue() or\
+                        self.cf_demo_fa_source.GetValue() or\
+                        self.cf_demo_aa_sink.GetValue() or\
+                        self.cf_demo_aa_source.GetValue():
+                        self.warn_dialog(message="Calculating any 'source' or 'sink' metrics using a connectivity"
+                                                 " matrix with units other than 'Individuals' assumes outflux from all "
+                                                 "planning units is equal.")
 
                 if self.cf_demo_fa_sink.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['fa_sink_' + self.type] = \
