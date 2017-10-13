@@ -457,7 +457,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         if metric == None:
             patches = []
-            colour = tuple(c / 255 for c in tuple(c / 255 for c in colour))
+            colour = tuple(c / 255 for c in colour)
             for poly in sf.geometry:
                 mpoly = shapely.ops.transform(self.plot.map, poly)
                 patches.append(PolygonPatch(mpoly))
