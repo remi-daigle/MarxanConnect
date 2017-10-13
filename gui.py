@@ -1201,7 +1201,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		cf_export_radioBoxChoices = [ u"Export", u"Append" ]
 		self.cf_export_radioBox = wx.RadioBox( self.connectivityMetrics, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, cf_export_radioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.cf_export_radioBox.SetSelection( 0 )
+		self.cf_export_radioBox.SetSelection( 1 )
 		cf_export_sizer.Add( self.cf_export_radioBox, 0, wx.ALL, 5 )
 		
 		cf_file_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
@@ -1888,6 +1888,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
 		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
+		self.demo_CU_file_pu_id.Bind( wx.EVT_TEXT, self.on_demo_CU_file_pu_id )
 		self.demo_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
@@ -1994,6 +1995,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_CU_file( self, event ):
+		event.Skip()
+	
+	def on_demo_CU_file_pu_id( self, event ):
 		event.Skip()
 	
 	def on_demo_PU_CM_progress( self, event ):

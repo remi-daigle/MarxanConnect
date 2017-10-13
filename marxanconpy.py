@@ -6,7 +6,7 @@ import wx
 import os
 
 
-def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,matrixformat,progressbar=False):
+def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,progressbar=False):
     """
     rescale the connectivity matrix to match the scale of the planning units
     """
@@ -54,7 +54,7 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,matrixformat,progressbar=
             dlg.Update(count)
         for index2, connID in cu.iterrows():
            if puID.geometry.intersects(connID.geometry):
-               con_mat_pu.append({'geometry': puID.geometry.intersection(connID.geometry), 'puID':puID.ID, 'connID': connID.ID, 'puIndex': index, 'connIndex': index2,'int_area': puID.geometry.intersection(connID.geometry).area, 'conn_area': connID.geometry.area, 'pu_area': puID.geometry.area})
+               con_mat_pu.append({'geometry': puID.geometry.intersection(connID.geometry), 'puID':puID[pu_id], 'connID': connID[cu_id], 'puIndex': index, 'connIndex': index2,'int_area': puID.geometry.intersection(connID.geometry).area, 'conn_area': connID.geometry.area, 'pu_area': puID.geometry.area})
 
 
     # make intersection GeoDataFrame
@@ -63,45 +63,45 @@ def rescale_matrix(pu_filepath,cu_filepath,cm_filepath,matrixformat,progressbar=
 
     # populate rescaled pu connectivity matrix
     pu_conmat = numpy.zeros((len(pu),len(pu)))
-    for source in pu.ID:
+    for source in pu[pu_id]:
         if progressbar:
             count += 9
             dlg.Update(count)
-        for sink in pu.ID:
+        for sink in pu[pu_id]:
             sources=df.puID==source
             sinks=df.puID==sink
             if any(sinks) and any(source):
                 temp_conn=grid_conmat[df.connIndex[sources],:][:,df.connIndex[sinks]]
                 cov_source=df.int_area[sources]/sum(df.int_area[sources])
                 cov_sink=df.int_area[sinks]/sum(df.int_area[sinks])
-                pu_conmat[numpy.array(pu.ID==source),numpy.array(pu.ID==sink)]=sum(sum(((temp_conn*numpy.array(cov_sink)).T*numpy.array(cov_source))))
+                pu_conmat[numpy.array(pu[pu_id]==source),numpy.array(pu[pu_id]==sink)]=sum(sum(((temp_conn*numpy.array(cov_sink)).T*numpy.array(cov_source))))
             else:
-                pu_conmat[numpy.array(pu.ID==source),numpy.array(pu.ID==sink)]=0
+                pu_conmat[numpy.array(pu[pu_id]==source),numpy.array(pu[pu_id]==sink)]=0
 
-    pu_conmat = pandas.DataFrame(pu_conmat, index=pu.ID, columns=pu.ID)
+    pu_conmat = pandas.DataFrame(pu_conmat, index=pu[pu_id], columns=pu[pu_id])
     pu_conmat.index.name = "puID"
 
     if time:
         # populate rescaled pu connectivity matrix
         for t in grid_conmat_time['time'].unique():
             pu_conmat_t = numpy.zeros((len(pu), len(pu)))
-            for source in pu.ID:
+            for source in pu[pu_id]:
                 if progressbar:
                     count += 9
                     dlg.Update(count)
-                for sink in pu.ID:
+                for sink in pu[pu_id]:
                     sources = df.puID == source
                     sinks = df.puID == sink
                     if any(sinks) and any(source):
                         temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
                         cov_source = df.int_area[sources] / sum(df.int_area[sources])
                         cov_sink = df.int_area[sinks] / sum(df.int_area[sinks])
-                        pu_conmat_t[numpy.array(pu.ID == source), numpy.array(pu.ID == sink)] = sum(
+                        pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
                             sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
                     else:
-                        pu_conmat_t[numpy.array(pu.ID == source), numpy.array(pu.ID == sink)] = 0
+                        pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = 0
 
-            pu_conmat_t = pandas.DataFrame(pu_conmat_t, index=pu.ID, columns=pu.ID)
+            pu_conmat_t = pandas.DataFrame(pu_conmat_t, index=pu[pu_id], columns=pu[pu_id])
             pu_conmat_t['id1'] = pu_conmat_t.index
             pu_conmat_t['time'] = t
             if t==grid_conmat_time['time'].unique()[0]:
@@ -218,7 +218,6 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
             if purow.geometry.intersects(farow.geometry):
                 fa_id = fa_id + (purow.ID,)
                 break
-    print(fa_id)
     if any([fid in conmat_time.id2.unique().tolist() for fid in fa_id]):
         cov_list = []
         for fa1 in fa_id:
@@ -237,5 +236,4 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
         score = -cov_list.groupby('id2').sum()
         return score['cov'].tolist()
     else:
-        print("no IDs match")
         return [0] * len(conmat_time.id2.unique())
