@@ -326,7 +326,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
             self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
-        self.plot.figure = plt.figure()
+        self.plot.figure = plt.figure(figsize=self.plot.GetClientSize()/wx.ScreenDC().GetPPI()[0])
         self.plot.axes = self.plot.figure.gca()
         self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
         self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
