@@ -779,6 +779,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 # ###########################  option setting functions ################################################################
     def on_demo_matrixUnitsRadioBox(self, event):
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
+        self.enable_metrics()
 
     def on_demo_matrixTypeRadioBox(self, event):
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
@@ -935,6 +936,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 demo_fa_enable = False
                 demo_fa_time_enable = False
 
+            if self.demo_matrixUnitsRadioBox.GetStringSelection() == "Individuals":
+                demo_ind_enable = True
+            else:
+                demo_ind_enable = False
             if self.project['filepaths']['aa_filepath'] != "":
                 demo_aa_enable = True
             else:
@@ -944,6 +949,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             demo_enable = False
             demo_fa_enable = False
             demo_fa_time_enable = False
+            demo_ind_enable = False
             demo_aa_enable = False
 
         if self.project['filepaths']['gen_pu_cm_filepath'] != "":
@@ -984,7 +990,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_between_cent.Enable(enable=demo_enable)
         self.cf_demo_eig_vect_cent.Enable(enable=demo_enable)
         self.cf_demo_self_recruit.Enable(enable=demo_enable)
-        self.cf_demo_outflux.Enable(enable=demo_enable)
+        self.cf_demo_outflux.Enable(enable=demo_ind_enable)
         self.cf_demo_stochasticity.Enable(enable=demo_fa_time_enable)
         self.cf_demo_fa_sink.Enable(enable=demo_fa_enable)
         self.cf_demo_fa_source.Enable(enable=demo_fa_enable)
@@ -995,7 +1001,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_gen_between_cent.Enable(enable=gen_enable)
         self.cf_gen_eig_vect_cent.Enable(enable=gen_enable)
         self.cf_gen_self_recruit.Enable(enable=gen_enable)
-        self.cf_gen_outflux.Enable(enable=gen_enable)
         self.cf_gen_fa_sink.Enable(enable=gen_fa_enable)
         self.cf_gen_fa_source.Enable(enable=gen_fa_enable)
         self.cf_gen_aa_sink.Enable(enable=gen_aa_enable)

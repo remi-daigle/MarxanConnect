@@ -181,7 +181,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		aa_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		aa_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.AA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Focus Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.AA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Avoidance Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.AA_filetext.Wrap( -1 )
 		self.AA_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		
@@ -842,19 +842,32 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.cf_demo_between_cent, 0, wx.ALL, 5 )
 		
 		self.cf_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_eig_vect_cent.SetValue(True) 
 		self.cf_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
 		
 		demo_cf_sizer.Add( self.cf_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
 		self.cf_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		self.cf_demo_self_recruit.SetValue(True) 
+		self.cf_demo_self_recruit.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
-		self.cf_demo_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_outflux.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		self.cf_demo_outflux_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_outflux_panel.SetToolTip( u"Outflux optimizes for 'productive' areas. It gives a higher value to planning units from which greater numbers of individuals originate. This is only available if the units of the connectivity matrix is \"Individuals\". " )
 		
-		demo_cf_sizer.Add( self.cf_demo_outflux, 0, wx.ALL, 5 )
+		cf_demo_outflux_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_outflux = wx.CheckBox( self.cf_demo_outflux_panel, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_outflux.SetToolTip( u"Outflux optimizes for 'productive' areas. It gives a higher value to planning units from which greater numbers of individuals originate. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		
+		cf_demo_outflux_sizer.Add( self.cf_demo_outflux, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_outflux_panel.SetSizer( cf_demo_outflux_sizer )
+		self.cf_demo_outflux_panel.Layout()
+		cf_demo_outflux_sizer.Fit( self.cf_demo_outflux_panel )
+		demo_cf_sizer.Add( self.cf_demo_outflux_panel, 1, 0, 5 )
 		
 		self.cf_demo_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_demo_stochasticity_panel.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab." )
@@ -863,6 +876,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_demo_stochasticity = wx.CheckBox( self.cf_demo_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_stochasticity.Enable( False )
+		self.cf_demo_stochasticity.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab." )
 		
 		cf_demo_stochasticity_sizer.Add( self.cf_demo_stochasticity, 0, wx.ALL, 5 )
 		
@@ -879,6 +893,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_demo_fa_sink = wx.CheckBox( self.cf_demo_fa_sink_panel, wx.ID_ANY, u"Focus Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_fa_sink.Enable( False )
+		self.cf_demo_fa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
 		cf_demo_fa_sink_sizer.Add( self.cf_demo_fa_sink, 0, wx.ALL, 5 )
 		
@@ -895,6 +910,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_demo_fa_source = wx.CheckBox( self.cf_demo_fa_source_panel, wx.ID_ANY, u"Focus Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_fa_source.Enable( False )
+		self.cf_demo_fa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
 		cf_demo_fa_source_sizer.Add( self.cf_demo_fa_source, 0, wx.ALL, 5 )
 		
@@ -911,6 +927,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_demo_aa_sink = wx.CheckBox( self.cf_demo_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_aa_sink.Enable( False )
+		self.cf_demo_aa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
 		
 		cf_demo_aa_sink_sizer.Add( self.cf_demo_aa_sink, 0, wx.ALL, 5 )
 		
@@ -927,6 +944,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_demo_aa_source = wx.CheckBox( self.cf_demo_aa_source_panel, wx.ID_ANY, u"Avoidance Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_aa_source.Enable( False )
+		self.cf_demo_aa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
 		
 		cf_demo_aa_source_sizer.Add( self.cf_demo_aa_source, 0, wx.ALL, 5 )
 		
@@ -967,15 +985,16 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_gen_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_gen_self_recruit.Enable( False )
-		self.cf_gen_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
+		self.cf_gen_self_recruit.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		gen_cf_sizer.Add( self.cf_gen_self_recruit, 0, wx.ALL, 5 )
 		
 		self.cf_gen_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_gen_outflux.Enable( False )
+		self.cf_gen_outflux.Hide()
 		self.cf_gen_outflux.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
-		gen_cf_sizer.Add( self.cf_gen_outflux, 0, wx.ALL, 5 )
+		gen_cf_sizer.Add( self.cf_gen_outflux, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
 		self.cf_gen_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_gen_stochasticity_panel.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab." )
@@ -1001,6 +1020,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_gen_fa_sink = wx.CheckBox( self.cf_gen_fa_sink_panel, wx.ID_ANY, u"Focus Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_gen_fa_sink.Enable( False )
+		self.cf_gen_fa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
 		cf_gen_fa_sink_sizer.Add( self.cf_gen_fa_sink, 0, wx.ALL, 5 )
 		
@@ -1017,6 +1037,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_gen_fa_source = wx.CheckBox( self.cf_gen_fa_source_panel, wx.ID_ANY, u"Focus Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_gen_fa_source.Enable( False )
+		self.cf_gen_fa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
 		cf_gen_fa_source_sizer.Add( self.cf_gen_fa_source, 0, wx.ALL, 5 )
 		
@@ -1033,6 +1054,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_gen_aa_sink = wx.CheckBox( self.cf_gen_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_gen_aa_sink.Enable( False )
+		self.cf_gen_aa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
 		
 		cf_gen_aa_sink_sizer.Add( self.cf_gen_aa_sink, 0, wx.ALL, 5 )
 		
@@ -1049,6 +1071,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_gen_aa_source = wx.CheckBox( self.cf_gen_aa_source_panel, wx.ID_ANY, u"Avoidance Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_gen_aa_source.Enable( False )
+		self.cf_gen_aa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
 		
 		cf_gen_aa_source_sizer.Add( self.cf_gen_aa_source, 0, wx.ALL, 5 )
 		
@@ -1087,25 +1110,19 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		land_cf_sizer.Add( self.cf_land_eig_vect_cent, 0, wx.ALL, 5 )
 		
-		self.cf_land_recruit_spacer = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		land_cf_sizer.Add( self.cf_land_recruit_spacer, 1, wx.EXPAND |wx.ALL, 5 )
-		
 		self.cf_land_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_self_recruit.SetValue(True) 
 		self.cf_land_self_recruit.Hide()
 		self.cf_land_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
-		land_cf_sizer.Add( self.cf_land_self_recruit, 0, wx.ALL, 5 )
-		
-		self.cf_land_outflux_spacer = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		land_cf_sizer.Add( self.cf_land_outflux_spacer, 1, wx.EXPAND |wx.ALL, 5 )
+		land_cf_sizer.Add( self.cf_land_self_recruit, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
 		self.cf_land_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_outflux.SetValue(True) 
 		self.cf_land_outflux.Hide()
 		self.cf_land_outflux.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
-		land_cf_sizer.Add( self.cf_land_outflux, 0, wx.ALL, 5 )
+		land_cf_sizer.Add( self.cf_land_outflux, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
 		self.cf_land_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_land_stochasticity_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
@@ -1131,6 +1148,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_land_fa_sink = wx.CheckBox( self.cf_land_fa_sink_panel, wx.ID_ANY, u"Focus Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_fa_sink.Enable( False )
+		self.cf_land_fa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
 		cf_land_fa_sink_sizer.Add( self.cf_land_fa_sink, 0, wx.ALL, 5 )
 		
@@ -1147,6 +1165,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_land_fa_source = wx.CheckBox( self.cf_land_fa_source_panel, wx.ID_ANY, u"Focus Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_fa_source.Enable( False )
+		self.cf_land_fa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
 		cf_land_fa_source_sizer.Add( self.cf_land_fa_source, 0, wx.ALL, 5 )
 		
@@ -1163,6 +1182,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_land_aa_sink = wx.CheckBox( self.cf_land_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Sink", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_aa_sink.Enable( False )
+		self.cf_land_aa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
 		
 		cf_land_aa_sink_sizer.Add( self.cf_land_aa_sink, 0, wx.ALL, 5 )
 		
@@ -1179,6 +1199,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.cf_land_aa_source = wx.CheckBox( self.cf_land_aa_source_panel, wx.ID_ANY, u"Avoidance Area Source", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_aa_source.Enable( False )
+		self.cf_land_aa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
 		
 		cf_land_aa_source_sizer.Add( self.cf_land_aa_source, 0, wx.ALL, 5 )
 		
@@ -1293,6 +1314,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_bd_sizer.Add( self.bd_demo_conn_boundary, 0, wx.ALL, 5 )
 		
 		self.bd_demo_min_plan_graph = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Minimum Planar Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_demo_min_plan_graph.SetValue(True) 
 		demo_bd_sizer.Add( self.bd_demo_min_plan_graph, 0, wx.ALL, 5 )
 		
 		
