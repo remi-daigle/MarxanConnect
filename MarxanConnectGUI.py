@@ -26,7 +26,7 @@ import sys
 import pandas
 import numpy
 import networkx as nx
-# import threading
+import subprocess
 import json
 
 # import MarxanConnect python module
@@ -906,14 +906,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # enable metrics
         self.enable_metrics()
 
-    # def on_demo_rescale_button(self, event):
-    #     """
-    #     Rescales the connectivity matrix to match the scale of the planning units
-    #     """
-    #     self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
-    #                                   filepath=self.project['filepaths']['demo_cu_cm_filepath'])
-    #     ProcessThreading(parent=self, rescale_matrix=True)
-
     def on_demo_PU_CM_progress(self, event):
         """
         Checks if the planning unit connectivity matrix progress bar should be activated. (It freezes up the GUI)
@@ -1030,7 +1022,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                       filepath=self.project['filepaths']['demo_cu_cm_filepath'])
         self.temp = {}
         # create dict entry for connectivityMetrics
-        if not 'connectivityMetrics' in self.project:
+
+        if 'connectivityMetrics' not in self.project:
+
             self.project['connectivityMetrics'] = {}
 
         self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
@@ -1066,8 +1060,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             pandas.read_json(self.temp['demo_pu_conmat'],
                              orient='split').to_csv(
                 self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
-
-
 
 # ##########################  metric related functions ################################################################
 
@@ -1350,8 +1342,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Starts Inedit (will fail to load file if it is not named input.dat)
         """
-        os.system('cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) + ' && ' + os.path.join(
-            self.project['filepaths']['marxan_dir'], 'Inedit.exe'))
+        subprocess.call(os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe'),
+                        cwd=os.path.dirname(self.project['filepaths']['marxan_input']))
 
     def on_run_marxan(self, event):
         """
@@ -1371,11 +1363,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
 
         for self.temp['file'] in range(self.temp['NUMREPS']):
-            self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + "_r" + "%05d" % (self.temp['file'] + 1) + ".txt")
+            self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'],
+                                           self.temp['SCENNAME'] + "_r" + "%05d" % (self.temp['file'] + 1) + ".txt")
             if self.temp['file'] == 0:
                 self.temp['select_freq'] = pandas.read_csv(self.temp['fn'])
             else:
-                self.temp['select_freq']['solution'] = self.temp['select_freq']['solution'] + pandas.read_csv(self.temp['fn'])['solution']
+                self.temp['select_freq']['solution'] = self.temp['select_freq']['solution'] + \
+                                                       pandas.read_csv(self.temp['fn'])['solution']
 
         self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq']['solution'].tolist()
 
@@ -1545,62 +1539,6 @@ class GettingStarted (wx.Frame):
         startMainSizer.Fit(self.gettingStarted)
 
 # ######################################################################################################################
-
-
-# ##########################  threading ################################################################################
-
-# class ProcessThreading(object):
-#     """
-#     The run() method will be started and it will run in the background
-#     until the application exits.
-#     """
-#
-#     def __init__(self, parent, rescale_matrix=False):
-#         self.parent = parent
-#         self.rescale_matrix = rescale_matrix
-#
-#         thread = threading.Thread(target=self.run, args=())
-#         thread.daemon = True  # Daemonize thread
-#         thread.start()  # Start the execution
-#
-#     def run(self):
-#         if self.rescale_matrix:
-#             self.temp = {}
-#             # create dict entry for connectivityMetrics
-#             if not 'connectivityMetrics' in self.parent.project:
-#                 self.parent.project['connectivityMetrics'] = {}
-#
-#             self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
-#                 self.parent.project['filepaths']['pu_filepath'],
-#                 self.parent.project['filepaths']['pu_file_pu_id'],
-#                 self.parent.project['filepaths']['demo_cu_filepath'],
-#                 self.parent.project['filepaths']['demo_cu_file_pu_id'],
-#                 self.parent.project['filepaths']['demo_cu_cm_filepath'],
-#                 matrixformat=self.parent.project['options']['demo_conmat_format'],
-#                 edge=self.parent.project['options']['demo_conmat_rescale_edge'],
-#                 progressbar=self.parent.project['options']['demo_pu_cm_progress'])
-#
-#             if self.parent.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
-#                 self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
-#                     self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'], var_name='id2',
-#                                                                                value_name='value').to_json(
-#                     orient='split')
-#                 self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
-#                     self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(orient='split')
-#                 pandas.read_json(self.temp['demo_pu_conmat_time'],
-#                                  orient='split').to_csv(
-#                     self.parent.project['filepaths']['demo_pu_cm_filepath'],
-#                     index=False, header=True, sep=",")
-#                 pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
-#                     str.replace(self.parent.project['filepaths']['demo_pu_cm_filepath'], '.csv', '_mean_of_times.csv'),
-#                     index=True, header=True, sep=",")
-#
-#             else:
-#                 self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
-#                 pandas.read_json(self.temp['demo_pu_conmat'],
-#                                  orient='split').to_csv(
-#                     self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
-#
 
 # ########################## debug mode ################################################################################
 
