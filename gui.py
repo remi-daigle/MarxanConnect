@@ -19,7 +19,7 @@ import wx.grid
 class MarxanConnectGUI ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1090,802 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1050,802 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -292,7 +292,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer.Add( demo_cu_cm_file_sizer, 1, wx.EXPAND, 5 )
 		
-		demo_rescale_sizer = wx.BoxSizer( wx.VERTICAL )
+		demo_rescale_txt_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		demo_rescale_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -301,15 +301,29 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_rescale_def_sizer.Add( self.demo_rescale_def_txt, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		demo_rescale_sizer.Add( demo_rescale_def_sizer, 1, wx.EXPAND, 5 )
+		demo_rescale_txt_sizer.Add( demo_rescale_def_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		demoMainSizer.Add( demo_rescale_txt_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		
+		demo_rescale_sizer = wx.FlexGridSizer( 1, 2, 0, 0 )
+		demo_rescale_sizer.AddGrowableCol( 0 )
+		demo_rescale_sizer.AddGrowableCol( 1 )
+		demo_rescale_sizer.SetFlexibleDirection( wx.BOTH )
+		demo_rescale_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		demo_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
-		self.demo_rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix?", wx.DefaultPosition, wx.DefaultSize, demo_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.demo_rescaleRadioBox.SetSelection( 0 )
-		demo_rescale_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		self.demo_rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, demo_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_rescaleRadioBox.SetSelection( 1 )
+		demo_rescale_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
+		demo_rescale_edgeRadioBoxChoices = [ u"Proportional to overlap", u"Assume homogenous connectivity" ]
+		self.demo_rescale_edgeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescaling edge handling", wx.DefaultPosition, wx.DefaultSize, demo_rescale_edgeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_rescale_edgeRadioBox.SetSelection( 0 )
+		demo_rescale_sizer.Add( self.demo_rescale_edgeRadioBox, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 		
 		
-		demoMainSizer.Add( demo_rescale_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_rescale_sizer, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
 		
 		demo_cu_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -1909,7 +1923,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
 		self.demo_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
-		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
+		self.demo_rescale_edgeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescale_edgeRadioBox )
+		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_file )
 		self.demo_CU_file_pu_id.Bind( wx.EVT_TEXT, self.on_demo_CU_file_pu_id )
 		self.demo_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
@@ -2016,7 +2031,10 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_demo_rescaleRadioBox( self, event ):
 		event.Skip()
 	
-	def on_CU_file( self, event ):
+	def on_demo_rescale_edgeRadioBox( self, event ):
+		event.Skip()
+	
+	def on_demo_CU_file( self, event ):
 		event.Skip()
 	
 	def on_demo_CU_file_pu_id( self, event ):
@@ -2046,6 +2064,8 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_gen_rescaleRadioBox( self, event ):
 		event.Skip()
 	
+	def on_CU_file( self, event ):
+		event.Skip()
 	
 	
 	

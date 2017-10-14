@@ -26,7 +26,7 @@ import sys
 import pandas
 import numpy
 import networkx as nx
-import threading
+# import threading
 import json
 
 # import MarxanConnect python module
@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # Either load or launch new project
         if len(sys.argv) > 1:
@@ -61,7 +61,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted (parent=self)
-            frame.Show()
+            # frame.Show()
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -98,6 +98,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
+        self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
         self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
         self.project['options']['metricsCalculated'] = False
@@ -107,16 +108,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         docdir = self.project['workingdirectory']
 
         # spatial input
-        self.project['filepaths']['pu_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs_connectivity.shp")
-        self.project['filepaths']['pu_file_pu_id'] = "con_id"
+        self.project['filepaths']['pu_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs.shp")
+        self.project['filepaths']['pu_file_pu_id'] = "pu_id"
         self.project['filepaths']['fa_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs_IUCN_IorII.shp")
         self.project['filepaths']['aa_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "ports.shp")
 
         # connectivity input
-        self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs.shp")
-        self.project['filepaths']['demo_cu_file_pu_id'] = "ID"
+        self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs_connectivity.shp")
+        self.project['filepaths']['demo_cu_file_pu_id'] = "con_id"
         self.project['filepaths']['demo_cu_cm_filepath'] = os.path.join(pfdir, "data", "GBR", "reef_strengths.csv")
-        self.project['filepaths']['demo_pu_cm_filepath'] = os.path.join(pfdir, "data", "GBR", "reef_strengths.csv")
+        self.project['filepaths']['demo_pu_cm_filepath'] = os.path.join(pfdir, "data", "GBR", "reef_strengths_rescaled.csv")
         self.project['filepaths']['gen_cu_filepath'] = ""
         self.project['filepaths']['gen_cu_file_pu_id'] = "ID"
         self.project['filepaths']['gen_cu_cm_filepath'] = ""
@@ -186,8 +187,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
         self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
         self.demo_rescaleRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale'])
+        self.demo_rescale_edgeRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale_edge'])
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
+
+        # set default file paths in GUI
+        self.set_GUI_filepaths()
 
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event=None)
@@ -198,9 +203,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.export_metrics.Enable(enable=True)
             self.custom_spec_panel.SetToolTip(None)
         self.enable_metrics()
-
-        # set default file paths in GUI
-        self.set_GUI_filepaths()
 
     def set_GUI_filepaths(self):
         # set default file paths
@@ -377,7 +379,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 legend2 = self.metric_legend1.GetCurrentSelection()
                 type2 = self.get_plot_type(selection=self.metric_shp_choice1.GetStringSelection())
                 metric_type2 = self.get_metric_type(selection=self.metric_choice1.GetStringSelection())
-                metric2 = self.project['connectivityMetrics']['spec_' + type2][metric_type2 + type2]
+                if type2 == "pu":
+                    metric2 = self.project['connectivityMetrics'][metric_type2]
+                else:
+                    metric2 = self.project['connectivityMetrics']['spec_' + type2][metric_type2 + type2]
 
             elif self.lyr2_choice.GetChoiceCtrl().GetStringSelection() == "Outline of shapefile":
                 colour2 = self.poly_col1.GetColour()
@@ -797,6 +802,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             enable = True
 
+        self.demo_rescale_edgeRadioBox.Enable(enable)
         self.demo_CU_def.Enable(enable)
         self.demo_CU_filetext.Enable(enable)
         self.demo_CU_file_pu_id.Enable(enable)
@@ -822,6 +828,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # enable metrics
         self.enable_metrics()
+
+    def on_demo_rescale_edgeRadioBox(self, event):
+        self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
 
     def on_gen_rescaleRadioBox(self, event):
         """
@@ -897,13 +906,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # enable metrics
         self.enable_metrics()
 
-    def on_demo_rescale_button(self, event):
-        """
-        Rescales the connectivity matrix to match the scale of the planning units
-        """
-        self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
-                                      filepath=self.project['filepaths']['demo_cu_cm_filepath'])
-        ProcessThreading(parent=self, rescale_matrix=True)
+    # def on_demo_rescale_button(self, event):
+    #     """
+    #     Rescales the connectivity matrix to match the scale of the planning units
+    #     """
+    #     self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+    #                                   filepath=self.project['filepaths']['demo_cu_cm_filepath'])
+    #     ProcessThreading(parent=self, rescale_matrix=True)
 
     def on_demo_PU_CM_progress(self, event):
         """
@@ -1012,7 +1021,55 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_land_aa_sink.Enable(enable=land_aa_enable)
         self.cf_land_aa_source.Enable(enable=land_aa_enable)
 
-    # ##########################  metric related functions #########################
+# ########################## rescaling #################################################################################
+    def on_demo_rescale_button(self, event):
+        """
+        Rescales the connectivity matrix to match the scale of the planning units
+        """
+        self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+                                      filepath=self.project['filepaths']['demo_cu_cm_filepath'])
+        self.temp = {}
+        # create dict entry for connectivityMetrics
+        if not 'connectivityMetrics' in self.project:
+            self.project['connectivityMetrics'] = {}
+
+        self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
+            self.project['filepaths']['pu_filepath'],
+            self.project['filepaths']['pu_file_pu_id'],
+            self.project['filepaths']['demo_cu_filepath'],
+            self.project['filepaths']['demo_cu_file_pu_id'],
+            self.project['filepaths']['demo_cu_cm_filepath'],
+            matrixformat=self.project['options']['demo_conmat_format'],
+            edge=self.project['options']['demo_conmat_rescale_edge'],
+            progressbar=self.project['options']['demo_pu_cm_progress'])
+
+        if self.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
+            self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
+                self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
+                                                                           var_name='id2',
+                                                                           value_name='value').to_json(
+                orient='split')
+            self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
+                self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(
+                orient='split')
+            pandas.read_json(self.temp['demo_pu_conmat_time'],
+                             orient='split').to_csv(
+                self.project['filepaths']['demo_pu_cm_filepath'],
+                index=False, header=True, sep=",")
+            pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
+                str.replace(self.project['filepaths']['demo_pu_cm_filepath'], '.csv',
+                            '_mean_of_times.csv'),
+                index=True, header=True, sep=",")
+
+        else:
+            self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
+            pandas.read_json(self.temp['demo_pu_conmat'],
+                             orient='split').to_csv(
+                self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+
+
+
+# ##########################  metric related functions ################################################################
 
     def on_calc_metrics(self, event):
         """
@@ -1492,57 +1549,58 @@ class GettingStarted (wx.Frame):
 
 # ##########################  threading ################################################################################
 
-class ProcessThreading(object):
-    """
-    The run() method will be started and it will run in the background
-    until the application exits.
-    """
-
-    def __init__(self, parent, rescale_matrix=False):
-        self.parent = parent
-        self.rescale_matrix = rescale_matrix
-
-        thread = threading.Thread(target=self.run, args=())
-        thread.daemon = True  # Daemonize thread
-        thread.start()  # Start the execution
-
-    def run(self):
-        if self.rescale_matrix:
-            self.temp = {}
-            # create dict entry for connectivityMetrics
-            if not 'connectivityMetrics' in self.parent.project:
-                self.parent.project['connectivityMetrics'] = {}
-
-            self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
-                self.parent.project['filepaths']['pu_filepath'],
-                self.parent.project['filepaths']['pu_file_pu_id'],
-                self.parent.project['filepaths']['demo_cu_filepath'],
-                self.parent.project['filepaths']['demo_cu_file_pu_id'],
-                self.parent.project['filepaths']['demo_cu_cm_filepath'],
-                matrixformat=self.parent.demo_matrixFormatRadioBox.GetStringSelection(),
-                progressbar=self.parent.project['options']['demo_pu_cm_progress'])
-
-            if self.parent.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
-                self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
-                    self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'], var_name='id2',
-                                                                               value_name='value').to_json(
-                    orient='split')
-                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
-                    self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(orient='split')
-                pandas.read_json(self.temp['demo_pu_conmat_time'],
-                                 orient='split').to_csv(
-                    self.parent.project['filepaths']['demo_pu_cm_filepath'],
-                    index=False, header=True, sep=",")
-                pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
-                    str.replace(self.parent.project['filepaths']['demo_pu_cm_filepath'], '.csv', '_mean_of_times.csv'),
-                    index=True, header=True, sep=",")
-
-            else:
-                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
-                pandas.read_json(self.temp['demo_pu_conmat'],
-                                 orient='split').to_csv(
-                    self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
-
+# class ProcessThreading(object):
+#     """
+#     The run() method will be started and it will run in the background
+#     until the application exits.
+#     """
+#
+#     def __init__(self, parent, rescale_matrix=False):
+#         self.parent = parent
+#         self.rescale_matrix = rescale_matrix
+#
+#         thread = threading.Thread(target=self.run, args=())
+#         thread.daemon = True  # Daemonize thread
+#         thread.start()  # Start the execution
+#
+#     def run(self):
+#         if self.rescale_matrix:
+#             self.temp = {}
+#             # create dict entry for connectivityMetrics
+#             if not 'connectivityMetrics' in self.parent.project:
+#                 self.parent.project['connectivityMetrics'] = {}
+#
+#             self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
+#                 self.parent.project['filepaths']['pu_filepath'],
+#                 self.parent.project['filepaths']['pu_file_pu_id'],
+#                 self.parent.project['filepaths']['demo_cu_filepath'],
+#                 self.parent.project['filepaths']['demo_cu_file_pu_id'],
+#                 self.parent.project['filepaths']['demo_cu_cm_filepath'],
+#                 matrixformat=self.parent.project['options']['demo_conmat_format'],
+#                 edge=self.parent.project['options']['demo_conmat_rescale_edge'],
+#                 progressbar=self.parent.project['options']['demo_pu_cm_progress'])
+#
+#             if self.parent.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
+#                 self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
+#                     self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'], var_name='id2',
+#                                                                                value_name='value').to_json(
+#                     orient='split')
+#                 self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
+#                     self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(orient='split')
+#                 pandas.read_json(self.temp['demo_pu_conmat_time'],
+#                                  orient='split').to_csv(
+#                     self.parent.project['filepaths']['demo_pu_cm_filepath'],
+#                     index=False, header=True, sep=",")
+#                 pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
+#                     str.replace(self.parent.project['filepaths']['demo_pu_cm_filepath'], '.csv', '_mean_of_times.csv'),
+#                     index=True, header=True, sep=",")
+#
+#             else:
+#                 self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
+#                 pandas.read_json(self.temp['demo_pu_conmat'],
+#                                  orient='split').to_csv(
+#                     self.parent.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+#
 
 # ########################## debug mode ################################################################################
 

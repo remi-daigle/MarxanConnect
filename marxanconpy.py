@@ -6,7 +6,7 @@ import wx
 import os
 
 
-def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,progressbar=False):
+def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,edge,progressbar=False):
     """
     rescale the connectivity matrix to match the scale of the planning units
     """
@@ -70,16 +70,27 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
         for sink in pu[pu_id]:
             sources=df.puID==source
             sinks=df.puID==sink
+            print(source)
+            print(sink)
             if any(sinks) and any(sources):
-                temp_conn=grid_conmat[df.connIndex[sources],:][:,df.connIndex[sinks]]
-                cov_source=df.int_area[sources]/sum(df.int_area[sources])
-                cov_sink=df.int_area[sinks]/sum(df.int_area[sinks])
-                pu_conmat[numpy.array(pu[pu_id]==source),numpy.array(pu[pu_id]==sink)]=sum(sum(((temp_conn*numpy.array(cov_sink)).T*numpy.array(cov_source))))
+                if edge == "Proportional to overlap":
+                    temp_conn=grid_conmat[df.connIndex[sources],:][:,df.connIndex[sinks]]
+                    cov_source=df.int_area[sources]/sum(df.int_area[sources])
+                    cov_sink=df.int_area[sinks]/sum(df.int_area[sinks])
+                    pu_conmat[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                        sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+                else:
+                    temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
+                    cov_source = df.int_area[sources] / df.pu_area[sources]
+                    cov_sink = df.int_area[sinks] / df.pu_area[sinks]
+                    print(df.pu_area[sources])
+                    pu_conmat[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                        sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
             else:
                 pu_conmat[numpy.array(pu[pu_id]==source),numpy.array(pu[pu_id]==sink)]=0
-
     pu_conmat = pandas.DataFrame(pu_conmat, index=pu[pu_id], columns=pu[pu_id])
     pu_conmat.index.name = "puID"
+    print('loop ok')
 
     if time:
         # populate rescaled pu connectivity matrix
@@ -93,11 +104,18 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
                     sources = df.puID == source
                     sinks = df.puID == sink
                     if any(sinks) and any(source):
-                        temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
-                        cov_source = df.int_area[sources] / sum(df.int_area[sources])
-                        cov_sink = df.int_area[sinks] / sum(df.int_area[sinks])
-                        pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
-                            sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+                        if edge == "Proportional to overlap":
+                            temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
+                            cov_source = df.int_area[sources] / sum(df.int_area[sources])
+                            cov_sink = df.int_area[sinks] / sum(df.int_area[sinks])
+                            pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                                sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+                        else:
+                            temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
+                            cov_source = df.int_area[sources] / df.pu_area[sources]
+                            cov_sink = df.int_area[sinks] / df.pu_area[sinks]
+                            pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                                sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
                     else:
                         pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = 0
 
