@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # Either load or launch new project
         if len(sys.argv) > 1:
@@ -61,7 +61,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted (parent=self)
-            frame.Show()
+            # frame.Show()
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(1)
@@ -72,6 +72,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_matrixTypeRadioBox.SetItemToolTip(2, "Migration Matrix - M [i,j] = (sij / Column-sum j), where mij represents the proportion of settlers in patch j that came from patch i. This matrix quantifies the proportion of immigrants (sources) to each destination patch. Diag(M) represents percent self-recruitment. M corresponds to migration matrix models in population genetics (Bodmer and Cavalli-Sforza 1968) and the source distribution matrix (Cowen et al. 2007), and has been used to explore diversity patterns in neutral communities (Ecomonomo and Keitt 2008).")
         self.demo_matrixTypeRadioBox.SetItemToolTip(3, "Local Immigration Matrix - I [i,j] = (sij / Total Released from j). Proportion of the released larvae from destination patch j that settle from source patch i. Values are in terms of the destination patch's size (or dispersal potential) and indicate the potential level of local impact. Can be used to define a demographically relevant settlement rate (e.g., Cowen et al. 2006, Table S1) in terms of the proportion of larvae released from a source population that are required to settle in the focal population to maintain a standard population size (Treml et al. in 2012, Table S4).")
         self.demo_matrixTypeRadioBox.SetItemToolTip(4, "Dispersal Flux Matrix (normalised) - F[i,j] = (Area i / Total Area of habitat in network) * P'ij; where P' is the probability matrix that is row-normalized by i's row-sum, casting probability in terms of successful settlers. F may be a more ecologically meaningful representation of network-wide dispersal, where connectivity is dependent on the source strength of the donor patch and the probability of connection (Urban and Keitt 2001). F is used for exploring patterns in system-wide connectivity using network analysis (Treml et al. in 2012, Treml et al. 2008, Urban and Keitt 2001).")
+
+        self.outline_shapefile_choices()
 
     def set_icon(self, frame):
         # set the icon
@@ -115,22 +117,22 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         docdir = self.project['workingdirectory']
 
         # spatial input
-        self.project['filepaths']['pu_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs.shp")
-        self.project['filepaths']['pu_file_pu_id'] = "pu_id"
-        self.project['filepaths']['fa_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs_IUCN_IorII.shp")
-        self.project['filepaths']['aa_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "ports.shp")
+        self.project['filepaths']['pu_filepath'] = ""
+        self.project['filepaths']['pu_file_pu_id'] = ""
+        self.project['filepaths']['fa_filepath'] = ""
+        self.project['filepaths']['aa_filepath'] = ""
 
         # connectivity input
-        self.project['filepaths']['demo_cu_filepath'] = os.path.join(pfdir, "data", "GBR", "shapefiles", "reefs_connectivity.shp")
-        self.project['filepaths']['demo_cu_file_pu_id'] = "con_id"
-        self.project['filepaths']['demo_cu_cm_filepath'] = os.path.join(pfdir, "data", "GBR", "reef_strengths.csv")
-        self.project['filepaths']['demo_pu_cm_filepath'] = os.path.join(pfdir, "data", "GBR", "reef_strengths_rescaled.csv")
+        self.project['filepaths']['demo_cu_filepath'] = ""
+        self.project['filepaths']['demo_cu_file_pu_id'] = ""
+        self.project['filepaths']['demo_cu_cm_filepath'] = ""
+        self.project['filepaths']['demo_pu_cm_filepath'] = ""
         self.project['filepaths']['gen_cu_filepath'] = ""
-        self.project['filepaths']['gen_cu_file_pu_id'] = "ID"
+        self.project['filepaths']['gen_cu_file_pu_id'] = ""
         self.project['filepaths']['gen_cu_cm_filepath'] = ""
         self.project['filepaths']['gen_pu_cm_filepath'] = ""
         self.project['filepaths']['land_cu_filepath'] = ""
-        self.project['filepaths']['land_cu_file_pu_id'] = "ID"
+        self.project['filepaths']['land_cu_file_pu_id'] = ""
         self.project['filepaths']['land_cu_cm_filepath'] = ""
         self.project['filepaths']['land_pu_cm_filepath'] = ""
 
@@ -150,6 +152,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
         self.enable_metrics()
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
+        self.colormap_metric_choices(1)
+        self.colormap_metric_choices(2)
 
         # if called at launch time, no need to ask users to create a new project file right away
         if not launch:
@@ -210,26 +216,30 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.export_metrics.Enable(enable=True)
             self.custom_spec_panel.SetToolTip(None)
         self.enable_metrics()
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
+        self.colormap_metric_choices(1)
+        self.colormap_metric_choices(2)
 
     def set_GUI_filepaths(self):
         # set default file paths
         # spatial input
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
-        self.PU_file_pu_id.SetValue(self.project['filepaths']['pu_file_pu_id'])
+        self.PU_file_pu_id.SetStringSelection(self.project['filepaths']['pu_file_pu_id'])
         self.FA_file.SetPath(self.project['filepaths']['fa_filepath'])
         self.AA_file.SetPath(self.project['filepaths']['aa_filepath'])
 
         # connectivity input
         self.demo_CU_file.SetPath(self.project['filepaths']['demo_cu_filepath'])
-        self.demo_CU_file_pu_id.SetValue(self.project['filepaths']['demo_cu_file_pu_id'])
+        self.demo_CU_file_pu_id.SetStringSelection(self.project['filepaths']['demo_cu_file_pu_id'])
         self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
         self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
         self.gen_CU_file.SetPath(self.project['filepaths']['gen_cu_filepath'])
-        self.gen_CU_file_pu_id.SetValue(self.project['filepaths']['gen_cu_file_pu_id'])
+        self.gen_CU_file_pu_id.SetStringSelection(self.project['filepaths']['gen_cu_file_pu_id'])
         self.gen_CU_CM_file.SetPath(self.project['filepaths']['gen_cu_cm_filepath'])
         self.gen_PU_CM_file.SetPath(self.project['filepaths']['gen_pu_cm_filepath'])
         self.land_CU_file.SetPath(self.project['filepaths']['land_cu_filepath'])
-        self.land_CU_file_pu_id.SetValue(self.project['filepaths']['land_cu_file_pu_id'])
+        self.land_CU_file_pu_id.SetStringSelection(self.project['filepaths']['land_cu_file_pu_id'])
         self.land_CU_CM_file.SetPath(self.project['filepaths']['land_cu_cm_filepath'])
         self.land_PU_CM_file.SetPath(self.project['filepaths']['land_pu_cm_filepath'])
 
@@ -515,6 +525,100 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                 orientation='horizontal')
                 self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
 
+    def outline_shapefile_choices(self):
+        choices = []
+        if self.project['filepaths']['pu_filepath'] != "":
+            choices.append("Planning Units")
+        if self.project['filepaths']['fa_filepath'] != "":
+            choices.append("Focus Areas")
+        if self.project['filepaths']['aa_filepath'] != "":
+            choices.append("Avoidance Areas")
+        if self.project['filepaths']['demo_cu_filepath'] != "":
+            choices.append("Demographic Units")
+        if self.project['filepaths']['gen_cu_filepath'] != "":
+            choices.append("Genetic Units")
+        if self.project['filepaths']['land_cu_filepath'] != "":
+            choices.append("Landscape Units")
+
+        self.poly_shp_choice.SetItems(choices)
+        self.poly_shp_choice.SetSelection(0)
+        self.poly_shp_choice1.SetItems(choices)
+        self.poly_shp_choice1.SetSelection(0)
+
+    def colormap_shapefile_choices(self):
+        choices = []
+        if self.project['filepaths']['demo_cu_filepath'] != "":
+            if 'connectivityMetrics' in self.project:
+                if 'best_solution' in self.project['connectivityMetrics']:
+                    choices.append("Planning Units (Marxan Results)")
+            if self.project['filepaths']['demo_cu_filepath'] != "":
+                choices.append("Planning Units (Demographic Data)")
+            if self.project['filepaths']['gen_cu_filepath'] != "":
+                choices.append("Planning Units (Genetic Data)")
+            if self.project['filepaths']['land_cu_filepath'] != "":
+                choices.append("Planning Units (Landscape Data)")
+        if self.project['filepaths']['demo_cu_filepath'] != "":
+            choices.append("Demographic Units")
+        if self.project['filepaths']['gen_cu_filepath'] != "":
+            choices.append("Genetic Units")
+        if self.project['filepaths']['land_cu_filepath'] != "":
+            choices.append("Landscape Units")
+
+        self.metric_shp_choice.SetItems(choices)
+        self.metric_shp_choice.SetSelection(0)
+        self.metric_shp_choice1.SetItems(choices)
+        self.metric_shp_choice1.SetSelection(0)
+
+    def on_metric_shp_choice(self, event=None):
+        self.colormap_metric_choices(1)
+
+    def on_metric_shp_choice1(self, event=None):
+        self.colormap_metric_choices(2)
+
+    def colormap_metric_choices(self,lyr):
+        choices = []
+        if lyr == 1:
+            shapefile = self.metric_shp_choice.GetStringSelection()
+        else:
+            shapefile = self.metric_shp_choice1.GetStringSelection()
+
+        if 'connectivityMetrics' in self.project:
+            if shapefile == "Planning Units (Marxan Results)":
+                if 'best_solution' in self.project['connectivityMetrics']:
+                    choices.append("Selection Frequency")
+                    choices.append("Best Solution")
+            else:
+                plot_type = self.get_plot_type(shapefile)
+                print(plot_type)
+                if 'spec_' + plot_type in self.project['connectivityMetrics']:
+                    if 'vertex_degree_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Vertex Degree")
+                    if 'between_cent_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Betweenness Centrality")
+                    if 'eig_vect_cent_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Eigen Vector Centrality")
+                    if 'self_recruit_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Self Recruitment")
+                    if 'outflux_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Outflux")
+                    if 'temp_conn_cov_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Temporal Connectivity Covariance")
+                    if 'fa_sink_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Focus Area Sink")
+                    if 'fa_source_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Focus Area Source")
+                    if 'aa_sink_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Avoidance Area Sink")
+                    if 'aa_source_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
+                        choices.append("Avoidance Area Source")
+
+        if lyr == 1:
+            self.metric_choice.SetItems(choices)
+            self.metric_choice.SetSelection(0)
+        else:
+            self.metric_choice1.SetItems(choices)
+            self.metric_choice1.SetSelection(0)
+
     def get_plot_type(self, selection):
         if selection == "Planning Units":
             type = 'pu'
@@ -604,48 +708,70 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Planning Unit file path
         """
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
+        self.PU_file_pu_id.SetItems(list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])))
+        self.PU_file_pu_id.SetSelection(0)
+        self.on_PU_file_pu_id(event=None)
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
 
     def on_PU_file_pu_id(self, event):
         """
         Defines ID column label for the Planning Unit file
         """
-        self.project['filepaths']['pu_file_pu_id'] = self.PU_file_pu_id.GetValue()
+        self.project['filepaths']['pu_file_pu_id'] = self.PU_file_pu_id.GetStringSelection()
 
     def on_demo_CU_file(self, event):
         """
         Defines Connectivity Unit file path
         """
         self.project['filepaths']['demo_cu_filepath'] = self.demo_CU_file.GetPath()
+        self.demo_CU_file_pu_id.SetItems(list(gpd.GeoDataFrame.from_file(self.project['filepaths']['demo_cu_filepath'])))
+        self.demo_CU_file_pu_id.SetSelection(0)
+        self.on_demo_CU_file_pu_id(event=None)
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
 
     def on_demo_CU_file_pu_id(self, event):
         """
         Defines ID column label for the demographic connectivity unit file
         """
-        self.project['filepaths']['demo_cu_file_pu_id'] = self.demo_CU_file_pu_id.GetValue()
+        self.project['filepaths']['demo_cu_file_pu_id'] = self.demo_CU_file_pu_id.GetStringSelection()
 
     def on_gen_CU_file(self, event):
         """
         Defines genetic Connectivity Unit file path
         """
         self.project['filepaths']['gen_cu_filepath'] = self.gen_CU_file.GetPath()
+        self.gen_CU_file_pu_id.SetItems(
+            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['gen_cu_filepath'])))
+        self.gen_CU_file_pu_id.SetSelection(0)
+        self.on_gen_CU_file_pu_id(event=None)
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
 
     def on_gen_CU_file_pu_id(self, event):
         """
         Defines ID column label for the genetic connectivity unit file
         """
-        self.project['filepaths']['gen_cu_file_pu_id'] = self.gen_CU_file_pu_id.GetValue()
+        self.project['filepaths']['gen_cu_file_pu_id'] = self.gen_CU_file_pu_id.GetStringSelection()
 
     def on_land_CU_file(self, event):
         """
         Defines landscape Connectivity Unit file path
         """
         self.project['filepaths']['land_cu_filepath'] = self.land_CU_file.GetPath()
+        self.land_CU_file_pu_id.SetItems(
+            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_cu_filepath'])))
+        self.land_CU_file_pu_id.SetSelection(0)
+        self.on_land_CU_file_pu_id(event=None)
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
 
     def on_land_CU_file_pu_id(self, event):
         """
         Defines landscape Connectivity Unit file path
         """
-        self.project['filepaths']['land_cu_file_pu_id'] = self.land_CU_file_pu_id.GetValue()
+        self.project['filepaths']['land_cu_file_pu_id'] = self.land_CU_file_pu_id.GetStringSelection()
 
     def on_demo_CU_CM_file(self, event):
         """
@@ -1255,6 +1381,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.CFT_percent_slider.Enable(enable=True)
         self.export_metrics.Enable(enable=True)
         self.custom_spec_panel.SetToolTip(None)
+        self.colormap_metric_choices(1)
+        self.colormap_metric_choices(2)
         self.project['options']['metricsCalculated'] = True
 
     def on_export_metrics(self, event):
@@ -1349,6 +1477,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Starts Inedit (will fail to load file if it is not named input.dat)
         """
+        if os.path.basename(self.project['filepaths']['marxan_input']) != "input.dat":
+            self.warn_dialog("Marxan Inedit will attempt to load 'input.dat' from " + os.path.dirname(
+                self.project['filepaths'][
+                    'marxan_input']) + "by default. You will have to manually load your file in Inedit")
         subprocess.call(os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe'),
                         cwd=os.path.dirname(self.project['filepaths']['marxan_input']))
 
@@ -1356,6 +1488,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Starts Marxan
         """
+        if not 'connectivityMetrics' in self.project:
+            self.project['connectivityMetrics'] = {}
+        self.temp = {}
         os.system("start /wait cmd /c " +
                   os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' + self.project['filepaths'][
                       'marxan_input'])
@@ -1383,6 +1518,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # load best solution
         self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + "_best.txt")
         self.project['connectivityMetrics']['best_solution'] = pandas.read_csv(self.temp['fn'])['solution'].tolist()
+
+        # update plotting options
+        self.colormap_shapefile_choices()
+        self.colormap_metric_choices(1)
+        self.colormap_metric_choices(2)
+
+
 
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):

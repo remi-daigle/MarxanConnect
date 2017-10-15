@@ -121,9 +121,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		pu_file_sizer1.Add( self.PU_file_pu_id_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.PU_file_pu_id = wx.TextCtrl( self.spatialInput, wx.ID_ANY, u"ID", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.PU_file_pu_id.SetToolTip( u"This is the name of the column in the shapefile which contains the planning unit ID's. These ID's should match those in the corresponding connectivity matrix" )
-		
+		PU_file_pu_idChoices = []
+		self.PU_file_pu_id = wx.Choice( self.spatialInput, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, PU_file_pu_idChoices, 0 )
+		self.PU_file_pu_id.SetSelection( 0 )
 		pu_file_sizer1.Add( self.PU_file_pu_id, 0, wx.ALL, 5 )
 		
 		
@@ -197,7 +197,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -360,10 +360,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cu_file_sizer.Add( self.demo_CU_file_pu_id_txt, 0, wx.ALL, 5 )
 		
-		self.demo_CU_file_pu_id = wx.TextCtrl( self.demographic, wx.ID_ANY, u"ID", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.demo_CU_file_pu_id.Enable( False )
-		self.demo_CU_file_pu_id.SetToolTip( u"This is the name of the column in the shapefile which contains the planning unit ID's. These ID's should match those in the corresponding connectivity matrix" )
-		
+		demo_CU_file_pu_idChoices = []
+		self.demo_CU_file_pu_id = wx.Choice( self.demographic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, demo_CU_file_pu_idChoices, 0 )
+		self.demo_CU_file_pu_id.SetSelection( 0 )
 		demo_cu_file_sizer.Add( self.demo_CU_file_pu_id, 0, wx.ALL, 5 )
 		
 		
@@ -549,10 +548,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		gen_cu_file_sizer.Add( self.gen_CU_file_pu_id_txt, 0, wx.ALL, 5 )
 		
-		self.gen_CU_file_pu_id = wx.TextCtrl( self.genetic, wx.ID_ANY, u"ID", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.gen_CU_file_pu_id.Enable( False )
-		self.gen_CU_file_pu_id.SetToolTip( u"This is the name of the column in the shapefile which contains the planning unit ID's. These ID's should match those in the corresponding connectivity matrix" )
-		
+		gen_CU_file_pu_idChoices = []
+		self.gen_CU_file_pu_id = wx.Choice( self.genetic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, gen_CU_file_pu_idChoices, 0 )
+		self.gen_CU_file_pu_id.SetSelection( 0 )
 		gen_cu_file_sizer.Add( self.gen_CU_file_pu_id, 0, wx.ALL, 5 )
 		
 		
@@ -738,10 +736,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		land_cu_file_sizer.Add( self.land_CU_file_pu_id_txt, 0, wx.ALL, 5 )
 		
-		self.land_CU_file_pu_id = wx.TextCtrl( self.landscape, wx.ID_ANY, u"ID", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.land_CU_file_pu_id.Enable( False )
-		self.land_CU_file_pu_id.SetToolTip( u"This is the name of the column in the shapefile which contains the planning unit ID's. These ID's should match those in the corresponding connectivity matrix" )
-		
+		land_CU_file_pu_idChoices = []
+		self.land_CU_file_pu_id = wx.Choice( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, land_CU_file_pu_idChoices, 0 )
+		self.land_CU_file_pu_id.SetSelection( 0 )
 		land_cu_file_sizer.Add( self.land_CU_file_pu_id, 0, wx.ALL, 5 )
 		
 		
@@ -815,7 +812,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -1248,7 +1245,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cf_export_txt.Wrap( -1 )
 		cf_file_export_sizer.Add( self.cf_export_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.CF_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.CF_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		cf_file_export_sizer.Add( self.CF_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		self.cf_targets_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Feature Targets:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1291,7 +1288,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.SPEC_filetxt.Wrap( -1 )
 		cf_file_export_sizer.Add( self.SPEC_filetxt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.SPEC_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.SPEC_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		cf_file_export_sizer.Add( self.SPEC_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -1388,7 +1385,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.BD_filecheck.SetValue(True) 
 		bd_file_sizer.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.BD_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.BD_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		bd_file_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -1442,6 +1439,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		spatialMainSizer1.AddGrowableRow( 2 )
 		spatialMainSizer1.AddGrowableRow( 3 )
 		spatialMainSizer1.AddGrowableRow( 4 )
+		spatialMainSizer1.AddGrowableRow( 5 )
 		spatialMainSizer1.SetFlexibleDirection( wx.VERTICAL )
 		spatialMainSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -1479,6 +1477,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		
 		spatialMainSizer1.Add( marxan_dir_sizer, 1, wx.EXPAND, 5 )
+		
+		inputdat_txt_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.inputdat_txt = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Specify the input file (i.e. input.dat) which dictates the number of replicates, the boundary length modifier, etc. Most importantly, the input file specifies which Conservation Feature, Planning unit vs Conservation Feature, and boundary files are used by Marxan. The 'Customize' button will allow you to create or customize the input file using Marxan Inedit.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.inputdat_txt.Wrap( -1 )
+		inputdat_txt_sizer.Add( self.inputdat_txt, 0, wx.ALIGN_BOTTOM|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		spatialMainSizer1.Add( inputdat_txt_sizer, 1, wx.ALIGN_BOTTOM|wx.EXPAND, 5 )
 		
 		inputdat_file_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
 		inputdat_file_sizer.AddGrowableCol( 1 )
@@ -1915,7 +1922,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.on_about, id = self.about.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_getting_started, id = self.start.GetId() )
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
-		self.PU_file_pu_id.Bind( wx.EVT_TEXT, self.on_PU_file_pu_id )
 		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
 		self.AA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_AA_file )
 		self.demo_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
@@ -1925,7 +1931,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
 		self.demo_rescale_edgeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescale_edgeRadioBox )
 		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_file )
-		self.demo_CU_file_pu_id.Bind( wx.EVT_TEXT, self.on_demo_CU_file_pu_id )
 		self.demo_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
@@ -1934,7 +1939,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.gen_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_gen_matrixFormatRadioBox )
 		self.gen_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_gen_CU_CM_file )
 		self.gen_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_gen_rescaleRadioBox )
-		self.gen_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
+		self.gen_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_gen_CU_file )
 		self.gen_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.gen_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.gen_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
@@ -1943,7 +1948,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_land_matrixFormatRadioBox )
 		self.land_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_CU_CM_file )
 		self.land_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_land_rescaleRadioBox )
-		self.land_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CU_file )
+		self.land_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_gen_CU_file )
 		self.land_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.land_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.land_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
@@ -2007,9 +2012,6 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_PU_file( self, event ):
 		event.Skip()
 	
-	def on_PU_file_pu_id( self, event ):
-		event.Skip()
-	
 	def on_FA_file( self, event ):
 		event.Skip()
 	
@@ -2037,9 +2039,6 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_demo_CU_file( self, event ):
 		event.Skip()
 	
-	def on_demo_CU_file_pu_id( self, event ):
-		event.Skip()
-	
 	def on_demo_PU_CM_progress( self, event ):
 		event.Skip()
 	
@@ -2064,7 +2063,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_gen_rescaleRadioBox( self, event ):
 		event.Skip()
 	
-	def on_CU_file( self, event ):
+	def on_gen_CU_file( self, event ):
 		event.Skip()
 	
 	
