@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # Either load or launch new project
         if len(sys.argv) > 1:
@@ -61,10 +61,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted (parent=self)
-            # frame.Show()
+            frame.Show()
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(0)
+        self.auinotebook.ChangeSelection(1)
+
+        # set tooltips for radioboxes
+        self.demo_matrixTypeRadioBox.SetItemToolTip(0, "Settlement Matrix - S [i,j] = dij * μt; where μ = survivorship probability at time t. S is the cumulative or total settlement over an entire dispersal simulation from every patch i to every patch j. Note that a postsettlement mortality could be applied to this matrix to more closely represent recruitment potential (ie realised connectivity). This matrix represents the dispersal connection strengths based on the biophysical dispersal model. A series of S matrices can be aggregated (i.e., different spawning events over many years) for the same life-history characteristics to represent the dispersal potential of a species. The S matrix is used to calculate all other connectivity matrices described below.")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(1, "Connectivity Probability Matrix - P [i,j] = (sij / Total Released from i ). Probability of settling on patch j from patch i, representing potential recruitment or surviving larvae. This matrix is often referred to as the discrete dispersal kernel, and the transpose of P, PT, is the population transition matrix (Caswell 1989). Row sums are often << 1 due to larval loss from mortality and larvae never reaching suitable habitat. Each row is a discrete version of the dispersal kernel (Botsford 2009b, also see Werner et al. 2007). Note, when patches are of different sizes, the largest patches will have relatively lower connection probabilities (due to greater denominator). Diag(P) represents percent local-retention at each source patch.")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "Migration Matrix - M [i,j] = (sij / Column-sum j), where mij represents the proportion of settlers in patch j that came from patch i. This matrix quantifies the proportion of immigrants (sources) to each destination patch. Diag(M) represents percent self-recruitment. M corresponds to migration matrix models in population genetics (Bodmer and Cavalli-Sforza 1968) and the source distribution matrix (Cowen et al. 2007), and has been used to explore diversity patterns in neutral communities (Ecomonomo and Keitt 2008).")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(3, "Local Immigration Matrix - I [i,j] = (sij / Total Released from j). Proportion of the released larvae from destination patch j that settle from source patch i. Values are in terms of the destination patch's size (or dispersal potential) and indicate the potential level of local impact. Can be used to define a demographically relevant settlement rate (e.g., Cowen et al. 2006, Table S1) in terms of the proportion of larvae released from a source population that are required to settle in the focal population to maintain a standard population size (Treml et al. in 2012, Table S4).")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(4, "Dispersal Flux Matrix (normalised) - F[i,j] = (Area i / Total Area of habitat in network) * P'ij; where P' is the probability matrix that is row-normalized by i's row-sum, casting probability in terms of successful settlers. F may be a more ecologically meaningful representation of network-wide dispersal, where connectivity is dependent on the source strength of the donor patch and the probability of connection (Urban and Keitt 2001). F is used for exploring patterns in system-wide connectivity using network analysis (Treml et al. in 2012, Treml et al. 2008, Urban and Keitt 2001).")
 
     def set_icon(self, frame):
         # set the icon
