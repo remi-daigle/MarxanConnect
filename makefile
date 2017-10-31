@@ -6,5 +6,7 @@ MarxanConnectGUImake: gui.py MarxanConnectGUI.py setup.py WindowsSetupBuilder.is
 	Rscript -e "rmarkdown::render('contributing.Rmd')"
 	rm README.html
 	python setup.py build
-	#zip -r MarxanConnect.zip build\exe.win-amd64-3.5\*
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" WindowsSetupBuilder.iss
+	mv build/exe.win-amd64-3.5/ build/MarxanConnect/
+	cd build/
+	zip -r ../MarxanConnect.zip MarxanConnect/* ../data/*

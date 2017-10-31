@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # Either load or launch new project
         if len(sys.argv) > 1:
@@ -61,10 +61,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted (parent=self)
-            # frame.Show()
+            frame.Show()
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(1)
+        self.auinotebook.ChangeSelection(0)
 
         # set tooltips for radioboxes
         self.demo_matrixTypeRadioBox.SetItemToolTip(0, "Settlement Matrix - S [i,j] = dij * μt; where μ = survivorship probability at time t. S is the cumulative or total settlement over an entire dispersal simulation from every patch i to every patch j. Note that a postsettlement mortality could be applied to this matrix to more closely represent recruitment potential (ie realised connectivity). This matrix represents the dispersal connection strengths based on the biophysical dispersal model. A series of S matrices can be aggregated (i.e., different spawning events over many years) for the same life-history characteristics to represent the dispersal potential of a species. The S matrix is used to calculate all other connectivity matrices described below.")
