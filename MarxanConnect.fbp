@@ -638,7 +638,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Describe Planning Units ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text</property>
+                                                    <property name="label">The planning unit is the fundamental spatial polygon on which Marxan analyses are based. The units can be any shape. Often square or hexagonal regular grids, or based on habitat features (e.g. reefs). All futher analyses will be based on whether a feature is present or absent in the planning unit.</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -1792,7 +1792,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">2) Connectivity Input</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -2229,7 +2229,7 @@
                                                         <property name="cols">1</property>
                                                         <property name="flexible_direction">wxVERTICAL</property>
                                                         <property name="growablecols">0</property>
-                                                        <property name="growablerows">0,2,3,4,5,7,8</property>
+                                                        <property name="growablerows">0,2,6</property>
                                                         <property name="hgap">0</property>
                                                         <property name="minimum_size"></property>
                                                         <property name="name">demoMainSizer</property>
@@ -2278,7 +2278,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Dexcribe Connectivity Matrix .......................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text</property>
+                                                                        <property name="label">The connectivity matrix (or list) is the fundamental input format for demographic data. It describes the movement from donor sites to recipient sites. It can be obtained by directly quantifying the movement of individual organisms (e.g. tagging) or  by modelling the dispersal of individual organisms (e.g. biophysical modelling of larval dispersal). Please indicate your connectivity data units, type, and format in the boxes below, and if necessary use the rescaling tools if the data was not gathered at the same spatial scale as the planning units</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -2820,7 +2820,7 @@
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
                                                                     <property name="border">5</property>
-                                                                    <property name="flag">wxEXPAND</property>
+                                                                    <property name="flag">wxALIGN_BOTTOM|wxEXPAND</property>
                                                                     <property name="proportion">1</property>
                                                                     <object class="wxBoxSizer" expanded="0">
                                                                         <property name="minimum_size"></property>
@@ -2829,7 +2829,7 @@
                                                                         <property name="permission">none</property>
                                                                         <object class="sizeritem" expanded="0">
                                                                             <property name="border">5</property>
-                                                                            <property name="flag">wxALL|wxEXPAND</property>
+                                                                            <property name="flag">wxALIGN_BOTTOM|wxALL|wxEXPAND</property>
                                                                             <property name="proportion">0</property>
                                                                             <object class="wxStaticText" expanded="0">
                                                                                 <property name="BottomDockable">1</property>
@@ -3153,7 +3153,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Describe Connectivity Matrix Shapefile ....................................... text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text</property>
+                                                                        <property name="label">If the connectivity data was collected at a scale different than that of the planning units, you will need to supply a Connectivity Matrix Shapefile which describes the spatial polygons for which the data was gathered.</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -3783,7 +3783,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Describe Planning Unit Connectivity Matrix ...................  text text text text text text text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text texttext text text text text</property>
+                                                                        <property name="label">The Planning Unit Connectivity Matrix is the output of the rescaling process. It is scaled to the planning units and will be used to calcuate the Connectivity Metrics for the planning units.</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -8111,7 +8111,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">3) Connectivity Metrics</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -9205,7 +9205,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Focus Area Sink</property>
+                                                                        <property name="label">Focus Area Recipients</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -9379,7 +9379,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Focus Area Source</property>
+                                                                        <property name="label">Focus Area Donors</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -9553,7 +9553,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Avoidance Area Sink</property>
+                                                                        <property name="label">Avoidance Area Recipients</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -9727,7 +9727,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Avoidance Area Source</property>
+                                                                        <property name="label">Avoidance Area Donors</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -10609,7 +10609,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Focus Area Sink</property>
+                                                                        <property name="label">Focus Area Recipients</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -10783,7 +10783,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Focus Area Source</property>
+                                                                        <property name="label">Focus Area Donors</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -10957,7 +10957,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Avoidance Area Sink</property>
+                                                                        <property name="label">Avoidance Area Recipients</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -11131,7 +11131,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Avoidance Area Source</property>
+                                                                        <property name="label">Avoidance Area Donors</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -12013,7 +12013,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Focus Area Sink</property>
+                                                                        <property name="label">Focus Area Recipients</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -12187,7 +12187,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Focus Area Source</property>
+                                                                        <property name="label">Focus Area Donors</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -12361,7 +12361,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Avoidance Area Sink</property>
+                                                                        <property name="label">Avoidance Area Recipients</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
@@ -12535,7 +12535,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Avoidance Area Source</property>
+                                                                        <property name="label">Avoidance Area Donors</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
                                                                         <property name="maximum_size"></property>
