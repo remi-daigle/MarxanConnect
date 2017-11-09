@@ -1296,29 +1296,51 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['connectivityMetrics'] = {}
         self.temp = {}
 
+        self.all_types = []
         if self.calc_metrics_pu.GetValue() and self.calc_metrics_cu.GetValue():
-            self.all_types = ['demo_pu', 'demo_cu']
+            if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+                self.all_types += ['demo_pu', 'demo_cu']
+            if os.path.isfile(self.project['filepaths']['gen_pu_cm_filepath']):
+                self.all_types += ['gen_pu', 'gen_cu']
+            if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+                self.all_types += ['land_pu']
         elif self.calc_metrics_pu.GetValue():
-            self.all_types = ['demo_pu']
+            if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+                self.all_types += ['demo_pu']
+            if os.path.isfile(self.project['filepaths']['gen_pu_cm_filepath']):
+                self.all_types += ['gen_pu']
+            if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
+                self.all_types += ['land_pu']
         elif self.calc_metrics_cu.GetValue():
-            self.all_types = ['demo_cu']
+            if os.path.isfile(self.project['filepaths']['demo_cu_cm_filepath']):
+                self.all_types += ['demo_cu']
+            if os.path.isfile(self.project['filepaths']['gen_cu_cm_filepath']):
+                self.all_types += ['gen_cu']
         else:
             self.warn_dialog(message="No 'Units' selected for metric calculations.")
 
+
         for self.type in self.all_types:
+            print(self.type)
             # check format
             if self.type[-2:] == 'pu':
-                self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
-                                              filepath=self.project['filepaths'][self.type + '_cm_filepath'])
+                if self.type == 'demo_pu':
+                    self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+                                                  filepath=self.project['filepaths'][self.type + '_cm_filepath'])
+                    self.temp['format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
+                if self.type == 'gen_pu':
+                    self.check_matrix_list_format(format=self.gen_matrixFormatRadioBox.GetStringSelection(),
+                                                  filepath=self.project['filepaths'][self.type + '_cm_filepath'])
+                self.temp['format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
 
-            # load correct demographic matrix and transform if necessary
+            # load correct matrix and transform if necessary
             if os.path.isfile(self.project['filepaths'][self.type + '_cm_filepath']):
-                if self.demo_matrixFormatRadioBox.GetStringSelection() == "Matrix":
+                if self.temp['format'] == "Matrix":
                     self.temp[self.type + '_conmat'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'], index_col=0)
                     self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
                         self.type + '_conmat'].to_json(orient='split')
-                elif self.demo_matrixFormatRadioBox.GetStringSelection() == "List":
+                elif self.temp['format'] == "List":
                     self.temp[self.type + '_conmat'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat'].pivot_table(values='value',
@@ -1326,7 +1348,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                                                     columns='id2')
                     self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
                         self.type + '_conmat'].to_json(orient='split')
-                elif self.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
+                elif self.temp['format'] == "List with Time":
                     self.temp[self.type + '_conmat_time'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat_time'][
@@ -1456,17 +1478,68 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
                         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
 
-                    # choose correct matrix for genetic metrics
-                    # insert stuff here!
-                    # calculate genetic metrics
-                    # insert stuff here!
+            # calculate genetic metrics ############################################################################
+            if self.type[:3] == 'gen':
+                print('calc gen')
+                if self.cf_gen_vertex_degree.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['vertex_degree_' + self.type] = \
+                        marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'])
 
-                    # choose correct matrix for landscape metrics
-                    # insert stuff here!
-                    # calculate landscape metrics
-                    # insert stuff here!
+                if self.cf_gen_between_cent.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type] = \
+                        marxanconpy.conmat2betweencent(self.temp[self.type + '_conmat'])
 
-                    # create initial spec
+                if self.cf_gen_eig_vect_cent.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type] = \
+                        marxanconpy.conmat2eigvectcent(self.temp[self.type + '_conmat'])
+
+                if self.cf_gen_self_recruit.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['self_recruit_' + self.type] = \
+                        marxanconpy.conmat2selfrecruit(self.temp[self.type + '_conmat'])
+
+                if self.cf_gen_fa_sink.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['fa_sink_' + self.type] = \
+                        marxanconpy.conmat2sink(self.temp[self.type + '_conmat'],
+                                                self.project['filepaths']['fa_filepath'],
+                                                self.temp['shp_filepath'],
+                                                self.temp['shp_file_pu_id']
+                                                )
+
+                if self.cf_gen_fa_source.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['fa_source_' + self.type] = \
+                        marxanconpy.conmat2source(self.temp[self.type + '_conmat'],
+                                                  self.project['filepaths']['fa_filepath'],
+                                                  self.temp['shp_filepath'],
+                                                  self.temp['shp_file_pu_id']
+                                                  )
+
+                if self.cf_gen_aa_sink.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['aa_sink_' + self.type] = \
+                        marxanconpy.conmat2sink(self.temp[self.type + '_conmat'],
+                                                self.project['filepaths']['aa_filepath'],
+                                                self.temp['shp_filepath'],
+                                                self.temp['shp_file_pu_id']
+                                                )
+
+                if self.cf_gen_aa_source.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['aa_source_' + self.type] = \
+                        marxanconpy.conmat2source(self.temp[self.type + '_conmat'],
+                                                  self.project['filepaths']['aa_filepath'],
+                                                  self.temp['shp_filepath'],
+                                                  self.temp['shp_file_pu_id']
+                                                  )
+
+                if self.bd_gen_conn_boundary.GetValue():
+                    self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
+                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'])
+
+                if self.bd_gen_min_plan_graph.GetValue():
+                    self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
+                        marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
+
+
+
+                            # create initial spec
         self.on_new_spec()
         self.customize_spec.Enable(enable=True)
         self.CFT_percent_slider.Enable(enable=True)
@@ -1627,36 +1700,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_new_spec(self):
         self.spec_frame = spec_customizer(parent=self)
-
+        self.all_types = []
         if self.calc_metrics_pu.GetValue():
-            self.type = 'demo_pu'
+            if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+                self.all_types += ['demo_pu']
+            if os.path.isfile(self.project['filepaths']['gen_pu_cm_filepath']):
+                self.all_types += ['gen_pu']
+            if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
+                self.all_types += ['land_pu']
         else:
             self.warn_dialog(message="'Planning Units' not selected for metric calculations.")
             return
 
-        self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_' + self.type])
+        for self.type in self.all_types:
+            self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_' + self.type])
 
-        for i in range(len(self.spec_frame.keys)):
-            self.spec_frame.spec_grid.InsertRows(i)
-            self.spec_frame.spec_grid.SetCellValue(i, 0, str(i + 1))
-            sum_metric = sum(self.project['connectivityMetrics']['spec_' + self.type][self.spec_frame.keys[i]])
-            self.spec_frame.spec_grid.SetCellValue(i, 1, str(sum_metric * self.CFT_percent_slider.GetValue() / 100))
-            self.spec_frame.spec_grid.SetCellValue(i, 2, str(1000))
-            self.spec_frame.spec_grid.SetCellValue(i, 3, self.spec_frame.keys[i])
-            w, h = self.spec_frame.GetClientSize()
+            for i in range(len(self.spec_frame.keys)):
+                self.spec_frame.spec_grid.InsertRows(i)
+                self.spec_frame.spec_grid.SetCellValue(i, 0, str(i + 1))
+                sum_metric = sum(self.project['connectivityMetrics']['spec_' + self.type][self.spec_frame.keys[i]])
+                self.spec_frame.spec_grid.SetCellValue(i, 1, str(sum_metric * self.CFT_percent_slider.GetValue() / 100))
+                self.spec_frame.spec_grid.SetCellValue(i, 2, str(1000))
+                self.spec_frame.spec_grid.SetCellValue(i, 3, self.spec_frame.keys[i])
+                w, h = self.spec_frame.GetClientSize()
 
-            self.spec_frame.SetSize((w + 16, h + 39 + 20))
-            self.spec_frame.Layout()
+                self.spec_frame.SetSize((w + 16, h + 39 + 20))
+                self.spec_frame.Layout()
 
-        self.project['spec_' + self.type + '_dat'] = pandas.DataFrame(
-            numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
-        self.project['spec_' + self.type + '_dat'].columns = ["id", "target", "spf", "name"]
+            self.project['spec_' + self.type + '_dat'] = pandas.DataFrame(
+                numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
+            self.project['spec_' + self.type + '_dat'].columns = ["id", "target", "spf", "name"]
 
-        for c in range(self.spec_frame.spec_grid.GetNumberCols()):
-            for r in range(self.spec_frame.spec_grid.GetNumberRows()):
-                self.project['spec_' + self.type + '_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
+            for c in range(self.spec_frame.spec_grid.GetNumberCols()):
+                for r in range(self.spec_frame.spec_grid.GetNumberRows()):
+                    self.project['spec_' + self.type + '_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
 
-        self.project['spec_' + self.type + '_dat'] = self.project['spec_' + self.type + '_dat'].to_json(orient='split')
+            self.project['spec_' + self.type + '_dat'] = self.project['spec_' + self.type + '_dat'].to_json(orient='split')
 
     def on_CFT_percent_slider(self, event):
         self.on_new_spec()
