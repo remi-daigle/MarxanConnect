@@ -237,6 +237,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
+        self.on_gen_rescaleRadioBox(event=None)
         if self.project['options']['metricsCalculated']:
             self.customize_spec.Enable(enable=True)
             self.CFT_percent_slider.Enable(enable=True)
@@ -1262,6 +1263,53 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             pandas.read_json(self.temp['demo_pu_conmat'],
                              orient='split').to_csv(
                 self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+
+    def on_gen_rescale_button(self, event):
+        """
+        Rescales the connectivity matrix to match the scale of the planning units
+        """
+        self.check_matrix_list_format(format=self.gen_matrixFormatRadioBox.GetStringSelection(),
+                                      filepath=self.project['filepaths']['gen_cu_cm_filepath'])
+        self.temp = {}
+        # create dict entry for connectivityMetrics
+
+        if 'connectivityMetrics' not in self.project:
+
+            self.project['connectivityMetrics'] = {}
+
+        self.temp['gen_pu_conmat'] = marxanconpy.rescale_matrix(
+            self.project['filepaths']['pu_filepath'],
+            self.project['filepaths']['pu_file_pu_id'],
+            self.project['filepaths']['gen_cu_filepath'],
+            self.project['filepaths']['gen_cu_file_pu_id'],
+            self.project['filepaths']['gen_cu_cm_filepath'],
+            matrixformat=self.project['options']['gen_conmat_format'],
+            edge=self.project['options']['gen_conmat_rescale_edge'],
+            progressbar=self.project['options']['gen_pu_cm_progress'])
+
+        if self.gen_matrixFormatRadioBox.GetStringSelection() == "List with Time":
+            self.temp['gen_pu_conmat_time'] = self.temp['gen_pu_conmat'][
+                self.temp['gen_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
+                                                                           var_name='id2',
+                                                                           value_name='value').to_json(
+                orient='split')
+            self.temp['gen_pu_conmat'] = self.temp['gen_pu_conmat'][
+                self.temp['gen_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(
+                orient='split')
+            pandas.read_json(self.temp['gen_pu_conmat_time'],
+                             orient='split').to_csv(
+                self.project['filepaths']['gen_pu_cm_filepath'],
+                index=False, header=True, sep=",")
+            pandas.read_json(self.temp['gen_pu_conmat'], orient='split').to_csv(
+                str.replace(self.project['filepaths']['gen_pu_cm_filepath'], '.csv',
+                            '_mean_of_times.csv'),
+                index=True, header=True, sep=",")
+
+        else:
+            self.temp['gen_pu_conmat'] = self.temp['gen_pu_conmat'].to_json(orient='split')
+            pandas.read_json(self.temp['gen_pu_conmat'],
+                             orient='split').to_csv(
+                self.project['filepaths']['gen_pu_cm_filepath'], index=True, header=True, sep=",")
 
     def on_land_generate_button(self, event):
         self.temp = {}
