@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # Either load or launch new project
         if len(sys.argv) > 1:
@@ -108,6 +108,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
+        self.project['options']['gen_pu_cm_progress'] = self.gen_PU_CM_progress.GetValue()
+        self.project['options']['gen_conmat_type'] = self.gen_matrixTypeRadioBox.GetStringSelection()
+        self.project['options']['gen_conmat_format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
+        self.project['options']['gen_conmat_rescale'] = self.gen_rescaleRadioBox.GetStringSelection()
+        self.project['options']['gen_conmat_rescale_edge'] = self.gen_rescale_edgeRadioBox.GetStringSelection()
+        self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
+        self.project['options']['land_pu_cm_progress'] = self.land_PU_CM_progress.GetValue()
+        self.project['options']['land_conmat_type'] = self.land_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
         self.project['options']['metricsCalculated'] = False
@@ -135,6 +143,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['land_cu_file_pu_id'] = ""
         self.project['filepaths']['land_cu_cm_filepath'] = ""
         self.project['filepaths']['land_pu_cm_filepath'] = ""
+        self.project['filepaths']['land_hab_filepath'] = ""
+        self.project['filepaths']['land_hab_file_hab_id'] = ""
+        self.project['filepaths']['land_res_mat_filepath'] = ""
+        self.project['filepaths']['land_res_filepath'] = ""
+        self.project['filepaths']['land_res_file_res_id'] = ""
 
         # Marxan metrics files
         self.project['filepaths']['cf_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "puvspr2.dat")
@@ -151,6 +164,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
+        self.on_gen_matrixFormatRadioBox(event=None)
+        self.on_gen_rescaleRadioBox(event=None)
+        self.on_land_matrixTypeRadioBox(event=None)
         self.enable_metrics()
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
@@ -201,6 +217,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
         self.demo_rescaleRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale'])
         self.demo_rescale_edgeRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale_edge'])
+
+        self.gen_PU_CM_progress.SetValue(self.project['options']['gen_pu_cm_progress'])
+        self.gen_matrixTypeRadioBox.SetStringSelection(self.project['options']['gen_conmat_type'])
+        self.gen_matrixFormatRadioBox.SetStringSelection(self.project['options']['gen_conmat_format'])
+        self.gen_rescaleRadioBox.SetStringSelection(self.project['options']['gen_conmat_rescale'])
+        self.gen_rescale_edgeRadioBox.SetStringSelection(self.project['options']['gen_conmat_rescale_edge'])
+
+        self.land_HAB_buff.SetValue(self.project['options']['land_hab_buff'])
+        self.land_PU_CM_progress.SetValue(self.project['options']['land_pu_cm_progress'])
+        self.land_matrixTypeRadioBox.SetStringSelection(self.project['options']['land_conmat_type'])
+
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
 
@@ -225,23 +252,30 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set default file paths
         # spatial input
         self.PU_file.SetPath(self.project['filepaths']['pu_filepath'])
-        self.PU_file_pu_id.SetStringSelection(self.project['filepaths']['pu_file_pu_id'])
+        self.set_GUI_id_selection(self.PU_file_pu_id, self.project['filepaths']['pu_filepath'],
+                                  self.project['filepaths']['pu_file_pu_id'])
         self.FA_file.SetPath(self.project['filepaths']['fa_filepath'])
         self.AA_file.SetPath(self.project['filepaths']['aa_filepath'])
 
         # connectivity input
         self.demo_CU_file.SetPath(self.project['filepaths']['demo_cu_filepath'])
-        self.demo_CU_file_pu_id.SetStringSelection(self.project['filepaths']['demo_cu_file_pu_id'])
+        self.set_GUI_id_selection(self.demo_CU_file_pu_id, self.project['filepaths']['demo_cu_filepath'],
+                                  self.project['filepaths']['demo_cu_file_pu_id'])
         self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
         self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
         self.gen_CU_file.SetPath(self.project['filepaths']['gen_cu_filepath'])
-        self.gen_CU_file_pu_id.SetStringSelection(self.project['filepaths']['gen_cu_file_pu_id'])
+        self.set_GUI_id_selection(self.gen_CU_file_pu_id, self.project['filepaths']['gen_cu_filepath'],
+                                  self.project['filepaths']['gen_cu_file_pu_id'])
         self.gen_CU_CM_file.SetPath(self.project['filepaths']['gen_cu_cm_filepath'])
         self.gen_PU_CM_file.SetPath(self.project['filepaths']['gen_pu_cm_filepath'])
-        self.land_CU_file.SetPath(self.project['filepaths']['land_cu_filepath'])
-        self.land_CU_file_pu_id.SetStringSelection(self.project['filepaths']['land_cu_file_pu_id'])
-        self.land_CU_CM_file.SetPath(self.project['filepaths']['land_cu_cm_filepath'])
+        self.land_HAB_file.SetPath(self.project['filepaths']['land_hab_filepath'])
+        self.set_GUI_id_selection(self.land_HAB_file_hab_id, self.project['filepaths']['land_hab_filepath'],
+                                  self.project['filepaths']['land_hab_file_hab_id'])
+        self.land_RES_mat_file.SetPath(self.project['filepaths']['land_res_mat_filepath'])
         self.land_PU_CM_file.SetPath(self.project['filepaths']['land_pu_cm_filepath'])
+        self.land_RES_file.SetPath(self.project['filepaths']['land_res_filepath'])
+        self.set_GUI_id_selection(self.land_RES_file_res_id, self.project['filepaths']['land_res_filepath'],
+                                  self.project['filepaths']['land_res_file_res_id'])
 
         # Marxan metrics files
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
@@ -251,6 +285,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Marxan analysis
         self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
         self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
+
+    def set_GUI_id_selection(self,choice,filepath,id):
+        if(os.path.isfile(filepath)):
+            choice.SetItems(list(gpd.GeoDataFrame.from_file(filepath)))
+            choice.SetStringSelection(id)
 
     def on_save_project_as(self, event):
         """
@@ -755,23 +794,48 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['gen_cu_file_pu_id'] = self.gen_CU_file_pu_id.GetStringSelection()
 
-    def on_land_CU_file(self, event):
+    def on_land_HAB_file(self, event):
         """
-        Defines landscape Connectivity Unit file path
+        Defines landscape habitat type file path
         """
-        self.project['filepaths']['land_cu_filepath'] = self.land_CU_file.GetPath()
-        self.land_CU_file_pu_id.SetItems(
-            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_cu_filepath'])))
-        self.land_CU_file_pu_id.SetSelection(0)
-        self.on_land_CU_file_pu_id(event=None)
+        self.project['filepaths']['land_hab_filepath'] = self.land_HAB_file.GetPath()
+        self.land_HAB_file_hab_id.SetItems(
+            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_hab_filepath'])))
+        self.land_HAB_file_hab_id.SetSelection(0)
+        self.on_land_HAB_file_hab_id(event=None)
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
 
-    def on_land_CU_file_pu_id(self, event):
+    def on_land_HAB_file_hab_id(self, event):
         """
         Defines landscape Connectivity Unit file path
         """
-        self.project['filepaths']['land_cu_file_pu_id'] = self.land_CU_file_pu_id.GetStringSelection()
+        self.project['filepaths']['land_hab_file_hab_id'] = self.land_HAB_file_hab_id.GetStringSelection()
+
+    def on_land_HAB_buff(self, event):
+        """
+        Defines landscape type connectivity buffer (i.e. the distance between neighbouring planning units at which they
+        will be connected for the least cost path analysis.)
+        """
+        self.project['filepaths']['land_hab_buff'] = self.land_HAB_buff.GetValue()
+
+    def on_land_RES_file(self, event):
+        """
+        Defines landscape resistance surface file path
+        """
+        self.project['filepaths']['land_res_filepath'] = self.land_RES_file.GetPath()
+        self.land_RES_file_res_id.SetItems(
+            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_res_filepath'])))
+        self.land_RES_file_res_id.SetSelection(0)
+        self.on_land_RES_file_hab_id(event=None)
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
+
+    def on_land_RES_file_hab_id(self, event):
+        """
+        Defines landscape Connectivity Unit file path
+        """
+        self.project['filepaths']['land_res_file_hab_id'] = self.land_RES_file_res_id.GetStringSelection()
 
     def on_demo_CU_CM_file(self, event):
         """
@@ -1002,39 +1066,44 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # enable metrics
         self.enable_metrics()
 
-    def on_land_rescaleRadioBox(self, event):
+    def on_gen_matrixTypeRadioBox(self, event):
+        self.project['options']['gen_conmat_type'] = self.gen_matrixTypeRadioBox.GetStringSelection()
+
+    def on_gen_matrixFormatRadioBox(self, event):
+        self.project['options']['gen_conmat_format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
+        self.enable_metrics()
+
+    def on_land_matrixTypeRadioBox(self, event):
         """
         Hides unnecessary options if rescaling is not necessary
         """
         # hide or unhide
-        self.project['options']['land_conmat_rescale'] = self.land_rescaleRadioBox.GetStringSelection()
-        if self.land_rescaleRadioBox.GetStringSelection() == "Identical Grids":
-            enable = False
+        self.project['options']['land_matrixType'] = self.land_matrixTypeRadioBox.GetStringSelection()
+        if self.project['options']['land_matrixType'] == "Resistance Surface":
+            enable_hab = False
+            enable_surface = True
+        elif self.project['options']['land_matrixType'] == "Connectivity Matrix":
+            enable_hab = False
+            enable_surface = False
         else:
-            enable = True
+            enable_hab = True
+            enable_surface = True
 
-        self.land_CU_def.Enable(enable)
-        self.land_CU_filetext.Enable(enable)
-        self.land_CU_file.Enable(enable)
-        self.land_CU_file_pu_id.Enable(enable)
-        self.land_CU_file_pu_id_txt.Enable(enable)
-        self.land_PU_CM_outputtext.Enable(enable)
-        self.land_PU_CM_def.Enable(enable)
-        self.land_PU_CM_progress.Enable(enable)
-        self.land_PU_CM_filetext.Enable(enable)
-        self.land_PU_CM_file.Enable(enable)
-        self.land_rescale_button.Enable(enable)
+        self.land_HAB_filetext.Enable(enable_hab)
+        self.land_HAB_file.Enable(enable_hab)
+        self.land_HAB_file_hab_id_txt.Enable(enable_hab)
+        self.land_HAB_file_hab_id.Enable(enable_hab)
+        self.land_RES_mat_filetext.Enable(enable_hab)
+        self.land_RES_mat_file.Enable(enable_hab)
+        self.resistance_mat_customize.Enable(enable_hab)
 
-        # reset filepaths
-        # connectivity units planning unit matrix
-        if self.land_rescaleRadioBox.GetStringSelection() == "Identical Grids":
-            self.project['filepaths']['land_pu_cm_filepath'] = self.land_CU_CM_file.GetPath()
-            self.land_PU_CM_file.SetPath(self.project['filepaths']['land_pu_cm_filepath'])
-            self.project['filepaths']['land_cu_filepath'] = self.PU_file.GetPath()
-            self.land_CU_file.SetPath(self.project['filepaths']['land_cu_filepath'])
-        else:
-            self.project['filepaths']['land_pu_cm_filepath'] = self.land_PU_CM_file.GetPath()
-            self.project['filepaths']['land_cu_filepath'] = self.land_CU_file.GetPath()
+        self.land_RES_filetext.Enable(enable_surface)
+        self.land_RES_file.Enable(enable_surface)
+        self.land_RES_def.Enable(enable_surface)
+        self.land_res_file_res_id_txt.Enable(enable_surface)
+        self.land_RES_file_res_id.Enable(enable_surface)
+        self.land_generate_button.Enable(enable_surface)
+        self.land_PU_CM_progress.Enable(enable_surface)
 
         # enable metrics
         self.enable_metrics()
@@ -1146,7 +1215,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_land_aa_sink.Enable(enable=land_aa_enable)
         self.cf_land_aa_source.Enable(enable=land_aa_enable)
 
-# ########################## rescaling #################################################################################
+# ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
         """
         Rescales the connectivity matrix to match the scale of the planning units
@@ -1193,6 +1262,28 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             pandas.read_json(self.temp['demo_pu_conmat'],
                              orient='split').to_csv(
                 self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+
+    def on_land_generate_button(self, event):
+        self.temp = {}
+        self.temp['land_pu_conmat'] = marxanconpy.habitatresistance2conmats(
+            buff=float(self.project['filepaths']['land_hab_buff']),
+            hab_filepath=self.project['filepaths']['land_hab_filepath'],
+            pu_filepath=self.project['filepaths']['pu_filepath'],
+            hab_id=self.project['filepaths']['land_hab_file_hab_id'])
+
+        self.project['filepaths']['land_pu_cm_filepaths'] = {}
+        for hab in self.temp['land_pu_conmat'].keys():
+            print(str.replace(
+                self.project['filepaths']['land_pu_cm_filepath'],
+                ".csv",
+                "_"+hab+".csv"))
+            self.project['filepaths']['land_pu_cm_filepaths'][hab] = str.replace(
+                self.project['filepaths']['land_pu_cm_filepath'],
+                ".csv",
+                "_"+hab+".csv")
+        pandas.read_json(self.temp['land_pu_conmat'][hab], orient='split').to_csv(
+            self.project['filepaths']['land_pu_cm_filepaths'][hab], index=True, header=True, sep=",")
+
 
 # ##########################  metric related functions ################################################################
 

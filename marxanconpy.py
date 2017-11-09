@@ -1,5 +1,6 @@
 import numpy
 import geopandas as gpd
+import shapely
 import pandas
 import igraph
 import wx
@@ -255,3 +256,42 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
         return score['cov'].tolist()
     else:
         return [0] * len(conmat_time.id2.unique())
+
+def habitatresistance2conmats(buff, hab_filepath, pu_filepath, hab_id):
+    hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs({'init': 'epsg:4326'})
+    pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs({'init': 'epsg:4326'})
+    pu = pu[0:5]
+
+    pu.geometry = pu.geometry.buffer(buff)
+
+    habtypes = hab[hab_id].unique().astype(str)
+    habres = numpy.ones((len(habtypes), len(habtypes))) * 10
+    numpy.fill_diagonal(habres, 1)
+
+    habresdf = pandas.DataFrame(columns=habtypes)
+    for index, habrow in hab.iterrows():
+        habresdf = habresdf.append(pandas.DataFrame(habres[str(habrow[hab_id]) == habtypes,], columns=habtypes))
+    habresdf = numpy.array(habresdf)
+
+
+    G = igraph.Graph()
+
+    G.add_vertices(pu.index)
+
+    for index1, pu1row in pu.iterrows():
+        for index2, pu2row in pu.iterrows():
+            print(index1, index2)
+            if index1 != index2:
+                if pu1row.geometry.intersects(pu2row.geometry):
+                    line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.x),
+                                                        (pu2row.geometry.centroid.x, pu2row.geometry.centroid.y)])
+
+                    lineinter = numpy.array(hab.intersection(line).length)
+                    weights = dict(zip(habtypes, numpy.multiply(lineinter, habresdf.T).sum(1)))
+                    dist = pu1row.geometry.centroid.distance(pu2row.geometry.centroid)
+                    G.add_edge(index1, index2, **weights, distance=dist)
+
+    conmat = {}
+    for h in habtypes:
+        conmat[h] = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h)).to_json(orient='split')
+    return conmat
