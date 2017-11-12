@@ -2980,7 +2980,7 @@
                                                                         <property name="pin_button">1</property>
                                                                         <property name="pos"></property>
                                                                         <property name="resize">Resizable</property>
-                                                                        <property name="selection">1</property>
+                                                                        <property name="selection">0</property>
                                                                         <property name="show">1</property>
                                                                         <property name="size"></property>
                                                                         <property name="style">wxRA_SPECIFY_COLS</property>
@@ -8858,7 +8858,7 @@
                                                             <property name="caption"></property>
                                                             <property name="caption_visible">1</property>
                                                             <property name="center_pane">0</property>
-                                                            <property name="checked">1</property>
+                                                            <property name="checked">0</property>
                                                             <property name="close_button">1</property>
                                                             <property name="context_help"></property>
                                                             <property name="context_menu">1</property>
@@ -8946,7 +8946,7 @@
                                                             <property name="caption"></property>
                                                             <property name="caption_visible">1</property>
                                                             <property name="center_pane">0</property>
-                                                            <property name="checked">1</property>
+                                                            <property name="checked">0</property>
                                                             <property name="close_button">1</property>
                                                             <property name="context_help"></property>
                                                             <property name="context_menu">1</property>
@@ -9403,7 +9403,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_demo_fa_sink_panel</property>
+                                                            <property name="name">cf_demo_fa_recipients_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -9444,7 +9444,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_demo_fa_sink_sizer</property>
+                                                                <property name="name">cf_demo_fa_recipients_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -9488,7 +9488,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_demo_fa_sink</property>
+                                                                        <property name="name">cf_demo_fa_recipients</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -9577,7 +9577,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_demo_fa_source_panel</property>
+                                                            <property name="name">cf_demo_fa_donors_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -9618,7 +9618,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_demo_fa_source_sizer</property>
+                                                                <property name="name">cf_demo_fa_donors_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -9662,7 +9662,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_demo_fa_source</property>
+                                                                        <property name="name">cf_demo_fa_donors</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -9751,7 +9751,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_demo_aa_sink_panel</property>
+                                                            <property name="name">cf_demo_aa_recipients_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -9792,7 +9792,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_demo_aa_sink_sizer</property>
+                                                                <property name="name">cf_demo_aa_recipients_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -9836,7 +9836,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_demo_aa_sink</property>
+                                                                        <property name="name">cf_demo_aa_recipients</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -9925,7 +9925,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_demo_aa_source_panel</property>
+                                                            <property name="name">cf_demo_aa_donors_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -9966,7 +9966,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_demo_aa_source_sizer</property>
+                                                                <property name="name">cf_demo_aa_donors_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -10010,7 +10010,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_demo_aa_source</property>
+                                                                        <property name="name">cf_demo_aa_donors</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -10807,7 +10807,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_gen_fa_sink_panel</property>
+                                                            <property name="name">cf_gen_fa_recipients_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -10848,7 +10848,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_gen_fa_sink_sizer</property>
+                                                                <property name="name">cf_gen_fa_recipients_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -10892,7 +10892,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_gen_fa_sink</property>
+                                                                        <property name="name">cf_gen_fa_recipients</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -10981,7 +10981,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_gen_fa_source_panel</property>
+                                                            <property name="name">cf_gen_fa_donors_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -11022,7 +11022,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_gen_fa_source_sizer</property>
+                                                                <property name="name">cf_gen_fa_donors_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -11066,7 +11066,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_gen_fa_source</property>
+                                                                        <property name="name">cf_gen_fa_donors</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -11155,7 +11155,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_gen_aa_sink_panel</property>
+                                                            <property name="name">cf_gen_aa_recipients_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -11196,7 +11196,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_gen_aa_sink_sizer</property>
+                                                                <property name="name">cf_gen_aa_recipients_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -11240,7 +11240,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_gen_aa_sink</property>
+                                                                        <property name="name">cf_gen_aa_recipients</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -11329,7 +11329,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_gen_aa_source_panel</property>
+                                                            <property name="name">cf_gen_aa_donors_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -11370,7 +11370,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_gen_aa_source_sizer</property>
+                                                                <property name="name">cf_gen_aa_donors_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -11414,7 +11414,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_gen_aa_source</property>
+                                                                        <property name="name">cf_gen_aa_donors</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -12211,7 +12211,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_land_fa_sink_panel</property>
+                                                            <property name="name">cf_land_fa_recipients_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -12252,7 +12252,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_land_fa_sink_sizer</property>
+                                                                <property name="name">cf_land_fa_recipients_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -12296,7 +12296,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_land_fa_sink</property>
+                                                                        <property name="name">cf_land_fa_recipients</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -12385,7 +12385,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_land_fa_source_panel</property>
+                                                            <property name="name">cf_land_fa_donors_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -12426,7 +12426,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_land_fa_source_sizer</property>
+                                                                <property name="name">cf_land_fa_donors_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -12470,7 +12470,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_land_fa_source</property>
+                                                                        <property name="name">cf_land_fa_donors</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -12559,7 +12559,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_land_aa_sink_panel</property>
+                                                            <property name="name">cf_land_aa_recipients_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -12600,7 +12600,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_land_aa_sink_sizer</property>
+                                                                <property name="name">cf_land_aa_recipients_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -12644,7 +12644,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_land_aa_sink</property>
+                                                                        <property name="name">cf_land_aa_recipients</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -12733,7 +12733,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">cf_land_aa_source_panel</property>
+                                                            <property name="name">cf_land_aa_donors_panel</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -12774,7 +12774,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="wxBoxSizer" expanded="0">
                                                                 <property name="minimum_size"></property>
-                                                                <property name="name">cf_land_aa_source_sizer</property>
+                                                                <property name="name">cf_land_aa_donors_sizer</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
                                                                 <object class="sizeritem" expanded="0">
@@ -12818,7 +12818,7 @@
                                                                         <property name="minimize_button">0</property>
                                                                         <property name="minimum_size"></property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">cf_land_aa_source</property>
+                                                                        <property name="name">cf_land_aa_donors</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>

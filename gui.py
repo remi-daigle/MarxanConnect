@@ -310,7 +310,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
 		self.demo_rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, demo_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.demo_rescaleRadioBox.SetSelection( 1 )
+		self.demo_rescaleRadioBox.SetSelection( 0 )
 		demo_rescale_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
 		demo_rescale_edgeRadioBoxChoices = [ u"Proportional to overlap", u"Assume homogenous connectivity" ]
@@ -852,13 +852,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.cf_demo_between_cent, 0, wx.ALL, 5 )
 		
 		self.cf_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_eig_vect_cent.SetValue(True) 
 		self.cf_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
 		
 		demo_cf_sizer.Add( self.cf_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
 		self.cf_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_self_recruit.SetValue(True) 
 		self.cf_demo_self_recruit.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
@@ -896,73 +894,73 @@ class MarxanConnectGUI ( wx.Frame ):
 		cf_demo_stochasticity_sizer.Fit( self.cf_demo_stochasticity_panel )
 		demo_cf_sizer.Add( self.cf_demo_stochasticity_panel, 1, 0, 0 )
 		
-		self.cf_demo_fa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_fa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_fa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_fa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_demo_fa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		cf_demo_fa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_demo_fa_sink = wx.CheckBox( self.cf_demo_fa_sink_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_fa_sink.Enable( False )
-		self.cf_demo_fa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_fa_recipients = wx.CheckBox( self.cf_demo_fa_recipients_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_fa_recipients.Enable( False )
+		self.cf_demo_fa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_demo_fa_sink_sizer.Add( self.cf_demo_fa_sink, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_fa_sink_panel.SetSizer( cf_demo_fa_sink_sizer )
-		self.cf_demo_fa_sink_panel.Layout()
-		cf_demo_fa_sink_sizer.Fit( self.cf_demo_fa_sink_panel )
-		demo_cf_sizer.Add( self.cf_demo_fa_sink_panel, 1, 0, 0 )
-		
-		self.cf_demo_fa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_fa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_fa_source_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_fa_source = wx.CheckBox( self.cf_demo_fa_source_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_fa_source.Enable( False )
-		self.cf_demo_fa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_fa_source_sizer.Add( self.cf_demo_fa_source, 0, wx.ALL, 5 )
+		cf_demo_fa_recipients_sizer.Add( self.cf_demo_fa_recipients, 0, wx.ALL, 5 )
 		
 		
-		self.cf_demo_fa_source_panel.SetSizer( cf_demo_fa_source_sizer )
-		self.cf_demo_fa_source_panel.Layout()
-		cf_demo_fa_source_sizer.Fit( self.cf_demo_fa_source_panel )
-		demo_cf_sizer.Add( self.cf_demo_fa_source_panel, 1, 0, 0 )
+		self.cf_demo_fa_recipients_panel.SetSizer( cf_demo_fa_recipients_sizer )
+		self.cf_demo_fa_recipients_panel.Layout()
+		cf_demo_fa_recipients_sizer.Fit( self.cf_demo_fa_recipients_panel )
+		demo_cf_sizer.Add( self.cf_demo_fa_recipients_panel, 1, 0, 0 )
 		
-		self.cf_demo_aa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_aa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_fa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_fa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_demo_aa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		cf_demo_fa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_demo_aa_sink = wx.CheckBox( self.cf_demo_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_aa_sink.Enable( False )
-		self.cf_demo_aa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_fa_donors = wx.CheckBox( self.cf_demo_fa_donors_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_fa_donors.Enable( False )
+		self.cf_demo_fa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_demo_aa_sink_sizer.Add( self.cf_demo_aa_sink, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_aa_sink_panel.SetSizer( cf_demo_aa_sink_sizer )
-		self.cf_demo_aa_sink_panel.Layout()
-		cf_demo_aa_sink_sizer.Fit( self.cf_demo_aa_sink_panel )
-		demo_cf_sizer.Add( self.cf_demo_aa_sink_panel, 1, 0, 0 )
-		
-		self.cf_demo_aa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_aa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_aa_source_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_aa_source = wx.CheckBox( self.cf_demo_aa_source_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_aa_source.Enable( False )
-		self.cf_demo_aa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_aa_source_sizer.Add( self.cf_demo_aa_source, 0, wx.ALL, 5 )
+		cf_demo_fa_donors_sizer.Add( self.cf_demo_fa_donors, 0, wx.ALL, 5 )
 		
 		
-		self.cf_demo_aa_source_panel.SetSizer( cf_demo_aa_source_sizer )
-		self.cf_demo_aa_source_panel.Layout()
-		cf_demo_aa_source_sizer.Fit( self.cf_demo_aa_source_panel )
-		demo_cf_sizer.Add( self.cf_demo_aa_source_panel, 1, 0, 0 )
+		self.cf_demo_fa_donors_panel.SetSizer( cf_demo_fa_donors_sizer )
+		self.cf_demo_fa_donors_panel.Layout()
+		cf_demo_fa_donors_sizer.Fit( self.cf_demo_fa_donors_panel )
+		demo_cf_sizer.Add( self.cf_demo_fa_donors_panel, 1, 0, 0 )
+		
+		self.cf_demo_aa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_aa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_aa_recipients = wx.CheckBox( self.cf_demo_aa_recipients_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_aa_recipients.Enable( False )
+		self.cf_demo_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_aa_recipients_sizer.Add( self.cf_demo_aa_recipients, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_aa_recipients_panel.SetSizer( cf_demo_aa_recipients_sizer )
+		self.cf_demo_aa_recipients_panel.Layout()
+		cf_demo_aa_recipients_sizer.Fit( self.cf_demo_aa_recipients_panel )
+		demo_cf_sizer.Add( self.cf_demo_aa_recipients_panel, 1, 0, 0 )
+		
+		self.cf_demo_aa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_aa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_aa_donors = wx.CheckBox( self.cf_demo_aa_donors_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_aa_donors.Enable( False )
+		self.cf_demo_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_demo_aa_donors_sizer.Add( self.cf_demo_aa_donors, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_aa_donors_panel.SetSizer( cf_demo_aa_donors_sizer )
+		self.cf_demo_aa_donors_panel.Layout()
+		cf_demo_aa_donors_sizer.Fit( self.cf_demo_aa_donors_panel )
+		demo_cf_sizer.Add( self.cf_demo_aa_donors_panel, 1, 0, 0 )
 		
 		
 		cf_sizer.Add( demo_cf_sizer, 1, wx.EXPAND, 5 )
@@ -1023,73 +1021,73 @@ class MarxanConnectGUI ( wx.Frame ):
 		cf_gen_stochasticity_sizer.Fit( self.cf_gen_stochasticity_panel )
 		gen_cf_sizer.Add( self.cf_gen_stochasticity_panel, 1, 0, 0 )
 		
-		self.cf_gen_fa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_gen_fa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		self.cf_gen_fa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_fa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_gen_fa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		cf_gen_fa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_gen_fa_sink = wx.CheckBox( self.cf_gen_fa_sink_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_gen_fa_sink.Enable( False )
-		self.cf_gen_fa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		self.cf_gen_fa_recipients = wx.CheckBox( self.cf_gen_fa_recipients_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_fa_recipients.Enable( False )
+		self.cf_gen_fa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_gen_fa_sink_sizer.Add( self.cf_gen_fa_sink, 0, wx.ALL, 5 )
-		
-		
-		self.cf_gen_fa_sink_panel.SetSizer( cf_gen_fa_sink_sizer )
-		self.cf_gen_fa_sink_panel.Layout()
-		cf_gen_fa_sink_sizer.Fit( self.cf_gen_fa_sink_panel )
-		gen_cf_sizer.Add( self.cf_gen_fa_sink_panel, 1, 0, 0 )
-		
-		self.cf_gen_fa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_gen_fa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_gen_fa_source_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_gen_fa_source = wx.CheckBox( self.cf_gen_fa_source_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_gen_fa_source.Enable( False )
-		self.cf_gen_fa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_gen_fa_source_sizer.Add( self.cf_gen_fa_source, 0, wx.ALL, 5 )
+		cf_gen_fa_recipients_sizer.Add( self.cf_gen_fa_recipients, 0, wx.ALL, 5 )
 		
 		
-		self.cf_gen_fa_source_panel.SetSizer( cf_gen_fa_source_sizer )
-		self.cf_gen_fa_source_panel.Layout()
-		cf_gen_fa_source_sizer.Fit( self.cf_gen_fa_source_panel )
-		gen_cf_sizer.Add( self.cf_gen_fa_source_panel, 1, 0, 0 )
+		self.cf_gen_fa_recipients_panel.SetSizer( cf_gen_fa_recipients_sizer )
+		self.cf_gen_fa_recipients_panel.Layout()
+		cf_gen_fa_recipients_sizer.Fit( self.cf_gen_fa_recipients_panel )
+		gen_cf_sizer.Add( self.cf_gen_fa_recipients_panel, 1, 0, 0 )
 		
-		self.cf_gen_aa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_gen_aa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_gen_fa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_fa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_gen_aa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		cf_gen_fa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_gen_aa_sink = wx.CheckBox( self.cf_gen_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_gen_aa_sink.Enable( False )
-		self.cf_gen_aa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_gen_fa_donors = wx.CheckBox( self.cf_gen_fa_donors_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_fa_donors.Enable( False )
+		self.cf_gen_fa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_gen_aa_sink_sizer.Add( self.cf_gen_aa_sink, 0, wx.ALL, 5 )
-		
-		
-		self.cf_gen_aa_sink_panel.SetSizer( cf_gen_aa_sink_sizer )
-		self.cf_gen_aa_sink_panel.Layout()
-		cf_gen_aa_sink_sizer.Fit( self.cf_gen_aa_sink_panel )
-		gen_cf_sizer.Add( self.cf_gen_aa_sink_panel, 1, 0, 0 )
-		
-		self.cf_gen_aa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_gen_aa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
-		
-		cf_gen_aa_source_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_gen_aa_source = wx.CheckBox( self.cf_gen_aa_source_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_gen_aa_source.Enable( False )
-		self.cf_gen_aa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
-		
-		cf_gen_aa_source_sizer.Add( self.cf_gen_aa_source, 0, wx.ALL, 5 )
+		cf_gen_fa_donors_sizer.Add( self.cf_gen_fa_donors, 0, wx.ALL, 5 )
 		
 		
-		self.cf_gen_aa_source_panel.SetSizer( cf_gen_aa_source_sizer )
-		self.cf_gen_aa_source_panel.Layout()
-		cf_gen_aa_source_sizer.Fit( self.cf_gen_aa_source_panel )
-		gen_cf_sizer.Add( self.cf_gen_aa_source_panel, 1, 0, 0 )
+		self.cf_gen_fa_donors_panel.SetSizer( cf_gen_fa_donors_sizer )
+		self.cf_gen_fa_donors_panel.Layout()
+		cf_gen_fa_donors_sizer.Fit( self.cf_gen_fa_donors_panel )
+		gen_cf_sizer.Add( self.cf_gen_fa_donors_panel, 1, 0, 0 )
+		
+		self.cf_gen_aa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_aa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_aa_recipients = wx.CheckBox( self.cf_gen_aa_recipients_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_aa_recipients.Enable( False )
+		self.cf_gen_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_aa_recipients_sizer.Add( self.cf_gen_aa_recipients, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_aa_recipients_panel.SetSizer( cf_gen_aa_recipients_sizer )
+		self.cf_gen_aa_recipients_panel.Layout()
+		cf_gen_aa_recipients_sizer.Fit( self.cf_gen_aa_recipients_panel )
+		gen_cf_sizer.Add( self.cf_gen_aa_recipients_panel, 1, 0, 0 )
+		
+		self.cf_gen_aa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_aa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_aa_donors = wx.CheckBox( self.cf_gen_aa_donors_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_aa_donors.Enable( False )
+		self.cf_gen_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_gen_aa_donors_sizer.Add( self.cf_gen_aa_donors, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_aa_donors_panel.SetSizer( cf_gen_aa_donors_sizer )
+		self.cf_gen_aa_donors_panel.Layout()
+		cf_gen_aa_donors_sizer.Fit( self.cf_gen_aa_donors_panel )
+		gen_cf_sizer.Add( self.cf_gen_aa_donors_panel, 1, 0, 0 )
 		
 		
 		cf_sizer.Add( gen_cf_sizer, 1, wx.EXPAND, 5 )
@@ -1151,73 +1149,73 @@ class MarxanConnectGUI ( wx.Frame ):
 		cf_land_stochasticity_sizer.Fit( self.cf_land_stochasticity_panel )
 		land_cf_sizer.Add( self.cf_land_stochasticity_panel, 1, 0, 0 )
 		
-		self.cf_land_fa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_fa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse to from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_fa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_fa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse to from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_land_fa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		cf_land_fa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_land_fa_sink = wx.CheckBox( self.cf_land_fa_sink_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_fa_sink.Enable( False )
-		self.cf_land_fa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_fa_recipients = wx.CheckBox( self.cf_land_fa_recipients_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_fa_recipients.Enable( False )
+		self.cf_land_fa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_land_fa_sink_sizer.Add( self.cf_land_fa_sink, 0, wx.ALL, 5 )
-		
-		
-		self.cf_land_fa_sink_panel.SetSizer( cf_land_fa_sink_sizer )
-		self.cf_land_fa_sink_panel.Layout()
-		cf_land_fa_sink_sizer.Fit( self.cf_land_fa_sink_panel )
-		land_cf_sizer.Add( self.cf_land_fa_sink_panel, 1, 0, 0 )
-		
-		self.cf_land_fa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_fa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_fa_source_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_land_fa_source = wx.CheckBox( self.cf_land_fa_source_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_fa_source.Enable( False )
-		self.cf_land_fa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_fa_source_sizer.Add( self.cf_land_fa_source, 0, wx.ALL, 5 )
+		cf_land_fa_recipients_sizer.Add( self.cf_land_fa_recipients, 0, wx.ALL, 5 )
 		
 		
-		self.cf_land_fa_source_panel.SetSizer( cf_land_fa_source_sizer )
-		self.cf_land_fa_source_panel.Layout()
-		cf_land_fa_source_sizer.Fit( self.cf_land_fa_source_panel )
-		land_cf_sizer.Add( self.cf_land_fa_source_panel, 1, 0, 0 )
+		self.cf_land_fa_recipients_panel.SetSizer( cf_land_fa_recipients_sizer )
+		self.cf_land_fa_recipients_panel.Layout()
+		cf_land_fa_recipients_sizer.Fit( self.cf_land_fa_recipients_panel )
+		land_cf_sizer.Add( self.cf_land_fa_recipients_panel, 1, 0, 0 )
 		
-		self.cf_land_aa_sink_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_aa_sink_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_fa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_fa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_land_aa_sink_sizer = wx.BoxSizer( wx.VERTICAL )
+		cf_land_fa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_land_aa_sink = wx.CheckBox( self.cf_land_aa_sink_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_aa_sink.Enable( False )
-		self.cf_land_aa_sink.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_fa_donors = wx.CheckBox( self.cf_land_fa_donors_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_fa_donors.Enable( False )
+		self.cf_land_fa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
-		cf_land_aa_sink_sizer.Add( self.cf_land_aa_sink, 0, wx.ALL, 5 )
-		
-		
-		self.cf_land_aa_sink_panel.SetSizer( cf_land_aa_sink_sizer )
-		self.cf_land_aa_sink_panel.Layout()
-		cf_land_aa_sink_sizer.Fit( self.cf_land_aa_sink_panel )
-		land_cf_sizer.Add( self.cf_land_aa_sink_panel, 1, 0, 0 )
-		
-		self.cf_land_aa_source_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_aa_source_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_aa_source_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_land_aa_source = wx.CheckBox( self.cf_land_aa_source_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_aa_source.Enable( False )
-		self.cf_land_aa_source.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_aa_source_sizer.Add( self.cf_land_aa_source, 0, wx.ALL, 5 )
+		cf_land_fa_donors_sizer.Add( self.cf_land_fa_donors, 0, wx.ALL, 5 )
 		
 		
-		self.cf_land_aa_source_panel.SetSizer( cf_land_aa_source_sizer )
-		self.cf_land_aa_source_panel.Layout()
-		cf_land_aa_source_sizer.Fit( self.cf_land_aa_source_panel )
-		land_cf_sizer.Add( self.cf_land_aa_source_panel, 1, 0, 0 )
+		self.cf_land_fa_donors_panel.SetSizer( cf_land_fa_donors_sizer )
+		self.cf_land_fa_donors_panel.Layout()
+		cf_land_fa_donors_sizer.Fit( self.cf_land_fa_donors_panel )
+		land_cf_sizer.Add( self.cf_land_fa_donors_panel, 1, 0, 0 )
+		
+		self.cf_land_aa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_aa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_aa_recipients = wx.CheckBox( self.cf_land_aa_recipients_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_aa_recipients.Enable( False )
+		self.cf_land_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_aa_recipients_sizer.Add( self.cf_land_aa_recipients, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_aa_recipients_panel.SetSizer( cf_land_aa_recipients_sizer )
+		self.cf_land_aa_recipients_panel.Layout()
+		cf_land_aa_recipients_sizer.Fit( self.cf_land_aa_recipients_panel )
+		land_cf_sizer.Add( self.cf_land_aa_recipients_panel, 1, 0, 0 )
+		
+		self.cf_land_aa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_aa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_aa_donors = wx.CheckBox( self.cf_land_aa_donors_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_aa_donors.Enable( False )
+		self.cf_land_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		
+		cf_land_aa_donors_sizer.Add( self.cf_land_aa_donors, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_aa_donors_panel.SetSizer( cf_land_aa_donors_sizer )
+		self.cf_land_aa_donors_panel.Layout()
+		cf_land_aa_donors_sizer.Fit( self.cf_land_aa_donors_panel )
+		land_cf_sizer.Add( self.cf_land_aa_donors_panel, 1, 0, 0 )
 		
 		
 		cf_sizer.Add( land_cf_sizer, 1, wx.EXPAND, 5 )

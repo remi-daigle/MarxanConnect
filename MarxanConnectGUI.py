@@ -140,14 +140,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['gen_cu_cm_filepath'] = ""
         self.project['filepaths']['gen_pu_cm_filepath'] = ""
         self.project['filepaths']['land_cu_filepath'] = ""
-        self.project['filepaths']['land_cu_file_pu_id'] = ""
-        self.project['filepaths']['land_cu_cm_filepath'] = ""
-        self.project['filepaths']['land_pu_cm_filepath'] = ""
-        self.project['filepaths']['land_hab_filepath'] = ""
-        self.project['filepaths']['land_hab_file_hab_id'] = ""
+        self.project['filepaths']['land_cu_file_hab_id'] = ""
         self.project['filepaths']['land_res_mat_filepath'] = ""
         self.project['filepaths']['land_res_filepath'] = ""
         self.project['filepaths']['land_res_file_res_id'] = ""
+        self.project['filepaths']['land_pu_cm_filepath'] = ""
 
         # Marxan metrics files
         self.project['filepaths']['cf_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "puvspr2.dat")
@@ -264,19 +261,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                   self.project['filepaths']['demo_cu_file_pu_id'])
         self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
         self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
+
         self.gen_CU_file.SetPath(self.project['filepaths']['gen_cu_filepath'])
         self.set_GUI_id_selection(self.gen_CU_file_pu_id, self.project['filepaths']['gen_cu_filepath'],
                                   self.project['filepaths']['gen_cu_file_pu_id'])
         self.gen_CU_CM_file.SetPath(self.project['filepaths']['gen_cu_cm_filepath'])
         self.gen_PU_CM_file.SetPath(self.project['filepaths']['gen_pu_cm_filepath'])
-        self.land_HAB_file.SetPath(self.project['filepaths']['land_hab_filepath'])
-        self.set_GUI_id_selection(self.land_HAB_file_hab_id, self.project['filepaths']['land_hab_filepath'],
-                                  self.project['filepaths']['land_hab_file_hab_id'])
+
+        self.land_HAB_file.SetPath(self.project['filepaths']['land_cu_filepath'])
+        self.set_GUI_id_selection(self.land_HAB_file_hab_id, self.project['filepaths']['land_cu_filepath'],
+                                  self.project['filepaths']['land_cu_file_hab_id'])
         self.land_RES_mat_file.SetPath(self.project['filepaths']['land_res_mat_filepath'])
-        self.land_PU_CM_file.SetPath(self.project['filepaths']['land_pu_cm_filepath'])
         self.land_RES_file.SetPath(self.project['filepaths']['land_res_filepath'])
         self.set_GUI_id_selection(self.land_RES_file_res_id, self.project['filepaths']['land_res_filepath'],
                                   self.project['filepaths']['land_res_file_res_id'])
+        self.land_PU_CM_file.SetPath(self.project['filepaths']['land_pu_cm_filepath'])
 
         # Marxan metrics files
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
@@ -400,12 +399,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 trans1 = self.metric_alpha.GetValue() / 100
                 legend1 = self.metric_legend.GetCurrentSelection()
                 type1 = self.get_plot_type(selection=self.metric_shp_choice.GetStringSelection())
-                metric_type1 = self.get_metric_type(selection=self.metric_choice.GetStringSelection())
+                metric_type1 = self.get_metric_type(selection=self.metric_choice.GetStringSelection(),type=type1)
+                print(type1)
+                print(metric_type1)
                 if type1 == "pu":
                     metric1 = self.project['connectivityMetrics'][metric_type1]
                 else:
-                    metric1 = self.project['connectivityMetrics']['spec_' + type1][metric_type1 + type1]
-
+                    metric1 = self.project['connectivityMetrics']['spec_' + type1][metric_type1]
+                print(metric1)
 
             elif self.lyr1_choice.GetChoiceCtrl().GetStringSelection() == "Outline of shapefile":
                 colour1 = self.poly_col.GetColour()
@@ -435,11 +436,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 trans2 = self.metric_alpha1.GetValue() / 100
                 legend2 = self.metric_legend1.GetCurrentSelection()
                 type2 = self.get_plot_type(selection=self.metric_shp_choice1.GetStringSelection())
-                metric_type2 = self.get_metric_type(selection=self.metric_choice1.GetStringSelection())
+                metric_type2 = self.get_metric_type(selection=self.metric_choice1.GetStringSelection(),type=type1)
                 if type2 == "pu":
                     metric2 = self.project['connectivityMetrics'][metric_type2]
                 else:
-                    metric2 = self.project['connectivityMetrics']['spec_' + type2][metric_type2 + type2]
+                    metric2 = self.project['connectivityMetrics']['spec_' + type2][metric_type2]
 
             elif self.lyr2_choice.GetChoiceCtrl().GetStringSelection() == "Outline of shapefile":
                 colour2 = self.poly_col1.GetColour()
@@ -574,9 +575,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.project['filepaths']['aa_filepath'] != "":
             choices.append("Avoidance Areas")
         if self.project['filepaths']['demo_cu_filepath'] != "":
-            choices.append("Demographic Units")
+            if self.demo_rescaleRadioBox.GetStringSelection() != "Identical Grids":
+                choices.append("Demographic Units")
         if self.project['filepaths']['gen_cu_filepath'] != "":
-            choices.append("Genetic Units")
+            if self.gen_rescaleRadioBox.GetStringSelection() != "Identical Grids":
+                choices.append("Genetic Units")
         if self.project['filepaths']['land_cu_filepath'] != "":
             choices.append("Landscape Units")
 
@@ -587,22 +590,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def colormap_shapefile_choices(self):
         choices = []
-        if self.project['filepaths']['demo_cu_filepath'] != "":
-            if 'connectivityMetrics' in self.project:
-                if 'best_solution' in self.project['connectivityMetrics']:
-                    choices.append("Planning Units (Marxan Results)")
-            if self.project['filepaths']['demo_cu_filepath'] != "":
+        if 'connectivityMetrics' in self.project:
+            if 'best_solution' in self.project['connectivityMetrics']:
+                choices.append("Planning Units (Marxan Results)")
+            if 'spec_demo_pu' in self.project['connectivityMetrics']:
                 choices.append("Planning Units (Demographic Data)")
-            if self.project['filepaths']['gen_cu_filepath'] != "":
+            if 'spec_gen_pu' in self.project['connectivityMetrics']:
                 choices.append("Planning Units (Genetic Data)")
-            if self.project['filepaths']['land_cu_filepath'] != "":
+            if 'spec_land_pu' in self.project['connectivityMetrics']:
                 choices.append("Planning Units (Landscape Data)")
-        if self.project['filepaths']['demo_cu_filepath'] != "":
-            choices.append("Demographic Units")
-        if self.project['filepaths']['gen_cu_filepath'] != "":
-            choices.append("Genetic Units")
-        if self.project['filepaths']['land_cu_filepath'] != "":
-            choices.append("Landscape Units")
+            if 'spec_demo_cu' in self.project['connectivityMetrics']:
+                choices.append("Demographic Units")
+            if 'spec_gen_cu' in self.project['connectivityMetrics']:
+                choices.append("Genetic Units")
 
         self.metric_shp_choice.SetItems(choices)
         self.metric_shp_choice.SetSelection(0)
@@ -629,28 +629,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     choices.append("Best Solution")
             else:
                 plot_type = self.get_plot_type(shapefile)
-                print(plot_type)
+                print(self.project['connectivityMetrics']['spec_' + plot_type].keys())
                 if 'spec_' + plot_type in self.project['connectivityMetrics']:
-                    if 'vertex_degree_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Vertex Degree")
-                    if 'between_cent_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Betweenness Centrality")
-                    if 'eig_vect_cent_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Eigen Vector Centrality")
-                    if 'self_recruit_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Self Recruitment")
-                    if 'outflux_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Outflux")
-                    if 'temp_conn_cov_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Temporal Connectivity Covariance")
-                    if 'fa_sink_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Focus Area Sink")
-                    if 'fa_source_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Focus Area Source")
-                    if 'aa_sink_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Avoidance Area Sink")
-                    if 'aa_source_' + plot_type in self.project['connectivityMetrics']['spec_' + plot_type].keys():
-                        choices.append("Avoidance Area Source")
+                    self.spec_resolve_metric_choice('vertex_degree_', "Vertex Degree", plot_type, choices)
+                    self.spec_resolve_metric_choice('between_cent_', "Betweenness Centrality", plot_type, choices)
+                    self.spec_resolve_metric_choice('eig_vect_cent_', "Eigen Vector Centrality", plot_type, choices)
+                    self.spec_resolve_metric_choice('self_recruit_', "Self Recruitment", plot_type, choices)
+                    self.spec_resolve_metric_choice('outflux_', "Outflux", plot_type, choices)
+                    self.spec_resolve_metric_choice('temp_conn_cov_', "Temporal Connectivity Covariance", plot_type, choices)
+                    self.spec_resolve_metric_choice('fa_recipients_', "Focus Area Recipients", plot_type, choices)
+                    self.spec_resolve_metric_choice('fa_donors_', "Focus Donors", plot_type, choices)
+                    self.spec_resolve_metric_choice('aa_recipients', "Avoidance Area Recipients", plot_type, choices)
+                    self.spec_resolve_metric_choice('aa_donors', "Avoidance Area Donors", plot_type, choices)
 
         if lyr == 1:
             self.metric_choice.SetItems(choices)
@@ -658,6 +648,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             self.metric_choice1.SetItems(choices)
             self.metric_choice1.SetSelection(0)
+
+    def spec_resolve_metric_choice(self, prefix, text = None, type = None, choices=None, gettext = True):
+        if gettext:
+            for k in self.project['connectivityMetrics']['spec_' + type].keys():
+                if k.startswith(prefix+type):
+                    if len(k)==len(prefix+type):
+                        choices.append(text)
+                    else:
+                        choices.append(text+' ('+k.replace(prefix+type+'_','')+')')
+        else:
+            if text.startswith(type):
+                if len(type) == len(text):
+                    return str(prefix)
+                else:
+                    return str(prefix+'_'+str.replace(text,type+' (','')[:-1])
 
     def get_plot_type(self, selection):
         if selection == "Planning Units":
@@ -680,33 +685,33 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             type = 'fa'
         elif selection == "Avoidance Areas":
             type = 'aa'
+        else:
+            type = 'pu'
         return type
 
-    def get_metric_type(self, selection):
-        if selection == "Selection Frequency":
-            metric_type = 'select_freq'
-        elif selection == "Best Solution":
-            metric_type = 'best_solution'
-        elif selection == "Vertex Degree":
-            metric_type = 'vertex_degree_'
-        elif selection == "Betweenness Centrality":
-            metric_type = 'between_cent_'
-        elif selection == "Eigen Vector Centrality":
-            metric_type = 'eig_vect_cent_'
-        elif selection == "Self Recruitment":
-            metric_type = 'self_recruit_'
-        elif selection == "Outflux":
-            metric_type = 'outflux_'
-        elif selection == "Temporal Connectivity Covariance":
-            metric_type = 'temp_conn_cov_'
-        elif selection == "Focus Area Sink":
-            metric_type = 'fa_sink_'
-        elif selection == "Focus Area Source":
-            metric_type = 'fa_source_'
-        elif selection == "Avoidance Area Sink":
-            metric_type = 'aa_sink_'
-        elif selection == "Avoidance Area Source":
-            metric_type = 'aa_source_'
+    def get_metric_type(self, selection, type):
+        metric_type = self.spec_resolve_metric_choice('select_freq' + type, selection, "Selection Frequency", type,
+                                                      gettext=False)
+        metric_type = self.spec_resolve_metric_choice('best_solution' + type, selection, "Best Solution", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('vertex_degree_' + type, selection, "Vertex Degree", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('between_cent_' + type, selection, "Betweenness Centrality", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('eig_vect_cent_' + type, selection, "Eigen Vector Centrality", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('outflux_' + type, selection, "Outflux", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('temp_conn_cov_' + type, selection, "Temporal Connectivity Covariance", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('fa_recipients_' + type, selection, "Focus Area Recipients", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('fa_donors_' + type, selection, "Focus Area Donors", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('aa_recipient_' + type, selection, "Avoidance Area Recipients", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('aa_donors_' + type, selection, "Avoidance Area Donors", type,
+                                                      gettext=False) or metric_type
         return metric_type
 
 # ##########################  graph plotting functions #################################################################
@@ -799,9 +804,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Defines landscape habitat type file path
         """
-        self.project['filepaths']['land_hab_filepath'] = self.land_HAB_file.GetPath()
+        self.project['filepaths']['land_cu_filepath'] = self.land_HAB_file.GetPath()
         self.land_HAB_file_hab_id.SetItems(
-            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_hab_filepath'])))
+            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_cu_filepath'])))
         self.land_HAB_file_hab_id.SetSelection(0)
         self.on_land_HAB_file_hab_id(event=None)
         self.outline_shapefile_choices()
@@ -811,7 +816,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Defines landscape Connectivity Unit file path
         """
-        self.project['filepaths']['land_hab_file_hab_id'] = self.land_HAB_file_hab_id.GetStringSelection()
+        self.project['filepaths']['land_cu_file_hab_id'] = self.land_HAB_file_hab_id.GetStringSelection()
 
     def on_land_HAB_buff(self, event):
         """
@@ -819,6 +824,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         will be connected for the least cost path analysis.)
         """
         self.project['filepaths']['land_hab_buff'] = self.land_HAB_buff.GetValue()
+
+    def on_land_RES_mat_file(self, event):
+        """
+        Defines landscape habitat resistance matrix file path
+        """
+        self.project['filepaths']['land_res_mat_filepath'] = self.land_RES_mat_file.GetPath()
 
     def on_land_RES_file(self, event):
         """
@@ -1194,27 +1205,27 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_self_recruit.Enable(enable=demo_enable)
         self.cf_demo_outflux.Enable(enable=demo_ind_enable)
         self.cf_demo_stochasticity.Enable(enable=demo_fa_time_enable)
-        self.cf_demo_fa_sink.Enable(enable=demo_fa_enable)
-        self.cf_demo_fa_source.Enable(enable=demo_fa_enable)
-        self.cf_demo_aa_sink.Enable(enable=demo_aa_enable)
-        self.cf_demo_aa_source.Enable(enable=demo_aa_enable)
+        self.cf_demo_fa_recipients.Enable(enable=demo_fa_enable)
+        self.cf_demo_fa_donors.Enable(enable=demo_fa_enable)
+        self.cf_demo_aa_recipients.Enable(enable=demo_aa_enable)
+        self.cf_demo_aa_donors.Enable(enable=demo_aa_enable)
 
         self.cf_gen_vertex_degree.Enable(enable=gen_enable)
         self.cf_gen_between_cent.Enable(enable=gen_enable)
         self.cf_gen_eig_vect_cent.Enable(enable=gen_enable)
         self.cf_gen_self_recruit.Enable(enable=gen_enable)
-        self.cf_gen_fa_sink.Enable(enable=gen_fa_enable)
-        self.cf_gen_fa_source.Enable(enable=gen_fa_enable)
-        self.cf_gen_aa_sink.Enable(enable=gen_aa_enable)
-        self.cf_gen_aa_source.Enable(enable=gen_aa_enable)
+        self.cf_gen_fa_recipients.Enable(enable=gen_fa_enable)
+        self.cf_gen_fa_donors.Enable(enable=gen_fa_enable)
+        self.cf_gen_aa_recipients.Enable(enable=gen_aa_enable)
+        self.cf_gen_aa_donors.Enable(enable=gen_aa_enable)
 
         self.cf_land_vertex_degree.Enable(enable=land_enable)
         self.cf_land_between_cent.Enable(enable=land_enable)
         self.cf_land_eig_vect_cent.Enable(enable=land_enable)
-        self.cf_land_fa_sink.Enable(enable=land_fa_enable)
-        self.cf_land_fa_source.Enable(enable=land_fa_enable)
-        self.cf_land_aa_sink.Enable(enable=land_aa_enable)
-        self.cf_land_aa_source.Enable(enable=land_aa_enable)
+        self.cf_land_fa_recipients.Enable(enable=land_fa_enable)
+        self.cf_land_fa_donors.Enable(enable=land_fa_enable)
+        self.cf_land_aa_recipients.Enable(enable=land_aa_enable)
+        self.cf_land_aa_donors.Enable(enable=land_aa_enable)
 
 # ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
@@ -1314,23 +1325,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_land_generate_button(self, event):
         self.temp = {}
         self.temp['land_pu_conmat'] = marxanconpy.habitatresistance2conmats(
-            buff=float(self.project['filepaths']['land_hab_buff']),
-            hab_filepath=self.project['filepaths']['land_hab_filepath'],
+            buff=float(self.project['options']['land_hab_buff']),
+            hab_filepath=self.project['filepaths']['land_cu_filepath'],
+            res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
             pu_filepath=self.project['filepaths']['pu_filepath'],
-            hab_id=self.project['filepaths']['land_hab_file_hab_id'])
+            hab_id=self.project['filepaths']['land_cu_file_hab_id'])
 
-        self.project['filepaths']['land_pu_cm_filepaths'] = {}
-        for hab in self.temp['land_pu_conmat'].keys():
-            print(str.replace(
-                self.project['filepaths']['land_pu_cm_filepath'],
-                ".csv",
-                "_"+hab+".csv"))
-            self.project['filepaths']['land_pu_cm_filepaths'][hab] = str.replace(
-                self.project['filepaths']['land_pu_cm_filepath'],
-                ".csv",
-                "_"+hab+".csv")
-        pandas.read_json(self.temp['land_pu_conmat'][hab], orient='split').to_csv(
-            self.project['filepaths']['land_pu_cm_filepaths'][hab], index=True, header=True, sep=",")
+        pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
+            self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")
 
 
 # ##########################  metric related functions ################################################################
@@ -1350,7 +1352,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.all_types += ['demo_pu', 'demo_cu']
             if os.path.isfile(self.project['filepaths']['gen_pu_cm_filepath']):
                 self.all_types += ['gen_pu', 'gen_cu']
-            if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+            if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
                 self.all_types += ['land_pu']
         elif self.calc_metrics_pu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
@@ -1367,9 +1369,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             self.warn_dialog(message="No 'Units' selected for metric calculations.")
 
-
         for self.type in self.all_types:
-            print(self.type)
+
             # check format
             if self.type[-2:] == 'pu':
                 if self.type == 'demo_pu':
@@ -1379,7 +1380,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 if self.type == 'gen_pu':
                     self.check_matrix_list_format(format=self.gen_matrixFormatRadioBox.GetStringSelection(),
                                                   filepath=self.project['filepaths'][self.type + '_cm_filepath'])
-                self.temp['format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
+                    self.temp['format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
+                if self.type == 'land_pu':
+                    self.temp['format'] = "List with Habitat"
 
             # load correct matrix and transform if necessary
             if os.path.isfile(self.project['filepaths'][self.type + '_cm_filepath']):
@@ -1413,6 +1416,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         message="A connectivity 'List with Time' was provided; however, all metrics except "
                                 "'Temporal Connectivity Correlation' will be calculated from the temporal"
                                 "mean of connectivity")
+                elif self.temp['format'] == "List with Habitat":
+                    self.temp[self.type + '_conmat_hab'] = pandas.read_csv(
+                        self.project['filepaths'][self.type + '_cm_filepath'])
+                    self.temp[self.type + '_conmat'] = {}
+                    for h in self.temp[self.type + '_conmat_hab']['habitat'].unique():
+                        self.temp[self.type + '_conmat'][h] = self.temp[self.type + '_conmat_hab'][
+                            self.temp[self.type + '_conmat_hab']['habitat'] == h].pivot_table(values='value', index='id1',
+                                                                                          columns='id2')
+
+                    self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
+                        self.type + '_conmat']
             else:
                 self.warn_dialog(message="File not found: " + self.project['filepaths'][self.type + '_cm_filepath'])
 
@@ -1425,12 +1439,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['shp_filepath'] = self.project['filepaths'][self.type + '_filepath']
                 self.temp['shp_file_pu_id'] = self.project['filepaths'][self.type + '_file_pu_id']
 
+            print(self.temp['shp_filepath'])
             # create dict entries for boundary and spec
             self.project['connectivityMetrics']['spec_' + self.type] = {}
             self.project['connectivityMetrics']['boundary'] = {}
 
             # warn if files not the same length
-            self.temp['conmat_len'] = str(len(self.temp[self.type + '_conmat']))
+            if self.temp['format'] == "List with Habitat":
+                self.temp['conmat_len'] = str(len(next(iter(self.temp[self.type + '_conmat'].values()))))
+            else:
+                self.temp['conmat_len'] = str(len(self.temp[self.type + '_conmat']))
+
             self.temp['shp_len'] = str(gpd.GeoDataFrame.from_file(self.temp['shp_filepath']).shape[0])
             if self.temp['conmat_len'] != self.temp['shp_len']:
                 self.warn_dialog(
@@ -1465,41 +1484,41 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         marxanconpy.conmat2outflux(self.temp[self.type + '_conmat'])
 
                 if self.demo_matrixUnitsRadioBox.GetStringSelection() != "Individuals":
-                    if self.cf_demo_fa_sink.GetValue() or\
-                        self.cf_demo_fa_source.GetValue() or\
-                        self.cf_demo_aa_sink.GetValue() or\
-                        self.cf_demo_aa_source.GetValue():
-                        self.warn_dialog(message="Calculating any 'source' or 'sink' metrics using a connectivity"
+                    if self.cf_demo_fa_recipients.GetValue() or\
+                        self.cf_demo_fa_donors.GetValue() or\
+                        self.cf_demo_aa_recipients.GetValue() or\
+                        self.cf_demo_aa_donors.GetValue():
+                        self.warn_dialog(message="Calculating any 'donors' or 'recipients' metrics using a connectivity"
                                                  " matrix with units other than 'Individuals' assumes outflux from all "
                                                  "planning units is equal.")
 
-                if self.cf_demo_fa_sink.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['fa_sink_' + self.type] = \
-                        marxanconpy.conmat2sink(self.temp[self.type + '_conmat'],
+                if self.cf_demo_fa_recipients.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type] = \
+                        marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'],
                                                 self.project['filepaths']['fa_filepath'],
                                                 self.temp['shp_filepath'],
                                                 self.temp['shp_file_pu_id']
                                                 )
 
-                if self.cf_demo_fa_source.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['fa_source_' + self.type] = \
-                        marxanconpy.conmat2source(self.temp[self.type + '_conmat'],
+                if self.cf_demo_fa_donors.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type] = \
+                        marxanconpy.conmat2donors(self.temp[self.type + '_conmat'],
                                                 self.project['filepaths']['fa_filepath'],
                                                 self.temp['shp_filepath'],
                                                 self.temp['shp_file_pu_id']
                                                 )
 
-                if self.cf_demo_aa_sink.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['aa_sink_' + self.type] = \
-                        marxanconpy.conmat2sink(self.temp[self.type + '_conmat'],
+                if self.cf_demo_aa_recipients.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type] = \
+                        marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'],
                                                 self.project['filepaths']['aa_filepath'],
                                                 self.temp['shp_filepath'],
                                                 self.temp['shp_file_pu_id']
                                                 )
 
-                if self.cf_demo_aa_source.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['aa_source_' + self.type] = \
-                        marxanconpy.conmat2source(self.temp[self.type + '_conmat'],
+                if self.cf_demo_aa_donors.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type] = \
+                        marxanconpy.conmat2donors(self.temp[self.type + '_conmat'],
                                                 self.project['filepaths']['aa_filepath'],
                                                 self.temp['shp_filepath'],
                                                 self.temp['shp_file_pu_id']
@@ -1528,7 +1547,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # calculate genetic metrics ############################################################################
             if self.type[:3] == 'gen':
-                print('calc gen')
                 if self.cf_gen_vertex_degree.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['vertex_degree_' + self.type] = \
                         marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'])
@@ -1545,33 +1563,33 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['spec_' + self.type]['self_recruit_' + self.type] = \
                         marxanconpy.conmat2selfrecruit(self.temp[self.type + '_conmat'])
 
-                if self.cf_gen_fa_sink.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['fa_sink_' + self.type] = \
-                        marxanconpy.conmat2sink(self.temp[self.type + '_conmat'],
+                if self.cf_gen_fa_recipients.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type] = \
+                        marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'],
                                                 self.project['filepaths']['fa_filepath'],
                                                 self.temp['shp_filepath'],
                                                 self.temp['shp_file_pu_id']
                                                 )
 
-                if self.cf_gen_fa_source.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['fa_source_' + self.type] = \
-                        marxanconpy.conmat2source(self.temp[self.type + '_conmat'],
+                if self.cf_gen_fa_donors.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type] = \
+                        marxanconpy.conmat2donors(self.temp[self.type + '_conmat'],
                                                   self.project['filepaths']['fa_filepath'],
                                                   self.temp['shp_filepath'],
                                                   self.temp['shp_file_pu_id']
                                                   )
 
-                if self.cf_gen_aa_sink.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['aa_sink_' + self.type] = \
-                        marxanconpy.conmat2sink(self.temp[self.type + '_conmat'],
+                if self.cf_gen_aa_recipients.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type] = \
+                        marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'],
                                                 self.project['filepaths']['aa_filepath'],
                                                 self.temp['shp_filepath'],
                                                 self.temp['shp_file_pu_id']
                                                 )
 
-                if self.cf_gen_aa_source.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['aa_source_' + self.type] = \
-                        marxanconpy.conmat2source(self.temp[self.type + '_conmat'],
+                if self.cf_gen_aa_donors.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type] = \
+                        marxanconpy.conmat2donors(self.temp[self.type + '_conmat'],
                                                   self.project['filepaths']['aa_filepath'],
                                                   self.temp['shp_filepath'],
                                                   self.temp['shp_file_pu_id']
@@ -1585,17 +1603,73 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
                         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
 
+            # calculate landscape metrics ############################################################################
+            if self.type[-7:] == 'land_pu':
+                for h in self.temp[self.type + '_conmat'].keys():
+                    print(self.temp[self.type + '_conmat'][h].shape)
+                    if self.cf_land_vertex_degree.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type][
+                            'vertex_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
+                            self.temp[self.type + '_conmat'][h])
 
+                    if self.cf_land_between_cent.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2betweencent(self.temp[self.type + '_conmat'][h])
 
-                            # create initial spec
+                    if self.cf_land_eig_vect_cent.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2eigvectcent(self.temp[self.type + '_conmat'][h])
+
+                    if self.cf_land_fa_recipients.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'][h],
+                                                    self.project['filepaths']['fa_filepath'],
+                                                    self.temp['shp_filepath'],
+                                                    self.temp['shp_file_pu_id']
+                                                    )
+
+                    if self.cf_land_fa_donors.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2donors(self.temp[self.type + '_conmat'][h],
+                                                      self.project['filepaths']['fa_filepath'],
+                                                      self.temp['shp_filepath'],
+                                                      self.temp['shp_file_pu_id']
+                                                      )
+
+                    if self.cf_land_aa_recipients.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'][h],
+                                                    self.project['filepaths']['aa_filepath'],
+                                                    self.temp['shp_filepath'],
+                                                    self.temp['shp_file_pu_id']
+                                                    )
+
+                    if self.cf_land_aa_donors.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2donors(self.temp[self.type + '_conmat'][h],
+                                                      self.project['filepaths']['aa_filepath'],
+                                                      self.temp['shp_filepath'],
+                                                      self.temp['shp_file_pu_id']
+                                                      )
+
+                    if self.bd_land_conn_boundary.GetValue():
+                        self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
+
+                    if self.bd_land_min_plan_graph.GetValue():
+                        self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'][h])
+
+        # create initial spec
+        self.project['options']['metricsCalculated'] = True
         self.on_new_spec()
         self.customize_spec.Enable(enable=True)
         self.CFT_percent_slider.Enable(enable=True)
         self.export_metrics.Enable(enable=True)
         self.custom_spec_panel.SetToolTip(None)
+        self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
-        self.project['options']['metricsCalculated'] = True
 
     def on_export_metrics(self, event):
         if self.calc_metrics_pu.GetValue():
@@ -1741,7 +1815,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):
         if self.calc_metrics_pu.GetValue():
-            self.type = 'demo_pu'
             self.spec_frame.Show()
         else:
             self.warn_dialog(message="'Planning Units' not selected for metric calculations.")
