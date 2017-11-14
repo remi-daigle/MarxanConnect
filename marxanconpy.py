@@ -171,8 +171,10 @@ def conmat2eigvectcent(conmat):
     return eigvectcent
 
 def conmat2outflux(conmat):
-    conmat.as_matrix().sum(1).tolist()
     return conmat.as_matrix().sum(1).tolist()
+
+def conmat2import(conmat):
+    return conmat.as_matrix().sum(0).tolist()
 
 def conmat2selfrecruit(conmat):
     selfrecruit = numpy.diag(conmat.as_matrix()).tolist()
@@ -302,16 +304,10 @@ def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath,
     habdiss[hab_id] = habdiss.index.values.astype(str)
     habdiss = habdiss.reset_index(drop=True)
     pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs({'init': 'epsg:4326'})
-
     pu['buff'] = pu.geometry.buffer(buff)
 
     habtypes = habdiss[hab_id].values
     habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0))
-
-    #    habresdf = pandas.DataFrame(columns=habtypes)
-    #    for index, habrow in hab.iterrows():
-    #        habresdf = habresdf.append(pandas.DataFrame(habres[str(habrow[hab_id]) == habtypes,], columns=habtypes))
-    #    habresdf = numpy.array(habresdf)
 
     G = igraph.Graph()
     G.add_vertices(pu.index)
@@ -319,7 +315,6 @@ def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath,
     area = pandas.DataFrame(numpy.zeros((len(pu), len(habtypes))), columns=habtypes)
     for index1, pu1row in pu.iterrows():
         for indexhab, habrow in habdiss.iterrows():
-            print(index1)
             area.iloc[index1,indexhab] = pu1row.geometry.intersection(habrow.geometry).area
         for index2, pu2row in pu.iterrows():
             print(index1, index2)
@@ -339,7 +334,7 @@ def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath,
         conmat_temp = conmat_temp * conmat_temp
         conmat_temp = conmat_temp-conmat_temp.values.min()
         conmat_temp = abs(conmat_temp / conmat_temp.values.max() - 1).multiply(area[h], axis=0)
-        conmat_temp.to_csv('test_' + h + '.csv')
+        # conmat_temp.to_csv('test_' + h + '.csv')
         conmat_temp['id1'] = conmat_temp.index
         conmat_temp['habitat'] = h
         conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))

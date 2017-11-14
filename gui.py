@@ -861,6 +861,22 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
+		self.cf_demo_import_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_import_panel.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		
+		cf_demo_import_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_demo_import = wx.CheckBox( self.cf_demo_import_panel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_import.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		
+		cf_demo_import_sizer.Add( self.cf_demo_import, 0, wx.ALL, 5 )
+		
+		
+		self.cf_demo_import_panel.SetSizer( cf_demo_import_sizer )
+		self.cf_demo_import_panel.Layout()
+		cf_demo_import_sizer.Fit( self.cf_demo_import_panel )
+		demo_cf_sizer.Add( self.cf_demo_import_panel, 1, 0, 5 )
+		
 		self.cf_demo_outflux_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_demo_outflux_panel.SetToolTip( u"Outflux optimizes for 'productive' areas. It gives a higher value to planning units from which greater numbers of individuals originate. This is only available if the units of the connectivity matrix is \"Individuals\". " )
 		
@@ -997,6 +1013,23 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		gen_cf_sizer.Add( self.cf_gen_self_recruit, 0, wx.ALL, 5 )
 		
+		self.cf_gen_import_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_gen_import_panel.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		
+		cf_gen_import_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_gen_import = wx.CheckBox( self.cf_gen_import_panel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_gen_import.Hide()
+		self.cf_gen_import.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		
+		cf_gen_import_sizer.Add( self.cf_gen_import, 0, wx.ALL, 5 )
+		
+		
+		self.cf_gen_import_panel.SetSizer( cf_gen_import_sizer )
+		self.cf_gen_import_panel.Layout()
+		cf_gen_import_sizer.Fit( self.cf_gen_import_panel )
+		gen_cf_sizer.Add( self.cf_gen_import_panel, 1, 0, 5 )
+		
 		self.cf_gen_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_gen_outflux.Enable( False )
 		self.cf_gen_outflux.Hide()
@@ -1125,6 +1158,23 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		land_cf_sizer.Add( self.cf_land_self_recruit, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
+		self.cf_land_import_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_import_panel.Hide()
+		self.cf_land_import_panel.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		
+		cf_land_import_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.cf_land_import = wx.CheckBox( self.cf_land_import_panel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_import.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		
+		cf_land_import_sizer.Add( self.cf_land_import, 0, wx.ALL, 5 )
+		
+		
+		self.cf_land_import_panel.SetSizer( cf_land_import_sizer )
+		self.cf_land_import_panel.Layout()
+		cf_land_import_sizer.Fit( self.cf_land_import_panel )
+		land_cf_sizer.Add( self.cf_land_import_panel, 1, wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
+		
 		self.cf_land_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_outflux.SetValue(True) 
 		self.cf_land_outflux.Hide()
@@ -1133,13 +1183,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_cf_sizer.Add( self.cf_land_outflux, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
 		self.cf_land_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_land_stochasticity_panel.Hide()
 		self.cf_land_stochasticity_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
 		
 		cf_land_stochasticity_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		self.cf_land_stochasticity = wx.CheckBox( self.cf_land_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_stochasticity.Enable( False )
-		self.cf_land_stochasticity.Hide()
 		
 		cf_land_stochasticity_sizer.Add( self.cf_land_stochasticity, 0, wx.ALL, 5 )
 		
@@ -1147,7 +1197,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cf_land_stochasticity_panel.SetSizer( cf_land_stochasticity_sizer )
 		self.cf_land_stochasticity_panel.Layout()
 		cf_land_stochasticity_sizer.Fit( self.cf_land_stochasticity_panel )
-		land_cf_sizer.Add( self.cf_land_stochasticity_panel, 1, 0, 0 )
+		land_cf_sizer.Add( self.cf_land_stochasticity_panel, 1, wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 0 )
 		
 		self.cf_land_fa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_land_fa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse to from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )

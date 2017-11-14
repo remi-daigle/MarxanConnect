@@ -636,6 +636,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.spec_resolve_metric_choice('eig_vect_cent_', "Eigen Vector Centrality", plot_type, choices)
                     self.spec_resolve_metric_choice('self_recruit_', "Self Recruitment", plot_type, choices)
                     self.spec_resolve_metric_choice('outflux_', "Outflux", plot_type, choices)
+                    self.spec_resolve_metric_choice('import_', "Import", plot_type, choices)
                     self.spec_resolve_metric_choice('temp_conn_cov_', "Temporal Connectivity Covariance", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_recipients_', "Focus Area Recipients", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_donors_', "Focus Donors", plot_type, choices)
@@ -701,6 +702,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.spec_resolve_metric_choice('eig_vect_cent_' + type, selection, "Eigen Vector Centrality", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('outflux_' + type, selection, "Outflux", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('import_' + type, selection, "Import", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('temp_conn_cov_' + type, selection, "Temporal Connectivity Covariance", type,
                                                       gettext=False) or metric_type
@@ -1204,6 +1207,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_eig_vect_cent.Enable(enable=demo_enable)
         self.cf_demo_self_recruit.Enable(enable=demo_enable)
         self.cf_demo_outflux.Enable(enable=demo_ind_enable)
+        self.cf_demo_import.Enable(enable=demo_ind_enable)
         self.cf_demo_stochasticity.Enable(enable=demo_fa_time_enable)
         self.cf_demo_fa_recipients.Enable(enable=demo_fa_enable)
         self.cf_demo_fa_donors.Enable(enable=demo_fa_enable)
@@ -1482,6 +1486,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 if self.cf_demo_outflux.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['outflux_' + self.type] = \
                         marxanconpy.conmat2outflux(self.temp[self.type + '_conmat'])
+
+                if self.cf_demo_import.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['import_' + self.type] = \
+                        marxanconpy.conmat2import(self.temp[self.type + '_conmat'])
 
                 if self.demo_matrixUnitsRadioBox.GetStringSelection() != "Individuals":
                     if self.cf_demo_fa_recipients.GetValue() or\
