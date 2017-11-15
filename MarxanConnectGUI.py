@@ -691,9 +691,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         return type
 
     def get_metric_type(self, selection, type):
-        metric_type = self.spec_resolve_metric_choice('select_freq' + type, selection, "Selection Frequency", type,
+        metric_type = self.spec_resolve_metric_choice('select_freq', selection, "Selection Frequency", type,
                                                       gettext=False)
-        metric_type = self.spec_resolve_metric_choice('best_solution' + type, selection, "Best Solution", type,
+        metric_type = self.spec_resolve_metric_choice('best_solution', selection, "Best Solution", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('vertex_degree_' + type, selection, "Vertex Degree", type,
                                                       gettext=False) or metric_type

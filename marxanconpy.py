@@ -334,7 +334,6 @@ def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath,
         conmat_temp = conmat_temp * conmat_temp
         conmat_temp = conmat_temp-conmat_temp.values.min()
         conmat_temp = abs(conmat_temp / conmat_temp.values.max() - 1).multiply(area[h], axis=0)
-        # conmat_temp.to_csv('test_' + h + '.csv')
         conmat_temp['id1'] = conmat_temp.index
         conmat_temp['habitat'] = h
         conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))
