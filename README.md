@@ -81,9 +81,16 @@ Authors
 -------
 
 -   **Remi Daigle** - *Initial work, development, maintenance* - [remi-daigle](https://github.com/remi-daigle)
--   **Arieanna Balbar** - *Consultation*
--   **Anna Metaxas** - *Consultation*
+-   **Arieanna Balbar** - *Consultation* - [abalbar](https://github.com/abalbar)
 -   **Maria Beger** - *Consultation*
+-   **Jo Clarke** - *Consultation*
+-   **Caitie Kuempel** - *Consultation*
+-   **Jennifer McGowan** - *Consultation*
+-   **Anna Metaxas** - *Consultation*
+-   **Hugh Possingham** - *Consultation*
+-   **Eric Anton Treml** - *Consultation*
+
+(alphabetical aside from first author)
 
 See also the list of [contributors](https://github.com/remi-daigle/MarxanConnect/contributors) who participated in this project.
 
