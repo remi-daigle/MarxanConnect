@@ -85,7 +85,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Arieanna Balbar** - *Consultation* - [abalbar](https://github.com/abalbar)
 * **Maria Beger** - *Consultation*
 * **Jo Clarke** - *Consultation*
-* **Caitie Kuempel** - *Consultation*
+* **Caitie Kuempel** - *Consultation* - [cdkuempel](https://github.com/cdkuempel)
 * **Jennifer McGowan** - *Consultation*
 * **Anna Metaxas** - *Consultation*
 * **Hugh Possingham** - *Consultation*
