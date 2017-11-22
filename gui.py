@@ -19,7 +19,7 @@ import wx.grid
 class MarxanConnectGUI ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1050,802 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1087,823 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -1411,84 +1411,84 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
 		self.preEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		fgSizer44 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		fgSizer44.AddGrowableCol( 0 )
-		fgSizer44.AddGrowableRow( 2 )
-		fgSizer44.SetFlexibleDirection( wx.BOTH )
-		fgSizer44.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEvalMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		preEvalMainSizer.AddGrowableCol( 0 )
+		preEvalMainSizer.AddGrowableRow( 0 )
+		preEvalMainSizer.AddGrowableRow( 2 )
+		preEvalMainSizer.SetFlexibleDirection( wx.BOTH )
+		preEvalMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		con_input_def_sizer1 = wx.BoxSizer( wx.HORIZONTAL )
+		preEval_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.con_input_def_txt1 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"text that explains what we're doing on this tab", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.con_input_def_txt1.Wrap( -1 )
-		con_input_def_sizer1.Add( self.con_input_def_txt1, 0, wx.ALL|wx.EXPAND, 5 )
+		self.preEval_def_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"This tab will allow you to evaluate the metrics created on the previous tab. They can be removed if they are not appropriate for the Marxan analysis, transformed into discrete features which can be locked in or out. Most importantly, everything can be exported as Marxan formatted files.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_def_txt.Wrap( -1 )
+		preEval_def_sizer.Add( self.preEval_def_txt, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		fgSizer44.Add( con_input_def_sizer1, 1, wx.EXPAND, 5 )
+		preEvalMainSizer.Add( preEval_def_sizer, 1, wx.EXPAND, 5 )
 		
-		con_input_choice_sizer1 = wx.BoxSizer( wx.VERTICAL )
+		preEval_choice_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.con_input_choice_txt1 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Choose Available Connectivity Metric to Discretize:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.con_input_choice_txt1.Wrap( -1 )
-		self.con_input_choice_txt1.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
+		self.preEval_choice_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Choose Available Connectivity Metric to Discretize:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_choice_txt.Wrap( -1 )
+		self.preEval_choice_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
-		con_input_choice_sizer1.Add( self.con_input_choice_txt1, 0, wx.ALL, 5 )
+		preEval_choice_sizer.Add( self.preEval_choice_txt, 0, wx.ALL, 5 )
 		
-		metrics_opt_sizer = wx.FlexGridSizer( 2, 2, 0, 0 )
-		metrics_opt_sizer.SetFlexibleDirection( wx.BOTH )
-		metrics_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_metrics_opt_sizer = wx.FlexGridSizer( 2, 3, 0, 0 )
+		preEval_metrics_opt_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_metrics_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.metric_shp_txt2 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.metric_shp_txt2.Wrap( -1 )
-		metrics_opt_sizer.Add( self.metric_shp_txt2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		self.preEval_metric_shp_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_metric_shp_txt.Wrap( -1 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
 		
-		self.metric_txt2 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.metric_txt2.Wrap( -1 )
-		metrics_opt_sizer.Add( self.metric_txt2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_metric_txt.Wrap( -1 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		
+		self.preEval_metric_spacertxt = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_metric_spacertxt.Wrap( -1 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_spacertxt, 0, wx.ALL, 5 )
 		
 		preEval_metric_shp_choiceChoices = [ u"Planning Units (Demographic Data)", u"Planning Units (Landscape Data)" ]
 		self.preEval_metric_shp_choice = wx.Choice( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_shp_choiceChoices, 0 )
 		self.preEval_metric_shp_choice.SetSelection( 0 )
-		metrics_opt_sizer.Add( self.preEval_metric_shp_choice, 0, wx.ALL, 5 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_shp_choice, 0, wx.ALL, 5 )
 		
 		preEval_metric_choiceChoices = [ u"Selection Frequency", u"Best Solution", u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment", u"Outflux", u"Temporal Connectivity Covariance", u"Focus Area Sink", u"Focus Area Source", u"Avoidance Area Sink", u"Avoidance Area Source" ]
 		self.preEval_metric_choice = wx.Choice( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_choiceChoices, 0 )
 		self.preEval_metric_choice.SetSelection( 0 )
-		metrics_opt_sizer.Add( self.preEval_metric_choice, 0, wx.ALL, 5 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_choice, 0, wx.ALL, 5 )
+		
+		self.m_button18 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_metrics_opt_sizer.Add( self.m_button18, 0, wx.ALL, 4 )
 		
 		
-		con_input_choice_sizer1.Add( metrics_opt_sizer, 1, wx.EXPAND, 5 )
+		preEval_choice_sizer.Add( preEval_metrics_opt_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		fgSizer44.Add( con_input_choice_sizer1, 1, wx.EXPAND, 5 )
+		preEvalMainSizer.Add( preEval_choice_sizer, 1, wx.EXPAND, 5 )
 		
-		fgSizer48 = wx.FlexGridSizer( 1, 4, 0, 0 )
-		fgSizer48.AddGrowableCol( 2 )
-		fgSizer48.AddGrowableCol( 3 )
-		fgSizer48.AddGrowableRow( 0 )
-		fgSizer48.SetFlexibleDirection( wx.BOTH )
-		fgSizer48.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_table_discrete_sizer = wx.FlexGridSizer( 1, 4, 0, 0 )
+		preEval_table_discrete_sizer.AddGrowableCol( 1 )
+		preEval_table_discrete_sizer.AddGrowableCol( 2 )
+		preEval_table_discrete_sizer.AddGrowableRow( 0 )
+		preEval_table_discrete_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_table_discrete_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		fgSizer49 = wx.FlexGridSizer( 1, 1, 0, 0 )
-		fgSizer49.AddGrowableRow( 0 )
-		fgSizer49.SetFlexibleDirection( wx.BOTH )
-		fgSizer49.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_table_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		preEval_table_sizer.AddGrowableCol( 0 )
+		preEval_table_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_table_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
+		self.preEval_table_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Selected Metric Summary", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_table_txt.Wrap( -1 )
+		self.preEval_table_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
 		
-		fgSizer48.Add( fgSizer49, 1, wx.EXPAND, 5 )
-		
-		fgSizer503 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		fgSizer503.AddGrowableCol( 0 )
-		fgSizer503.SetFlexibleDirection( wx.BOTH )
-		fgSizer503.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.m_staticText941 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Selected Metric Summary", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText941.Wrap( -1 )
-		self.m_staticText941.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
-		
-		fgSizer503.Add( self.m_staticText941, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		preEval_table_sizer.Add( self.preEval_table_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		self.preEval_grid = wx.grid.Grid( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		
@@ -1526,155 +1526,152 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		# Cell Defaults
 		self.preEval_grid.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
-		fgSizer503.Add( self.preEval_grid, 0, wx.ALL, 5 )
+		preEval_table_sizer.Add( self.preEval_grid, 0, wx.ALL, 5 )
 		
 		
-		fgSizer48.Add( fgSizer503, 1, wx.EXPAND, 5 )
+		preEval_table_discrete_sizer.Add( preEval_table_sizer, 1, wx.EXPAND, 5 )
 		
-		fgSizer50 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		fgSizer50.AddGrowableCol( 0 )
-		fgSizer50.SetFlexibleDirection( wx.BOTH )
-		fgSizer50.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_discrete_from_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		preEval_discrete_from_sizer.AddGrowableCol( 0 )
+		preEval_discrete_from_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_from_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_staticText94 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"From:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText94.Wrap( -1 )
-		self.m_staticText94.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.preEval_discrete_from_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Make discrete feature from:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_discrete_from_txt.Wrap( -1 )
+		self.preEval_discrete_from_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
 		
-		fgSizer50.Add( self.m_staticText94, 0, wx.ALL, 5 )
+		preEval_discrete_from_sizer.Add( self.preEval_discrete_from_txt, 0, wx.ALL, 5 )
 		
-		fgSizer5011 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer5011.AddGrowableCol( 1 )
-		fgSizer5011.SetFlexibleDirection( wx.BOTH )
-		fgSizer5011.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_discrete_from_quartile_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		preEval_discrete_from_quartile_sizer.AddGrowableCol( 1 )
+		preEval_discrete_from_quartile_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_from_quartile_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_checkBox511 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer5011.Add( self.m_checkBox511, 0, wx.ALL, 5 )
+		self.preEval_discrete_from_quartile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_from_quartile_sizer.Add( self.preEval_discrete_from_quartile, 0, wx.ALL, 5 )
 		
-		m_radioBox13Choices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
-		self.m_radioBox13 = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, m_radioBox13Choices, 1, wx.RA_SPECIFY_COLS )
-		self.m_radioBox13.SetSelection( 0 )
-		fgSizer5011.Add( self.m_radioBox13, 0, wx.ALL, 5 )
-		
-		
-		fgSizer50.Add( fgSizer5011, 1, wx.EXPAND, 5 )
-		
-		fgSizer501 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer501.AddGrowableCol( 1 )
-		fgSizer501.SetFlexibleDirection( wx.BOTH )
-		fgSizer501.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.m_checkBox51 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer501.Add( self.m_checkBox51, 0, wx.ALL, 5 )
-		
-		self.m_slider6 = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
-		fgSizer501.Add( self.m_slider6, 0, wx.EXPAND|wx.RIGHT, 30 )
+		preEval_discrete_from_quartile_radioChoices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
+		self.preEval_discrete_from_quartile_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, preEval_discrete_from_quartile_radioChoices, 1, wx.RA_SPECIFY_COLS )
+		self.preEval_discrete_from_quartile_radio.SetSelection( 0 )
+		preEval_discrete_from_quartile_sizer.Add( self.preEval_discrete_from_quartile_radio, 0, wx.ALL, 5 )
 		
 		
-		fgSizer50.Add( fgSizer501, 1, wx.EXPAND, 5 )
+		preEval_discrete_from_sizer.Add( preEval_discrete_from_quartile_sizer, 1, wx.EXPAND, 5 )
 		
-		fgSizer5012 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer5012.AddGrowableCol( 1 )
-		fgSizer5012.SetFlexibleDirection( wx.BOTH )
-		fgSizer5012.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_discrete_from_percentile_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		preEval_discrete_from_percentile_sizer.AddGrowableCol( 1 )
+		preEval_discrete_from_percentile_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_from_percentile_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_checkBox512 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Value", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer5012.Add( self.m_checkBox512, 0, wx.ALL, 5 )
+		self.preEval_discrete_from_percentile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_from_percentile_sizer.Add( self.preEval_discrete_from_percentile, 0, wx.ALL, 5 )
 		
-		self.m_textCtrl3 = wx.TextCtrl( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer5012.Add( self.m_textCtrl3, 0, wx.ALL, 5 )
-		
-		
-		fgSizer50.Add( fgSizer5012, 1, wx.EXPAND, 5 )
+		self.preEval_discrete_from_percentile_slider = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		preEval_discrete_from_percentile_sizer.Add( self.preEval_discrete_from_percentile_slider, 0, wx.EXPAND|wx.RIGHT, 30 )
 		
 		
-		fgSizer48.Add( fgSizer50, 1, wx.EXPAND, 5 )
+		preEval_discrete_from_sizer.Add( preEval_discrete_from_percentile_sizer, 1, wx.EXPAND, 5 )
 		
-		fgSizer502 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		fgSizer502.AddGrowableCol( 0 )
-		fgSizer502.SetFlexibleDirection( wx.BOTH )
-		fgSizer502.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_discrete_from_value_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		preEval_discrete_from_value_sizer.AddGrowableCol( 1 )
+		preEval_discrete_from_value_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_from_value_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_staticText95 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"To:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText95.Wrap( -1 )
-		self.m_staticText95.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.preEval_discrete_from_value = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Value", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_from_value_sizer.Add( self.preEval_discrete_from_value, 0, wx.ALL, 5 )
 		
-		fgSizer502.Add( self.m_staticText95, 0, wx.ALL, 5 )
-		
-		fgSizer50111 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer50111.AddGrowableCol( 1 )
-		fgSizer50111.SetFlexibleDirection( wx.BOTH )
-		fgSizer50111.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.m_checkBox5111 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer50111.Add( self.m_checkBox5111, 0, wx.ALL, 5 )
-		
-		m_radioBox131Choices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
-		self.m_radioBox131 = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, m_radioBox131Choices, 1, wx.RA_SPECIFY_COLS )
-		self.m_radioBox131.SetSelection( 0 )
-		fgSizer50111.Add( self.m_radioBox131, 0, wx.ALL, 5 )
+		self.preEval_discrete_from_value_txtctrl = wx.TextCtrl( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_from_value_sizer.Add( self.preEval_discrete_from_value_txtctrl, 0, wx.ALL, 5 )
 		
 		
-		fgSizer502.Add( fgSizer50111, 1, wx.EXPAND, 5 )
-		
-		fgSizer5013 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer5013.AddGrowableCol( 1 )
-		fgSizer5013.SetFlexibleDirection( wx.BOTH )
-		fgSizer5013.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.m_checkBox513 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer5013.Add( self.m_checkBox513, 0, wx.ALL, 5 )
-		
-		self.m_slider61 = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
-		fgSizer5013.Add( self.m_slider61, 0, wx.EXPAND|wx.RIGHT, 30 )
+		preEval_discrete_from_sizer.Add( preEval_discrete_from_value_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		fgSizer502.Add( fgSizer5013, 1, wx.EXPAND, 5 )
+		preEval_table_discrete_sizer.Add( preEval_discrete_from_sizer, 1, wx.EXPAND, 5 )
 		
-		fgSizer50121 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer50121.AddGrowableCol( 1 )
-		fgSizer50121.SetFlexibleDirection( wx.BOTH )
-		fgSizer50121.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		preEval_discrete_to_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		preEval_discrete_to_sizer.AddGrowableCol( 0 )
+		preEval_discrete_to_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_to_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_checkBox5121 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Value", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer50121.Add( self.m_checkBox5121, 0, wx.ALL, 5 )
+		self.preEval_discrete_to_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Make discrete feature to:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_discrete_to_txt.Wrap( -1 )
+		self.preEval_discrete_to_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
 		
-		self.m_textCtrl31 = wx.TextCtrl( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer50121.Add( self.m_textCtrl31, 0, wx.ALL, 5 )
+		preEval_discrete_to_sizer.Add( self.preEval_discrete_to_txt, 0, wx.ALL, 5 )
+		
+		preEval_discrete_to_quartile_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		preEval_discrete_to_quartile_sizer.AddGrowableCol( 1 )
+		preEval_discrete_to_quartile_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_to_quartile_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.preEval_discrete_to_quartile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_to_quartile_sizer.Add( self.preEval_discrete_to_quartile, 0, wx.ALL, 5 )
+		
+		preEval_discrete_to_quartile_radioChoices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
+		self.preEval_discrete_to_quartile_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, preEval_discrete_to_quartile_radioChoices, 1, wx.RA_SPECIFY_COLS )
+		self.preEval_discrete_to_quartile_radio.SetSelection( 0 )
+		preEval_discrete_to_quartile_sizer.Add( self.preEval_discrete_to_quartile_radio, 0, wx.ALL, 5 )
 		
 		
-		fgSizer502.Add( fgSizer50121, 1, wx.EXPAND, 5 )
+		preEval_discrete_to_sizer.Add( preEval_discrete_to_quartile_sizer, 1, wx.EXPAND, 5 )
+		
+		preEval_discrete_to_percentile_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		preEval_discrete_to_percentile_sizer.AddGrowableCol( 1 )
+		preEval_discrete_to_percentile_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_to_percentile_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.preEval_discrete_from_percentile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_to_percentile_sizer.Add( self.preEval_discrete_from_percentile, 0, wx.ALL, 5 )
+		
+		self.preEval_discrete_to_percentile_slider = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		preEval_discrete_to_percentile_sizer.Add( self.preEval_discrete_to_percentile_slider, 0, wx.EXPAND|wx.RIGHT, 30 )
 		
 		
-		fgSizer48.Add( fgSizer502, 1, wx.EXPAND, 5 )
+		preEval_discrete_to_sizer.Add( preEval_discrete_to_percentile_sizer, 1, wx.EXPAND, 5 )
+		
+		preEval_discrete_to_value_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		preEval_discrete_to_value_sizer.AddGrowableCol( 1 )
+		preEval_discrete_to_value_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_discrete_to_value_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.preEval_discrete_to_value = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Value", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_to_value_sizer.Add( self.preEval_discrete_to_value, 0, wx.ALL, 5 )
+		
+		self.preEval_discrete_to_value_txtctrl = wx.TextCtrl( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_to_value_sizer.Add( self.preEval_discrete_to_value_txtctrl, 0, wx.ALL, 5 )
 		
 		
-		fgSizer44.Add( fgSizer48, 1, wx.EXPAND, 5 )
+		preEval_discrete_to_sizer.Add( preEval_discrete_to_value_sizer, 1, wx.EXPAND, 5 )
 		
-		metrics_buttons_sizer11 = wx.FlexGridSizer( 0, 6, 0, 0 )
-		metrics_buttons_sizer11.AddGrowableCol( 0 )
-		metrics_buttons_sizer11.SetFlexibleDirection( wx.BOTH )
-		metrics_buttons_sizer11.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		preEval_table_discrete_sizer.Add( preEval_discrete_to_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		preEvalMainSizer.Add( preEval_table_discrete_sizer, 1, wx.EXPAND, 5 )
+		
+		preEval_metrics_buttons_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
+		preEval_metrics_buttons_sizer.AddGrowableCol( 0 )
+		preEval_metrics_buttons_sizer.SetFlexibleDirection( wx.BOTH )
+		preEval_metrics_buttons_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.spacertext11 = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.spacertext11.Wrap( -1 )
-		metrics_buttons_sizer11.Add( self.spacertext11, 0, wx.ALL, 5 )
+		preEval_metrics_buttons_sizer.Add( self.spacertext11, 0, wx.ALL, 5 )
 		
 		self.calc_metrics11 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		metrics_buttons_sizer11.Add( self.calc_metrics11, 0, wx.ALL, 5 )
+		preEval_metrics_buttons_sizer.Add( self.calc_metrics11, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		m_radioBox1511Choices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.m_radioBox1511 = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, m_radioBox1511Choices, 3, wx.RA_SPECIFY_COLS )
 		self.m_radioBox1511.SetSelection( 2 )
-		metrics_buttons_sizer11.Add( self.m_radioBox1511, 0, wx.ALL, 5 )
-		
-		self.m_button18 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		metrics_buttons_sizer11.Add( self.m_button18, 0, wx.ALL, 5 )
+		preEval_metrics_buttons_sizer.Add( self.m_radioBox1511, 0, wx.ALL, 5 )
 		
 		
-		fgSizer44.Add( metrics_buttons_sizer11, 1, wx.EXPAND, 5 )
+		preEvalMainSizer.Add( preEval_metrics_buttons_sizer, 1, wx.EXPAND, 5 )
 		
 		self.m_staticline8 = wx.StaticLine( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		fgSizer44.Add( self.m_staticline8, 0, wx.EXPAND |wx.ALL, 5 )
+		preEvalMainSizer.Add( self.m_staticline8, 0, wx.EXPAND |wx.ALL, 5 )
 		
 		cf_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		cf_export_sizer.AddGrowableCol( 1 )
@@ -1748,10 +1745,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		cf_export_sizer.Add( cf_file_export_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		fgSizer44.Add( cf_export_sizer, 1, wx.EXPAND, 5 )
+		preEvalMainSizer.Add( cf_export_sizer, 1, wx.EXPAND, 5 )
 		
 		self.m_staticline81 = wx.StaticLine( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		fgSizer44.Add( self.m_staticline81, 0, wx.EXPAND |wx.ALL, 5 )
+		preEvalMainSizer.Add( self.m_staticline81, 0, wx.EXPAND |wx.ALL, 5 )
 		
 		bd_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		bd_file_sizer.AddGrowableCol( 1 )
@@ -1766,7 +1763,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		bd_file_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		fgSizer44.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
+		preEvalMainSizer.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
 		
 		bd_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		bd_file_sizer.AddGrowableCol( 1 )
@@ -1781,7 +1778,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		bd_file_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		fgSizer44.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
+		preEvalMainSizer.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
 		
 		metrics_buttons_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
 		metrics_buttons_sizer.AddGrowableCol( 0 )
@@ -1797,27 +1794,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		metrics_buttons_sizer.Add( self.export_metrics, 0, wx.ALL, 5 )
 		
-		self.metrics_for_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"For:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.metrics_for_txt.Wrap( -1 )
-		metrics_buttons_sizer.Add( self.metrics_for_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.calc_metrics_pu = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Planning Units", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.calc_metrics_pu.SetValue(True) 
-		metrics_buttons_sizer.Add( self.calc_metrics_pu, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.calc_metrics_cu = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Connectivity Units", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.calc_metrics_cu.SetToolTip( u"Calculating Connectivity Metrics is for plotting purposes only. These metrics will not be exported or appended to the Marxan input files." )
-		
-		metrics_buttons_sizer.Add( self.calc_metrics_cu, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		preEvalMainSizer.Add( metrics_buttons_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		fgSizer44.Add( metrics_buttons_sizer, 1, wx.EXPAND, 5 )
-		
-		
-		self.preEvaluation.SetSizer( fgSizer44 )
+		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
-		fgSizer44.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
+		preEvalMainSizer.Fit( self.preEvaluation )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		spatialMainSizer1 = wx.FlexGridSizer( 0, 1, 0, 0 )
 		spatialMainSizer1.AddGrowableCol( 0 )
