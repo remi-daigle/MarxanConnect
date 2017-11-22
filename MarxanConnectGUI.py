@@ -620,6 +620,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.metric_shp_choice1.SetItems(choices)
         self.metric_shp_choice1.SetSelection(0)
 
+        choices = []
+
+        if 'connectivityMetrics' in self.project:
+            if 'spec_demo_pu' in self.project['connectivityMetrics']:
+                choices.append("Planning Units (Demographic Data)")
+            if 'spec_land_pu' in self.project['connectivityMetrics']:
+                choices.append("Planning Units (Landscape Data)")
+        self.preEval_metric_shp_choice.SetItems(choices)
+        self.preEval_metric_shp_choice.SetSelection(0)
+
     def on_metric_shp_choice(self, event=None):
         self.colormap_metric_choices(1)
 
@@ -1819,29 +1829,43 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                      type=self.get_plot_type(
                                                          selection=self.preEval_metric_shp_choice.GetStringSelection()))
 
-        self.temp['metric'] = self.project['connectivityMetrics']['spec_' + type][metric_type]
+        if 'spec_' + type in self.project['connectivityMetrics']:
+            self.temp['metric'] = self.project['connectivityMetrics']['spec_' + type][metric_type]
 
-        self.preEval_grid.SetCellValue(0, 0, str(sum(self.temp['metric'])))
-        self.preEval_grid.SetCellValue(1, 0, str(numpy.mean(self.temp['metric'])))
-        self.preEval_grid.SetCellValue(2, 0, str(min(self.temp['metric'])))
-        self.preEval_grid.SetCellValue(3, 0, str(numpy.percentile(self.temp['metric'], 25)))
-        self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 50)))
-        self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 75)))
-        self.preEval_grid.SetCellValue(6, 0, str(max(self.temp['metric'])))
-        if 'aa_included' in self.shapefiles:
-            self.preEval_grid.SetCellValue(7, 0, str((sum(
-                self.shapefiles['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
-                self.temp['metric']) * 100)))
-        else:
-            self.preEval_grid.SetCellValue(7, 0, 'NA')
-        if 'fa_included' in self.shapefiles:
-            self.preEval_grid.SetCellValue(8, 0, str((sum(
-                self.shapefiles['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
-                self.temp['metric']) * 100)))
-        else:
-            self.preEval_grid.SetCellValue(8, 0, 'NA')
+            self.preEval_grid.SetCellValue(0, 0, str(sum(self.temp['metric'])))
+            self.preEval_grid.SetCellValue(1, 0, str(numpy.mean(self.temp['metric'])))
+            self.preEval_grid.SetCellValue(2, 0, str(min(self.temp['metric'])))
+            self.preEval_grid.SetCellValue(3, 0, str(numpy.percentile(self.temp['metric'], 25)))
+            self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 50)))
+            self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 75)))
+            self.preEval_grid.SetCellValue(6, 0, str(max(self.temp['metric'])))
+            if 'aa_included' in self.shapefiles:
+                self.preEval_grid.SetCellValue(7, 0, str((sum(
+                    self.shapefiles['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
+                    self.temp['metric']) * 100)))
+            else:
+                self.preEval_grid.SetCellValue(7, 0, 'NA')
+            if 'fa_included' in self.shapefiles:
+                self.preEval_grid.SetCellValue(8, 0, str((sum(
+                    self.shapefiles['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
+                    self.temp['metric']) * 100)))
+            else:
+                self.preEval_grid.SetCellValue(8, 0, 'NA')
 
-        self.preEval_grid.SetCellValue(9, 0, 'NA')
+            self.preEval_grid.SetCellValue(9, 0, 'NA')
+
+    def on_remove_metric(self,event):
+        type = self.get_plot_type(selection=self.preEval_metric_shp_choice.GetStringSelection())
+        metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
+                                           type=self.get_plot_type(
+                                               selection=self.preEval_metric_shp_choice.GetStringSelection()))
+        if 'spec_' + type in self.project['connectivityMetrics']:
+            del self.project['connectivityMetrics']['spec_' + type][metric_type]
+            if len(self.project['connectivityMetrics']['spec_' + type])==0:
+                del self.project['connectivityMetrics']['spec_' + type]
+        self.colormap_shapefile_choices()
+        self.colormap_metric_choices("pre-eval")
+        self.on_preEval_metric_choice(event=None)
 
 
 # ########################## marxan functions ##########################################################################
@@ -1901,8 +1925,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):
-        if self.calc_metrics_pu.GetValue():
-            self.spec_frame.Show()
+        if self.calc_metrics_pu.GetValue() & self.project['options']['metricsCalculated']:
+            if hasattr(self,'spec_frame'):
+                self.spec_frame.Show()
+            else:
+                self.on_new_spec()
+                self.spec_frame.Show()
         else:
             self.warn_dialog(message="'Planning Units' not selected for metric calculations.")
 

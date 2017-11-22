@@ -1789,7 +1789,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spacertext.Wrap( -1 )
 		metrics_buttons_sizer.Add( self.spacertext, 0, wx.ALL, 5 )
 		
-		self.export_metrics = wx.Button( self.preEvaluation, wx.ID_ANY, u"Export Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.export_metrics = wx.Button( self.preEvaluation, wx.ID_ANY, u"Export Files", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.export_metrics.Enable( False )
 		
 		metrics_buttons_sizer.Add( self.export_metrics, 0, wx.ALL, 5 )
@@ -2336,6 +2336,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.preEval_metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_shp_choice )
 		self.preEval_metric_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_choice )
+		self.m_button18.Bind( wx.EVT_BUTTON, self.on_remove_metric )
 		self.calc_metrics11.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
@@ -2527,6 +2528,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_preEval_metric_choice( self, event ):
+		event.Skip()
+	
+	def on_remove_metric( self, event ):
 		event.Skip()
 	
 	
