@@ -1817,7 +1817,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.warn_dialog(message="Multiple Boundary Definitions were selected. Boundary file names have been"
                                      " edited to include type.", caption="Warning!")
 
-# ########################## pre-evaluation functions ##########################################################################
+# ########################## pre-evaluation functions ##################################################################
     def on_preEval_metric_shp_choice(self,event):
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)
@@ -1828,9 +1828,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
                                                      type=self.get_plot_type(
                                                          selection=self.preEval_metric_shp_choice.GetStringSelection()))
-
+        print(type)
+        print(metric_type)
         if 'spec_' + type in self.project['connectivityMetrics']:
             self.temp['metric'] = self.project['connectivityMetrics']['spec_' + type][metric_type]
+            print(self.temp['metric'])
 
             self.preEval_grid.SetCellValue(0, 0, str(sum(self.temp['metric'])))
             self.preEval_grid.SetCellValue(1, 0, str(numpy.mean(self.temp['metric'])))
@@ -1863,6 +1865,80 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             del self.project['connectivityMetrics']['spec_' + type][metric_type]
             if len(self.project['connectivityMetrics']['spec_' + type])==0:
                 del self.project['connectivityMetrics']['spec_' + type]
+        self.colormap_shapefile_choices()
+        self.colormap_metric_choices("pre-eval")
+        self.on_preEval_metric_choice(event=None)
+
+    def on_preEval_create_new(self, event):
+        self.temp = {}
+        type = self.get_plot_type(selection=self.preEval_metric_shp_choice.GetStringSelection())
+        metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
+                                           type=self.get_plot_type(
+                                               selection=self.preEval_metric_shp_choice.GetStringSelection()))
+
+        if 'spec_' + type in self.project['connectivityMetrics']:
+            self.temp['metric'] = numpy.array(self.project['connectivityMetrics']['spec_' + type][metric_type])
+
+        if self.preEval_discrete_from_quartile.GetValue():
+            if self.preEval_discrete_from_quartile_radio.GetStringSelection()== "Minimum":
+                self.temp['from_type'] = 'minimum'
+                self.temp['from'] = min(self.temp['metric'])
+            if self.preEval_discrete_from_quartile_radio.GetStringSelection()== "Lower Quartile":
+                self.temp['from_type'] = 'lower_quartile'
+                self.temp['from'] = numpy.percentile(self.temp['metric'], 25)
+            if self.preEval_discrete_from_quartile_radio.GetStringSelection()== "Median":
+                self.temp['from_type'] = 'median'
+                self.temp['from'] = numpy.percentile(self.temp['metric'], 50)
+            if self.preEval_discrete_from_quartile_radio.GetStringSelection()== "Upper Quartile":
+                self.temp['from_type'] = 'upper_quartile'
+                self.temp['from'] = numpy.percentile(self.temp['metric'], 75)
+            if self.preEval_discrete_from_quartile_radio.GetStringSelection()== "Maximum":
+                self.temp['from_type'] = 'maximum'
+                self.temp['from'] = max(self.temp['metric'])
+
+        if self.preEval_discrete_from_percentile.GetValue():
+            self.temp['from'] = numpy.percentile(self.temp['metric'],
+                                                 self.preEval_discrete_from_percentile_slider.GetValue())
+            self.temp['from_type'] = str(self.temp['from']) + 'th_percentile'
+
+        if self.preEval_discrete_from_value.GetValue():
+            self.temp['from'] = float(self.preEval_discrete_from_value_txtctrl.GetValue())
+            self.temp['from_type'] = str(self.temp['from']) + 'th_percentile'
+
+        if self.preEval_discrete_to_quartile.GetValue():
+            if self.preEval_discrete_to_quartile_radio.GetStringSelection() == "Minimum":
+                self.temp['to_type'] = 'minimum'
+                self.temp['to'] = min(self.temp['metric'])
+            if self.preEval_discrete_to_quartile_radio.GetStringSelection() == "Lower Quartile":
+                self.temp['to_type'] = 'lower_quartile'
+                self.temp['to'] = numpy.percentile(self.temp['metric'], 25)
+            if self.preEval_discrete_to_quartile_radio.GetStringSelection() == "Median":
+                self.temp['to_type'] = 'median'
+                self.temp['to'] = numpy.percentile(self.temp['metric'], 50)
+            if self.preEval_discrete_to_quartile_radio.GetStringSelection() == "Upper Quartile":
+                self.temp['to_type'] = 'upper_quartile'
+                self.temp['to'] = numpy.percentile(self.temp['metric'], 75)
+            if self.preEval_discrete_to_quartile_radio.GetStringSelection() == "Maximum":
+                self.temp['to_type'] = 'maximum'
+                self.temp['to'] = max(self.temp['metric'])
+
+        if self.preEval_discrete_to_percentile.GetValue():
+            self.temp['to'] = numpy.percentile(self.temp['metric'],
+                                                 self.preEval_discrete_to_percentile_slider.GetValue())
+            self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
+
+        if self.preEval_discrete_to_value.GetValue():
+            self.temp['to'] = float(self.preEval_discrete_to_value_txtctrl.GetValue())
+            self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
+
+        print(self.temp['from'])
+        print(self.temp['to'])
+
+        self.temp['new_metric'] = (self.temp['metric']>=self.temp['from']) & (self.temp['metric']<=self.temp['to']).astype(int)
+        self.project['connectivityMetrics']['spec_' + type][
+            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type']] = self.temp[
+            'new_metric'].tolist()
+
         self.colormap_shapefile_choices()
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)

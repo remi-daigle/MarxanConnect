@@ -1621,8 +1621,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_discrete_to_percentile_sizer.SetFlexibleDirection( wx.BOTH )
 		preEval_discrete_to_percentile_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.preEval_discrete_from_percentile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
-		preEval_discrete_to_percentile_sizer.Add( self.preEval_discrete_from_percentile, 0, wx.ALL, 5 )
+		self.preEval_discrete_to_percentile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_discrete_to_percentile_sizer.Add( self.preEval_discrete_to_percentile, 0, wx.ALL, 5 )
 		
 		self.preEval_discrete_to_percentile_slider = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
 		preEval_discrete_to_percentile_sizer.Add( self.preEval_discrete_to_percentile_slider, 0, wx.EXPAND|wx.RIGHT, 30 )
@@ -1659,13 +1659,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spacertext11.Wrap( -1 )
 		preEval_metrics_buttons_sizer.Add( self.spacertext11, 0, wx.ALL, 5 )
 		
-		self.calc_metrics11 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		preEval_metrics_buttons_sizer.Add( self.calc_metrics11, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		self.preEval_create_new = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_metrics_buttons_sizer.Add( self.preEval_create_new, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		m_radioBox1511Choices = [ u"Locked in", u"Locked out", u"Status-quo" ]
-		self.m_radioBox1511 = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, m_radioBox1511Choices, 3, wx.RA_SPECIFY_COLS )
-		self.m_radioBox1511.SetSelection( 2 )
-		preEval_metrics_buttons_sizer.Add( self.m_radioBox1511, 0, wx.ALL, 5 )
+		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
+		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
+		self.preEval_status_radio.SetSelection( 2 )
+		preEval_metrics_buttons_sizer.Add( self.preEval_status_radio, 0, wx.ALL, 5 )
 		
 		
 		preEvalMainSizer.Add( preEval_metrics_buttons_sizer, 1, wx.EXPAND, 5 )
@@ -2337,7 +2337,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_shp_choice )
 		self.preEval_metric_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_choice )
 		self.m_button18.Bind( wx.EVT_BUTTON, self.on_remove_metric )
-		self.calc_metrics11.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
+		self.preEval_create_new.Bind( wx.EVT_BUTTON, self.on_preEval_create_new )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
@@ -2533,6 +2533,8 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_remove_metric( self, event ):
 		event.Skip()
 	
+	def on_preEval_create_new( self, event ):
+		event.Skip()
 	
 	def on_CT_file( self, event ):
 		event.Skip()
