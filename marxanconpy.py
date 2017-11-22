@@ -259,45 +259,7 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
     else:
         return [0] * len(conmat_time.id2.unique())
 
-# def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath, hab_id):
-#     hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs({'init': 'epsg:4326'})
-#     pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs({'init': 'epsg:4326'})
-#
-#     pu.geometry = pu.geometry.buffer(buff)
-#
-#     habtypes = hab[hab_id].unique().astype(str)
-#     habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0))
-#
-#     habresdf = pandas.DataFrame(columns=habtypes)
-#     for index, habrow in hab.iterrows():
-#         habresdf = habresdf.append(pandas.DataFrame(habres[str(habrow[hab_id]) == habtypes,], columns=habtypes))
-#     habresdf = numpy.array(habresdf)
-#
-#     G = igraph.Graph()
-#     G.add_vertices(pu.index)
-#
-#     for index1, pu1row in pu.iterrows():
-#         for index2, pu2row in pu.iterrows():
-#             print(index1, index2)
-#             if index1 != index2:
-#                 if pu1row.geometry.intersects(pu2row.geometry):
-#                     line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.x),
-#                                                         (pu2row.geometry.centroid.x, pu2row.geometry.centroid.y)])
-#
-#                     lineinter = numpy.array(hab.intersection(line).length)
-#                     weights = dict(zip(habtypes, numpy.multiply(lineinter, habresdf.T).sum(1)))
-#                     dist = pu1row.geometry.centroid.distance(pu2row.geometry.centroid)
-#                     G.add_edge(index1, index2, **weights, distance=dist)
-#
-#     conmat=pandas.DataFrame({'habitat':[],'id1':[],'id2':[],'value':[]})
-#     for h in habtypes:
-#         conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h))
-#         conmat_temp = conmat_temp*conmat_temp
-#         conmat_temp = abs(conmat_temp/conmat_temp.values.max()-1)
-#         conmat_temp['id1'] = conmat_temp.index
-#         conmat_temp['habitat'] = h
-#         conmat = conmat.append(conmat_temp.melt(id_vars=('habitat','id1'), var_name='id2',value_name='value'))
-#     return conmat.to_json(orient='split')
+
 def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath, hab_id):
     hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs({'init': 'epsg:4326'})
     habdiss = hab.dissolve(by=hab_id)
@@ -332,7 +294,7 @@ def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath,
     for h in habtypes:
         conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h))
         conmat_temp = conmat_temp * conmat_temp
-        conmat_temp = conmat_temp-conmat_temp.values.min()
+        # conmat_temp = conmat_temp-conmat_temp.values.min()
         conmat_temp = abs(conmat_temp / conmat_temp.values.max() - 1).multiply(area[h], axis=0)
         conmat_temp['id1'] = conmat_temp.index
         conmat_temp['habitat'] = h

@@ -80,9 +80,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		spatialMainSizer.AddGrowableRow( 1 )
 		spatialMainSizer.AddGrowableRow( 2 )
 		spatialMainSizer.AddGrowableRow( 4 )
-		spatialMainSizer.AddGrowableRow( 5 )
-		spatialMainSizer.AddGrowableRow( 7 )
+		spatialMainSizer.AddGrowableRow( 6 )
 		spatialMainSizer.AddGrowableRow( 8 )
+		spatialMainSizer.AddGrowableRow( 10 )
 		spatialMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		spatialMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -144,9 +144,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		spatialMainSizer.Add( fa_def_sizer, 1, wx.EXPAND, 5 )
 		
-		fa_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fa_file_sizer = wx.FlexGridSizer( 1, 2, 0, 0 )
 		fa_file_sizer.AddGrowableCol( 1 )
-		fa_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		fa_file_sizer.SetFlexibleDirection( wx.BOTH )
 		fa_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.FA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Focus Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -160,6 +160,19 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		
 		spatialMainSizer.Add( fa_file_sizer, 1, wx.EXPAND, 5 )
+		
+		fa_status_sizer = wx.FlexGridSizer( 1, 1, 0, 0 )
+		fa_status_sizer.AddGrowableCol( 0 )
+		fa_status_sizer.SetFlexibleDirection( wx.BOTH )
+		fa_status_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		fa_status_radioBoxChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
+		self.fa_status_radioBox = wx.RadioBox( self.spatialInput, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, fa_status_radioBoxChoices, 3, wx.RA_SPECIFY_COLS )
+		self.fa_status_radioBox.SetSelection( 2 )
+		fa_status_sizer.Add( self.fa_status_radioBox, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		
+		spatialMainSizer.Add( fa_status_sizer, 1, wx.EXPAND, 5 )
 		
 		self.aa_title = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Avoidance Areas:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.aa_title.Wrap( -1 )
@@ -176,9 +189,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		spatialMainSizer.Add( aa_def_sizer, 1, wx.EXPAND, 5 )
 		
-		aa_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		aa_file_sizer = wx.FlexGridSizer( 1, 2, 0, 0 )
 		aa_file_sizer.AddGrowableCol( 1 )
-		aa_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		aa_file_sizer.SetFlexibleDirection( wx.BOTH )
 		aa_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.AA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Avoidance Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -193,11 +206,25 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		spatialMainSizer.Add( aa_file_sizer, 1, wx.EXPAND, 5 )
 		
+		aa_status_sizer = wx.FlexGridSizer( 1, 1, 0, 0 )
+		aa_status_sizer.AddGrowableCol( 0 )
+		aa_status_sizer.AddGrowableRow( 0 )
+		aa_status_sizer.SetFlexibleDirection( wx.BOTH )
+		aa_status_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		aa_status_radioBoxChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
+		self.aa_status_radioBox = wx.RadioBox( self.spatialInput, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, aa_status_radioBoxChoices, 3, wx.RA_SPECIFY_COLS )
+		self.aa_status_radioBox.SetSelection( 2 )
+		aa_status_sizer.Add( self.aa_status_radioBox, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		
+		spatialMainSizer.Add( aa_status_sizer, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
+		
 		
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -816,7 +843,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
 		metricsMainSizer.AddGrowableRow( 1 )
-		metricsMainSizer.AddGrowableRow( 5 )
+		metricsMainSizer.AddGrowableRow( 4 )
 		metricsMainSizer.SetFlexibleDirection( wx.BOTH )
 		metricsMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -1273,77 +1300,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		metricsMainSizer.Add( cf_sizer, 1, wx.EXPAND, 5 )
 		
-		cf_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		cf_export_sizer.AddGrowableCol( 1 )
-		cf_export_sizer.SetFlexibleDirection( wx.BOTH )
-		cf_export_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		cf_export_radioBoxChoices = [ u"Export", u"Append" ]
-		self.cf_export_radioBox = wx.RadioBox( self.connectivityMetrics, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, cf_export_radioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.cf_export_radioBox.SetSelection( 1 )
-		cf_export_sizer.Add( self.cf_export_radioBox, 0, wx.ALL, 5 )
-		
-		cf_file_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		cf_file_export_sizer.AddGrowableCol( 1 )
-		cf_file_export_sizer.SetFlexibleDirection( wx.BOTH )
-		cf_file_export_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.cf_export_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Planning Unit versus Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_export_txt.Wrap( -1 )
-		cf_file_export_sizer.Add( self.cf_export_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.CF_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
-		cf_file_export_sizer.Add( self.CF_file, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		self.cf_targets_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Feature Targets:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_targets_txt.Wrap( -1 )
-		cf_file_export_sizer.Add( self.cf_targets_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		cft_sizer = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.cft_percent_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Percent of Feature Targeted:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cft_percent_txt.Wrap( -1 )
-		cft_sizer.Add( self.cft_percent_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.CFT_percent_slider = wx.Slider( self.connectivityMetrics, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
-		self.CFT_percent_slider.Enable( False )
-		
-		cft_sizer.Add( self.CFT_percent_slider, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.custom_spec_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.custom_spec_panel.SetToolTip( u"To enable, please calculate  any Conservation Feature metrics" )
-		
-		custom_spec_panel_sizer = wx.FlexGridSizer( 1, 1, 0, 0 )
-		custom_spec_panel_sizer.SetFlexibleDirection( wx.BOTH )
-		custom_spec_panel_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.customize_spec = wx.Button( self.custom_spec_panel, wx.ID_ANY, u"Customize Conservation Feature File", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.customize_spec.Enable( False )
-		
-		custom_spec_panel_sizer.Add( self.customize_spec, 0, wx.ALL, 14 )
-		
-		
-		self.custom_spec_panel.SetSizer( custom_spec_panel_sizer )
-		self.custom_spec_panel.Layout()
-		custom_spec_panel_sizer.Fit( self.custom_spec_panel )
-		cft_sizer.Add( self.custom_spec_panel, 1, wx.ALL, 5 )
-		
-		
-		cf_file_export_sizer.Add( cft_sizer, 1, wx.EXPAND, 5 )
-		
-		self.SPEC_filetxt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.SPEC_filetxt.Wrap( -1 )
-		cf_file_export_sizer.Add( self.SPEC_filetxt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.SPEC_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
-		cf_file_export_sizer.Add( self.SPEC_file, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		
-		cf_export_sizer.Add( cf_file_export_sizer, 1, wx.EXPAND, 5 )
-		
-		
-		metricsMainSizer.Add( cf_export_sizer, 1, wx.EXPAND, 5 )
-		
 		self.metrics_seperator = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metricsMainSizer.Add( self.metrics_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
@@ -1423,24 +1379,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		metricsMainSizer.Add( bd_sizer, 1, wx.EXPAND, 5 )
 		
-		bd_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		bd_file_sizer.AddGrowableCol( 1 )
-		bd_file_sizer.SetFlexibleDirection( wx.BOTH )
-		bd_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.BD_filecheck = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Export Boundary Definition to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.BD_filecheck.SetValue(True) 
-		bd_file_sizer.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.BD_file = wx.FilePickerCtrl( self.connectivityMetrics, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
-		bd_file_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		
-		metricsMainSizer.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
-		
-		self.metrics_buttons_seperator = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		metricsMainSizer.Add( self.metrics_buttons_seperator, 0, wx.EXPAND |wx.ALL, 5 )
-		
 		metrics_buttons_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
 		metrics_buttons_sizer.AddGrowableCol( 0 )
 		metrics_buttons_sizer.SetFlexibleDirection( wx.BOTH )
@@ -1452,11 +1390,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.calc_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Calculate Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
 		metrics_buttons_sizer.Add( self.calc_metrics, 0, wx.ALL, 5 )
-		
-		self.export_metrics = wx.Button( self.connectivityMetrics, wx.ID_ANY, u"Export Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.export_metrics.Enable( False )
-		
-		metrics_buttons_sizer.Add( self.export_metrics, 0, wx.ALL, 5 )
 		
 		self.metrics_for_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"For:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metrics_for_txt.Wrap( -1 )
@@ -1478,7 +1411,413 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
+		self.preEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		fgSizer44 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		fgSizer44.AddGrowableCol( 0 )
+		fgSizer44.AddGrowableRow( 2 )
+		fgSizer44.SetFlexibleDirection( wx.BOTH )
+		fgSizer44.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		con_input_def_sizer1 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.con_input_def_txt1 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"text that explains what we're doing on this tab", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.con_input_def_txt1.Wrap( -1 )
+		con_input_def_sizer1.Add( self.con_input_def_txt1, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		fgSizer44.Add( con_input_def_sizer1, 1, wx.EXPAND, 5 )
+		
+		con_input_choice_sizer1 = wx.BoxSizer( wx.VERTICAL )
+		
+		self.con_input_choice_txt1 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Choose Available Connectivity Metric to Discretize:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.con_input_choice_txt1.Wrap( -1 )
+		self.con_input_choice_txt1.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
+		
+		con_input_choice_sizer1.Add( self.con_input_choice_txt1, 0, wx.ALL, 5 )
+		
+		metrics_opt_sizer = wx.FlexGridSizer( 2, 2, 0, 0 )
+		metrics_opt_sizer.SetFlexibleDirection( wx.BOTH )
+		metrics_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.metric_shp_txt2 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_shp_txt2.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_shp_txt2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		
+		self.metric_txt2 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_txt2.Wrap( -1 )
+		metrics_opt_sizer.Add( self.metric_txt2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		
+		preEval_metric_shp_choiceChoices = [ u"Planning Units (Demographic Data)", u"Planning Units (Landscape Data)" ]
+		self.preEval_metric_shp_choice = wx.Choice( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_shp_choiceChoices, 0 )
+		self.preEval_metric_shp_choice.SetSelection( 0 )
+		metrics_opt_sizer.Add( self.preEval_metric_shp_choice, 0, wx.ALL, 5 )
+		
+		preEval_metric_choiceChoices = [ u"Selection Frequency", u"Best Solution", u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment", u"Outflux", u"Temporal Connectivity Covariance", u"Focus Area Sink", u"Focus Area Source", u"Avoidance Area Sink", u"Avoidance Area Source" ]
+		self.preEval_metric_choice = wx.Choice( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_choiceChoices, 0 )
+		self.preEval_metric_choice.SetSelection( 0 )
+		metrics_opt_sizer.Add( self.preEval_metric_choice, 0, wx.ALL, 5 )
+		
+		
+		con_input_choice_sizer1.Add( metrics_opt_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		fgSizer44.Add( con_input_choice_sizer1, 1, wx.EXPAND, 5 )
+		
+		fgSizer48 = wx.FlexGridSizer( 1, 4, 0, 0 )
+		fgSizer48.AddGrowableCol( 2 )
+		fgSizer48.AddGrowableCol( 3 )
+		fgSizer48.AddGrowableRow( 0 )
+		fgSizer48.SetFlexibleDirection( wx.BOTH )
+		fgSizer48.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		fgSizer49 = wx.FlexGridSizer( 1, 1, 0, 0 )
+		fgSizer49.AddGrowableRow( 0 )
+		fgSizer49.SetFlexibleDirection( wx.BOTH )
+		fgSizer49.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		
+		fgSizer48.Add( fgSizer49, 1, wx.EXPAND, 5 )
+		
+		fgSizer503 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		fgSizer503.AddGrowableCol( 0 )
+		fgSizer503.SetFlexibleDirection( wx.BOTH )
+		fgSizer503.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_staticText941 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Selected Metric Summary", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText941.Wrap( -1 )
+		self.m_staticText941.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		
+		fgSizer503.Add( self.m_staticText941, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		self.preEval_grid = wx.grid.Grid( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		
+		# Grid
+		self.preEval_grid.CreateGrid( 10, 1 )
+		self.preEval_grid.EnableEditing( False )
+		self.preEval_grid.EnableGridLines( True )
+		self.preEval_grid.EnableDragGridSize( False )
+		self.preEval_grid.SetMargins( 0, 0 )
+		
+		# Columns
+		self.preEval_grid.SetColSize( 0, 150 )
+		self.preEval_grid.EnableDragColMove( False )
+		self.preEval_grid.EnableDragColSize( True )
+		self.preEval_grid.SetColLabelSize( 30 )
+		self.preEval_grid.SetColLabelValue( 0, u"Value" )
+		self.preEval_grid.SetColLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Rows
+		self.preEval_grid.EnableDragRowSize( True )
+		self.preEval_grid.SetRowLabelSize( 150 )
+		self.preEval_grid.SetRowLabelValue( 0, u"Sum" )
+		self.preEval_grid.SetRowLabelValue( 1, u"Mean" )
+		self.preEval_grid.SetRowLabelValue( 2, u"Minimum" )
+		self.preEval_grid.SetRowLabelValue( 3, u"Lower Quartile" )
+		self.preEval_grid.SetRowLabelValue( 4, u"Median" )
+		self.preEval_grid.SetRowLabelValue( 5, u"Upper Quartile" )
+		self.preEval_grid.SetRowLabelValue( 6, u"Maximum" )
+		self.preEval_grid.SetRowLabelValue( 7, u"% in Avoidance Area" )
+		self.preEval_grid.SetRowLabelValue( 8, u"% in Focus Area" )
+		self.preEval_grid.SetRowLabelValue( 9, u"Status" )
+		self.preEval_grid.SetRowLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Label Appearance
+		
+		# Cell Defaults
+		self.preEval_grid.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+		fgSizer503.Add( self.preEval_grid, 0, wx.ALL, 5 )
+		
+		
+		fgSizer48.Add( fgSizer503, 1, wx.EXPAND, 5 )
+		
+		fgSizer50 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		fgSizer50.AddGrowableCol( 0 )
+		fgSizer50.SetFlexibleDirection( wx.BOTH )
+		fgSizer50.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_staticText94 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"From:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText94.Wrap( -1 )
+		self.m_staticText94.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		
+		fgSizer50.Add( self.m_staticText94, 0, wx.ALL, 5 )
+		
+		fgSizer5011 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer5011.AddGrowableCol( 1 )
+		fgSizer5011.SetFlexibleDirection( wx.BOTH )
+		fgSizer5011.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_checkBox511 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer5011.Add( self.m_checkBox511, 0, wx.ALL, 5 )
+		
+		m_radioBox13Choices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
+		self.m_radioBox13 = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, m_radioBox13Choices, 1, wx.RA_SPECIFY_COLS )
+		self.m_radioBox13.SetSelection( 0 )
+		fgSizer5011.Add( self.m_radioBox13, 0, wx.ALL, 5 )
+		
+		
+		fgSizer50.Add( fgSizer5011, 1, wx.EXPAND, 5 )
+		
+		fgSizer501 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer501.AddGrowableCol( 1 )
+		fgSizer501.SetFlexibleDirection( wx.BOTH )
+		fgSizer501.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_checkBox51 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer501.Add( self.m_checkBox51, 0, wx.ALL, 5 )
+		
+		self.m_slider6 = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		fgSizer501.Add( self.m_slider6, 0, wx.EXPAND|wx.RIGHT, 30 )
+		
+		
+		fgSizer50.Add( fgSizer501, 1, wx.EXPAND, 5 )
+		
+		fgSizer5012 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer5012.AddGrowableCol( 1 )
+		fgSizer5012.SetFlexibleDirection( wx.BOTH )
+		fgSizer5012.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_checkBox512 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Value", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer5012.Add( self.m_checkBox512, 0, wx.ALL, 5 )
+		
+		self.m_textCtrl3 = wx.TextCtrl( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer5012.Add( self.m_textCtrl3, 0, wx.ALL, 5 )
+		
+		
+		fgSizer50.Add( fgSizer5012, 1, wx.EXPAND, 5 )
+		
+		
+		fgSizer48.Add( fgSizer50, 1, wx.EXPAND, 5 )
+		
+		fgSizer502 = wx.FlexGridSizer( 0, 1, 0, 0 )
+		fgSizer502.AddGrowableCol( 0 )
+		fgSizer502.SetFlexibleDirection( wx.BOTH )
+		fgSizer502.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_staticText95 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"To:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText95.Wrap( -1 )
+		self.m_staticText95.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		
+		fgSizer502.Add( self.m_staticText95, 0, wx.ALL, 5 )
+		
+		fgSizer50111 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer50111.AddGrowableCol( 1 )
+		fgSizer50111.SetFlexibleDirection( wx.BOTH )
+		fgSizer50111.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_checkBox5111 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer50111.Add( self.m_checkBox5111, 0, wx.ALL, 5 )
+		
+		m_radioBox131Choices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
+		self.m_radioBox131 = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, m_radioBox131Choices, 1, wx.RA_SPECIFY_COLS )
+		self.m_radioBox131.SetSelection( 0 )
+		fgSizer50111.Add( self.m_radioBox131, 0, wx.ALL, 5 )
+		
+		
+		fgSizer502.Add( fgSizer50111, 1, wx.EXPAND, 5 )
+		
+		fgSizer5013 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer5013.AddGrowableCol( 1 )
+		fgSizer5013.SetFlexibleDirection( wx.BOTH )
+		fgSizer5013.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_checkBox513 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Percentile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer5013.Add( self.m_checkBox513, 0, wx.ALL, 5 )
+		
+		self.m_slider61 = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		fgSizer5013.Add( self.m_slider61, 0, wx.EXPAND|wx.RIGHT, 30 )
+		
+		
+		fgSizer502.Add( fgSizer5013, 1, wx.EXPAND, 5 )
+		
+		fgSizer50121 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer50121.AddGrowableCol( 1 )
+		fgSizer50121.SetFlexibleDirection( wx.BOTH )
+		fgSizer50121.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_checkBox5121 = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Value", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer50121.Add( self.m_checkBox5121, 0, wx.ALL, 5 )
+		
+		self.m_textCtrl31 = wx.TextCtrl( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer50121.Add( self.m_textCtrl31, 0, wx.ALL, 5 )
+		
+		
+		fgSizer502.Add( fgSizer50121, 1, wx.EXPAND, 5 )
+		
+		
+		fgSizer48.Add( fgSizer502, 1, wx.EXPAND, 5 )
+		
+		
+		fgSizer44.Add( fgSizer48, 1, wx.EXPAND, 5 )
+		
+		metrics_buttons_sizer11 = wx.FlexGridSizer( 0, 6, 0, 0 )
+		metrics_buttons_sizer11.AddGrowableCol( 0 )
+		metrics_buttons_sizer11.SetFlexibleDirection( wx.BOTH )
+		metrics_buttons_sizer11.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.spacertext11 = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spacertext11.Wrap( -1 )
+		metrics_buttons_sizer11.Add( self.spacertext11, 0, wx.ALL, 5 )
+		
+		self.calc_metrics11 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		metrics_buttons_sizer11.Add( self.calc_metrics11, 0, wx.ALL, 5 )
+		
+		m_radioBox1511Choices = [ u"Locked in", u"Locked out", u"Status-quo" ]
+		self.m_radioBox1511 = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, m_radioBox1511Choices, 3, wx.RA_SPECIFY_COLS )
+		self.m_radioBox1511.SetSelection( 2 )
+		metrics_buttons_sizer11.Add( self.m_radioBox1511, 0, wx.ALL, 5 )
+		
+		self.m_button18 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		metrics_buttons_sizer11.Add( self.m_button18, 0, wx.ALL, 5 )
+		
+		
+		fgSizer44.Add( metrics_buttons_sizer11, 1, wx.EXPAND, 5 )
+		
+		self.m_staticline8 = wx.StaticLine( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		fgSizer44.Add( self.m_staticline8, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		cf_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		cf_export_sizer.AddGrowableCol( 1 )
+		cf_export_sizer.SetFlexibleDirection( wx.BOTH )
+		cf_export_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		cf_export_radioBoxChoices = [ u"Export", u"Append" ]
+		self.cf_export_radioBox = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, cf_export_radioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.cf_export_radioBox.SetSelection( 1 )
+		cf_export_sizer.Add( self.cf_export_radioBox, 0, wx.ALL, 5 )
+		
+		cf_file_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		cf_file_export_sizer.AddGrowableCol( 1 )
+		cf_file_export_sizer.SetFlexibleDirection( wx.BOTH )
+		cf_file_export_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.cf_export_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Planning Unit versus Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_export_txt.Wrap( -1 )
+		cf_file_export_sizer.Add( self.cf_export_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.CF_file = wx.FilePickerCtrl( self.preEvaluation, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		cf_file_export_sizer.Add( self.CF_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		self.cf_targets_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Conservation Feature Targets:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_targets_txt.Wrap( -1 )
+		cf_file_export_sizer.Add( self.cf_targets_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		cft_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		cft_sizer.AddGrowableCol( 1 )
+		cft_sizer.SetFlexibleDirection( wx.BOTH )
+		cft_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.cft_percent_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Percent of Feature Targeted:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cft_percent_txt.Wrap( -1 )
+		cft_sizer.Add( self.cft_percent_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.CFT_percent_slider = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		self.CFT_percent_slider.Enable( False )
+		
+		cft_sizer.Add( self.CFT_percent_slider, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL|wx.EXPAND, 5 )
+		
+		self.custom_spec_panel = wx.Panel( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.custom_spec_panel.SetToolTip( u"To enable, please calculate  any Conservation Feature metrics" )
+		
+		custom_spec_panel_sizer = wx.FlexGridSizer( 1, 1, 0, 0 )
+		custom_spec_panel_sizer.SetFlexibleDirection( wx.BOTH )
+		custom_spec_panel_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.customize_spec = wx.Button( self.custom_spec_panel, wx.ID_ANY, u"Customize Conservation Feature File", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.customize_spec.Enable( False )
+		
+		custom_spec_panel_sizer.Add( self.customize_spec, 0, wx.ALL, 14 )
+		
+		
+		self.custom_spec_panel.SetSizer( custom_spec_panel_sizer )
+		self.custom_spec_panel.Layout()
+		custom_spec_panel_sizer.Fit( self.custom_spec_panel )
+		cft_sizer.Add( self.custom_spec_panel, 1, wx.ALL, 5 )
+		
+		
+		cf_file_export_sizer.Add( cft_sizer, 1, wx.EXPAND, 5 )
+		
+		self.SPEC_filetxt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.SPEC_filetxt.Wrap( -1 )
+		cf_file_export_sizer.Add( self.SPEC_filetxt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.SPEC_file = wx.FilePickerCtrl( self.preEvaluation, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		cf_file_export_sizer.Add( self.SPEC_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		cf_export_sizer.Add( cf_file_export_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		fgSizer44.Add( cf_export_sizer, 1, wx.EXPAND, 5 )
+		
+		self.m_staticline81 = wx.StaticLine( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		fgSizer44.Add( self.m_staticline81, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		bd_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		bd_file_sizer.AddGrowableCol( 1 )
+		bd_file_sizer.SetFlexibleDirection( wx.BOTH )
+		bd_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.BD_filecheck = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Export Boundary Definition to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.BD_filecheck.SetValue(True) 
+		bd_file_sizer.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.BD_file = wx.FilePickerCtrl( self.preEvaluation, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		bd_file_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		fgSizer44.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
+		
+		bd_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		bd_file_sizer.AddGrowableCol( 1 )
+		bd_file_sizer.SetFlexibleDirection( wx.BOTH )
+		bd_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.BD_filecheck = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Export Planning Unit File to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.BD_filecheck.SetValue(True) 
+		bd_file_sizer.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.BD_file = wx.FilePickerCtrl( self.preEvaluation, wx.ID_ANY, u"~\\pu.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		bd_file_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		fgSizer44.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
+		
+		metrics_buttons_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
+		metrics_buttons_sizer.AddGrowableCol( 0 )
+		metrics_buttons_sizer.SetFlexibleDirection( wx.BOTH )
+		metrics_buttons_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.spacertext = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spacertext.Wrap( -1 )
+		metrics_buttons_sizer.Add( self.spacertext, 0, wx.ALL, 5 )
+		
+		self.export_metrics = wx.Button( self.preEvaluation, wx.ID_ANY, u"Export Metrics", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.export_metrics.Enable( False )
+		
+		metrics_buttons_sizer.Add( self.export_metrics, 0, wx.ALL, 5 )
+		
+		self.metrics_for_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"For:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metrics_for_txt.Wrap( -1 )
+		metrics_buttons_sizer.Add( self.metrics_for_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.calc_metrics_pu = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Planning Units", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.calc_metrics_pu.SetValue(True) 
+		metrics_buttons_sizer.Add( self.calc_metrics_pu, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.calc_metrics_cu = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Connectivity Units", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.calc_metrics_cu.SetToolTip( u"Calculating Connectivity Metrics is for plotting purposes only. These metrics will not be exported or appended to the Marxan input files." )
+		
+		metrics_buttons_sizer.Add( self.calc_metrics_cu, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		
+		fgSizer44.Add( metrics_buttons_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		self.preEvaluation.SetSizer( fgSizer44 )
+		self.preEvaluation.Layout()
+		fgSizer44.Fit( self.preEvaluation )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		spatialMainSizer1 = wx.FlexGridSizer( 0, 1, 0, 0 )
 		spatialMainSizer1.AddGrowableCol( 0 )
@@ -1573,7 +1912,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( spatialMainSizer1 )
 		self.marxanAnalysis.Layout()
 		spatialMainSizer1.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"4) Marxan Analysis", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -1945,7 +2284,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"5) Plotting Options", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -1971,7 +2310,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
 		self.PU_file_pu_id.Bind( wx.EVT_CHOICE, self.on_PU_file_pu_id )
 		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
+		self.fa_status_radioBox.Bind( wx.EVT_RADIOBOX, self.on_fa_status_radioBox )
 		self.AA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_AA_file )
+		self.aa_status_radioBox.Bind( wx.EVT_RADIOBOX, self.on_aa_status_radioBox )
 		self.demo_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
 		self.demo_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
 		self.demo_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
@@ -2004,12 +2345,20 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_land_PU_CM_progress )
 		self.land_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_PU_CM_file )
 		self.land_generate_button.Bind( wx.EVT_BUTTON, self.on_land_generate_button )
+		self.bd_demo_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_conn_boundary )
+		self.bd_demo_min_plan_graph.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_min_plan_graph )
+		self.bd_land_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_land_conn_boundary )
+		self.bd_land_min_plan_graph.Bind( wx.EVT_CHECKBOX, self.on_bd_land_min_plan_graph )
+		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
+		self.preEval_metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_shp_choice )
+		self.preEval_metric_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_choice )
+		self.calc_metrics11.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
 		self.SPEC_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file_append )
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
-		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
+		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
 		self.marxan_dir.Bind( wx.EVT_DIRPICKER_CHANGED, self.on_marxan_dir )
 		self.inputdat_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_inputdat_file )
@@ -2070,7 +2419,13 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_FA_file( self, event ):
 		event.Skip()
 	
+	def on_fa_status_radioBox( self, event ):
+		event.Skip()
+	
 	def on_AA_file( self, event ):
+		event.Skip()
+	
+	def on_aa_status_radioBox( self, event ):
 		event.Skip()
 	
 	def on_demo_matrixUnitsRadioBox( self, event ):
@@ -2169,6 +2524,28 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_land_generate_button( self, event ):
 		event.Skip()
 	
+	def on_bd_demo_conn_boundary( self, event ):
+		event.Skip()
+	
+	def on_bd_demo_min_plan_graph( self, event ):
+		event.Skip()
+	
+	def on_bd_land_conn_boundary( self, event ):
+		event.Skip()
+	
+	def on_bd_land_min_plan_graph( self, event ):
+		event.Skip()
+	
+	def on_calc_metrics( self, event ):
+		event.Skip()
+	
+	def on_preEval_metric_shp_choice( self, event ):
+		event.Skip()
+	
+	def on_preEval_metric_choice( self, event ):
+		event.Skip()
+	
+	
 	def on_CT_file( self, event ):
 		event.Skip()
 	
@@ -2184,8 +2561,6 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_BD_file( self, event ):
 		event.Skip()
 	
-	def on_calc_metrics( self, event ):
-		event.Skip()
 	
 	def on_export_metrics( self, event ):
 		event.Skip()

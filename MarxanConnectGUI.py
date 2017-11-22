@@ -61,7 +61,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted (parent=self)
-            frame.Show()
+            # frame.Show()
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -96,12 +96,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         open a new project and name/save a new project file
         """
         # create project list to store project specific data
+        self.shapefiles = {}
         self.project = {}
         self.project['workingdirectory'] = os.path.expanduser(os.path.join("~", "Documents"))
         self.project['filepaths'] = {}
         self.project['options'] = {}
 
         # set default options
+        self.project['options']['fa_status'] = self.fa_status_radioBox.GetStringSelection()
+        self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
         self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
@@ -169,6 +172,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
+        self.colormap_metric_choices("pre-eval")
 
         # if called at launch time, no need to ask users to create a new project file right away
         if not launch:
@@ -202,12 +206,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.load_project_function()
 
     def load_project_function(self):
+        self.shapefiles = {}
         with open(self.project['filepaths']['projfile'], 'r') as fp:
             self.project = json.loads(fp.read())
 
         self.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
         # set default options
+        self.fa_status_radioBox.SetStringSelection(self.project['options']['fa_status'])
+        self.aa_status_radioBox.SetStringSelection(self.project['options']['aa_status'])
+
         self.demo_PU_CM_progress.SetValue(self.project['options']['demo_pu_cm_progress'])
         self.demo_matrixUnitsRadioBox.SetStringSelection(self.project['options']['demo_conmat_units'])
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
@@ -232,6 +240,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_GUI_filepaths()
 
         # trigger functions which enable/disable options
+        self.on_PU_file(event=None)
+        self.on_FA_file(event=None)
+        self.on_AA_file(event=None)
+        self.on_demo_matrixFormatRadioBox(event=None)
+        self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
         self.on_gen_rescaleRadioBox(event=None)
@@ -245,6 +258,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
+        self.colormap_metric_choices("pre-eval")
 
     def set_GUI_filepaths(self):
         # set default file paths
@@ -400,13 +414,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 legend1 = self.metric_legend.GetCurrentSelection()
                 type1 = self.get_plot_type(selection=self.metric_shp_choice.GetStringSelection())
                 metric_type1 = self.get_metric_type(selection=self.metric_choice.GetStringSelection(),type=type1)
-                print(type1)
-                print(metric_type1)
                 if type1 == "pu":
                     metric1 = self.project['connectivityMetrics'][metric_type1]
                 else:
                     metric1 = self.project['connectivityMetrics']['spec_' + type1][metric_type1]
-                print(metric1)
 
             elif self.lyr1_choice.GetChoiceCtrl().GetStringSelection() == "Outline of shapefile":
                 colour1 = self.poly_col.GetColour()
@@ -615,12 +626,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_metric_shp_choice1(self, event=None):
         self.colormap_metric_choices(2)
 
-    def colormap_metric_choices(self,lyr):
+    def colormap_metric_choices(self, lyr):
         choices = []
         if lyr == 1:
             shapefile = self.metric_shp_choice.GetStringSelection()
-        else:
+        elif lyr == 2:
             shapefile = self.metric_shp_choice1.GetStringSelection()
+        else:
+            shapefile = self.preEval_metric_shp_choice.GetStringSelection()
 
         if 'connectivityMetrics' in self.project:
             if shapefile == "Planning Units (Marxan Results)":
@@ -629,7 +642,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     choices.append("Best Solution")
             else:
                 plot_type = self.get_plot_type(shapefile)
-                print(self.project['connectivityMetrics']['spec_' + plot_type].keys())
                 if 'spec_' + plot_type in self.project['connectivityMetrics']:
                     self.spec_resolve_metric_choice('vertex_degree_', "Vertex Degree", plot_type, choices)
                     self.spec_resolve_metric_choice('between_cent_', "Betweenness Centrality", plot_type, choices)
@@ -639,16 +651,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.spec_resolve_metric_choice('import_', "Import", plot_type, choices)
                     self.spec_resolve_metric_choice('temp_conn_cov_', "Temporal Connectivity Covariance", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_recipients_', "Focus Area Recipients", plot_type, choices)
-                    self.spec_resolve_metric_choice('fa_donors_', "Focus Donors", plot_type, choices)
-                    self.spec_resolve_metric_choice('aa_recipients', "Avoidance Area Recipients", plot_type, choices)
-                    self.spec_resolve_metric_choice('aa_donors', "Avoidance Area Donors", plot_type, choices)
-
+                    self.spec_resolve_metric_choice('fa_donors_', "Focus Area Donors", plot_type, choices)
+                    self.spec_resolve_metric_choice('aa_recipients_', "Avoidance Area Recipients", plot_type, choices)
+                    self.spec_resolve_metric_choice('aa_donors_', "Avoidance Area Donors", plot_type, choices)
         if lyr == 1:
             self.metric_choice.SetItems(choices)
             self.metric_choice.SetSelection(0)
-        else:
+        elif lyr == 2:
             self.metric_choice1.SetItems(choices)
             self.metric_choice1.SetSelection(0)
+        else:
+            self.preEval_metric_choice.SetItems(choices)
+            self.preEval_metric_choice.SetSelection(0)
 
     def spec_resolve_metric_choice(self, prefix, text = None, type = None, choices=None, gettext = True):
         if gettext:
@@ -701,6 +715,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('eig_vect_cent_' + type, selection, "Eigen Vector Centrality", type,
                                                       gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('self_recruit_' + type, selection, "Self Recruitment", type,
+                                                      gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('outflux_' + type, selection, "Outflux", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('import_' + type, selection, "Import", type,
@@ -711,7 +727,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('fa_donors_' + type, selection, "Focus Area Donors", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('aa_recipient_' + type, selection, "Avoidance Area Recipients", type,
+        metric_type = self.spec_resolve_metric_choice('aa_recipients_' + type, selection, "Avoidance Area Recipients", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('aa_donors_' + type, selection, "Avoidance Area Donors", type,
                                                       gettext=False) or metric_type
@@ -756,6 +772,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Planning Unit file path
         """
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
+        if os.path.isfile(self.project['filepaths']['pu_filepath']):
+            self.shapefiles['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])
         self.PU_file_pu_id.SetItems(list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])))
         self.PU_file_pu_id.SetSelection(0)
         self.on_PU_file_pu_id(event=None)
@@ -921,6 +939,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Focus Areas file path
         """
         self.project['filepaths']['fa_filepath'] = self.FA_file.GetPath()
+        if os.path.isfile(self.project['filepaths']['fa_filepath']):
+            if 'pu_shp' in self.shapefiles:
+                self.shapefiles['fa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['fa_filepath'])
+                self.shapefiles['fa_shp']['diss'] = 1
+                self.shapefiles['fa_shp'] = self.shapefiles['fa_shp'].dissolve(by='diss')
+                self.shapefiles['pu_shp']['fa_included'] = 0
+                for index, purow in self.shapefiles['pu_shp'].iterrows():
+                    self.shapefiles['pu_shp'].loc[index,'fa_included'] = self.shapefiles[
+                        'fa_shp'].geometry.intersects(purow.geometry).bool()
         # enable metrics
         self.enable_metrics()
 
@@ -929,6 +956,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Avoidance Areas file path
         """
         self.project['filepaths']['aa_filepath'] = self.AA_file.GetPath()
+        if os.path.isfile(self.project['filepaths']['aa_filepath']):
+            if 'pu_shp' in self.shapefiles:
+                self.shapefiles['aa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['aa_filepath'])
+                self.shapefiles['aa_shp']['diss'] = 1
+                self.shapefiles['aa_shp'] = self.shapefiles['aa_shp'].dissolve(by='diss')
+                self.shapefiles['pu_shp']['aa_included'] = 0
+                for index, purow in self.shapefiles['pu_shp'].iterrows():
+                    self.shapefiles['pu_shp'].loc[index,'aa_included'] = self.shapefiles['aa_shp'].geometry.intersects(purow.geometry).bool()
         # enable metrics
         self.enable_metrics()
 
@@ -992,6 +1027,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         return
 
 # ###########################  option setting functions ################################################################
+
+    def on_fa_status_radioBox(self, event):
+        self.project['options']['fa_status'] = self.fa_status_radioBox.GetStringSelection()
+
+    def on_aa_status_radioBox(self, event):
+        self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
+
     def on_demo_matrixUnitsRadioBox(self, event):
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
         self.enable_metrics()
@@ -1346,7 +1388,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         calculates the selected metrics
         """
         # create dict entry for connectivityMetrics
-        # if not 'connectivityMetrics' in self.project:
         self.project['connectivityMetrics'] = {}
         self.temp = {}
 
@@ -1372,6 +1413,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.all_types += ['gen_cu']
         else:
             self.warn_dialog(message="No 'Units' selected for metric calculations.")
+
+        # create dict entries for boundary
+        self.project['connectivityMetrics']['boundary'] = {}
 
         for self.type in self.all_types:
 
@@ -1430,7 +1474,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                                           columns='id2')
 
                     self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
-                        self.type + '_conmat']
+                        self.type + '_conmat_hab'].to_json(orient='split')
             else:
                 self.warn_dialog(message="File not found: " + self.project['filepaths'][self.type + '_cm_filepath'])
 
@@ -1443,10 +1487,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['shp_filepath'] = self.project['filepaths'][self.type + '_filepath']
                 self.temp['shp_file_pu_id'] = self.project['filepaths'][self.type + '_file_pu_id']
 
-            print(self.temp['shp_filepath'])
-            # create dict entries for boundary and spec
+            # create dict entries for spec
             self.project['connectivityMetrics']['spec_' + self.type] = {}
-            self.project['connectivityMetrics']['boundary'] = {}
 
             # warn if files not the same length
             if self.temp['format'] == "List with Habitat":
@@ -1614,7 +1656,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # calculate landscape metrics ############################################################################
             if self.type[-7:] == 'land_pu':
                 for h in self.temp[self.type + '_conmat'].keys():
-                    print(self.temp[self.type + '_conmat'][h].shape)
                     if self.cf_land_vertex_degree.GetValue():
                         self.project['connectivityMetrics']['spec_' + self.type][
                             'vertex_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
@@ -1678,6 +1719,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
+        self.colormap_metric_choices("pre-eval")
 
     def on_export_metrics(self, event):
         if self.calc_metrics_pu.GetValue():
@@ -1689,7 +1731,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Export or append feature files
         if self.cf_export_radioBox.GetSelection() == 0:
             # export spec
-            spec = pandas.read_json(self.project['spec_' + self.type + '_dat'], orient='split')
+            spec = pandas.read_json(self.project['spec_dat'], orient='split')
             spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
             # export conservation features
             cf = self.project['connectivityMetrics']['spec_' + self.type].copy()
@@ -1706,7 +1748,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
 
             # append spec
-            new_spec = pandas.read_json(self.project['spec_' + self.type + '_dat'], orient='split')
+            new_spec = pandas.read_json(self.project['spec_dat'], orient='split')
             new_spec['id'] = new_spec['id'] + max(old_spec['id'])
 
             pandas.concat([old_spec, new_spec]).fillna(0.0).to_csv(
@@ -1764,6 +1806,43 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if multiple:
             self.warn_dialog(message="Multiple Boundary Definitions were selected. Boundary file names have been"
                                      " edited to include type.", caption="Warning!")
+
+# ########################## pre-evaluation functions ##########################################################################
+    def on_preEval_metric_shp_choice(self,event):
+        self.colormap_metric_choices("pre-eval")
+        self.on_preEval_metric_choice(event=None)
+
+    def on_preEval_metric_choice(self, event):
+        self.temp = {}
+        type = self.get_plot_type(selection=self.preEval_metric_shp_choice.GetStringSelection())
+        metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
+                                                     type=self.get_plot_type(
+                                                         selection=self.preEval_metric_shp_choice.GetStringSelection()))
+
+        self.temp['metric'] = self.project['connectivityMetrics']['spec_' + type][metric_type]
+
+        self.preEval_grid.SetCellValue(0, 0, str(sum(self.temp['metric'])))
+        self.preEval_grid.SetCellValue(1, 0, str(numpy.mean(self.temp['metric'])))
+        self.preEval_grid.SetCellValue(2, 0, str(min(self.temp['metric'])))
+        self.preEval_grid.SetCellValue(3, 0, str(numpy.percentile(self.temp['metric'], 25)))
+        self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 50)))
+        self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 75)))
+        self.preEval_grid.SetCellValue(6, 0, str(max(self.temp['metric'])))
+        if 'aa_included' in self.shapefiles:
+            self.preEval_grid.SetCellValue(7, 0, str((sum(
+                self.shapefiles['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
+                self.temp['metric']) * 100)))
+        else:
+            self.preEval_grid.SetCellValue(7, 0, 'NA')
+        if 'fa_included' in self.shapefiles:
+            self.preEval_grid.SetCellValue(8, 0, str((sum(
+                self.shapefiles['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
+                self.temp['metric']) * 100)))
+        else:
+            self.preEval_grid.SetCellValue(8, 0, 'NA')
+
+        self.preEval_grid.SetCellValue(9, 0, 'NA')
+
 
 # ########################## marxan functions ##########################################################################
 
@@ -1844,27 +1923,31 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         for self.type in self.all_types:
             self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_' + self.type])
 
-            for i in range(len(self.spec_frame.keys)):
+            for j in range(len(self.spec_frame.keys)):
+                if j != self.spec_frame.spec_grid.GetNumberRows():
+                    i = self.spec_frame.spec_grid.GetNumberRows()
+                else:
+                    i=j
                 self.spec_frame.spec_grid.InsertRows(i)
                 self.spec_frame.spec_grid.SetCellValue(i, 0, str(i + 1))
-                sum_metric = sum(self.project['connectivityMetrics']['spec_' + self.type][self.spec_frame.keys[i]])
+                sum_metric = sum(self.project['connectivityMetrics']['spec_' + self.type][self.spec_frame.keys[j]])
                 self.spec_frame.spec_grid.SetCellValue(i, 1, str(sum_metric * self.CFT_percent_slider.GetValue() / 100))
                 self.spec_frame.spec_grid.SetCellValue(i, 2, str(1000))
-                self.spec_frame.spec_grid.SetCellValue(i, 3, self.spec_frame.keys[i])
+                self.spec_frame.spec_grid.SetCellValue(i, 3, self.spec_frame.keys[j])
                 w, h = self.spec_frame.GetClientSize()
 
                 self.spec_frame.SetSize((w + 16, h + 39 + 20))
                 self.spec_frame.Layout()
 
-            self.project['spec_' + self.type + '_dat'] = pandas.DataFrame(
-                numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
-            self.project['spec_' + self.type + '_dat'].columns = ["id", "target", "spf", "name"]
+        self.project['spec_dat'] = pandas.DataFrame(
+            numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
+        self.project['spec_dat'].columns = ["id", "target", "spf", "name"]
 
-            for c in range(self.spec_frame.spec_grid.GetNumberCols()):
-                for r in range(self.spec_frame.spec_grid.GetNumberRows()):
-                    self.project['spec_' + self.type + '_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
+        for c in range(self.spec_frame.spec_grid.GetNumberCols()):
+            for r in range(self.spec_frame.spec_grid.GetNumberRows()):
+                self.project['spec_dat'].iloc[r, c] = self.spec_frame.spec_grid.GetCellValue(r, c)
 
-            self.project['spec_' + self.type + '_dat'] = self.project['spec_' + self.type + '_dat'].to_json(orient='split')
+        self.project['spec_dat'] = self.project['spec_dat'].to_json(orient='split')
 
     def on_CFT_percent_slider(self, event):
         self.on_new_spec()
