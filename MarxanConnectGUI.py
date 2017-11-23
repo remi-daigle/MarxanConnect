@@ -96,7 +96,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         open a new project and name/save a new project file
         """
         # create project list to store project specific data
-        self.shapefiles = {}
+        self.spatial = {}
         self.project = {}
         self.project['workingdirectory'] = os.path.expanduser(os.path.join("~", "Documents"))
         self.project['filepaths'] = {}
@@ -153,6 +153,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['cf_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "puvspr2.dat")
         self.project['filepaths']['spec_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "spec.dat")
         self.project['filepaths']['bd_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "boundary.dat")
+        self.project['filepaths']['pudat_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "pu.dat")
 
         # Marxan analysis
         self.project['filepaths']['marxan_input'] = os.path.join(pfdir, "data", "GBR", "input.dat")
@@ -206,7 +207,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.load_project_function()
 
     def load_project_function(self):
-        self.shapefiles = {}
+        self.spatial = {}
         with open(self.project['filepaths']['projfile'], 'r') as fp:
             self.project = json.loads(fp.read())
 
@@ -295,6 +296,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
         self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
         self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
+        self.PUDAT_file.SetPath(self.project['filepaths']['pudat_filepath'])
 
         # Marxan analysis
         self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
@@ -602,8 +604,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def colormap_shapefile_choices(self):
         choices = []
         if 'connectivityMetrics' in self.project:
-            if 'best_solution' in self.project['connectivityMetrics']:
-                choices.append("Planning Units (Marxan Results)")
+            if 'best_solution' in self.project['connectivityMetrics'] or 'status' in self.project['connectivityMetrics']:
+                choices.append("Planning Units (Marxan Data)")
             if 'spec_demo_pu' in self.project['connectivityMetrics']:
                 choices.append("Planning Units (Demographic Data)")
             if 'spec_gen_pu' in self.project['connectivityMetrics']:
@@ -646,10 +648,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             shapefile = self.preEval_metric_shp_choice.GetStringSelection()
 
         if 'connectivityMetrics' in self.project:
-            if shapefile == "Planning Units (Marxan Results)":
+            if shapefile == "Planning Units (Marxan Data)":
                 if 'best_solution' in self.project['connectivityMetrics']:
                     choices.append("Selection Frequency")
                     choices.append("Best Solution")
+                if 'status' in self.project['connectivityMetrics']:
+                    choices.append("Status")
             else:
                 plot_type = self.get_plot_type(shapefile)
                 if 'spec_' + plot_type in self.project['connectivityMetrics']:
@@ -719,6 +723,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False)
         metric_type = self.spec_resolve_metric_choice('best_solution', selection, "Best Solution", type,
                                                       gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('status', selection, "Status", type,
+                                                      gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('vertex_degree_' + type, selection, "Vertex Degree", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('between_cent_' + type, selection, "Betweenness Centrality", type,
@@ -783,7 +789,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
         if os.path.isfile(self.project['filepaths']['pu_filepath']):
-            self.shapefiles['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])
+            self.spatial['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])
         self.PU_file_pu_id.SetItems(list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])))
         self.PU_file_pu_id.SetSelection(0)
         self.on_PU_file_pu_id(event=None)
@@ -950,15 +956,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['fa_filepath'] = self.FA_file.GetPath()
         if os.path.isfile(self.project['filepaths']['fa_filepath']):
-            if 'pu_shp' in self.shapefiles:
-                self.shapefiles['fa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['fa_filepath'])
-                self.shapefiles['fa_shp']['diss'] = 1
-                self.shapefiles['fa_shp'] = self.shapefiles['fa_shp'].dissolve(by='diss')
-                self.shapefiles['pu_shp']['fa_included'] = 0
-                for index, purow in self.shapefiles['pu_shp'].iterrows():
-                    self.shapefiles['pu_shp'].loc[index,'fa_included'] = self.shapefiles[
+            if 'pu_shp' in self.spatial:
+                self.spatial['fa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['fa_filepath'])
+                self.spatial['fa_shp']['diss'] = 1
+                self.spatial['fa_shp'] = self.spatial['fa_shp'].dissolve(by='diss')
+                self.spatial['pu_shp']['fa_included'] = 0
+                for index, purow in self.spatial['pu_shp'].iterrows():
+                    self.spatial['pu_shp'].loc[index,'fa_included'] = self.spatial[
                         'fa_shp'].geometry.intersects(purow.geometry).bool()
         # enable metrics
+        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.enable_metrics()
 
     def on_AA_file(self, event):
@@ -967,14 +974,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['aa_filepath'] = self.AA_file.GetPath()
         if os.path.isfile(self.project['filepaths']['aa_filepath']):
-            if 'pu_shp' in self.shapefiles:
-                self.shapefiles['aa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['aa_filepath'])
-                self.shapefiles['aa_shp']['diss'] = 1
-                self.shapefiles['aa_shp'] = self.shapefiles['aa_shp'].dissolve(by='diss')
-                self.shapefiles['pu_shp']['aa_included'] = 0
-                for index, purow in self.shapefiles['pu_shp'].iterrows():
-                    self.shapefiles['pu_shp'].loc[index,'aa_included'] = self.shapefiles['aa_shp'].geometry.intersects(purow.geometry).bool()
+            if 'pu_shp' in self.spatial:
+                self.spatial['aa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['aa_filepath'])
+                self.spatial['aa_shp']['diss'] = 1
+                self.spatial['aa_shp'] = self.spatial['aa_shp'].dissolve(by='diss')
+                self.spatial['pu_shp']['aa_included'] = 0
+                for index, purow in self.spatial['pu_shp'].iterrows():
+                    self.spatial['pu_shp'].loc[index,'aa_included'] = self.spatial['aa_shp'].geometry.intersects(purow.geometry).bool()
         # enable metrics
+        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.enable_metrics()
 
     def on_CF_file(self, event):
@@ -994,6 +1002,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Focus Areas file path
         """
         self.project['filepaths']['bd_filepath'] = self.BD_file.GetPath()
+
+    def on_PUDAT_file(self, event):
+        """
+        Defines planning unit data file path
+        """
+        self.project['filepaths']['pudat_filepath'] = self.PUDAT_file.GetPath()
+        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
 
     def on_marxan_dir(self, event):
         """
@@ -1040,9 +1055,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_fa_status_radioBox(self, event):
         self.project['options']['fa_status'] = self.fa_status_radioBox.GetStringSelection()
+        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
 
     def on_aa_status_radioBox(self, event):
         self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
+        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
 
     def on_demo_matrixUnitsRadioBox(self, event):
         self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
@@ -1778,6 +1795,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             if self.BD_filecheck.GetValue():
                 self.export_boundary_file(BD_filepath=self.project['filepaths']['bd_filepath'])
+            if self.PUDAT_filecheck.GetValue():
+                self.export_pudat_file(pudat_filepath=self.project['filepaths']['pudat_filepath'])
 
     def export_boundary_file(self, BD_filepath):
         if self.calc_metrics_pu.GetValue():
@@ -1817,6 +1836,49 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.warn_dialog(message="Multiple Boundary Definitions were selected. Boundary file names have been"
                                      " edited to include type.", caption="Warning!")
 
+    def export_pudat_file(self, pudat_filepath):
+        self.lock_pudat(pudat_filepath)
+
+        self.temp['pudat'].to_csv(str.replace(self.project['filepaths']['pudat_filepath'], ".dat", "_lock.dat"), index=0)
+
+    def lock_pudat(self, pudat_filepath):
+        self.temp = {}
+        self.temp['pudat'] = pandas.read_csv(pudat_filepath)
+        if os.path.isfile(self.project['filepaths']['fa_filepath']):
+            if self.fa_status_radioBox.GetStringSelection() == "Locked out":
+                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 3
+            if self.fa_status_radioBox.GetStringSelection() == "Locked in":
+                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 2
+
+        if os.path.isfile(self.project['filepaths']['aa_filepath']):
+            if self.aa_status_radioBox.GetStringSelection() == "Locked out":
+                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['aa_included']), 'status'] = 3
+            if self.aa_status_radioBox.GetStringSelection() == "Locked in":
+                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['aa_included']), 'status'] = 2
+
+        self.temp['all_metrics'] = []
+        if 'connectivityMetrics' in self.project:
+            if 'spec_demo_pu' in self.project['connectivityMetrics']:
+                self.temp['all_metrics'] += self.project['connectivityMetrics']['spec_demo_pu']
+            if 'spec_land_pu' in self.project['connectivityMetrics']:
+                self.temp['all_metrics'] += self.project['connectivityMetrics']['spec_land_pu']
+
+        for self.temp['metric'] in self.temp['all_metrics']:
+            if 'demo_pu' in self.temp['metric']:
+                self.temp['metric_values'] = self.project['connectivityMetrics']['spec_demo_pu'][self.temp['metric']]
+            if 'land_pu' in self.temp['metric']:
+                self.temp['metric_values'] = self.project['connectivityMetrics']['spec_land_pu'][self.temp['metric']]
+
+            if self.temp['metric'].endswith('lockout'):
+                self.temp['pudat'].loc[numpy.array(self.temp['metric_values']) != 0, 'status'] = 3
+            if self.temp['metric'].endswith('lockin'):
+                self.temp['pudat'].loc[numpy.array(self.temp['metric_values']) != 0, 'status'] = 2
+
+            self.project['connectivityMetrics']['status'] = self.temp['pudat']['status'].tolist()
+            self.colormap_shapefile_choices()
+            self.colormap_metric_choices(1)
+            self.colormap_metric_choices(2)
+
 # ########################## pre-evaluation functions ##################################################################
     def on_preEval_metric_shp_choice(self,event):
         self.colormap_metric_choices("pre-eval")
@@ -1841,15 +1903,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 50)))
             self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 75)))
             self.preEval_grid.SetCellValue(6, 0, str(max(self.temp['metric'])))
-            if 'aa_included' in self.shapefiles:
+            if 'aa_included' in self.spatial:
                 self.preEval_grid.SetCellValue(7, 0, str((sum(
-                    self.shapefiles['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
+                    self.spatial['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
                     self.temp['metric']) * 100)))
             else:
                 self.preEval_grid.SetCellValue(7, 0, 'NA')
-            if 'fa_included' in self.shapefiles:
+            if 'fa_included' in self.spatial:
                 self.preEval_grid.SetCellValue(8, 0, str((sum(
-                    self.shapefiles['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
+                    self.spatial['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
                     self.temp['metric']) * 100)))
             else:
                 self.preEval_grid.SetCellValue(8, 0, 'NA')
@@ -1875,7 +1937,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
                                            type=self.get_plot_type(
                                                selection=self.preEval_metric_shp_choice.GetStringSelection()))
-
+        
+        # get the 'from' for discretization
         if 'spec_' + type in self.project['connectivityMetrics']:
             self.temp['metric'] = numpy.array(self.project['connectivityMetrics']['spec_' + type][metric_type])
 
@@ -1905,6 +1968,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.temp['from'] = float(self.preEval_discrete_from_value_txtctrl.GetValue())
             self.temp['from_type'] = str(self.temp['from']) + 'th_percentile'
 
+        # get the 'to' for discretization
         if self.preEval_discrete_to_quartile.GetValue():
             if self.preEval_discrete_to_quartile_radio.GetStringSelection() == "Minimum":
                 self.temp['to_type'] = 'minimum'
@@ -1931,18 +1995,27 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.temp['to'] = float(self.preEval_discrete_to_value_txtctrl.GetValue())
             self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
 
-        print(self.temp['from'])
-        print(self.temp['to'])
-
+        
+        # create new metric
         self.temp['new_metric'] = (self.temp['metric']>=self.temp['from']) & (self.temp['metric']<=self.temp['to']).astype(int)
-        self.project['connectivityMetrics']['spec_' + type][
+        if self.preEval_status_radio.GetStringSelection() == "Status-quo":
+            self.project['connectivityMetrics']['spec_' + type][
             metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type']] = self.temp[
             'new_metric'].tolist()
-
+        if self.preEval_status_radio.GetStringSelection() == "Locked out":
+            self.project['connectivityMetrics']['spec_' + type][
+            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockout'] = self.temp[
+            'new_metric'].tolist()
+        if self.preEval_status_radio.GetStringSelection() == "Locked in":
+            self.project['connectivityMetrics']['spec_' + type][
+            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockin'] = self.temp[
+            'new_metric'].tolist()
+        
+        # reset choices
+        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.colormap_shapefile_choices()
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)
-
 
 # ########################## marxan functions ##########################################################################
 

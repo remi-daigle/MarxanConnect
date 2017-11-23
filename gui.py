@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*- 
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Jun 28 2017)
+## Python code generated with wxFormBuilder (version Nov  6 2017)
 ## http://www.wxformbuilder.org/
 ##
-## PLEASE DO "NOT" EDIT THIS FILE!
+## PLEASE DO *NOT* EDIT THIS FILE!
 ###########################################################################
 
 import wx
@@ -1664,7 +1664,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
-		self.preEval_status_radio.SetSelection( 2 )
+		self.preEval_status_radio.SetSelection( 0 )
 		preEval_metrics_buttons_sizer.Add( self.preEval_status_radio, 0, wx.ALL, 5 )
 		
 		
@@ -1765,20 +1765,20 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEvalMainSizer.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
 		
-		bd_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
-		bd_file_sizer.AddGrowableCol( 1 )
-		bd_file_sizer.SetFlexibleDirection( wx.BOTH )
-		bd_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		pudat_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		pudat_file_sizer.AddGrowableCol( 1 )
+		pudat_file_sizer.SetFlexibleDirection( wx.BOTH )
+		pudat_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.BD_filecheck = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Export Planning Unit File to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.BD_filecheck.SetValue(True) 
-		bd_file_sizer.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		self.PUDAT_filecheck = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Export Planning Unit File to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PUDAT_filecheck.SetValue(True) 
+		pudat_file_sizer.Add( self.PUDAT_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.BD_file = wx.FilePickerCtrl( self.preEvaluation, wx.ID_ANY, u"~\\pu.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
-		bd_file_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
+		self.PUDAT_file = wx.FilePickerCtrl( self.preEvaluation, wx.ID_ANY, u"~\\pu.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		pudat_file_sizer.Add( self.PUDAT_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		preEvalMainSizer.Add( bd_file_sizer, 1, wx.EXPAND, 5 )
+		preEvalMainSizer.Add( pudat_file_sizer, 1, wx.EXPAND, 5 )
 		
 		metrics_buttons_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
 		metrics_buttons_sizer.AddGrowableCol( 0 )
@@ -2343,7 +2343,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
 		self.SPEC_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file_append )
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
-		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
+		self.PUDAT_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUDAT_file )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
 		self.marxan_dir.Bind( wx.EVT_DIRPICKER_CHANGED, self.on_marxan_dir )
 		self.inputdat_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_inputdat_file )
@@ -2551,6 +2551,8 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_BD_file( self, event ):
 		event.Skip()
 	
+	def on_PUDAT_file( self, event ):
+		event.Skip()
 	
 	def on_export_metrics( self, event ):
 		event.Skip()

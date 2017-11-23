@@ -10,7 +10,6 @@ if os.name=='nt':
       filedata = file.read()
 
     # Replace the target string
-    filedata = filedata.replace('SetToolTipString', 'SetToolTip')
     filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
     filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
 
