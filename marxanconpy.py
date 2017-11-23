@@ -192,22 +192,30 @@ def get_intersect_id(area_filepath, pu_filepath,pu_id='ID'):
                 break
     return area_id
 
-def conmat2recipients(conmat, area_filepath, pu_filepath, pu_id='ID'):
+def conmat2recipients(conmat, area_filepath, pu_filepath, pu_id='ID',inverse=False):
     area_id = get_intersect_id(area_filepath, pu_filepath, pu_id)
     cm = conmat.copy().as_matrix()
+    numpy.fill_diagonal(cm,0)
     for i in conmat.index:
         if i in area_id:
             cm[conmat.index == i,:] = 0
-    return cm.sum(0).tolist()
+    if inverse:
+        return abs(cm.sum(0) - max(cm.sum(0))).tolist()
+    else:
+        return cm.sum(0).tolist()
 
 
-def conmat2donors(conmat, area_filepath, pu_filepath, pu_id='ID'):
+def conmat2donors(conmat, area_filepath, pu_filepath, pu_id='ID',inverse=False):
     area_id = get_intersect_id(area_filepath, pu_filepath, pu_id)
     cm = conmat.copy().as_matrix()
+    numpy.fill_diagonal(cm, 0)
     for i in conmat.index:
         if i in area_id:
             cm[:, conmat.index == i] = 0
-    return cm.sum(1).tolist()
+    if inverse:
+        return abs(cm.sum(1)-max(cm.sum(1))).tolist()
+    else:
+        return cm.sum(1).tolist()
 
 def conmat2connboundary(conmat):
     cm = conmat.copy()

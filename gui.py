@@ -777,13 +777,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.cf_demo_fa_donors_panel, 1, 0, 0 )
 		
 		self.cf_demo_aa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_demo_aa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		self.cf_demo_aa_recipients = wx.CheckBox( self.cf_demo_aa_recipients_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_aa_recipients.Enable( False )
-		self.cf_demo_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_demo_aa_recipients_sizer.Add( self.cf_demo_aa_recipients, 0, wx.ALL, 5 )
 		
@@ -794,13 +794,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.cf_demo_aa_recipients_panel, 1, 0, 0 )
 		
 		self.cf_demo_aa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab.  Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_demo_aa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		self.cf_demo_aa_donors = wx.CheckBox( self.cf_demo_aa_donors_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_aa_donors.Enable( False )
-		self.cf_demo_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_demo_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_demo_aa_donors_sizer.Add( self.cf_demo_aa_donors, 0, wx.ALL, 5 )
 		
@@ -922,13 +922,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_cf_sizer.Add( self.cf_land_fa_donors_panel, 1, 0, 0 )
 		
 		self.cf_land_aa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_land_aa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		self.cf_land_aa_recipients = wx.CheckBox( self.cf_land_aa_recipients_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_aa_recipients.Enable( False )
-		self.cf_land_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_land_aa_recipients_sizer.Add( self.cf_land_aa_recipients, 0, wx.ALL, 5 )
 		
@@ -939,13 +939,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_cf_sizer.Add( self.cf_land_aa_recipients_panel, 1, 0, 0 )
 		
 		self.cf_land_aa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_land_aa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		self.cf_land_aa_donors = wx.CheckBox( self.cf_land_aa_donors_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_aa_donors.Enable( False )
-		self.cf_land_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
 		
 		cf_land_aa_donors_sizer.Add( self.cf_land_aa_donors, 0, wx.ALL, 5 )
 		
@@ -1051,7 +1051,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
 		self.preEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		preEvalMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		preEvalMainSizer.AddGrowableCol( 0 )
@@ -1911,7 +1911,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		

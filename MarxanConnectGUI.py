@@ -1432,18 +1432,20 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 if self.cf_demo_aa_recipients.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type] = \
                         marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'],
-                                                self.project['filepaths']['aa_filepath'],
-                                                self.temp['shp_filepath'],
-                                                self.temp['shp_file_pu_id']
-                                                )
+                                                      self.project['filepaths']['aa_filepath'],
+                                                      self.temp['shp_filepath'],
+                                                      self.temp['shp_file_pu_id'],
+                                                      True
+                                                      )
 
                 if self.cf_demo_aa_donors.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type] = \
                         marxanconpy.conmat2donors(self.temp[self.type + '_conmat'],
-                                                self.project['filepaths']['aa_filepath'],
-                                                self.temp['shp_filepath'],
-                                                self.temp['shp_file_pu_id']
-                                                )
+                                                  self.project['filepaths']['aa_filepath'],
+                                                  self.temp['shp_filepath'],
+                                                  self.temp['shp_file_pu_id'],
+                                                  True
+                                                  )
 
                 if self.cf_demo_stochasticity.GetValue():
                     if 'fa_filepath' in self.project['filepaths']:
@@ -1499,19 +1501,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       )
 
                     if self.cf_land_aa_recipients.GetValue():
-                        self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type + "_" + str(h)] = \
+                        self.project['connectivityMetrics']['spec_' + self.type][
+                            'aa_recipients_' + self.type + "_" + str(h)] = \
                             marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'][h],
-                                                    self.project['filepaths']['aa_filepath'],
-                                                    self.temp['shp_filepath'],
-                                                    self.temp['shp_file_pu_id']
-                                                    )
+                                                          self.project['filepaths']['aa_filepath'],
+                                                          self.temp['shp_filepath'],
+                                                          self.temp['shp_file_pu_id'],
+                                                          True
+                                                          )
 
                     if self.cf_land_aa_donors.GetValue():
-                        self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type + "_" + str(h)] = \
+                        self.project['connectivityMetrics']['spec_' + self.type][
+                            'aa_donors_' + self.type + "_" + str(h)] = \
                             marxanconpy.conmat2donors(self.temp[self.type + '_conmat'][h],
                                                       self.project['filepaths']['aa_filepath'],
                                                       self.temp['shp_filepath'],
-                                                      self.temp['shp_file_pu_id']
+                                                      self.temp['shp_file_pu_id'],
+                                                      True
                                                       )
 
                     if self.bd_land_conn_boundary.GetValue():
