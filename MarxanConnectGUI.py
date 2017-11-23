@@ -626,12 +626,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             else:
                 plot_type = self.get_plot_type(shapefile)
                 if 'spec_' + plot_type in self.project['connectivityMetrics']:
-                    self.spec_resolve_metric_choice('vertex_degree_', "Vertex Degree", plot_type, choices)
+                    self.spec_resolve_metric_choice('in_degree_', "In Degree", plot_type, choices)
+                    self.spec_resolve_metric_choice('out_degree_', "Out Degree", plot_type, choices)
                     self.spec_resolve_metric_choice('between_cent_', "Betweenness Centrality", plot_type, choices)
                     self.spec_resolve_metric_choice('eig_vect_cent_', "Eigen Vector Centrality", plot_type, choices)
+                    self.spec_resolve_metric_choice('google_', "Google Page Rank", plot_type, choices)
                     self.spec_resolve_metric_choice('self_recruit_', "Self Recruitment", plot_type, choices)
                     self.spec_resolve_metric_choice('outflux_', "Outflux", plot_type, choices)
-                    self.spec_resolve_metric_choice('import_', "Import", plot_type, choices)
+                    self.spec_resolve_metric_choice('influx_', "Influx", plot_type, choices)
                     self.spec_resolve_metric_choice('temp_conn_cov_', "Temporal Connectivity Covariance", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_recipients_', "Focus Area Recipients", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_donors_', "Focus Area Donors", plot_type, choices)
@@ -692,17 +694,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('status', selection, "Status", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('vertex_degree_' + type, selection, "Vertex Degree", type,
+        metric_type = self.spec_resolve_metric_choice('in_degree_' + type, selection, "In Degree", type,
+                                                      gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('out_degree_' + type, selection, "Out Degree", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('between_cent_' + type, selection, "Betweenness Centrality", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('eig_vect_cent_' + type, selection, "Eigen Vector Centrality", type,
                                                       gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('google_' + type, selection, "Google Page Rank", type,
+                                                      gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('self_recruit_' + type, selection, "Self Recruitment", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('outflux_' + type, selection, "Outflux", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('import_' + type, selection, "Import", type,
+        metric_type = self.spec_resolve_metric_choice('import_' + type, selection, "Influx", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('temp_conn_cov_' + type, selection, "Temporal Connectivity Covariance", type,
                                                       gettext=False) or metric_type
@@ -1181,19 +1187,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             land_fa_enable = False
             land_aa_enable = False
 
-        self.cf_demo_vertex_degree.Enable(enable=demo_enable)
+        self.cf_demo_in_degree.Enable(enable=demo_enable)
+        self.cf_demo_out_degree.Enable(enable=demo_enable)
         self.cf_demo_between_cent.Enable(enable=demo_enable)
         self.cf_demo_eig_vect_cent.Enable(enable=demo_enable)
         self.cf_demo_self_recruit.Enable(enable=demo_enable)
         self.cf_demo_outflux.Enable(enable=demo_ind_enable)
-        self.cf_demo_import.Enable(enable=demo_ind_enable)
+        self.cf_demo_influx.Enable(enable=demo_ind_enable)
         self.cf_demo_stochasticity.Enable(enable=demo_fa_time_enable)
         self.cf_demo_fa_recipients.Enable(enable=demo_fa_enable)
         self.cf_demo_fa_donors.Enable(enable=demo_fa_enable)
         self.cf_demo_aa_recipients.Enable(enable=demo_aa_enable)
         self.cf_demo_aa_donors.Enable(enable=demo_aa_enable)
 
-        self.cf_land_vertex_degree.Enable(enable=land_enable)
+        self.cf_land_in_degree.Enable(enable=land_enable)
+        self.cf_land_out_degree.Enable(enable=land_enable)
         self.cf_land_between_cent.Enable(enable=land_enable)
         self.cf_land_eig_vect_cent.Enable(enable=land_enable)
         self.cf_land_fa_recipients.Enable(enable=land_fa_enable)
@@ -1380,9 +1388,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # calculate demographic metrics
             if self.type[:4] == 'demo':
-                if self.cf_demo_vertex_degree.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['vertex_degree_' + self.type] = \
-                        marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'])
+                if self.cf_demo_in_degree.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['in_degree_' + self.type] = \
+                        marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'],mode='IN')
+
+                if self.cf_demo_out_degree.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['out_degree_' + self.type] = \
+                        marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'],mode='OUT')
 
                 if self.cf_demo_between_cent.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type] = \
@@ -1392,6 +1404,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type] = \
                         marxanconpy.conmat2eigvectcent(self.temp[self.type + '_conmat'])
 
+                if self.cf_demo_google.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['google_' + self.type] = \
+                        marxanconpy.conmat2google(self.temp[self.type + '_conmat'])
+
                 if self.cf_demo_self_recruit.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['self_recruit_' + self.type] = \
                         marxanconpy.conmat2selfrecruit(self.temp[self.type + '_conmat'])
@@ -1400,7 +1416,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['spec_' + self.type]['outflux_' + self.type] = \
                         marxanconpy.conmat2outflux(self.temp[self.type + '_conmat'])
 
-                if self.cf_demo_import.GetValue():
+                if self.cf_demo_influx.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['import_' + self.type] = \
                         marxanconpy.conmat2import(self.temp[self.type + '_conmat'])
 
@@ -1471,10 +1487,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # calculate landscape metrics ############################################################################
             if self.type[-7:] == 'land_pu':
                 for h in self.temp[self.type + '_conmat'].keys():
-                    if self.cf_land_vertex_degree.GetValue():
+                    if self.cf_land_in_degree.GetValue():
                         self.project['connectivityMetrics']['spec_' + self.type][
-                            'vertex_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
-                            self.temp[self.type + '_conmat'][h])
+                            'in_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
+                            self.temp[self.type + '_conmat'][h], mode='IN')
+
+                    if self.cf_land_out_degree.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type][
+                            'out_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
+                            self.temp[self.type + '_conmat'][h], mode='OUT')
 
                     if self.cf_land_between_cent.GetValue():
                         self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type + "_" + str(h)] = \
@@ -1483,6 +1504,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     if self.cf_land_eig_vect_cent.GetValue():
                         self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type + "_" + str(h)] = \
                             marxanconpy.conmat2eigvectcent(self.temp[self.type + '_conmat'][h])
+
+                    if self.cf_land_google.GetValue():
+                        self.project['connectivityMetrics']['spec_' + self.type]['google_' + self.type + "_" + str(h)] = \
+                            marxanconpy.conmat2google(self.temp[self.type + '_conmat'][h])
 
                     if self.cf_land_fa_recipients.GetValue():
                         self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type + "_" + str(h)] = \

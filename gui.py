@@ -673,10 +673,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cf_sizer.Add( self.demo_cf_txt, 0, wx.ALL, 5 )
 		
-		self.cf_demo_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_vertex_degree.SetToolTip( u"The vertex degree indicates the number of connections for each planning unit" )
+		self.cf_demo_in_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"In Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_in_degree.SetToolTip( u"The in degree indicates the number of connections into each planning unit" )
 		
-		demo_cf_sizer.Add( self.cf_demo_vertex_degree, 0, wx.ALL, 5 )
+		demo_cf_sizer.Add( self.cf_demo_in_degree, 0, wx.ALL, 5 )
+		
+		self.cf_demo_out_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Out Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_out_degree.SetToolTip( u"The out degree indicates the number of connections from each planning unit" )
+		
+		demo_cf_sizer.Add( self.cf_demo_out_degree, 0, wx.ALL, 5 )
 		
 		self.cf_demo_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_between_cent.SetToolTip( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
@@ -688,26 +693,31 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cf_sizer.Add( self.cf_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
+		self.cf_demo_google = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Google Page Rank", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_google.SetToolTip( u"Calculates the Google PageRank values of a graph. Higher ranking planning units will have a higher influence on the network." )
+		
+		demo_cf_sizer.Add( self.cf_demo_google, 0, wx.ALL, 5 )
+		
 		self.cf_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_self_recruit.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
-		self.cf_demo_import_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_import_panel.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		self.cf_demo_influx_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.cf_demo_influx_panel.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
 		
-		cf_demo_import_sizer = wx.BoxSizer( wx.VERTICAL )
+		cf_demo_influx_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.cf_demo_import = wx.CheckBox( self.cf_demo_import_panel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_import.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		self.cf_demo_influx = wx.CheckBox( self.cf_demo_influx_panel, wx.ID_ANY, u"Influx", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_influx.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
 		
-		cf_demo_import_sizer.Add( self.cf_demo_import, 0, wx.ALL, 5 )
+		cf_demo_influx_sizer.Add( self.cf_demo_influx, 0, wx.ALL, 5 )
 		
 		
-		self.cf_demo_import_panel.SetSizer( cf_demo_import_sizer )
-		self.cf_demo_import_panel.Layout()
-		cf_demo_import_sizer.Fit( self.cf_demo_import_panel )
-		demo_cf_sizer.Add( self.cf_demo_import_panel, 1, 0, 5 )
+		self.cf_demo_influx_panel.SetSizer( cf_demo_influx_sizer )
+		self.cf_demo_influx_panel.Layout()
+		cf_demo_influx_sizer.Fit( self.cf_demo_influx_panel )
+		demo_cf_sizer.Add( self.cf_demo_influx_panel, 1, 0, 5 )
 		
 		self.cf_demo_outflux_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_demo_outflux_panel.SetToolTip( u"Outflux optimizes for 'productive' areas. It gives a higher value to planning units from which greater numbers of individuals originate. This is only available if the units of the connectivity matrix is \"Individuals\". " )
@@ -821,11 +831,17 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		land_cf_sizer.Add( self.land_cf_txt, 0, wx.ALL, 5 )
 		
-		self.cf_land_vertex_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Vertex Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_vertex_degree.Enable( False )
-		self.cf_land_vertex_degree.SetToolTip( u"The vertex degree indicates the number of connections for each planning unit" )
+		self.cf_land_in_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"In Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_in_degree.Enable( False )
+		self.cf_land_in_degree.SetToolTip( u"The in degree indicates the number of connections into each planning unit" )
 		
-		land_cf_sizer.Add( self.cf_land_vertex_degree, 0, wx.ALL, 5 )
+		land_cf_sizer.Add( self.cf_land_in_degree, 0, wx.ALL, 5 )
+		
+		self.cf_land_out_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Out Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_out_degree.Enable( False )
+		self.cf_land_out_degree.SetToolTip( u"The out degree indicates the number of connections from each planning unit" )
+		
+		land_cf_sizer.Add( self.cf_land_out_degree, 0, wx.ALL, 5 )
 		
 		self.cf_land_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_between_cent.Enable( False )
@@ -838,6 +854,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cf_land_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
 		
 		land_cf_sizer.Add( self.cf_land_eig_vect_cent, 0, wx.ALL, 5 )
+		
+		self.cf_land_google = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Google Page Rank", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_google.SetToolTip( u"Calculates the Google PageRank values of a graph. Higher ranking planning units will have a higher influence on the network." )
+		
+		land_cf_sizer.Add( self.cf_land_google, 0, wx.ALL, 5 )
 		
 		self.cf_land_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_self_recruit.SetValue(True) 

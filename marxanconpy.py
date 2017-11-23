@@ -155,9 +155,9 @@ def buffer_shp_corners(gdf_list, bufferwidth = 0):
         if(latmaxtemp>latmax): latmax = latmaxtemp
     return lonmin, lonmax, latmin, latmax
 
-def conmat2vertexdegree(conmat):
+def conmat2vertexdegree(conmat,mode='ALL'):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
-    vertexdegree = g.degree()
+    vertexdegree = g.degree(mode=mode)
     return vertexdegree
 
 def conmat2betweencent(conmat):
@@ -168,6 +168,11 @@ def conmat2betweencent(conmat):
 def conmat2eigvectcent(conmat):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
     eigvectcent = g.evcent()
+    return eigvectcent
+
+def conmat2google(conmat):
+    g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
+    eigvectcent = g.pagerank()
     return eigvectcent
 
 def conmat2outflux(conmat):
