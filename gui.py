@@ -2007,7 +2007,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_shp_txt.Wrap( -1 )
 		metrics_opt_sizer.Add( self.metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
 		
-		self.metric_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Output", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_txt.Wrap( -1 )
 		metrics_opt_sizer.Add( self.metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
 		
@@ -2127,7 +2127,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_shp_txt1.Wrap( -1 )
 		metrics_opt_sizer1.Add( self.metric_shp_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
 		
-		self.metric_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Output", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_txt1.Wrap( -1 )
 		metrics_opt_sizer1.Add( self.metric_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
 		
