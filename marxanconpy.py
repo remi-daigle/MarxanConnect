@@ -176,10 +176,14 @@ def conmat2google(conmat):
     return eigvectcent
 
 def conmat2outflux(conmat):
-    return conmat.as_matrix().sum(1).tolist()
+    cm = conmat.copy().as_matrix()
+    numpy.fill_diagonal(cm, 0)
+    return cm.sum(1).tolist()
 
-def conmat2import(conmat):
-    return conmat.as_matrix().sum(0).tolist()
+def conmat2influx(conmat):
+    cm = conmat.copy().as_matrix()
+    numpy.fill_diagonal(cm, 0)
+    return cm.sum(0).tolist()
 
 def conmat2selfrecruit(conmat):
     selfrecruit = numpy.diag(conmat.as_matrix()).tolist()

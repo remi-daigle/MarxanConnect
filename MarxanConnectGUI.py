@@ -117,6 +117,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
         self.project['options']['metricsCalculated'] = False
+        self.set_metric_options()
 
         # set default file paths
         pfdir = sys.path[0]
@@ -217,8 +218,40 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.land_PU_CM_progress.SetValue(self.project['options']['land_pu_cm_progress'])
         self.land_matrixTypeRadioBox.SetStringSelection(self.project['options']['land_conmat_type'])
 
+        self.cf_demo_in_degree.SetValue(self.project['options']['demo_metrics']['in_degree'])
+        self.cf_demo_out_degree.SetValue(self.project['options']['demo_metrics']['out_degree'])
+        self.cf_demo_between_cent.SetValue(self.project['options']['demo_metrics']['between_cent'])
+        self.cf_demo_eig_vect_cent.SetValue(self.project['options']['demo_metrics']['eig_vect_cent'])
+        self.cf_demo_google.SetValue(self.project['options']['demo_metrics']['google'])
+        self.cf_demo_self_recruit.SetValue(self.project['options']['demo_metrics']['self_recruit'])
+        self.cf_demo_outflux.SetValue(self.project['options']['demo_metrics']['outflux'])
+        self.cf_demo_influx.SetValue(self.project['options']['demo_metrics']['influx'])
+        self.cf_demo_stochasticity.SetValue(self.project['options']['demo_metrics']['stochasticity'])
+        self.cf_demo_fa_recipients.SetValue(self.project['options']['demo_metrics']['fa_recipients'])
+        self.cf_demo_fa_donors.SetValue(self.project['options']['demo_metrics']['fa_donors'])
+        self.cf_demo_aa_recipients.SetValue(self.project['options']['demo_metrics']['aa_recipients'])
+        self.cf_demo_aa_donors.SetValue(self.project['options']['demo_metrics']['aa_donors'])
+
+        self.bd_demo_conn_boundary.SetValue(self.project['options']['demo_metrics']['conn_boundary'])
+        self.bd_demo_min_plan_graph.SetValue(self.project['options']['demo_metrics']['min_plan_graph'])
+
+        self.cf_land_in_degree.SetValue(self.project['options']['land_metrics']['in_degree'])
+        self.cf_land_out_degree.SetValue(self.project['options']['land_metrics']['out_degree'])
+        self.cf_land_between_cent.SetValue(self.project['options']['land_metrics']['between_cent'])
+        self.cf_land_eig_vect_cent.SetValue(self.project['options']['land_metrics']['eig_vect_cent'])
+        self.cf_land_google.SetValue(self.project['options']['land_metrics']['google'])
+        self.cf_land_fa_recipients.SetValue(self.project['options']['land_metrics']['fa_recipients'])
+        self.cf_land_fa_donors.SetValue(self.project['options']['land_metrics']['fa_donors'])
+        self.cf_land_aa_recipients.SetValue(self.project['options']['land_metrics']['aa_recipients'])
+        self.cf_land_aa_donors.SetValue(self.project['options']['land_metrics']['aa_donors'])
+
+        self.bd_demo_conn_boundary.SetValue(self.project['options']['land_metrics']['conn_boundary'])
+        self.bd_demo_min_plan_graph.SetValue(self.project['options']['land_metrics']['min_plan_graph'])
+
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
+
+
 
         # set default file paths in GUI
         self.set_GUI_filepaths()
@@ -283,6 +316,39 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             choice.SetItems(list(gpd.GeoDataFrame.from_file(filepath)))
             choice.SetStringSelection(id)
 
+    def set_metric_options(self):
+        self.project['options']['demo_metrics'] = {}
+        self.project['options']['demo_metrics']['in_degree'] = self.cf_demo_in_degree.GetValue()
+        self.project['options']['demo_metrics']['out_degree'] = self.cf_demo_out_degree.GetValue()
+        self.project['options']['demo_metrics']['between_cent'] = self.cf_demo_between_cent.GetValue()
+        self.project['options']['demo_metrics']['eig_vect_cent'] = self.cf_demo_eig_vect_cent.GetValue()
+        self.project['options']['demo_metrics']['google'] = self.cf_demo_google.GetValue()
+        self.project['options']['demo_metrics']['self_recruit'] = self.cf_demo_self_recruit.GetValue()
+        self.project['options']['demo_metrics']['outflux'] = self.cf_demo_outflux.GetValue()
+        self.project['options']['demo_metrics']['influx'] = self.cf_demo_influx.GetValue()
+        self.project['options']['demo_metrics']['stochasticity'] = self.cf_demo_stochasticity.GetValue()
+        self.project['options']['demo_metrics']['fa_recipients'] = self.cf_demo_fa_recipients.GetValue()
+        self.project['options']['demo_metrics']['fa_donors'] = self.cf_demo_fa_donors.GetValue()
+        self.project['options']['demo_metrics']['aa_recipients'] = self.cf_demo_aa_recipients.GetValue()
+        self.project['options']['demo_metrics']['aa_donors'] = self.cf_demo_aa_donors.GetValue()
+
+        self.project['options']['demo_metrics']['conn_boundary'] = self.bd_demo_conn_boundary.GetValue()
+        self.project['options']['demo_metrics']['min_plan_graph'] = self.bd_demo_min_plan_graph.GetValue()
+
+        self.project['options']['land_metrics'] = {}
+        self.project['options']['land_metrics']['in_degree'] = self.cf_land_in_degree.GetValue()
+        self.project['options']['land_metrics']['out_degree'] = self.cf_land_out_degree.GetValue()
+        self.project['options']['land_metrics']['between_cent'] = self.cf_land_between_cent.GetValue()
+        self.project['options']['land_metrics']['eig_vect_cent'] = self.cf_land_eig_vect_cent.GetValue()
+        self.project['options']['land_metrics']['google'] = self.cf_land_google.GetValue()
+        self.project['options']['land_metrics']['fa_recipients'] = self.cf_land_fa_recipients.GetValue()
+        self.project['options']['land_metrics']['fa_donors'] = self.cf_land_fa_donors.GetValue()
+        self.project['options']['land_metrics']['aa_recipients'] = self.cf_land_aa_recipients.GetValue()
+        self.project['options']['land_metrics']['aa_donors'] = self.cf_land_aa_donors.GetValue()
+
+        self.project['options']['land_metrics']['conn_boundary'] = self.bd_land_conn_boundary.GetValue()
+        self.project['options']['land_metrics']['min_plan_graph'] = self.bd_land_min_plan_graph.GetValue()
+
     def on_save_project_as(self, event):
         """
         Create and show the Open FileDialog to save a project
@@ -296,6 +362,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.project['filepaths']['projfilename'] = dlg.GetFilename()
             self.project['workingdirectory'] = dlg.GetDirectory()
+            self.set_metric_options()
             with open(self.project['filepaths']['projfile'], 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
         dlg.Destroy()
@@ -306,6 +373,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         save a project, but call 'on_save_project_as' if project file has not previously been defined
         """
         if 'projfile' in self.project['filepaths']:
+            self.set_metric_options()
             with open(self.project['filepaths']['projfile'], 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
         else:
@@ -708,7 +776,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('outflux_' + type, selection, "Outflux", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('import_' + type, selection, "Influx", type,
+        metric_type = self.spec_resolve_metric_choice('influx_' + type, selection, "Influx", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('temp_conn_cov_' + type, selection, "Temporal Connectivity Covariance", type,
                                                       gettext=False) or metric_type
@@ -1191,6 +1259,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_out_degree.Enable(enable=demo_enable)
         self.cf_demo_between_cent.Enable(enable=demo_enable)
         self.cf_demo_eig_vect_cent.Enable(enable=demo_enable)
+        self.cf_demo_google.Enable(enable=demo_enable)
         self.cf_demo_self_recruit.Enable(enable=demo_enable)
         self.cf_demo_outflux.Enable(enable=demo_ind_enable)
         self.cf_demo_influx.Enable(enable=demo_ind_enable)
@@ -1200,14 +1269,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_aa_recipients.Enable(enable=demo_aa_enable)
         self.cf_demo_aa_donors.Enable(enable=demo_aa_enable)
 
+        self.bd_demo_conn_boundary.Enable(enable=demo_enable)
+        self.bd_demo_min_plan_graph.Enable(enable=demo_enable)
+
         self.cf_land_in_degree.Enable(enable=land_enable)
         self.cf_land_out_degree.Enable(enable=land_enable)
         self.cf_land_between_cent.Enable(enable=land_enable)
         self.cf_land_eig_vect_cent.Enable(enable=land_enable)
+        self.cf_land_google.Enable(enable=demo_enable)
         self.cf_land_fa_recipients.Enable(enable=land_fa_enable)
         self.cf_land_fa_donors.Enable(enable=land_fa_enable)
         self.cf_land_aa_recipients.Enable(enable=land_aa_enable)
         self.cf_land_aa_donors.Enable(enable=land_aa_enable)
+
+        self.bd_demo_conn_boundary.Enable(enable=demo_enable)
+        self.bd_demo_min_plan_graph.Enable(enable=demo_enable)
 
 # ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
@@ -1417,8 +1493,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         marxanconpy.conmat2outflux(self.temp[self.type + '_conmat'])
 
                 if self.cf_demo_influx.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['import_' + self.type] = \
-                        marxanconpy.conmat2import(self.temp[self.type + '_conmat'])
+                    self.project['connectivityMetrics']['spec_' + self.type]['influx_' + self.type] = \
+                        marxanconpy.conmat2influx(self.temp[self.type + '_conmat'])
 
                 if self.demo_matrixUnitsRadioBox.GetStringSelection() != "Individuals":
                     if self.cf_demo_fa_recipients.GetValue() or\
