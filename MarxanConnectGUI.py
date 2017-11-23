@@ -111,11 +111,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
-        self.project['options']['gen_pu_cm_progress'] = self.gen_PU_CM_progress.GetValue()
-        self.project['options']['gen_conmat_type'] = self.gen_matrixTypeRadioBox.GetStringSelection()
-        self.project['options']['gen_conmat_format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
-        self.project['options']['gen_conmat_rescale'] = self.gen_rescaleRadioBox.GetStringSelection()
-        self.project['options']['gen_conmat_rescale_edge'] = self.gen_rescale_edgeRadioBox.GetStringSelection()
         self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
         self.project['options']['land_pu_cm_progress'] = self.land_PU_CM_progress.GetValue()
         self.project['options']['land_conmat_type'] = self.land_matrixTypeRadioBox.GetStringSelection()
@@ -138,10 +133,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['demo_cu_file_pu_id'] = ""
         self.project['filepaths']['demo_cu_cm_filepath'] = ""
         self.project['filepaths']['demo_pu_cm_filepath'] = ""
-        self.project['filepaths']['gen_cu_filepath'] = ""
-        self.project['filepaths']['gen_cu_file_pu_id'] = ""
-        self.project['filepaths']['gen_cu_cm_filepath'] = ""
-        self.project['filepaths']['gen_pu_cm_filepath'] = ""
         self.project['filepaths']['land_cu_filepath'] = ""
         self.project['filepaths']['land_cu_file_hab_id'] = ""
         self.project['filepaths']['land_res_mat_filepath'] = ""
@@ -165,8 +156,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
-        self.on_gen_matrixFormatRadioBox(event=None)
-        self.on_gen_rescaleRadioBox(event=None)
         self.on_land_matrixTypeRadioBox(event=None)
         self.enable_metrics()
         self.outline_shapefile_choices()
@@ -224,12 +213,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_rescaleRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale'])
         self.demo_rescale_edgeRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale_edge'])
 
-        self.gen_PU_CM_progress.SetValue(self.project['options']['gen_pu_cm_progress'])
-        self.gen_matrixTypeRadioBox.SetStringSelection(self.project['options']['gen_conmat_type'])
-        self.gen_matrixFormatRadioBox.SetStringSelection(self.project['options']['gen_conmat_format'])
-        self.gen_rescaleRadioBox.SetStringSelection(self.project['options']['gen_conmat_rescale'])
-        self.gen_rescale_edgeRadioBox.SetStringSelection(self.project['options']['gen_conmat_rescale_edge'])
-
         self.land_HAB_buff.SetValue(self.project['options']['land_hab_buff'])
         self.land_PU_CM_progress.SetValue(self.project['options']['land_pu_cm_progress'])
         self.land_matrixTypeRadioBox.SetStringSelection(self.project['options']['land_conmat_type'])
@@ -248,7 +231,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
-        self.on_gen_rescaleRadioBox(event=None)
         if self.project['options']['metricsCalculated']:
             self.customize_spec.Enable(enable=True)
             self.CFT_percent_slider.Enable(enable=True)
@@ -276,12 +258,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                   self.project['filepaths']['demo_cu_file_pu_id'])
         self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
         self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
-
-        self.gen_CU_file.SetPath(self.project['filepaths']['gen_cu_filepath'])
-        self.set_GUI_id_selection(self.gen_CU_file_pu_id, self.project['filepaths']['gen_cu_filepath'],
-                                  self.project['filepaths']['gen_cu_file_pu_id'])
-        self.gen_CU_CM_file.SetPath(self.project['filepaths']['gen_cu_cm_filepath'])
-        self.gen_PU_CM_file.SetPath(self.project['filepaths']['gen_pu_cm_filepath'])
 
         self.land_HAB_file.SetPath(self.project['filepaths']['land_cu_filepath'])
         self.set_GUI_id_selection(self.land_HAB_file_hab_id, self.project['filepaths']['land_cu_filepath'],
@@ -590,9 +566,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.project['filepaths']['demo_cu_filepath'] != "":
             if self.demo_rescaleRadioBox.GetStringSelection() != "Identical Grids":
                 choices.append("Demographic Units")
-        if self.project['filepaths']['gen_cu_filepath'] != "":
-            if self.gen_rescaleRadioBox.GetStringSelection() != "Identical Grids":
-                choices.append("Genetic Units")
         if self.project['filepaths']['land_cu_filepath'] != "":
             choices.append("Landscape Units")
 
@@ -608,14 +581,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 choices.append("Planning Units (Marxan Data)")
             if 'spec_demo_pu' in self.project['connectivityMetrics']:
                 choices.append("Planning Units (Demographic Data)")
-            if 'spec_gen_pu' in self.project['connectivityMetrics']:
-                choices.append("Planning Units (Genetic Data)")
             if 'spec_land_pu' in self.project['connectivityMetrics']:
                 choices.append("Planning Units (Landscape Data)")
             if 'spec_demo_cu' in self.project['connectivityMetrics']:
                 choices.append("Demographic Units")
-            if 'spec_gen_cu' in self.project['connectivityMetrics']:
-                choices.append("Genetic Units")
 
         self.metric_shp_choice.SetItems(choices)
         self.metric_shp_choice.SetSelection(0)
@@ -702,14 +671,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             type = 'pu'
         elif selection == "Planning Units (Demographic Data)":
             type = 'demo_pu'
-        elif selection == "Planning Units (Genetic Data)":
-            type = 'gen_pu'
         elif selection == "Planning Units (Landscape Data)":
             type = 'land_pu'
         elif selection == "Demographic Units":
             type = 'demo_cu'
-        elif selection == "Genetic Units":
-            type = 'gen_cu'
         elif selection == "Landscape Units":
             type = 'land_cu'
         elif selection == "Focus Areas":
@@ -821,24 +786,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['demo_cu_file_pu_id'] = self.demo_CU_file_pu_id.GetStringSelection()
 
-    def on_gen_CU_file(self, event):
-        """
-        Defines genetic Connectivity Unit file path
-        """
-        self.project['filepaths']['gen_cu_filepath'] = self.gen_CU_file.GetPath()
-        self.gen_CU_file_pu_id.SetItems(
-            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['gen_cu_filepath'])))
-        self.gen_CU_file_pu_id.SetSelection(0)
-        self.on_gen_CU_file_pu_id(event=None)
-        self.outline_shapefile_choices()
-        self.colormap_shapefile_choices()
-
-    def on_gen_CU_file_pu_id(self, event):
-        """
-        Defines ID column label for the genetic connectivity unit file
-        """
-        self.project['filepaths']['gen_cu_file_pu_id'] = self.gen_CU_file_pu_id.GetStringSelection()
-
     def on_land_HAB_file(self, event):
         """
         Defines landscape habitat type file path
@@ -906,28 +853,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines Planning Unit scaled demographic Connectivity Matrix file path
         """
         self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_PU_CM_file.GetPath()
-        # enable metrics
-        self.enable_metrics()
-
-    def on_gen_CU_CM_file(self, event):
-        """
-        Defines genetic Connectivity Matrix file path
-        """
-        self.project['filepaths']['gen_cu_cm_filepath'] = self.gen_CU_CM_file.GetPath()
-
-        # reset filepaths
-        self.on_gen_rescaleRadioBox(event=None)
-
-
-        # # check format
-        # self.check_matrix_list_format(format=self.gen_matrixFormatRadioBox.GetStringSelection(),
-        #                               filepath=self.gen_CU_CM_file.GetPath())
-
-    def on_gen_PU_CM_file(self, event):
-        """
-        Defines Planning Unit scaled genetic Connectivity Matrix file path
-        """
-        self.project['filepaths']['gen_pu_cm_filepath'] = self.gen_PU_CM_file.GetPath()
         # enable metrics
         self.enable_metrics()
 
@@ -1239,23 +1164,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             demo_ind_enable = False
             demo_aa_enable = False
 
-        if self.project['filepaths']['gen_pu_cm_filepath'] != "":
-            gen_enable = True
-            if self.project['filepaths']['fa_filepath'] != "":
-                gen_fa_enable = True
-            else:
-                gen_fa_enable = False
-
-            if self.project['filepaths']['aa_filepath'] != "":
-                gen_aa_enable = True
-            else:
-                gen_aa_enable = False
-
-        else:
-            gen_enable = False
-            gen_fa_enable = False
-            gen_aa_enable = False
-
         if self.project['filepaths']['land_pu_cm_filepath'] != "":
             land_enable = True
             if self.project['filepaths']['fa_filepath'] != "":
@@ -1284,15 +1192,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_fa_donors.Enable(enable=demo_fa_enable)
         self.cf_demo_aa_recipients.Enable(enable=demo_aa_enable)
         self.cf_demo_aa_donors.Enable(enable=demo_aa_enable)
-
-        self.cf_gen_vertex_degree.Enable(enable=gen_enable)
-        self.cf_gen_between_cent.Enable(enable=gen_enable)
-        self.cf_gen_eig_vect_cent.Enable(enable=gen_enable)
-        self.cf_gen_self_recruit.Enable(enable=gen_enable)
-        self.cf_gen_fa_recipients.Enable(enable=gen_fa_enable)
-        self.cf_gen_fa_donors.Enable(enable=gen_fa_enable)
-        self.cf_gen_aa_recipients.Enable(enable=gen_aa_enable)
-        self.cf_gen_aa_donors.Enable(enable=gen_aa_enable)
 
         self.cf_land_vertex_degree.Enable(enable=land_enable)
         self.cf_land_between_cent.Enable(enable=land_enable)
@@ -1350,53 +1249,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                              orient='split').to_csv(
                 self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
 
-    def on_gen_rescale_button(self, event):
-        """
-        Rescales the connectivity matrix to match the scale of the planning units
-        """
-        self.check_matrix_list_format(format=self.gen_matrixFormatRadioBox.GetStringSelection(),
-                                      filepath=self.project['filepaths']['gen_cu_cm_filepath'])
-        self.temp = {}
-        # create dict entry for connectivityMetrics
-
-        if 'connectivityMetrics' not in self.project:
-
-            self.project['connectivityMetrics'] = {}
-
-        self.temp['gen_pu_conmat'] = marxanconpy.rescale_matrix(
-            self.project['filepaths']['pu_filepath'],
-            self.project['filepaths']['pu_file_pu_id'],
-            self.project['filepaths']['gen_cu_filepath'],
-            self.project['filepaths']['gen_cu_file_pu_id'],
-            self.project['filepaths']['gen_cu_cm_filepath'],
-            matrixformat=self.project['options']['gen_conmat_format'],
-            edge=self.project['options']['gen_conmat_rescale_edge'],
-            progressbar=self.project['options']['gen_pu_cm_progress'])
-
-        if self.gen_matrixFormatRadioBox.GetStringSelection() == "List with Time":
-            self.temp['gen_pu_conmat_time'] = self.temp['gen_pu_conmat'][
-                self.temp['gen_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
-                                                                           var_name='id2',
-                                                                           value_name='value').to_json(
-                orient='split')
-            self.temp['gen_pu_conmat'] = self.temp['gen_pu_conmat'][
-                self.temp['gen_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(
-                orient='split')
-            pandas.read_json(self.temp['gen_pu_conmat_time'],
-                             orient='split').to_csv(
-                self.project['filepaths']['gen_pu_cm_filepath'],
-                index=False, header=True, sep=",")
-            pandas.read_json(self.temp['gen_pu_conmat'], orient='split').to_csv(
-                str.replace(self.project['filepaths']['gen_pu_cm_filepath'], '.csv',
-                            '_mean_of_times.csv'),
-                index=True, header=True, sep=",")
-
-        else:
-            self.temp['gen_pu_conmat'] = self.temp['gen_pu_conmat'].to_json(orient='split')
-            pandas.read_json(self.temp['gen_pu_conmat'],
-                             orient='split').to_csv(
-                self.project['filepaths']['gen_pu_cm_filepath'], index=True, header=True, sep=",")
-
     def on_land_generate_button(self, event):
         self.temp = {}
         self.temp['land_pu_conmat'] = marxanconpy.habitatresistance2conmats(
@@ -1424,22 +1276,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.calc_metrics_pu.GetValue() and self.calc_metrics_cu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
                 self.all_types += ['demo_pu', 'demo_cu']
-            if os.path.isfile(self.project['filepaths']['gen_pu_cm_filepath']):
-                self.all_types += ['gen_pu', 'gen_cu']
             if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
                 self.all_types += ['land_pu']
         elif self.calc_metrics_pu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
                 self.all_types += ['demo_pu']
-            if os.path.isfile(self.project['filepaths']['gen_pu_cm_filepath']):
-                self.all_types += ['gen_pu']
             if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
                 self.all_types += ['land_pu']
         elif self.calc_metrics_cu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_cu_cm_filepath']):
                 self.all_types += ['demo_cu']
-            if os.path.isfile(self.project['filepaths']['gen_cu_cm_filepath']):
-                self.all_types += ['gen_cu']
         else:
             self.warn_dialog(message="No 'Units' selected for metric calculations.")
 
@@ -1454,10 +1300,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
                                                   filepath=self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp['format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
-                if self.type == 'gen_pu':
-                    self.check_matrix_list_format(format=self.gen_matrixFormatRadioBox.GetStringSelection(),
-                                                  filepath=self.project['filepaths'][self.type + '_cm_filepath'])
-                    self.temp['format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
                 if self.type == 'land_pu':
                     self.temp['format'] = "List with Habitat"
 
@@ -1621,64 +1463,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'])
 
                 if self.bd_demo_min_plan_graph.GetValue():
-                    self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
-                        marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
-
-            # calculate genetic metrics ############################################################################
-            if self.type[:3] == 'gen':
-                if self.cf_gen_vertex_degree.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['vertex_degree_' + self.type] = \
-                        marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'])
-
-                if self.cf_gen_between_cent.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type] = \
-                        marxanconpy.conmat2betweencent(self.temp[self.type + '_conmat'])
-
-                if self.cf_gen_eig_vect_cent.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type] = \
-                        marxanconpy.conmat2eigvectcent(self.temp[self.type + '_conmat'])
-
-                if self.cf_gen_self_recruit.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['self_recruit_' + self.type] = \
-                        marxanconpy.conmat2selfrecruit(self.temp[self.type + '_conmat'])
-
-                if self.cf_gen_fa_recipients.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type] = \
-                        marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'],
-                                                self.project['filepaths']['fa_filepath'],
-                                                self.temp['shp_filepath'],
-                                                self.temp['shp_file_pu_id']
-                                                )
-
-                if self.cf_gen_fa_donors.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type] = \
-                        marxanconpy.conmat2donors(self.temp[self.type + '_conmat'],
-                                                  self.project['filepaths']['fa_filepath'],
-                                                  self.temp['shp_filepath'],
-                                                  self.temp['shp_file_pu_id']
-                                                  )
-
-                if self.cf_gen_aa_recipients.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type] = \
-                        marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'],
-                                                self.project['filepaths']['aa_filepath'],
-                                                self.temp['shp_filepath'],
-                                                self.temp['shp_file_pu_id']
-                                                )
-
-                if self.cf_gen_aa_donors.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type] = \
-                        marxanconpy.conmat2donors(self.temp[self.type + '_conmat'],
-                                                  self.project['filepaths']['aa_filepath'],
-                                                  self.temp['shp_filepath'],
-                                                  self.temp['shp_file_pu_id']
-                                                  )
-
-                if self.bd_gen_conn_boundary.GetValue():
-                    self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'])
-
-                if self.bd_gen_min_plan_graph.GetValue():
                     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
                         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
 
@@ -2086,8 +1870,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.calc_metrics_pu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
                 self.all_types += ['demo_pu']
-            if os.path.isfile(self.project['filepaths']['gen_pu_cm_filepath']):
-                self.all_types += ['gen_pu']
             if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
                 self.all_types += ['land_pu']
         else:
