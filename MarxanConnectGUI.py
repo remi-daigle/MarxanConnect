@@ -1290,6 +1290,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Rescales the connectivity matrix to match the scale of the planning units
         """
+        self.warn_dialog("Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
+                         " if the rescaling is ecologically valid. We recommend acquiring connectivity data at the same"
+                         " scale as the planning unit")
+        
         self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
                                       filepath=self.project['filepaths']['demo_cu_cm_filepath'])
         self.temp = {}
