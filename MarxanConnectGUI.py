@@ -677,6 +677,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             self.preEval_metric_choice.SetItems(choices)
             self.preEval_metric_choice.SetSelection(0)
+            if 'connectivityMetrics' in self.project:
+                self.on_preEval_metric_choice(event=None)
 
     def spec_resolve_metric_choice(self, prefix, text = None, type = None, choices=None, gettext = True):
         if gettext:
@@ -1890,33 +1892,30 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
                                                      type=self.get_plot_type(
                                                          selection=self.preEval_metric_shp_choice.GetStringSelection()))
-        print(type)
-        print(metric_type)
+
         if 'spec_' + type in self.project['connectivityMetrics']:
             self.temp['metric'] = self.project['connectivityMetrics']['spec_' + type][metric_type]
-            print(self.temp['metric'])
 
             self.preEval_grid.SetCellValue(0, 0, str(sum(self.temp['metric'])))
             self.preEval_grid.SetCellValue(1, 0, str(numpy.mean(self.temp['metric'])))
-            self.preEval_grid.SetCellValue(2, 0, str(min(self.temp['metric'])))
-            self.preEval_grid.SetCellValue(3, 0, str(numpy.percentile(self.temp['metric'], 25)))
-            self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 50)))
-            self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 75)))
-            self.preEval_grid.SetCellValue(6, 0, str(max(self.temp['metric'])))
+            self.preEval_grid.SetCellValue(2, 0, str(numpy.std(self.temp['metric'])))
+            self.preEval_grid.SetCellValue(3, 0, str(min(self.temp['metric'])))
+            self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 25)))
+            self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 50)))
+            self.preEval_grid.SetCellValue(6, 0, str(numpy.percentile(self.temp['metric'], 75)))
+            self.preEval_grid.SetCellValue(7, 0, str(max(self.temp['metric'])))
             if 'aa_included' in self.spatial:
-                self.preEval_grid.SetCellValue(7, 0, str((sum(
+                self.preEval_grid.SetCellValue(8, 0, str((sum(
                     self.spatial['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
                     self.temp['metric']) * 100)))
             else:
-                self.preEval_grid.SetCellValue(7, 0, 'NA')
+                self.preEval_grid.SetCellValue(8, 0, 'NA')
             if 'fa_included' in self.spatial:
-                self.preEval_grid.SetCellValue(8, 0, str((sum(
+                self.preEval_grid.SetCellValue(9, 0, str((sum(
                     self.spatial['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
                     self.temp['metric']) * 100)))
             else:
-                self.preEval_grid.SetCellValue(8, 0, 'NA')
-
-            self.preEval_grid.SetCellValue(9, 0, 'NA')
+                self.preEval_grid.SetCellValue(9, 0, 'NA')
 
     def on_remove_metric(self,event):
         type = self.get_plot_type(selection=self.preEval_metric_shp_choice.GetStringSelection())
@@ -2069,8 +2068,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
-
-
 
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):

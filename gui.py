@@ -168,7 +168,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fa_status_radioBoxChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.fa_status_radioBox = wx.RadioBox( self.spatialInput, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, fa_status_radioBoxChoices, 3, wx.RA_SPECIFY_COLS )
-		self.fa_status_radioBox.SetSelection( 2 )
+		self.fa_status_radioBox.SetSelection( 0 )
 		fa_status_sizer.Add( self.fa_status_radioBox, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		
@@ -1438,6 +1438,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_choice_sizer.Add( self.preEval_choice_txt, 0, wx.ALL, 5 )
 		
 		preEval_metrics_opt_sizer = wx.FlexGridSizer( 2, 3, 0, 0 )
+		preEval_metrics_opt_sizer.AddGrowableCol( 1 )
 		preEval_metrics_opt_sizer.SetFlexibleDirection( wx.BOTH )
 		preEval_metrics_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -1461,7 +1462,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_metric_choiceChoices = [ u"Selection Frequency", u"Best Solution", u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment", u"Outflux", u"Temporal Connectivity Covariance", u"Focus Area Sink", u"Focus Area Source", u"Avoidance Area Sink", u"Avoidance Area Source" ]
 		self.preEval_metric_choice = wx.Choice( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_choiceChoices, 0 )
 		self.preEval_metric_choice.SetSelection( 0 )
-		preEval_metrics_opt_sizer.Add( self.preEval_metric_choice, 0, wx.ALL, 5 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_choice, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_button18 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
 		preEval_metrics_opt_sizer.Add( self.m_button18, 0, wx.ALL, 4 )
@@ -1512,14 +1513,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_grid.SetRowLabelSize( 150 )
 		self.preEval_grid.SetRowLabelValue( 0, u"Sum" )
 		self.preEval_grid.SetRowLabelValue( 1, u"Mean" )
-		self.preEval_grid.SetRowLabelValue( 2, u"Minimum" )
-		self.preEval_grid.SetRowLabelValue( 3, u"Lower Quartile" )
-		self.preEval_grid.SetRowLabelValue( 4, u"Median" )
-		self.preEval_grid.SetRowLabelValue( 5, u"Upper Quartile" )
-		self.preEval_grid.SetRowLabelValue( 6, u"Maximum" )
-		self.preEval_grid.SetRowLabelValue( 7, u"% in Avoidance Area" )
-		self.preEval_grid.SetRowLabelValue( 8, u"% in Focus Area" )
-		self.preEval_grid.SetRowLabelValue( 9, u"Status" )
+		self.preEval_grid.SetRowLabelValue( 2, u"Standard Deviation" )
+		self.preEval_grid.SetRowLabelValue( 3, u"Minimum" )
+		self.preEval_grid.SetRowLabelValue( 4, u"Lower Quartile" )
+		self.preEval_grid.SetRowLabelValue( 5, u"Median" )
+		self.preEval_grid.SetRowLabelValue( 6, u"Upper Quartile" )
+		self.preEval_grid.SetRowLabelValue( 7, u"Maximum" )
+		self.preEval_grid.SetRowLabelValue( 8, u"% in Avoidance Area" )
+		self.preEval_grid.SetRowLabelValue( 9, u"% in Focus Area" )
 		self.preEval_grid.SetRowLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
 		
 		# Label Appearance
@@ -1548,11 +1549,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_discrete_from_quartile_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.preEval_discrete_from_quartile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_discrete_from_quartile.SetValue(True) 
 		preEval_discrete_from_quartile_sizer.Add( self.preEval_discrete_from_quartile, 0, wx.ALL, 5 )
 		
 		preEval_discrete_from_quartile_radioChoices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
 		self.preEval_discrete_from_quartile_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, preEval_discrete_from_quartile_radioChoices, 1, wx.RA_SPECIFY_COLS )
-		self.preEval_discrete_from_quartile_radio.SetSelection( 0 )
+		self.preEval_discrete_from_quartile_radio.SetSelection( 3 )
 		preEval_discrete_from_quartile_sizer.Add( self.preEval_discrete_from_quartile_radio, 0, wx.ALL, 5 )
 		
 		
@@ -1606,11 +1608,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_discrete_to_quartile_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.preEval_discrete_to_quartile = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Quartile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_discrete_to_quartile.SetValue(True) 
 		preEval_discrete_to_quartile_sizer.Add( self.preEval_discrete_to_quartile, 0, wx.ALL, 5 )
 		
 		preEval_discrete_to_quartile_radioChoices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
 		self.preEval_discrete_to_quartile_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, preEval_discrete_to_quartile_radioChoices, 1, wx.RA_SPECIFY_COLS )
-		self.preEval_discrete_to_quartile_radio.SetSelection( 0 )
+		self.preEval_discrete_to_quartile_radio.SetSelection( 4 )
 		preEval_discrete_to_quartile_sizer.Add( self.preEval_discrete_to_quartile_radio, 0, wx.ALL, 5 )
 		
 		
@@ -1664,7 +1667,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
-		self.preEval_status_radio.SetSelection( 0 )
+		self.preEval_status_radio.SetSelection( 2 )
 		preEval_metrics_buttons_sizer.Add( self.preEval_status_radio, 0, wx.ALL, 5 )
 		
 		
@@ -1680,7 +1683,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		cf_export_radioBoxChoices = [ u"Export", u"Append" ]
 		self.cf_export_radioBox = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, cf_export_radioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.cf_export_radioBox.SetSelection( 1 )
+		self.cf_export_radioBox.SetSelection( 0 )
 		cf_export_sizer.Add( self.cf_export_radioBox, 0, wx.ALL, 5 )
 		
 		cf_file_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
@@ -1801,7 +1804,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		spatialMainSizer1 = wx.FlexGridSizer( 0, 1, 0, 0 )
 		spatialMainSizer1.AddGrowableCol( 0 )
@@ -2268,7 +2271,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		

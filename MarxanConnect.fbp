@@ -16051,7 +16051,7 @@
                                                             <property name="resize">Resizable</property>
                                                             <property name="row_label_horiz_alignment">wxALIGN_CENTRE</property>
                                                             <property name="row_label_size">150</property>
-                                                            <property name="row_label_values">&quot;Sum&quot; &quot;Mean&quot; &quot;Minimum&quot; &quot;Lower Quartile&quot; &quot;Median&quot; &quot;Upper Quartile&quot; &quot;Maximum&quot; &quot;% in Avoidance Area&quot; &quot;% in Focus Area&quot; &quot;Status&quot;</property>
+                                                            <property name="row_label_values">&quot;Sum&quot; &quot;Mean&quot; &quot;Standard Deviation&quot; &quot;Minimum&quot; &quot;Lower Quartile&quot; &quot;Median&quot; &quot;Upper Quartile&quot; &quot;Maximum&quot; &quot;% in Avoidance Area&quot; &quot;% in Focus Area&quot;</property>
                                                             <property name="row_label_vert_alignment">wxALIGN_CENTRE</property>
                                                             <property name="row_sizes"></property>
                                                             <property name="rows">10</property>
