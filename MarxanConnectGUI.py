@@ -66,12 +66,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
 
-        # set tooltips for radioboxes
-        self.demo_matrixTypeRadioBox.SetItemToolTip(0, "Settlement Matrix - S [i,j] = dij * μt; where μ = survivorship probability at time t. S is the cumulative or total settlement over an entire dispersal simulation from every patch i to every patch j. Note that a postsettlement mortality could be applied to this matrix to more closely represent recruitment potential (ie realised connectivity). This matrix represents the dispersal connection strengths based on the biophysical dispersal model. A series of S matrices can be aggregated (i.e., different spawning events over many years) for the same life-history characteristics to represent the dispersal potential of a species. The S matrix is used to calculate all other connectivity matrices described below.")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(1, "Connectivity Probability Matrix - P [i,j] = (sij / Total Released from i ). Probability of settling on patch j from patch i, representing potential recruitment or surviving larvae. This matrix is often referred to as the discrete dispersal kernel, and the transpose of P, PT, is the population transition matrix (Caswell 1989). Row sums are often << 1 due to larval loss from mortality and larvae never reaching suitable habitat. Each row is a discrete version of the dispersal kernel (Botsford 2009b, also see Werner et al. 2007). Note, when patches are of different sizes, the largest patches will have relatively lower connection probabilities (due to greater denominator). Diag(P) represents percent local-retention at each source patch.")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "Migration Matrix - M [i,j] = (sij / Column-sum j), where mij represents the proportion of settlers in patch j that came from patch i. This matrix quantifies the proportion of immigrants (sources) to each destination patch. Diag(M) represents percent self-recruitment. M corresponds to migration matrix models in population genetics (Bodmer and Cavalli-Sforza 1968) and the source distribution matrix (Cowen et al. 2007), and has been used to explore diversity patterns in neutral communities (Ecomonomo and Keitt 2008).")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(3, "Local Immigration Matrix - I [i,j] = (sij / Total Released from j). Proportion of the released larvae from destination patch j that settle from source patch i. Values are in terms of the destination patch's size (or dispersal potential) and indicate the potential level of local impact. Can be used to define a demographically relevant settlement rate (e.g., Cowen et al. 2006, Table S1) in terms of the proportion of larvae released from a source population that are required to settle in the focal population to maintain a standard population size (Treml et al. in 2012, Table S4).")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(4, "Dispersal Flux Matrix (normalised) - F[i,j] = (Area i / Total Area of habitat in network) * P'ij; where P' is the probability matrix that is row-normalized by i's row-sum, casting probability in terms of successful settlers. F may be a more ecologically meaningful representation of network-wide dispersal, where connectivity is dependent on the source strength of the donor patch and the probability of connection (Urban and Keitt 2001). F is used for exploring patterns in system-wide connectivity using network analysis (Treml et al. in 2012, Treml et al. 2008, Urban and Keitt 2001).")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality.")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row).")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flux matrix, each cell represents the number of elements/individuals moving from site A (row) to site B (column) ber unit time.")
+
+        self.demo_matrixFormatRadioBox.SetItemToolTip(0,"Matrix format data has the connectivity values arranged is a square format (i.e.the same number of rows and columns). The row names are the donor sites and the column names are the recipient sites ")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(1,"Edge Edge Listwith habi has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(2,"An Edge List with Time has 4 columns: time ('time'), the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value")
 
         self.outline_shapefile_choices()
 
@@ -106,7 +107,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['fa_status'] = self.fa_status_radioBox.GetStringSelection()
         self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
         self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
-        self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
@@ -114,6 +114,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
         self.project['options']['land_pu_cm_progress'] = self.land_PU_CM_progress.GetValue()
         self.project['options']['land_conmat_type'] = self.land_matrixTypeRadioBox.GetStringSelection()
+        self.project['options']['land_res_matrixType'] = self.land_res_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
         self.project['options']['metricsCalculated'] = False
@@ -134,12 +135,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['demo_cu_file_pu_id'] = ""
         self.project['filepaths']['demo_cu_cm_filepath'] = ""
         self.project['filepaths']['demo_pu_cm_filepath'] = ""
+        self.project['filepaths']['demo_lp_filepath'] = ""
         self.project['filepaths']['land_cu_filepath'] = ""
         self.project['filepaths']['land_cu_file_hab_id'] = ""
         self.project['filepaths']['land_res_mat_filepath'] = ""
         self.project['filepaths']['land_res_filepath'] = ""
         self.project['filepaths']['land_res_file_res_id'] = ""
         self.project['filepaths']['land_pu_cm_filepath'] = ""
+        self.project['filepaths']['land_lp_filepath'] = ""
 
         # Marxan metrics files
         self.project['filepaths']['cf_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "puvspr2.dat")
@@ -208,7 +211,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.aa_status_radioBox.SetStringSelection(self.project['options']['aa_status'])
 
         self.demo_PU_CM_progress.SetValue(self.project['options']['demo_pu_cm_progress'])
-        self.demo_matrixUnitsRadioBox.SetStringSelection(self.project['options']['demo_conmat_units'])
         self.demo_matrixTypeRadioBox.SetStringSelection(self.project['options']['demo_conmat_type'])
         self.demo_matrixFormatRadioBox.SetStringSelection(self.project['options']['demo_conmat_format'])
         self.demo_rescaleRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale'])
@@ -291,6 +293,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                   self.project['filepaths']['demo_cu_file_pu_id'])
         self.demo_CU_CM_file.SetPath(self.project['filepaths']['demo_cu_cm_filepath'])
         self.demo_PU_CM_file.SetPath(self.project['filepaths']['demo_pu_cm_filepath'])
+        self.demo_LP_file.SetPath(self.project['filepaths']['demo_lp_filepath'])
 
         self.land_HAB_file.SetPath(self.project['filepaths']['land_cu_filepath'])
         self.set_GUI_id_selection(self.land_HAB_file_hab_id, self.project['filepaths']['land_cu_filepath'],
@@ -300,6 +303,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_GUI_id_selection(self.land_RES_file_res_id, self.project['filepaths']['land_res_filepath'],
                                   self.project['filepaths']['land_res_file_res_id'])
         self.land_PU_CM_file.SetPath(self.project['filepaths']['land_pu_cm_filepath'])
+        self.land_LP_file.SetPath(self.project['filepaths']['land_lp_filepath'])
 
         # Marxan metrics files
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
@@ -1028,10 +1032,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if format == "Matrix":
             self.conmat = pandas.read_csv(filepath, index_col=0)
         else:
-            if format == "List":
+            if format == "Edge List":
                 self.ncol = 3
                 self.expected = numpy.array(['id1', 'id2', 'value'])
-            elif format == "List with Time":
+            elif format == "Edge List with Time":
                 self.ncol = 4
                 self.expected = numpy.array(['time', 'id1', 'id2', 'value'])
             self.conmat = pandas.read_csv(filepath)
@@ -1062,12 +1066,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
         self.lock_pudat(self.project['filepaths']['pudat_filepath'])
 
-    def on_demo_matrixUnitsRadioBox(self, event):
-        self.project['options']['demo_conmat_units'] = self.demo_matrixUnitsRadioBox.GetStringSelection()
-        self.enable_metrics()
-
     def on_demo_matrixTypeRadioBox(self, event):
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
+        self.enable_metrics()
 
     def on_demo_matrixFormatRadioBox(self, event):
         self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
@@ -1085,7 +1086,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             enable = True
 
         self.demo_rescale_edgeRadioBox.Enable(enable)
-        self.demo_CU_def.Enable(enable)
         self.demo_CU_filetext.Enable(enable)
         self.demo_CU_file_pu_id.Enable(enable)
         self.demo_CU_file_pu_id_txt.Enable(enable)
@@ -1114,50 +1114,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_demo_rescale_edgeRadioBox(self, event):
         self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
 
-    def on_gen_rescaleRadioBox(self, event):
-        """
-        Hides unnecessary options if rescaling is not necessary
-        """
-        # hide or unhide
-        self.project['options']['gen_conmat_rescale'] = self.gen_rescaleRadioBox.GetStringSelection()
-        if self.gen_rescaleRadioBox.GetStringSelection() == "Identical Grids":
-            enable = False
-        else:
-            enable = True
-
-        self.gen_CU_def.Enable(enable)
-        self.gen_CU_filetext.Enable(enable)
-        self.gen_CU_file.Enable(enable)
-        self.gen_CU_file_pu_id.Enable(enable)
-        self.gen_CU_file_pu_id_txt.Enable(enable)
-        self.gen_PU_CM_outputtext.Enable(enable)
-        self.gen_PU_CM_def.Enable(enable)
-        self.gen_PU_CM_progress.Enable(enable)
-        self.gen_PU_CM_filetext.Enable(enable)
-        self.gen_PU_CM_file.Enable(enable)
-        self.gen_rescale_button.Enable(enable)
-
-        # reset filepaths
-        # connectivity units planning unit matrix
-        if self.gen_rescaleRadioBox.GetStringSelection() == "Identical Grids":
-            self.project['filepaths']['gen_pu_cm_filepath'] = self.gen_CU_CM_file.GetPath()
-            self.gen_PU_CM_file.SetPath(self.project['filepaths']['gen_pu_cm_filepath'])
-            self.project['filepaths']['gen_cu_filepath'] = self.PU_file.GetPath()
-            self.gen_CU_file.SetPath(self.project['filepaths']['gen_cu_filepath'])
-        else:
-            self.project['filepaths']['gen_pu_cm_filepath'] = self.gen_PU_CM_file.GetPath()
-            self.project['filepaths']['gen_cu_filepath'] = self.gen_CU_file.GetPath()
-
-        # enable metrics
-        self.enable_metrics()
-
-    def on_gen_matrixTypeRadioBox(self, event):
-        self.project['options']['gen_conmat_type'] = self.gen_matrixTypeRadioBox.GetStringSelection()
-
-    def on_gen_matrixFormatRadioBox(self, event):
-        self.project['options']['gen_conmat_format'] = self.gen_matrixFormatRadioBox.GetStringSelection()
-        self.enable_metrics()
-
     def on_land_matrixTypeRadioBox(self, event):
         """
         Hides unnecessary options if rescaling is not necessary
@@ -1170,9 +1126,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         elif self.project['options']['land_matrixType'] == "Connectivity Matrix":
             enable_hab = False
             enable_surface = False
-        else:
+        elif self.project['options']['land_matrixType'] == "Habitat Type + Resistance":
             enable_hab = True
-            enable_surface = True
+            enable_surface = False
 
         self.land_HAB_filetext.Enable(enable_hab)
         self.land_HAB_file.Enable(enable_hab)
@@ -1181,6 +1137,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.land_RES_mat_filetext.Enable(enable_hab)
         self.land_RES_mat_file.Enable(enable_hab)
         self.resistance_mat_customize.Enable(enable_hab)
+        self.land_HAB_buff.Enable(enable_hab)
+        self.land_HAB_buff_txt.Enable(enable_hab)
+        self.land_res_matrixTypeRadioBox.Enable(enable_hab)
 
         self.land_RES_filetext.Enable(enable_surface)
         self.land_RES_file.Enable(enable_surface)
@@ -1192,6 +1151,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # enable metrics
         self.enable_metrics()
+
+    def on_land_res_matrixTypeRadioBox(self, event):
+        self.project['options']['land_res_matrixType'] = self.land_res_matrixTypeRadioBox.GetStringSelection()
+        if self.project['options']['land_matrixType'] == "Least-Cost Path":
+            enable_hab = False
+        elif self.project['options']['land_matrixType'] == "Euclidean Distance":
+            enable_hab = False
+        self.land_RES_mat_filetext.Enable(enable_hab)
+        self.land_RES_mat_file.Enable(enable_hab)
+        self.resistance_mat_customize.Enable(enable_hab)
 
     def on_demo_PU_CM_progress(self, event):
         """
@@ -1214,7 +1183,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             demo_enable = True
             if self.project['filepaths']['fa_filepath'] != "":
                 demo_fa_enable = True
-                if self.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
+                if self.demo_matrixFormatRadioBox.GetStringSelection() == "Edge List with Time":
                     demo_fa_time_enable = True
                 else:
                     demo_fa_time_enable = False
@@ -1222,7 +1191,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 demo_fa_enable = False
                 demo_fa_time_enable = False
 
-            if self.demo_matrixUnitsRadioBox.GetStringSelection() == "Individuals":
+            if self.demo_matrixTypeRadioBox.GetStringSelection() == "Flux":
                 demo_ind_enable = True
             else:
                 demo_ind_enable = False
@@ -1276,14 +1245,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_land_out_degree.Enable(enable=land_enable)
         self.cf_land_between_cent.Enable(enable=land_enable)
         self.cf_land_eig_vect_cent.Enable(enable=land_enable)
-        self.cf_land_google.Enable(enable=demo_enable)
+        self.cf_land_google.Enable(enable=land_enable)
         self.cf_land_fa_recipients.Enable(enable=land_fa_enable)
         self.cf_land_fa_donors.Enable(enable=land_fa_enable)
         self.cf_land_aa_recipients.Enable(enable=land_aa_enable)
         self.cf_land_aa_donors.Enable(enable=land_aa_enable)
 
-        self.bd_demo_conn_boundary.Enable(enable=demo_enable)
-        self.bd_demo_min_plan_graph.Enable(enable=demo_enable)
+        self.bd_demo_conn_boundary.Enable(enable=land_enable)
+        self.bd_demo_min_plan_graph.Enable(enable=land_enable)
 
 # ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
@@ -1293,7 +1262,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.warn_dialog("Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
                          " if the rescaling is ecologically valid. We recommend acquiring connectivity data at the same"
                          " scale as the planning unit")
-        
+
         self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
                                       filepath=self.project['filepaths']['demo_cu_cm_filepath'])
         self.temp = {}
@@ -1313,7 +1282,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             edge=self.project['options']['demo_conmat_rescale_edge'],
             progressbar=self.project['options']['demo_pu_cm_progress'])
 
-        if self.demo_matrixFormatRadioBox.GetStringSelection() == "List with Time":
+        if self.demo_matrixFormatRadioBox.GetStringSelection() == "Edge List with Time":
             self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
                 self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
                                                                            var_name='id2',
@@ -1389,7 +1358,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                   filepath=self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp['format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
                 if self.type == 'land_pu':
-                    self.temp['format'] = "List with Habitat"
+                    self.temp['format'] = "Edge List with Habitat"
 
             # load correct matrix and transform if necessary
             if os.path.isfile(self.project['filepaths'][self.type + '_cm_filepath']):
@@ -1398,7 +1367,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         self.project['filepaths'][self.type + '_cm_filepath'], index_col=0)
                     self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
                         self.type + '_conmat'].to_json(orient='split')
-                elif self.temp['format'] == "List":
+                elif self.temp['format'] == "Edge List":
                     self.temp[self.type + '_conmat'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat'].pivot_table(values='value',
@@ -1406,7 +1375,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                                                     columns='id2')
                     self.project['connectivityMetrics'][self.type + '_conmat'] = self.temp[
                         self.type + '_conmat'].to_json(orient='split')
-                elif self.temp['format'] == "List with Time":
+                elif self.temp['format'] == "Edge List with Time":
                     self.temp[self.type + '_conmat_time'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp[self.type + '_conmat'] = self.temp[self.type + '_conmat_time'][
@@ -1420,10 +1389,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         self.type + '_conmat_time'].to_json(orient='split')
 
                     self.warn_dialog(
-                        message="A connectivity 'List with Time' was provided; however, all metrics except "
+                        message="A connectivity 'Edge List with Time' was provided; however, all metrics except "
                                 "'Temporal Connectivity Correlation' will be calculated from the temporal"
                                 "mean of connectivity")
-                elif self.temp['format'] == "List with Habitat":
+                elif self.temp['format'] == "Edge List with Habitat":
                     self.temp[self.type + '_conmat_hab'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
                     self.temp[self.type + '_conmat'] = {}
@@ -1450,7 +1419,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['connectivityMetrics']['spec_' + self.type] = {}
 
             # warn if files not the same length
-            if self.temp['format'] == "List with Habitat":
+            if self.temp['format'] == "Edge List with Habitat":
                 self.temp['conmat_len'] = str(len(next(iter(self.temp[self.type + '_conmat'].values()))))
             else:
                 self.temp['conmat_len'] = str(len(self.temp[self.type + '_conmat']))
@@ -1468,6 +1437,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # calculate demographic metrics
             if self.type[:4] == 'demo':
+                if not os.path.isfile(self.project['filepaths']['demo_lp_filepath']):
+                    self.warn_dialog("No Local Production input. Marxan Connect will assume equal production in each planning unit.")
+
                 if self.cf_demo_in_degree.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['in_degree_' + self.type] = \
                         marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'],mode='IN')
@@ -1500,7 +1472,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['spec_' + self.type]['influx_' + self.type] = \
                         marxanconpy.conmat2influx(self.temp[self.type + '_conmat'])
 
-                if self.demo_matrixUnitsRadioBox.GetStringSelection() != "Individuals":
+                if self.demo_matrixTypeRadioBox.GetStringSelection() != "Flux":
                     if self.cf_demo_fa_recipients.GetValue() or\
                         self.cf_demo_fa_donors.GetValue() or\
                         self.cf_demo_aa_recipients.GetValue() or\

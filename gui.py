@@ -101,7 +101,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		spatialMainSizer.Add( pu_def_sizer, 1, wx.EXPAND, 5 )
 		
-		pu_file_sizer1 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		pu_file_sizer1 = wx.FlexGridSizer( 0, 4, 0, 0 )
 		pu_file_sizer1.AddGrowableCol( 1 )
 		pu_file_sizer1.SetFlexibleDirection( wx.HORIZONTAL )
 		pu_file_sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -168,7 +168,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fa_status_radioBoxChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.fa_status_radioBox = wx.RadioBox( self.spatialInput, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, fa_status_radioBoxChoices, 3, wx.RA_SPECIFY_COLS )
-		self.fa_status_radioBox.SetSelection( 0 )
+		self.fa_status_radioBox.SetSelection( 2 )
 		fa_status_sizer.Add( self.fa_status_radioBox, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		
@@ -228,18 +228,27 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
-		conn_input_mainsizer.AddGrowableRow( 2 )
+		conn_input_mainsizer.AddGrowableRow( 3 )
 		conn_input_mainsizer.SetFlexibleDirection( wx.BOTH )
 		conn_input_mainsizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		con_input_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.con_input_def_txt = wx.StaticText( self.connectivityInput, wx.ID_ANY, u"Connectivity data come from many sources and to simplify the input procedure has been divided into two main categories: demographic connectivity and landscape connectivity. ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.con_input_def_txt = wx.StaticText( self.connectivityInput, wx.ID_ANY, u"Connectivity data come from many sources and to simplify the input procedure has been divided into two main categories: demographic connectivity and landscape connectivity.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.con_input_def_txt.Wrap( -1 )
-		con_input_def_sizer.Add( self.con_input_def_txt, 0, wx.ALL|wx.EXPAND, 5 )
+		con_input_def_sizer.Add( self.con_input_def_txt, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
 		
 		
 		conn_input_mainsizer.Add( con_input_def_sizer, 1, wx.EXPAND, 5 )
+		
+		con_input_def_sizer1 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.con_input_def_txt1 = wx.StaticText( self.connectivityInput, wx.ID_ANY, u"Choosing a different category will not erase any input and input from multiple categories can be used simultaneously in the analyses in the next steps", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.con_input_def_txt1.Wrap( -1 )
+		con_input_def_sizer1.Add( self.con_input_def_txt1, 0, wx.BOTTOM|wx.EXPAND|wx.LEFT|wx.RIGHT, 5 )
+		
+		
+		conn_input_mainsizer.Add( con_input_def_sizer1, 1, wx.EXPAND, 5 )
 		
 		con_input_choice_sizer = wx.BoxSizer( wx.VERTICAL )
 		
@@ -256,44 +265,46 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.conn_category_choicebook.SetToolTip( u"Choosing a different category will not erase any input and input from multiple categories can be used simultaneously in the analyses in the next steps" )
 		
 		self.demographic = wx.Panel( self.conn_category_choicebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.demographic.SetToolTip( u"Choosing a different category will not erase any input and input from multiple categories can be used simultaneously in the analyses in the next steps" )
-		
 		demoMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		demoMainSizer.AddGrowableCol( 0 )
 		demoMainSizer.AddGrowableRow( 0 )
-		demoMainSizer.AddGrowableRow( 2 )
-		demoMainSizer.AddGrowableRow( 6 )
+		demoMainSizer.AddGrowableRow( 8 )
 		demoMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		demoMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
 		demo_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.demo_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"The connectivity matrix (or list) is the fundamental input format for demographic data. It describes the movement from donor sites to recipient sites. It can be obtained by directly quantifying the movement of individual organisms (e.g. tagging) or  by modelling the dispersal of individual organisms (e.g. biophysical modelling of larval dispersal). Please indicate your connectivity data units, type, and format in the boxes below, and if necessary use the rescaling tools if the data was not gathered at the same spatial scale as the planning units", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"The connectivity matrix (or list) is the fundamental input format for demographic data. It describes the movement from donor sites to recipient sites. It can be obtained by directly quantifying the movement of individual organisms (e.g. tagging) or  by modelling the dispersal of individual organisms (e.g. biophysical modelling of larval dispersal). Please indicate your connectivity data units, type, and format in the boxes below, and if necessary use the rescaling tools if the data was not gathered at the same spatial scale as the planning units. \n\nThe demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below. If the connectivity data was collected at a scale different than that of the planning units, you will need to supply a Connectivity Matrix Shapefile which describes the spatial polygons for which the data was gathered.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_CM_def.Wrap( -1 )
 		demo_cm_def_sizer.Add( self.demo_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		demoMainSizer.Add( demo_cm_def_sizer, 1, wx.EXPAND, 5 )
 		
-		demo_radio_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		demo_radio_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
 		demo_radio_sizer.AddGrowableCol( 1 )
 		demo_radio_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		demo_radio_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		demo_matrixUnitsRadioBoxChoices = [ u"Probability", u"Individuals" ]
-		self.demo_matrixUnitsRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Units", wx.DefaultPosition, wx.DefaultSize, demo_matrixUnitsRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.demo_matrixUnitsRadioBox.SetSelection( 0 )
-		demo_radio_sizer.Add( self.demo_matrixUnitsRadioBox, 0, wx.ALL, 5 )
-		
-		demo_matrixTypeRadioBoxChoices = [ u"Settlement", u"Connectivity", u"Migration", u"Local Immigration", u"Dispersal Flux" ]
-		self.demo_matrixTypeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, demo_matrixTypeRadioBoxChoices, 3, wx.RA_SPECIFY_COLS )
-		self.demo_matrixTypeRadioBox.SetSelection( 1 )
+		demo_matrixTypeRadioBoxChoices = [ u"Probability", u"Migration", u"Flux" ]
+		self.demo_matrixTypeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, demo_matrixTypeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_matrixTypeRadioBox.SetSelection( 0 )
 		demo_radio_sizer.Add( self.demo_matrixTypeRadioBox, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		demo_matrixFormatRadioBoxChoices = [ u"Matrix", u"List", u"List with Time" ]
-		self.demo_matrixFormatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, demo_matrixFormatRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
+		demo_matrixFormatRadioBoxChoices = [ u"Matrix", u"Edge List", u"Edge List with Time" ]
+		self.demo_matrixFormatRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Format", wx.DefaultPosition, wx.DefaultSize, demo_matrixFormatRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
 		self.demo_matrixFormatRadioBox.SetSelection( 0 )
 		demo_radio_sizer.Add( self.demo_matrixFormatRadioBox, 0, wx.ALL, 5 )
+		
+		demo_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
+		self.demo_rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, demo_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_rescaleRadioBox.SetSelection( 0 )
+		demo_radio_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
+		demo_rescale_edgeRadioBoxChoices = [ u"Proportional to overlap", u"Assume homogenous connectivity" ]
+		self.demo_rescale_edgeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescaling edge handling", wx.DefaultPosition, wx.DefaultSize, demo_rescale_edgeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
+		self.demo_rescale_edgeRadioBox.SetSelection( 0 )
+		demo_radio_sizer.Add( self.demo_rescale_edgeRadioBox, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 		
 		
 		demoMainSizer.Add( demo_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
@@ -303,7 +314,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cu_cm_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		demo_cu_cm_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.demo_CU_CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CU_CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_CU_CM_filetext.Wrap( -1 )
 		self.demo_CU_CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
@@ -315,56 +326,36 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer.Add( demo_cu_cm_file_sizer, 1, wx.EXPAND, 5 )
 		
-		demo_rescale_txt_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		demo_rescale_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.demo_rescale_def_txt = wx.StaticText( self.demographic, wx.ID_ANY, u"The demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below.", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.demo_rescale_def_txt.Wrap( -1 )
-		demo_rescale_def_sizer.Add( self.demo_rescale_def_txt, 0, wx.ALIGN_BOTTOM|wx.ALL|wx.EXPAND, 5 )
-		
-		
-		demo_rescale_txt_sizer.Add( demo_rescale_def_sizer, 1, wx.ALIGN_BOTTOM|wx.EXPAND, 5 )
-		
-		
-		demoMainSizer.Add( demo_rescale_txt_sizer, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
-		
 		demo_rescale_sizer = wx.FlexGridSizer( 1, 2, 0, 0 )
 		demo_rescale_sizer.AddGrowableCol( 0 )
 		demo_rescale_sizer.AddGrowableCol( 1 )
 		demo_rescale_sizer.SetFlexibleDirection( wx.BOTH )
 		demo_rescale_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		demo_rescaleRadioBoxChoices = [ u"Identical Grids", u"Rescale Connectivity Matrix" ]
-		self.demo_rescaleRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescale Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, demo_rescaleRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.demo_rescaleRadioBox.SetSelection( 0 )
-		demo_rescale_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
-		
-		demo_rescale_edgeRadioBoxChoices = [ u"Proportional to overlap", u"Assume homogenous connectivity" ]
-		self.demo_rescale_edgeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescaling edge handling", wx.DefaultPosition, wx.DefaultSize, demo_rescale_edgeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.demo_rescale_edgeRadioBox.SetSelection( 0 )
-		demo_rescale_sizer.Add( self.demo_rescale_edgeRadioBox, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
-		
 		
 		demoMainSizer.Add( demo_rescale_sizer, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
 		
-		demo_cu_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		demo_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.demo_CU_def = wx.StaticText( self.demographic, wx.ID_ANY, u"If the connectivity data was collected at a scale different than that of the planning units, you will need to supply a Connectivity Matrix Shapefile which describes the spatial polygons for which the data was gathered.", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.demo_CU_def.Wrap( -1 )
-		self.demo_CU_def.Enable( False )
+		self.demo_pucm_seperator = wx.StaticLine( self.demographic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		demo_pucm_output_txt_sizer.Add( self.demo_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		demo_cu_def_sizer.Add( self.demo_CU_def, 0, wx.ALL|wx.EXPAND, 5 )
+		self.demo_PU_CM_outputtext = wx.StaticText( self.demographic, wx.ID_ANY, u"Rescaling:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PU_CM_outputtext.Wrap( -1 )
+		self.demo_PU_CM_outputtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.demo_PU_CM_outputtext.Enable( False )
+		
+		demo_pucm_output_txt_sizer.Add( self.demo_PU_CM_outputtext, 0, wx.ALL, 5 )
 		
 		
-		demoMainSizer.Add( demo_cu_def_sizer, 1, wx.EXPAND, 5 )
+		demoMainSizer.Add( demo_pucm_output_txt_sizer, 1, wx.EXPAND, 5 )
 		
-		demo_cu_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		demo_cu_file_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
 		demo_cu_file_sizer.AddGrowableCol( 1 )
 		demo_cu_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		demo_cu_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.demo_CU_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CU_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Unit Shapefile:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_CU_filetext.Wrap( -1 )
 		self.demo_CU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		self.demo_CU_filetext.Enable( False )
@@ -394,16 +385,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		demoMainSizer.Add( demo_cu_file_sizer, 1, wx.EXPAND, 5 )
 		
 		demo_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.demo_pucm_seperator = wx.StaticLine( self.demographic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		demo_pucm_output_txt_sizer.Add( self.demo_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
-		
-		self.demo_PU_CM_outputtext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.demo_PU_CM_outputtext.Wrap( -1 )
-		self.demo_PU_CM_outputtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
-		self.demo_PU_CM_outputtext.Enable( False )
-		
-		demo_pucm_output_txt_sizer.Add( self.demo_PU_CM_outputtext, 0, wx.ALL, 5 )
 		
 		
 		demoMainSizer.Add( demo_pucm_output_txt_sizer, 1, wx.EXPAND, 5 )
@@ -450,31 +431,88 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demoMainSizer.Add( self.demo_rescale_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
+		demo_LP_txt_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.demo_LP_seperator = wx.StaticLine( self.demographic, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		demo_LP_txt_sizer.Add( self.demo_LP_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		self.demo_LP_text = wx.StaticText( self.demographic, wx.ID_ANY, u"Local Production:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_LP_text.Wrap( -1 )
+		self.demo_LP_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		
+		demo_LP_txt_sizer.Add( self.demo_LP_text, 0, wx.ALL, 5 )
+		
+		
+		demoMainSizer.Add( demo_LP_txt_sizer, 1, wx.EXPAND, 5 )
+		
+		demo_LP_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.demo_LP_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Local production is the number of elements/individuals produced by each planning unit.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_LP_def.Wrap( -1 )
+		demo_LP_def_sizer.Add( self.demo_LP_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		demoMainSizer.Add( demo_LP_def_sizer, 1, wx.EXPAND, 5 )
+		
+		demo_LP_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		demo_LP_sizer.AddGrowableCol( 1 )
+		demo_LP_sizer.SetFlexibleDirection( wx.BOTH )
+		demo_LP_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.demo_LP_def = wx.StaticText( self.demographic, wx.ID_ANY, u"Local Production:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_LP_def.Wrap( -1 )
+		self.demo_LP_def.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		
+		demo_LP_sizer.Add( self.demo_LP_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		self.demo_LP_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		demo_LP_sizer.Add( self.demo_LP_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		demoMainSizer.Add( demo_LP_sizer, 1, wx.EXPAND, 5 )
+		
 		
 		self.demographic.SetSizer( demoMainSizer )
 		self.demographic.Layout()
 		demoMainSizer.Fit( self.demographic )
 		self.conn_category_choicebook.AddPage( self.demographic, u"Demographic Input", True )
 		self.landscape = wx.Panel( self.conn_category_choicebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.landscape.SetToolTip( u"Choosing a different category will not erase any input and input from multiple categories can be used simultaneously in the analyses in the next steps" )
-		
 		landMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		landMainSizer.AddGrowableCol( 0 )
-		landMainSizer.AddGrowableRow( 0 )
-		landMainSizer.AddGrowableRow( 3 )
-		landMainSizer.AddGrowableRow( 5 )
-		landMainSizer.AddGrowableRow( 8 )
+		landMainSizer.AddGrowableRow( 6 )
+		landMainSizer.AddGrowableRow( 9 )
 		landMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		landMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
-		land_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		land_cm_def_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.land_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can 1) upload a connectivity matrix directly, 2) upload a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or 3) upload a habitat type shapefile and a resistance matrix, which can used to generate a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis. Please indicate your connectivity data type in the box below, and fill in the available filenames.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_CM_def.Wrap( -1 )
 		land_cm_def_sizer.Add( self.land_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
+		self.m_staticText192 = wx.StaticText( self.landscape, wx.ID_ANY, u" 1) load a connectivity matrix directly,", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText192.Wrap( -1 )
+		land_cm_def_sizer.Add( self.m_staticText192, 0, wx.LEFT|wx.RIGHT, 5 )
+		
+		self.m_staticText193 = wx.StaticText( self.landscape, wx.ID_ANY, u" 2) load a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText193.Wrap( -1 )
+		land_cm_def_sizer.Add( self.m_staticText193, 0, wx.LEFT|wx.RIGHT, 5 )
+		
+		self.m_staticText195 = wx.StaticText( self.landscape, wx.ID_ANY, u" 3) load a habitat type shapefile and an optional resistance matrix, which can used to calculate the connectivity matrix via least-cost path or Euclidean distance analysis.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText195.Wrap( -1 )
+		land_cm_def_sizer.Add( self.m_staticText195, 0, wx.LEFT|wx.RIGHT, 5 )
+		
 		
 		landMainSizer.Add( land_cm_def_sizer, 1, wx.EXPAND, 5 )
+		
+		land_cm_def_sizer1 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.land_CM_def1 = wx.StaticText( self.landscape, wx.ID_ANY, u" Please indicate your connectivity data type in the box below, and fill in the available filenames.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CM_def1.Wrap( -1 )
+		land_cm_def_sizer1.Add( self.land_CM_def1, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_cm_def_sizer1, 1, wx.EXPAND, 5 )
 		
 		land_radio_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
 		land_radio_sizer.AddGrowableCol( 1 )
@@ -486,10 +524,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_matrixTypeRadioBox.SetSelection( 0 )
 		land_radio_sizer.Add( self.land_matrixTypeRadioBox, 0, wx.ALIGN_CENTER|wx.ALL|wx.EXPAND, 5 )
 		
+		land_res_matrixTypeRadioBoxChoices = [ u"Least-Cost Path", u"Euclidean Distance" ]
+		self.land_res_matrixTypeRadioBox = wx.RadioBox( self.landscape, wx.ID_ANY, u"Distance Calculation Type", wx.DefaultPosition, wx.DefaultSize, land_res_matrixTypeRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
+		self.land_res_matrixTypeRadioBox.SetSelection( 0 )
+		land_radio_sizer.Add( self.land_res_matrixTypeRadioBox, 0, wx.ALL, 5 )
+		
 		
 		landMainSizer.Add( land_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
 		
-		land_cu_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		land_cu_file_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
 		land_cu_file_sizer.AddGrowableCol( 1 )
 		land_cu_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		land_cu_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -512,47 +555,57 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_HAB_file_hab_idChoices = []
 		self.land_HAB_file_hab_id = wx.Choice( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, land_HAB_file_hab_idChoices, 0 )
 		self.land_HAB_file_hab_id.SetSelection( 0 )
+		self.land_HAB_file_hab_id.SetToolTip( u"The column which contains the habitat names or ID's." )
+		
 		land_cu_file_sizer.Add( self.land_HAB_file_hab_id, 0, wx.ALL, 5 )
 		
-		self.land_HAB_buff_txt = wx.StaticText( self.landscape, wx.ID_ANY, u"Habitat Connectivity Buffer", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_buff_txt = wx.StaticText( self.landscape, wx.ID_ANY, u"Habitat Neighour Buffer", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_HAB_buff_txt.Wrap( -1 )
 		self.land_HAB_buff_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
 		land_cu_file_sizer.Add( self.land_HAB_buff_txt, 0, wx.ALL, 5 )
 		
 		self.land_HAB_buff = wx.TextCtrl( self.landscape, wx.ID_ANY, u"0.01", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_buff.SetToolTip( u"Buffer distance under which planning units will be considered connected neighbours in the distance calculations. All distance calculations assume travel in straight lines between the centers of neighbouring planning units." )
+		
 		land_cu_file_sizer.Add( self.land_HAB_buff, 0, wx.ALL, 5 )
 		
 		
 		landMainSizer.Add( land_cu_file_sizer, 1, wx.EXPAND, 5 )
 		
-		land_cu_cm_file_sizer2 = wx.FlexGridSizer( 0, 3, 0, 0 )
-		land_cu_cm_file_sizer2.AddGrowableCol( 1 )
-		land_cu_cm_file_sizer2.SetFlexibleDirection( wx.HORIZONTAL )
-		land_cu_cm_file_sizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		land_cu_cm_file_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
+		land_cu_cm_file_sizer.AddGrowableCol( 1 )
+		land_cu_cm_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		land_cu_cm_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.land_RES_mat_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Resistance Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_RES_mat_filetext.Wrap( -1 )
 		self.land_RES_mat_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
-		land_cu_cm_file_sizer2.Add( self.land_RES_mat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		land_cu_cm_file_sizer.Add( self.land_RES_mat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		self.land_RES_mat_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-		land_cu_cm_file_sizer2.Add( self.land_RES_mat_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		land_cu_cm_file_sizer.Add( self.land_RES_mat_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		self.resistance_mat_customize = wx.Button( self.landscape, wx.ID_ANY, u"Customize", wx.DefaultPosition, wx.DefaultSize, 0 )
-		land_cu_cm_file_sizer2.Add( self.resistance_mat_customize, 0, wx.ALL, 5 )
+		land_cu_cm_file_sizer.Add( self.resistance_mat_customize, 0, wx.ALL, 5 )
 		
 		
-		landMainSizer.Add( land_cu_cm_file_sizer2, 1, wx.EXPAND, 5 )
+		landMainSizer.Add( land_cu_cm_file_sizer, 1, wx.EXPAND, 5 )
 		
-		bSizer54 = wx.BoxSizer( wx.VERTICAL )
+		land_res_txt_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.m_staticline16 = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		bSizer54.Add( self.m_staticline16, 0, wx.EXPAND |wx.ALL, 5 )
+		self.land_res_seperator = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		land_res_txt_sizer.Add( self.land_res_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		self.land_res_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Resistance Surface:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_res_text.Wrap( -1 )
+		self.land_res_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		
+		land_res_txt_sizer.Add( self.land_res_text, 0, wx.ALL, 5 )
 		
 		
-		landMainSizer.Add( bSizer54, 1, wx.EXPAND, 5 )
+		landMainSizer.Add( land_res_txt_sizer, 1, wx.EXPAND, 5 )
 		
 		land_res_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -563,7 +616,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		landMainSizer.Add( land_res_def_sizer, 1, wx.EXPAND, 5 )
 		
-		land_res_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		land_res_file_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
 		land_res_file_sizer.AddGrowableCol( 1 )
 		land_res_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		land_res_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -595,6 +648,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.land_pucm_seperator = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		land_pucm_output_txt_sizer.Add( self.land_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		self.demo_PUCM_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Connectivity Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PUCM_text.Wrap( -1 )
+		self.demo_PUCM_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		
+		land_pucm_output_txt_sizer.Add( self.demo_PUCM_text, 0, wx.ALL, 5 )
 		
 		
 		landMainSizer.Add( land_pucm_output_txt_sizer, 1, wx.EXPAND, 5 )
@@ -632,6 +691,46 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_generate_button = wx.Button( self.landscape, wx.ID_ANY, u"Generate Connectivity Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
 		landMainSizer.Add( self.land_generate_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
+		land_LP_txt_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.land_LP_seperator = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		land_LP_txt_sizer.Add( self.land_LP_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		
+		self.land_LP_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Local Production:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_LP_text.Wrap( -1 )
+		self.land_LP_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		
+		land_LP_txt_sizer.Add( self.land_LP_text, 0, wx.ALL, 5 )
+		
+		
+		landMainSizer.Add( land_LP_txt_sizer, 1, wx.EXPAND, 5 )
+		
+		land_LP_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.land_LP_def = wx.StaticText( self.landscape, wx.ID_ANY, u"Local production is the number of elements/individuals produced by each planning unit.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_LP_def.Wrap( -1 )
+		land_LP_def_sizer.Add( self.land_LP_def, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_LP_def_sizer, 1, wx.EXPAND, 5 )
+		
+		land_LP_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		land_LP_file_sizer.AddGrowableCol( 1 )
+		land_LP_file_sizer.SetFlexibleDirection( wx.BOTH )
+		land_LP_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.land_LP_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Local Production:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_LP_filetext.Wrap( -1 )
+		self.land_LP_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		
+		land_LP_file_sizer.Add( self.land_LP_filetext, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		self.land_LP_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, u"~\\data\\local_production.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		land_LP_file_sizer.Add( self.land_LP_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		landMainSizer.Add( land_LP_file_sizer, 1, wx.EXPAND, 5 )
+		
 		
 		self.landscape.SetSizer( landMainSizer )
 		self.landscape.Layout()
@@ -643,7 +742,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -1072,7 +1171,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
 		self.preEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		preEvalMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		preEvalMainSizer.AddGrowableCol( 0 )
@@ -1961,18 +2060,19 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.fa_status_radioBox.Bind( wx.EVT_RADIOBOX, self.on_fa_status_radioBox )
 		self.AA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_AA_file )
 		self.aa_status_radioBox.Bind( wx.EVT_RADIOBOX, self.on_aa_status_radioBox )
-		self.demo_matrixUnitsRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixUnitsRadioBox )
 		self.demo_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
 		self.demo_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
-		self.demo_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
 		self.demo_rescale_edgeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescale_edgeRadioBox )
+		self.demo_CU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_CM_file )
 		self.demo_CU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_CU_file )
 		self.demo_CU_file_pu_id.Bind( wx.EVT_CHOICE, self.on_demo_CU_file_pu_id )
 		self.demo_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_demo_PU_CM_progress )
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
+		self.demo_LP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_LP_file )
 		self.land_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_land_matrixTypeRadioBox )
+		self.land_res_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_land_res_matrixTypeRadioBox )
 		self.land_HAB_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_HAB_file )
 		self.land_HAB_file_hab_id.Bind( wx.EVT_CHOICE, self.on_land_HAB_file_hab_id )
 		self.land_HAB_buff.Bind( wx.EVT_TEXT, self.on_land_HAB_buff )
@@ -1983,6 +2083,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_PU_CM_progress.Bind( wx.EVT_CHECKBOX, self.on_land_PU_CM_progress )
 		self.land_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_PU_CM_file )
 		self.land_generate_button.Bind( wx.EVT_BUTTON, self.on_land_generate_button )
+		self.land_LP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_LP_file )
 		self.bd_demo_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_conn_boundary )
 		self.bd_demo_min_plan_graph.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_min_plan_graph )
 		self.bd_land_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_land_conn_boundary )
@@ -2067,22 +2168,19 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_aa_status_radioBox( self, event ):
 		event.Skip()
 	
-	def on_demo_matrixUnitsRadioBox( self, event ):
-		event.Skip()
-	
 	def on_demo_matrixTypeRadioBox( self, event ):
 		event.Skip()
 	
 	def on_demo_matrixFormatRadioBox( self, event ):
 		event.Skip()
 	
-	def on_demo_CU_CM_file( self, event ):
-		event.Skip()
-	
 	def on_demo_rescaleRadioBox( self, event ):
 		event.Skip()
 	
 	def on_demo_rescale_edgeRadioBox( self, event ):
+		event.Skip()
+	
+	def on_demo_CU_CM_file( self, event ):
 		event.Skip()
 	
 	def on_demo_CU_file( self, event ):
@@ -2100,7 +2198,13 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_demo_rescale_button( self, event ):
 		event.Skip()
 	
+	def on_demo_LP_file( self, event ):
+		event.Skip()
+	
 	def on_land_matrixTypeRadioBox( self, event ):
+		event.Skip()
+	
+	def on_land_res_matrixTypeRadioBox( self, event ):
 		event.Skip()
 	
 	def on_land_HAB_file( self, event ):
@@ -2132,6 +2236,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	
 	def on_land_generate_button( self, event ):
 		event.Skip()
+	
 	
 	def on_bd_demo_conn_boundary( self, event ):
 		event.Skip()
