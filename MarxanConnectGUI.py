@@ -66,9 +66,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
 
-        self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality.")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row).")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flux matrix, each cell represents the number of elements/individuals moving from site A (row) to site B (column) ber unit time.")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality. If there is no mortality, rows sum to 1")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row). Columns sum to 1.")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flux matrix, each cell represents the number of elements/individuals moving from site A (row) to site B (column) per unit time.")
 
         self.demo_matrixFormatRadioBox.SetItemToolTip(0,"Matrix format data has the connectivity values arranged is a square format (i.e.the same number of rows and columns). The row names are the donor sites and the column names are the recipient sites ")
         self.demo_matrixFormatRadioBox.SetItemToolTip(1,"Edge Edge Listwith habi has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
@@ -153,6 +153,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Marxan analysis
         self.project['filepaths']['marxan_input'] = os.path.join(pfdir, "data", "GBR", "input.dat")
         self.project['filepaths']['marxan_dir'] = os.path.join(pfdir, "Marxan243")
+
+        # Export plot data
+        self.project['filepaths']['pushp'] = os.path.join(pfdir, "pu.shp")
+        self.project['filepaths']['pucsv'] = os.path.join(pfdir, "pu.csv")
+        self.project['filepaths']['map'] = os.path.join(pfdir, "map.png")
 
         # set default file paths in GUI
         self.set_GUI_filepaths()
@@ -314,6 +319,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Marxan analysis
         self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
         self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
+
+        # Export plot data
+        self.PUSHP_file.SetPath(self.project['filepaths']['pushp'])
+        self.PUCSV_file.SetPath(self.project['filepaths']['pucsv'])
+        self.MAP_file.SetPath(self.project['filepaths']['map'])
 
     def set_GUI_id_selection(self,choice,filepath,id):
         if(os.path.isfile(filepath)):
@@ -794,38 +804,37 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         return metric_type
 
-# ##########################  graph plotting functions #################################################################
+    def on_plot_export_button( self, event ):
+        self.temp = {}
+        self.temp['pu'] = self.spatial['pu_shp']
+        if 'spec_demo_pu' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat(
+                [self.temp['pu'], pandas.DataFrame.from_dict(self.project['connectivityMetrics']['spec_demo_pu'])],
+                axis=1)
+        if 'spec_land_pu' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat(
+                [self.temp['pu'], pandas.DataFrame.from_dict(self.project['connectivityMetrics']['spec_land_pu'])],
+                axis=1)
+        if 'best_solution' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat([self.temp['pu'], pandas.DataFrame.from_dict(
+                {'best_solution': self.project['connectivityMetrics']['best_solution'],
+                 'select_freq': self.project['connectivityMetrics']['select_freq']})],
+                                            axis=1)
+        if 'status' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat([self.temp['pu'], pandas.DataFrame.from_dict(
+                {'status': self.project['connectivityMetrics']['status']})],
+                                            axis=1)
 
-    # def on_plot_graph_button(self, event):
-    #     """
-    #     Initiates graph plotting. Creates a 'Plot' tab, and call 'on_draw_graph' to plot the graph
-    #     """
-    #     if not hasattr(self, 'plot'):
-    #         self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-    #         self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
-    #     self.plot.figure = plt.figure()
-    #     self.plot.axes = self.plot.figure.gca()
-    #     self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
-    #     self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
-    #     self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
-    #     self.plot.SetSizer(self.plot.sizer)
-    #     self.plot.Fit()
-    #     self.on_draw_graph(pucm_filedir=self.project['filepaths']['pucm_filedir'],
-    #                        pucm_filename=self.project['filepaths']['pucm_filename'])
-    #     for i in range(self.auinotebook.GetPageCount()):
-    #         if self.auinotebook.GetPageText(i) == "7) Plot":
-    #             self.auinotebook.ChangeSelection(i)
-    #
-    # def on_draw_graph(self, pucm_filedir, pucm_filename):
-    #     """
-    #     Draws the desired graph on the plot created by 'on_plot_graph_button'
-    #     """
-    #     demo_cu_cm_filepath = os.path.join(pucm_filedir, pucm_filename)
-    #     conmat = pandas.read_csv(demo_cu_cm_filepath, index_col=0)
-    #     g1 = nx.from_numpy_matrix(conmat.as_matrix())
-    #     mapping = dict(zip(g1.nodes(), conmat.index))
-    #     g1 = nx.relabel_nodes(g1, mapping)
-    #     nx.draw_networkx(g1, with_labels=True, edge_color='lightgray')
+        if self.PUSHP_filecheck.GetValue():
+            print('export shape')
+            self.temp['pu'].to_file("self.project['filepaths']['pushp']")
+        if self.PUCSV_filecheck.GetValue():
+            self.temp['pu'].to_csv(self.project['filepaths']['pucsv'])
+            print('export csv')
+            print(self.temp['pu'])
+        if self.MAP_filecheck.GetValue():
+            print(self.project['filepaths']['map'])
+            print('export map')
 
 # ###########################  file management functions ###############################################################
     def on_PU_file(self, event):

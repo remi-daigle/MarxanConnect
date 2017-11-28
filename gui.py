@@ -742,7 +742,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 0 )
@@ -788,7 +788,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.cf_demo_between_cent, 0, wx.ALL, 5 )
 		
 		self.cf_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
+		self.cf_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unit in the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
 		
 		demo_cf_sizer.Add( self.cf_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
@@ -803,12 +803,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
 		self.cf_demo_influx_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_influx_panel.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		self.cf_demo_influx_panel.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants/elements. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
 		
 		cf_demo_influx_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		self.cf_demo_influx = wx.CheckBox( self.cf_demo_influx_panel, wx.ID_ANY, u"Influx", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_influx.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		self.cf_demo_influx.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants/elements. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
 		
 		cf_demo_influx_sizer.Add( self.cf_demo_influx, 0, wx.ALL, 5 )
 		
@@ -819,12 +819,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.cf_demo_influx_panel, 1, 0, 5 )
 		
 		self.cf_demo_outflux_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_outflux_panel.SetToolTip( u"Outflux optimizes for 'productive' areas. It gives a higher value to planning units from which greater numbers of individuals originate. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		self.cf_demo_outflux_panel.SetToolTip( u"Outflux optimizes for areas with high local production. It gives a higher value to planning units from which greater numbers of elements/individuals originate. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
 		
 		cf_demo_outflux_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		self.cf_demo_outflux = wx.CheckBox( self.cf_demo_outflux_panel, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_outflux.SetToolTip( u"Outflux optimizes for 'productive' areas. It gives a higher value to planning units from which greater numbers of individuals originate. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		self.cf_demo_outflux.SetToolTip( u"Outflux optimizes for areas with high local production. It gives a higher value to planning units from which greater numbers of elements/individuals originate. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
 		
 		cf_demo_outflux_sizer.Add( self.cf_demo_outflux, 0, wx.ALL, 5 )
 		
@@ -1109,7 +1109,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_bd_sizer.Add( self.bd_demo_conn_boundary, 0, wx.ALL, 5 )
 		
 		self.bd_demo_min_plan_graph = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Minimum Planar Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bd_demo_min_plan_graph.SetValue(True) 
 		demo_bd_sizer.Add( self.bd_demo_min_plan_graph, 0, wx.ALL, 5 )
 		
 		
@@ -1667,7 +1666,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		plottingMainSizer.AddGrowableRow( 4 )
 		plottingMainSizer.AddGrowableRow( 6 )
 		plottingMainSizer.AddGrowableRow( 7 )
-		plottingMainSizer.AddGrowableRow( 10 )
 		plottingMainSizer.SetFlexibleDirection( wx.BOTH )
 		plottingMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -1986,52 +1984,65 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plot_opt_seperator = wx.StaticLine( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		plottingMainSizer.Add( self.plot_opt_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		self.graphoptions = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Graph Plotting Options", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.graphoptions.Wrap( -1 )
-		self.graphoptions.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
-		self.graphoptions.Enable( False )
+		self.Export = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Export Spatial Data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.Export.Wrap( -1 )
+		self.Export.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
-		plottingMainSizer.Add( self.graphoptions, 0, wx.ALL, 5 )
+		plottingMainSizer.Add( self.Export, 0, wx.ALL, 5 )
 		
-		sizer011 = wx.BoxSizer( wx.HORIZONTAL )
+		pushp_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		pushp_file_sizer.AddGrowableCol( 1 )
+		pushp_file_sizer.SetFlexibleDirection( wx.BOTH )
+		pushp_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		m_choice21Choices = []
-		self.m_choice21 = wx.Choice( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice21Choices, 0 )
-		self.m_choice21.SetSelection( 0 )
-		self.m_choice21.Enable( False )
+		self.PUSHP_filecheck = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Export data to shapefile: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PUSHP_filecheck.SetValue(True) 
+		pushp_file_sizer.Add( self.PUSHP_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		sizer011.Add( self.m_choice21, 0, wx.ALL, 5 )
-		
-		m_choice11Choices = [ u"Vertex Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Self Recruitment", wx.EmptyString ]
-		self.m_choice11 = wx.Choice( self.plottingOptions, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice11Choices, 0 )
-		self.m_choice11.SetSelection( 0 )
-		self.m_choice11.Enable( False )
-		
-		sizer011.Add( self.m_choice11, 0, wx.ALL, 5 )
-		
-		self.m_colourPicker11 = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.BLACK, wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE )
-		self.m_colourPicker11.Enable( False )
-		
-		sizer011.Add( self.m_colourPicker11, 0, wx.ALL, 5 )
-		
-		self.m_colourPicker21 = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.BLACK, wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE )
-		self.m_colourPicker21.Enable( False )
-		
-		sizer011.Add( self.m_colourPicker21, 0, wx.ALL, 5 )
+		self.PUSHP_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		pushp_file_sizer.Add( self.PUSHP_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		plottingMainSizer.Add( sizer011, 1, wx.EXPAND, 5 )
+		plottingMainSizer.Add( pushp_file_sizer, 1, wx.EXPAND, 5 )
 		
-		self.plot_graph_button = wx.Button( self.plottingOptions, wx.ID_ANY, u"Plot Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.plot_graph_button.Enable( False )
+		pucsv_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		pucsv_file_sizer.AddGrowableCol( 1 )
+		pucsv_file_sizer.SetFlexibleDirection( wx.BOTH )
+		pucsv_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		plottingMainSizer.Add( self.plot_graph_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		self.PUCSV_filecheck = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Export data to file: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PUCSV_filecheck.SetValue(True) 
+		pucsv_file_sizer.Add( self.PUCSV_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.PUCSV_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\pu.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		pucsv_file_sizer.Add( self.PUCSV_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		plottingMainSizer.Add( pucsv_file_sizer, 1, wx.EXPAND, 5 )
+		
+		map_file_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
+		map_file_sizer.AddGrowableCol( 1 )
+		map_file_sizer.SetFlexibleDirection( wx.BOTH )
+		map_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.MAP_filecheck = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Export map to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.MAP_filecheck.SetValue(True) 
+		map_file_sizer.Add( self.MAP_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.MAP_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\map.png", u"Select a file", u"Portable Network Graphics (*.png)|*.png|Joint Photographic Experts Group (*.jpg)|*.jpg|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		map_file_sizer.Add( self.MAP_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		plottingMainSizer.Add( map_file_sizer, 1, wx.EXPAND, 5 )
+		
+		self.plot_export_button = wx.Button( self.plottingOptions, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
+		plottingMainSizer.Add( self.plot_export_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
 		
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -2107,7 +2118,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice )
 		self.metric_shp_choice1.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice1 )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
-		self.plot_graph_button.Bind( wx.EVT_BUTTON, self.on_plot_graph_button )
+		self.PUSHP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUSHP_file )
+		self.PUCSV_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCSV_file )
+		self.MAP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_MAP_file )
+		self.plot_export_button.Bind( wx.EVT_BUTTON, self.on_plot_export_button )
 	
 	def __del__( self ):
 		pass
@@ -2307,7 +2321,16 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_plot_map_button( self, event ):
 		event.Skip()
 	
-	def on_plot_graph_button( self, event ):
+	def on_PUSHP_file( self, event ):
+		event.Skip()
+	
+	def on_PUCSV_file( self, event ):
+		event.Skip()
+	
+	def on_MAP_file( self, event ):
+		event.Skip()
+	
+	def on_plot_export_button( self, event ):
 		event.Skip()
 	
 
