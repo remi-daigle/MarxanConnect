@@ -1,7 +1,7 @@
-Marxan with Connectivity
+Marxan Connect
 ================
 
-Marxan with Connectivity (henceforth the "app") is a Graphical User Interface (GUI) to help conservationists include "connectivity" in their protected area network planning.
+Marxan Connect (henceforth the "app") is a Graphical User Interface (GUI) to help conservationists include "connectivity" in their protected area network planning.
 
 The term "connectivity" has a variety of definitions (i.e. larval connectivity, genetic connectivity, landscape connectivity, etc) and protected area networks can be optimized for various connectivity objectives. The app is intended to guide conservationists through the process of identifying important aspects of connectivity for their conservation scenarios as well as highlighting the necessary data.
 
@@ -16,7 +16,7 @@ Installing
 
 ### Windows Installer:
 
-(**WARNING! Marxan with Connectivity is in 'alpha' release and is not yet fully operational, download at your own risk**)
+(**WARNING! Marxan Connect is in 'alpha' release and is not yet fully operational, download at your own risk**)
 
 Please download the latest [MarxanConnectSetupWindows.exe](https://github.com/remi-daigle/MarxanConnect/releases) installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the [Building from source](https://remi-daigle.github.io/MarxanConnect/#building-from-source) instructions to use the latest bleeding edge version of the app.
 
@@ -32,7 +32,7 @@ Building from source is only necessary if you plan to contribute to the project 
 Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (*Please note, I could not build the repository using Anaconda*).
 
 -   Download this repository
--   If necessary, edit the hard coded file paths in [setup.py](https://github.com/remi-daigle/MarxanConnect/blob/master/setup.py) and [Marxan with Connectivity.nsi](https://github.com/remi-daigle/MarxanConnect/blob/master/Marxan%20with%20Connectivity.nsi)
+-   If necessary, edit the hard coded file paths in [setup.py](https://github.com/remi-daigle/MarxanConnect/blob/master/setup.py) and [WindowsSetupBuilder.iss](https://github.com/remi-daigle/MarxanConnect/blob/master/WindowsSetupBuilder.iss)
 -   open a terminal or `cmd` window (or git bash) in the project directory and type:
 
 <!-- -->
@@ -84,7 +84,7 @@ Authors
 -   **Arieanna Balbar** - *Consultation* - [abalbar](https://github.com/abalbar)
 -   **Maria Beger** - *Consultation*
 -   **Jo Clarke** - *Consultation*
--   **Caitie Kuempel** - *Consultation*
+-   **Caitie Kuempel** - *Consultation* - [cdkuempel](https://github.com/cdkuempel)
 -   **Jennifer McGowan** - *Consultation*
 -   **Anna Metaxas** - *Consultation*
 -   **Hugh Possingham** - *Consultation*

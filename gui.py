@@ -19,7 +19,7 @@ import wx.grid
 class MarxanConnectGUI ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan with Connectivity", pos = wx.DefaultPosition, size = wx.Size( 1087,823 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect", pos = wx.DefaultPosition, size = wx.Size( 1087,823 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -224,7 +224,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -1565,21 +1565,21 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEvalMainSizer.Fit( self.preEvaluation )
 		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		spatialMainSizer1 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		spatialMainSizer1.AddGrowableCol( 0 )
-		spatialMainSizer1.AddGrowableRow( 1 )
-		spatialMainSizer1.AddGrowableRow( 2 )
-		spatialMainSizer1.AddGrowableRow( 3 )
-		spatialMainSizer1.AddGrowableRow( 4 )
-		spatialMainSizer1.AddGrowableRow( 5 )
-		spatialMainSizer1.SetFlexibleDirection( wx.VERTICAL )
-		spatialMainSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
+		marxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		marxanMainSizer.AddGrowableCol( 0 )
+		marxanMainSizer.AddGrowableRow( 1 )
+		marxanMainSizer.AddGrowableRow( 4 )
+		marxanMainSizer.AddGrowableRow( 5 )
+		marxanMainSizer.AddGrowableRow( 6 )
+		marxanMainSizer.AddGrowableRow( 7 )
+		marxanMainSizer.SetFlexibleDirection( wx.VERTICAL )
+		marxanMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
 		self.marxan_title = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Running Marxan", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.marxan_title.Wrap( -1 )
 		self.marxan_title.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
 		
-		spatialMainSizer1.Add( self.marxan_title, 0, wx.ALL, 5 )
+		marxanMainSizer.Add( self.marxan_title, 0, wx.ALL, 5 )
 		
 		marxan_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -1588,10 +1588,22 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxan_def_sizer.Add( self.marxan_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		spatialMainSizer1.Add( marxan_def_sizer, 1, wx.EXPAND, 5 )
+		marxanMainSizer.Add( marxan_def_sizer, 1, wx.EXPAND, 5 )
 		
 		self.marxanwebsite = wx.adv.HyperlinkCtrl( self.marxanAnalysis, wx.ID_ANY, u"Marxan Website", u"http://marxan.net/index.php/marxan", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		spatialMainSizer1.Add( self.marxanwebsite, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		marxanMainSizer.Add( self.marxanwebsite, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		self.marxan_logo = wx.StaticBitmap( self.marxanAnalysis, wx.ID_ANY, wx.Bitmap( u"marxanlogo.jpg", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		marxanMainSizer.Add( self.marxan_logo, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		marxan_ref_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.marxan_ref_txt = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Ball, I.R., H.P. Possingham, and M. Watts. 2009. Marxan and relatives: Software for spatial conservation prioritisation. Chapter 14: Pages 185-195 in Spatial conservation prioritisation: Quantitative methods and computational tools. Eds Moilanen, A., K.A. Wilson, and H.P. Possingham. Oxford University Press, Oxford, UK.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.marxan_ref_txt.Wrap( -1 )
+		marxan_ref_sizer.Add( self.marxan_ref_txt, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		marxanMainSizer.Add( marxan_ref_sizer, 1, wx.EXPAND, 5 )
 		
 		marxan_dir_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		marxan_dir_sizer.AddGrowableCol( 1 )
@@ -1608,7 +1620,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxan_dir_sizer.Add( self.marxan_dir, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		spatialMainSizer1.Add( marxan_dir_sizer, 1, wx.EXPAND, 5 )
+		marxanMainSizer.Add( marxan_dir_sizer, 1, wx.EXPAND, 5 )
 		
 		inputdat_txt_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -1617,7 +1629,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		inputdat_txt_sizer.Add( self.inputdat_txt, 0, wx.ALIGN_BOTTOM|wx.ALL|wx.EXPAND, 5 )
 		
 		
-		spatialMainSizer1.Add( inputdat_txt_sizer, 1, wx.ALIGN_BOTTOM|wx.EXPAND, 5 )
+		marxanMainSizer.Add( inputdat_txt_sizer, 1, wx.ALIGN_BOTTOM|wx.EXPAND, 5 )
 		
 		inputdat_file_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
 		inputdat_file_sizer.AddGrowableCol( 1 )
@@ -1637,7 +1649,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		inputdat_file_sizer.Add( self.customize_inputdat, 0, wx.ALL, 5 )
 		
 		
-		spatialMainSizer1.Add( inputdat_file_sizer, 1, wx.EXPAND, 5 )
+		marxanMainSizer.Add( inputdat_file_sizer, 1, wx.EXPAND, 5 )
 		
 		run_marxan_sizer = wx.FlexGridSizer( 1, 3, 0, 0 )
 		run_marxan_sizer.AddGrowableCol( 0 )
@@ -1652,12 +1664,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		run_marxan_sizer.Add( self.run_marxan_button, 0, wx.ALL, 5 )
 		
 		
-		spatialMainSizer1.Add( run_marxan_sizer, 1, wx.EXPAND, 5 )
+		marxanMainSizer.Add( run_marxan_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		self.marxanAnalysis.SetSizer( spatialMainSizer1 )
+		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
-		spatialMainSizer1.Fit( self.marxanAnalysis )
+		marxanMainSizer.Fit( self.marxanAnalysis )
 		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
@@ -2042,7 +2054,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -2418,5 +2430,125 @@ class spec_customizer ( wx.Dialog ):
 	
 	def on_spec_cancel( self, event ):
 		event.Skip()
+	
+
+###########################################################################
+## Class GettingStarted
+###########################################################################
+
+class GettingStarted ( wx.Frame ):
+	
+	def __init__( self, parent ):
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect: Getting Started", pos = wx.DefaultPosition, size = wx.Size( 900,750 ), style = wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL )
+		
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+		
+		bSizer50 = wx.BoxSizer( wx.VERTICAL )
+		
+		self.m_panel27 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		fgSizer61 = wx.FlexGridSizer( 4, 1, 0, 0 )
+		fgSizer61.AddGrowableRow( 0 )
+		fgSizer61.SetFlexibleDirection( wx.BOTH )
+		fgSizer61.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		bSizer51 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.m_staticText100 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"Marxan with Connectivity (henceforth the \"app\") is a Graphical User Interface (GUI) to help conservationists include \"connectivity\" in their protected area network planning.\n\nThe term \"connectivity\" has a variety of definitions (i.e. larval connectivity, genetic connectivity,  landscape connectivity, etc) and protected area networks can be optimized for various connectivity objectives. The app is intended to guide conservationists through the process of identifying important aspects of connectivity for their conservation scenarios as well as highlighting the necessary data.\n\nThe app also includes be a fully functional python module (in progress) that is operated via command line that can be used to reproduce an analysis using the project file generated by the GUI.\n\nTo use this software, please visit the Tutorial and the Glossary which can be accessed under the help menu, or the links below (in progress). Otherwise, if you would just like to get started, please proceed through all the tabs from left to right starting the \"Spatial Input\". After calculating the \"Connectivity Metrics\", you can choose to conduct a Marxan analysis in the app (maybe), export the connectivity metrics for use in a standalone custom Marxan analysis, or you can visualize the Connectivity Metrics using the \"Plotting Options\" tab.\n\nIf you would like to report any bugs or request a missing feature, please post an issue on the GitHub repository which is available in the help menu, or the link below.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText100.Wrap( -1 )
+		bSizer51.Add( self.m_staticText100, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		fgSizer61.Add( bSizer51, 1, wx.EXPAND, 5 )
+		
+		fgSizer62 = wx.FlexGridSizer( 1, 3, 0, 0 )
+		fgSizer62.AddGrowableCol( 0 )
+		fgSizer62.AddGrowableCol( 2 )
+		fgSizer62.SetFlexibleDirection( wx.BOTH )
+		fgSizer62.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_hyperlink2 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Tutorial", u"tutorial.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		fgSizer62.Add( self.m_hyperlink2, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
+		self.m_hyperlink3 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Glossary", u"glossary.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		fgSizer62.Add( self.m_hyperlink3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
+		
+		self.m_hyperlink4 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Github Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		fgSizer62.Add( self.m_hyperlink4, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		
+		
+		fgSizer61.Add( fgSizer62, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
+		
+		bSizer52 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		fgSizer63 = wx.FlexGridSizer( 2, 1, 0, 0 )
+		fgSizer63.AddGrowableRow( 0 )
+		fgSizer63.SetFlexibleDirection( wx.BOTH )
+		fgSizer63.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_staticText1001 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"With funding provided by:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1001.Wrap( -1 )
+		fgSizer63.Add( self.m_staticText1001, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		self.m_bitmap2 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"CHONelogo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( 300,-1 ), 0 )
+		fgSizer63.Add( self.m_bitmap2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		
+		bSizer52.Add( fgSizer63, 1, wx.EXPAND, 5 )
+		
+		bSizer63 = wx.BoxSizer( wx.VERTICAL )
+		
+		self.m_staticText10011 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"Marxan Connect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText10011.Wrap( -1 )
+		self.m_staticText10011.SetFont( wx.Font( 24, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Fingbanger" ) )
+		
+		bSizer63.Add( self.m_staticText10011, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		self.m_bitmap3 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"icon_bundle.ico", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer63.Add( self.m_bitmap3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		
+		bSizer52.Add( bSizer63, 1, wx.EXPAND, 5 )
+		
+		fgSizer65 = wx.FlexGridSizer( 2, 1, 0, 0 )
+		fgSizer65.AddGrowableRow( 0 )
+		fgSizer65.SetFlexibleDirection( wx.BOTH )
+		fgSizer65.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_staticText10012 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"With funding provided by:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText10012.Wrap( -1 )
+		fgSizer65.Add( self.m_staticText10012, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		self.m_bitmap4 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"dal-logo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer65.Add( self.m_bitmap4, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		
+		bSizer52.Add( fgSizer65, 1, wx.EXPAND, 5 )
+		
+		
+		fgSizer61.Add( bSizer52, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
+		
+		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later, authors except Daigle are listed alphabetically):\n\nDaigle, RM, Balbar, A, Beger, M, Clarke, J, Kuempel, C, McGowan, J, Metaxas, A, Possingham, H,Treml, EA. 2018. Marxan Connect. https://github.com/remi-daigle/MarxanConnect\n\n", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002.Wrap( -1 )
+		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		fgSizer61.Add( bSizer512, 1, wx.EXPAND, 5 )
+		
+		
+		self.m_panel27.SetSizer( fgSizer61 )
+		self.m_panel27.Layout()
+		fgSizer61.Fit( self.m_panel27 )
+		bSizer50.Add( self.m_panel27, 1, wx.EXPAND, 5 )
+		
+		
+		self.SetSizer( bSizer50 )
+		self.Layout()
+		
+		self.Centre( wx.BOTH )
+	
+	def __del__( self ):
+		pass
 	
 

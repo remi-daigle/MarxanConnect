@@ -38,7 +38,7 @@ if os.name=='nt':
         base = 'Win32GUI'
 
     setup(name = 'MarxanConnectGUI' ,
-          version = '0.0.3' ,
+          version = '0.0.4' ,
           description = '' ,
           options = {'build_exe': build_exe_options},
           executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'icon_bundle.ico'))])
@@ -53,7 +53,7 @@ else:
     mac_options = {'iconfile': os.path.join(sys.path[0], 'icon_mac.icns')}
 
     setup(name='MarxanConnectGUI',
-          version='0.0.3',
+          version='0.0.4',
           description='',
           options={'build_exe': build_exe_options,
                    'bdist_mac': mac_options},
