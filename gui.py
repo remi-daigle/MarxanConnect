@@ -19,7 +19,7 @@ import wx.grid
 class MarxanConnectGUI ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect", pos = wx.DefaultPosition, size = wx.Size( 1087,823 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect", pos = wx.DefaultPosition, size = wx.Size( 1100,768 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -1183,7 +1183,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.preEval_def_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"This tab will allow you to evaluate the metrics created on the previous tab. They can be removed if they are not appropriate for the Marxan analysis, transformed into discrete features which can be locked in or out. Most importantly, everything can be exported as Marxan formatted files.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_def_txt.Wrap( -1 )
-		preEval_def_sizer.Add( self.preEval_def_txt, 0, wx.ALL|wx.EXPAND, 5 )
+		preEval_def_sizer.Add( self.preEval_def_txt, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
 		
 		
 		preEvalMainSizer.Add( preEval_def_sizer, 1, wx.EXPAND, 5 )
@@ -1196,22 +1196,26 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEval_choice_sizer.Add( self.preEval_choice_txt, 0, wx.ALL, 5 )
 		
-		preEval_metrics_opt_sizer = wx.FlexGridSizer( 2, 3, 0, 0 )
+		preEval_metrics_opt_sizer = wx.FlexGridSizer( 2, 4, 0, 0 )
 		preEval_metrics_opt_sizer.AddGrowableCol( 1 )
 		preEval_metrics_opt_sizer.SetFlexibleDirection( wx.BOTH )
 		preEval_metrics_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.preEval_metric_shp_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_metric_shp_txt.Wrap( -1 )
-		preEval_metrics_opt_sizer.Add( self.preEval_metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 		
 		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_metric_txt.Wrap( -1 )
-		preEval_metrics_opt_sizer.Add( self.preEval_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 		
 		self.preEval_metric_spacertxt = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_metric_spacertxt.Wrap( -1 )
-		preEval_metrics_opt_sizer.Add( self.preEval_metric_spacertxt, 0, wx.ALL, 5 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_spacertxt, 0, 0, 5 )
+		
+		self.preEval_metric_spacertxt1 = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_metric_spacertxt1.Wrap( -1 )
+		preEval_metrics_opt_sizer.Add( self.preEval_metric_spacertxt1, 0, 0, 5 )
 		
 		preEval_metric_shp_choiceChoices = [ u"Planning Units (Demographic Data)", u"Planning Units (Landscape Data)" ]
 		self.preEval_metric_shp_choice = wx.Choice( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_shp_choiceChoices, 0 )
@@ -1223,8 +1227,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_metric_choice.SetSelection( 0 )
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_choice, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		self.m_button18 = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		preEval_metrics_opt_sizer.Add( self.m_button18, 0, wx.ALL, 4 )
+		self.plot_freq_metric = wx.Button( self.preEvaluation, wx.ID_ANY, u"Plot Frequency", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.plot_freq_metric.SetToolTip( u"Plot frequency histogram for selected metric" )
+		
+		preEval_metrics_opt_sizer.Add( self.plot_freq_metric, 0, wx.ALL, 5 )
+		
+		self.remove_metric = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		preEval_metrics_opt_sizer.Add( self.remove_metric, 0, wx.ALL, 4 )
 		
 		
 		preEval_choice_sizer.Add( preEval_metrics_opt_sizer, 1, wx.EXPAND, 5 )
@@ -1248,7 +1257,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_table_txt.Wrap( -1 )
 		self.preEval_table_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
 		
-		preEval_table_sizer.Add( self.preEval_table_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		preEval_table_sizer.Add( self.preEval_table_txt, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.preEval_grid = wx.grid.Grid( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		
@@ -1300,7 +1309,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_discrete_from_txt.Wrap( -1 )
 		self.preEval_discrete_from_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
 		
-		preEval_discrete_from_sizer.Add( self.preEval_discrete_from_txt, 0, wx.ALL, 5 )
+		preEval_discrete_from_sizer.Add( self.preEval_discrete_from_txt, 0, 0, 5 )
 		
 		preEval_discrete_from_quartile_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		preEval_discrete_from_quartile_sizer.AddGrowableCol( 1 )
@@ -1359,7 +1368,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_discrete_to_txt.Wrap( -1 )
 		self.preEval_discrete_to_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
 		
-		preEval_discrete_to_sizer.Add( self.preEval_discrete_to_txt, 0, wx.ALL, 5 )
+		preEval_discrete_to_sizer.Add( self.preEval_discrete_to_txt, 0, 0, 5 )
 		
 		preEval_discrete_to_quartile_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		preEval_discrete_to_quartile_sizer.AddGrowableCol( 1 )
@@ -1422,12 +1431,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_metrics_buttons_sizer.Add( self.spacertext11, 0, wx.ALL, 5 )
 		
 		self.preEval_create_new = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		preEval_metrics_buttons_sizer.Add( self.preEval_create_new, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		preEval_metrics_buttons_sizer.Add( self.preEval_create_new, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 		
 		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
-		self.preEval_status_radio.SetSelection( 2 )
-		preEval_metrics_buttons_sizer.Add( self.preEval_status_radio, 0, wx.ALL, 5 )
+		self.preEval_status_radio.SetSelection( 0 )
+		preEval_metrics_buttons_sizer.Add( self.preEval_status_radio, 0, 0, 5 )
 		
 		
 		preEvalMainSizer.Add( preEval_metrics_buttons_sizer, 1, wx.EXPAND, 5 )
@@ -1470,10 +1479,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cft_percent_txt.Wrap( -1 )
 		cft_sizer.Add( self.cft_percent_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.CFT_percent_slider = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_LABELS )
+		self.CFT_percent_slider = wx.Slider( self.preEvaluation, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_LABELS )
 		self.CFT_percent_slider.Enable( False )
 		
-		cft_sizer.Add( self.CFT_percent_slider, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL|wx.EXPAND, 5 )
+		cft_sizer.Add( self.CFT_percent_slider, 0, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.LEFT|wx.RIGHT, 5 )
 		
 		self.custom_spec_panel = wx.Panel( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.custom_spec_panel.SetToolTip( u"To enable, please calculate  any Conservation Feature metrics" )
@@ -1485,13 +1494,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.customize_spec = wx.Button( self.custom_spec_panel, wx.ID_ANY, u"Customize Conservation Feature File", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.customize_spec.Enable( False )
 		
-		custom_spec_panel_sizer.Add( self.customize_spec, 0, wx.ALL, 14 )
+		custom_spec_panel_sizer.Add( self.customize_spec, 0, wx.ALL, 5 )
 		
 		
 		self.custom_spec_panel.SetSizer( custom_spec_panel_sizer )
 		self.custom_spec_panel.Layout()
 		custom_spec_panel_sizer.Fit( self.custom_spec_panel )
-		cft_sizer.Add( self.custom_spec_panel, 1, wx.ALL, 5 )
+		cft_sizer.Add( self.custom_spec_panel, 1, 0, 5 )
 		
 		
 		cf_file_export_sizer.Add( cft_sizer, 1, wx.EXPAND, 5 )
@@ -1593,7 +1602,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanwebsite = wx.adv.HyperlinkCtrl( self.marxanAnalysis, wx.ID_ANY, u"Marxan Website", u"http://marxan.net/index.php/marxan", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
 		marxanMainSizer.Add( self.marxanwebsite, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.marxan_logo = wx.StaticBitmap( self.marxanAnalysis, wx.ID_ANY, wx.Bitmap( u"marxanlogo.jpg", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.marxan_logo = wx.StaticBitmap( self.marxanAnalysis, wx.ID_ANY, wx.Bitmap( u"images/marxanlogo.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		marxanMainSizer.Add( self.marxan_logo, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		marxan_ref_sizer = wx.BoxSizer( wx.HORIZONTAL )
@@ -1674,10 +1683,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
-		plottingMainSizer.AddGrowableRow( 2 )
 		plottingMainSizer.AddGrowableRow( 4 )
 		plottingMainSizer.AddGrowableRow( 6 )
-		plottingMainSizer.AddGrowableRow( 7 )
+		plottingMainSizer.AddGrowableRow( 12 )
 		plottingMainSizer.SetFlexibleDirection( wx.BOTH )
 		plottingMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -1710,19 +1718,19 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.bmap_landcol_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Land Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bmap_landcol_txt.Wrap( -1 )
-		bmap_options_sizer.Add( self.bmap_landcol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		bmap_options_sizer.Add( self.bmap_landcol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.bmap_lakecol_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Lake Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bmap_lakecol_txt.Wrap( -1 )
-		bmap_options_sizer.Add( self.bmap_lakecol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		bmap_options_sizer.Add( self.bmap_lakecol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.bmap_oceancol_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Ocean Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bmap_oceancol_txt.Wrap( -1 )
-		bmap_options_sizer.Add( self.bmap_oceancol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		bmap_options_sizer.Add( self.bmap_oceancol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
 		self.bmap_buffer_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Buffer (degrees)", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bmap_buffer_txt.Wrap( -1 )
-		bmap_options_sizer.Add( self.bmap_buffer_txt, 0, wx.ALL, 5 )
+		bmap_options_sizer.Add( self.bmap_buffer_txt, 0, 0, 5 )
 		
 		self.bmap_landcol = wx.ColourPickerCtrl( self.plottingOptions, wx.ID_ANY, wx.Colour( 221, 170, 102 ), wx.DefaultPosition, wx.DefaultSize, wx.CLRP_DEFAULT_STYLE|wx.CLRP_SHOW_LABEL|wx.CLRP_USE_TEXTCTRL )
 		self.bmap_landcol.SetToolTip( u"Double-click on the colour box, or manually enter colour values in the text box (as shown or hex format, e.g. #fff7ec)" )
@@ -1775,15 +1783,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.metric_shp_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_shp_txt.Wrap( -1 )
-		metrics_opt_sizer.Add( self.metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		metrics_opt_sizer.Add( self.metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL, 10 )
 		
 		self.metric_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Output", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_txt.Wrap( -1 )
-		metrics_opt_sizer.Add( self.metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		metrics_opt_sizer.Add( self.metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL, 10 )
 		
 		self.metric_lowcol_txt = wx.StaticText( self.metrics_opt, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_lowcol_txt.Wrap( -1 )
-		metrics_opt_sizer.Add( self.metric_lowcol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		metrics_opt_sizer.Add( self.metric_lowcol_txt, 0, wx.ALIGN_CENTER_HORIZONTAL, 10 )
 		
 		metric_shp_choiceChoices = [ u"Planning Units (Marxan Results)", u"Planning Units (Demographic Data)", u"Planning Units (Genetic Data)", u"Planning Units (Landscape Data)", u"Demographic Units", u"Genetic Units", u"Landscape Units" ]
 		self.metric_shp_choice = wx.Choice( self.metrics_opt, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_shp_choiceChoices, 0 )
@@ -1895,15 +1903,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		self.metric_shp_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_shp_txt1.Wrap( -1 )
-		metrics_opt_sizer1.Add( self.metric_shp_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		metrics_opt_sizer1.Add( self.metric_shp_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL, 10 )
 		
 		self.metric_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Output", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_txt1.Wrap( -1 )
-		metrics_opt_sizer1.Add( self.metric_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		metrics_opt_sizer1.Add( self.metric_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL, 10 )
 		
 		self.metric_lowcol_txt1 = wx.StaticText( self.metrics_opt1, wx.ID_ANY, u"Low Colour", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.metric_lowcol_txt1.Wrap( -1 )
-		metrics_opt_sizer1.Add( self.metric_lowcol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 10 )
+		metrics_opt_sizer1.Add( self.metric_lowcol_txt1, 0, wx.ALIGN_CENTER_HORIZONTAL, 10 )
 		
 		metric_shp_choice1Choices = [ u"Planning Units (Marxan Results)", u"Planning Units (Demographic Data)", u"Planning Units (Genetic Data)", u"Planning Units (Landscape Data)", u"Demographic Units", u"Genetic Units", u"Landscape Units" ]
 		self.metric_shp_choice1 = wx.Choice( self.metrics_opt1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_shp_choice1Choices, 0 )
@@ -2114,7 +2122,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.preEval_metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_shp_choice )
 		self.preEval_metric_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_choice )
-		self.m_button18.Bind( wx.EVT_BUTTON, self.on_remove_metric )
+		self.plot_freq_metric.Bind( wx.EVT_BUTTON, self.on_plot_freq_metric )
+		self.remove_metric.Bind( wx.EVT_BUTTON, self.on_remove_metric )
 		self.preEval_create_new.Bind( wx.EVT_BUTTON, self.on_preEval_create_new )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
@@ -2285,6 +2294,9 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_preEval_metric_choice( self, event ):
 		event.Skip()
 	
+	def on_plot_freq_metric( self, event ):
+		event.Skip()
+	
 	def on_remove_metric( self, event ):
 		event.Skip()
 	
@@ -2439,7 +2451,7 @@ class spec_customizer ( wx.Dialog ):
 class GettingStarted ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect: Getting Started", pos = wx.DefaultPosition, size = wx.Size( 900,750 ), style = wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Marxan Connect: Getting Started", pos = wx.DefaultPosition, size = wx.Size( 1000,768 ), style = wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -2480,20 +2492,25 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer52 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		fgSizer63 = wx.FlexGridSizer( 2, 1, 0, 0 )
-		fgSizer63.AddGrowableRow( 0 )
+		fgSizer63 = wx.FlexGridSizer( 3, 1, 0, 0 )
+		fgSizer63.AddGrowableCol( 0 )
+		fgSizer63.AddGrowableRow( 1 )
+		fgSizer63.AddGrowableRow( 2 )
 		fgSizer63.SetFlexibleDirection( wx.BOTH )
 		fgSizer63.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.m_staticText1001 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"With funding provided by:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1001.Wrap( -1 )
-		fgSizer63.Add( self.m_staticText1001, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		fgSizer63.Add( self.m_staticText1001, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.ALL, 5 )
 		
-		self.m_bitmap2 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"CHONelogo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( 300,-1 ), 0 )
+		self.m_bitmap2 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/CHONelogo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 		fgSizer63.Add( self.m_bitmap2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
+		self.m_bitmap4 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/dal-logo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer63.Add( self.m_bitmap4, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		bSizer52.Add( fgSizer63, 1, wx.EXPAND, 5 )
+		
+		bSizer52.Add( fgSizer63, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.EXPAND, 5 )
 		
 		bSizer63 = wx.BoxSizer( wx.VERTICAL )
 		
@@ -2501,28 +2518,29 @@ class GettingStarted ( wx.Frame ):
 		self.m_staticText10011.Wrap( -1 )
 		self.m_staticText10011.SetFont( wx.Font( 24, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Fingbanger" ) )
 		
-		bSizer63.Add( self.m_staticText10011, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		bSizer63.Add( self.m_staticText10011, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_bitmap3 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"icon_bundle.ico", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer63.Add( self.m_bitmap3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		bSizer63.Add( self.m_bitmap3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL|wx.EXPAND, 5 )
 		
 		
-		bSizer52.Add( bSizer63, 1, wx.EXPAND, 5 )
+		bSizer52.Add( bSizer63, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 		
 		fgSizer65 = wx.FlexGridSizer( 2, 1, 0, 0 )
+		fgSizer65.AddGrowableCol( 0 )
 		fgSizer65.AddGrowableRow( 0 )
 		fgSizer65.SetFlexibleDirection( wx.BOTH )
 		fgSizer65.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_staticText10012 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"With funding provided by:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText10012 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"With contributions by:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText10012.Wrap( -1 )
 		fgSizer65.Add( self.m_staticText10012, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.m_bitmap4 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"dal-logo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer65.Add( self.m_bitmap4, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		self.m_bitmap5 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/institutionlogos.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer65.Add( self.m_bitmap5, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		
-		bSizer52.Add( fgSizer65, 1, wx.EXPAND, 5 )
+		bSizer52.Add( fgSizer65, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
 		
 		
 		fgSizer61.Add( bSizer52, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
