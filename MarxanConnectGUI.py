@@ -1889,6 +1889,45 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)
 
+    def on_plot_freq_metric( self, event ):
+        self.temp = {}
+        type = self.get_plot_type(selection=self.preEval_metric_shp_choice.GetStringSelection())
+        metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
+                                           type=self.get_plot_type(
+                                               selection=self.preEval_metric_shp_choice.GetStringSelection()))
+
+        # get the 'from' for discretization
+        if 'spec_' + type in self.project['connectivityMetrics']:
+            self.temp['metric'] = numpy.array(self.project['connectivityMetrics']['spec_' + type][metric_type])
+
+        # prepare plotting window
+        if not hasattr(self, 'plot'):
+            self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+            self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
+        self.plot.figure = plt.figure(figsize=self.plot.GetClientSize() / wx.ScreenDC().GetPPI()[0])
+        self.plot.axes = self.plot.figure.gca()
+        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
+        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        self.plot.SetSizer(self.plot.sizer)
+        self.plot.Fit()
+
+        self.plot.hist = plt.hist(self.temp['metric'],bins=int(len(self.temp['metric'])/15))
+        self.plot.xlabel = plt.xlabel(metric_type)
+        self.plot.ylabel = plt.ylabel("Frequency")
+        self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 25), label='test',color='k',linestyle='--')
+        self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 20),sum(self.plot.axes.get_ylim())/2,'Lower Quartile',rotation=90,verticalalignment='center')
+        self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 50), label='test',color='k',linestyle='--')
+        self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 45), sum(self.plot.axes.get_ylim()) / 2, 'Median', rotation=90,verticalalignment='center')
+        self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 75), label='test',color='k',linestyle='--')
+        self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 70), sum(self.plot.axes.get_ylim()) / 2, 'Upper Quartile', rotation=90,verticalalignment='center')
+        # print()
+
+        # change selection to plot tab
+        for i in range(self.auinotebook.GetPageCount()):
+            if self.auinotebook.GetPageText(i) == "7) Plot":
+                self.auinotebook.ChangeSelection(i)
+
 # ########################## marxan functions ##########################################################################
 
     def on_inedit(self, event):
