@@ -74,8 +74,6 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
         for sink in pu[pu_id]:
             sources=df.puID==source
             sinks=df.puID==sink
-            print(source)
-            print(sink)
             if any(sinks) and any(sources):
                 if edge == "Proportional to overlap":
                     temp_conn=grid_conmat[df.connIndex[sources],:][:,df.connIndex[sinks]]
@@ -87,14 +85,12 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
                     temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
                     cov_source = df.int_area[sources] / df.pu_area[sources]
                     cov_sink = df.int_area[sinks] / df.pu_area[sinks]
-                    print(df.pu_area[sources])
                     pu_conmat[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
                         sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
             else:
                 pu_conmat[numpy.array(pu[pu_id]==source),numpy.array(pu[pu_id]==sink)]=0
     pu_conmat = pandas.DataFrame(pu_conmat, index=pu[pu_id], columns=pu[pu_id])
     pu_conmat.index.name = "puID"
-    print('loop ok')
 
     if time:
         # populate rescaled pu connectivity matrix
@@ -186,12 +182,12 @@ def conmat2betweencent(conmat):
 
 def conmat2eigvectcent(conmat):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
-    eigvectcent = g.evcent()
+    eigvectcent = g.evcent(weights='weight')
     return eigvectcent
 
 def conmat2google(conmat):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
-    eigvectcent = g.pagerank()
+    eigvectcent = g.pagerank(weights='weight')
     return eigvectcent
 
 def conmat2outflux(conmat):
@@ -346,7 +342,6 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
             count += 10
             dlg.Update(count)
         for index2, pu2row in pu_dist.iterrows():
-            # print(index1, index2)
             if index1 != index2:
                 if pu1row.buff.intersects(pu2row.buff):
                     line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.y),
