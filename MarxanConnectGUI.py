@@ -1153,8 +1153,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.land_RES_def.Enable(enable_surface)
         self.land_res_file_res_id_txt.Enable(enable_surface)
         self.land_RES_file_res_id.Enable(enable_surface)
-        self.land_generate_button.Enable(enable_surface)
-        self.land_PU_CM_progress.Enable(enable_surface)
+        self.land_generate_button.Enable(enable_surface or enable_hab)
+        self.land_PU_CM_progress.Enable(enable_surface or enable_hab)
 
         # enable metrics
         self.enable_metrics()
@@ -1318,9 +1318,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.temp['land_pu_conmat'] = marxanconpy.habitatresistance2conmats(
             buff=float(self.project['options']['land_hab_buff']),
             hab_filepath=self.project['filepaths']['land_cu_filepath'],
+            hab_id=self.project['filepaths']['land_cu_file_hab_id'],
             res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
             pu_filepath=self.project['filepaths']['pu_filepath'],
-            hab_id=self.project['filepaths']['land_cu_file_hab_id'])
+            pu_id=self.project['filepaths']['pu_file_pu_id'])
 
         pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
             self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")

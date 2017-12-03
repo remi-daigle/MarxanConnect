@@ -155,6 +155,22 @@ def buffer_shp_corners(gdf_list, bufferwidth = 0):
         if(latmaxtemp>latmax): latmax = latmaxtemp
     return lonmin, lonmax, latmin, latmax
 
+def get_appropriate_projection(shapefile,equal='area'):
+    lonmin, lonmax, latmin, latmax = buffer_shp_corners([shapefile])
+    lon = (lonmin + lonmax) / 2
+    lat = (latmin+latmax)/2
+    if equal == 'area':
+        if lat > 30:
+            proj = '+proj=laea +lat_0='+str(lat)+' +lon_0='+str(lon)
+        else:
+            proj = '+proj=laea +lon_0=' + str(lon)
+    elif equal == 'distance':
+        if lat > 30:
+            proj = '+proj=eqdc +lat_1='+str(latmin)+' +lat_2='+str(latmax)+' +lon_0='+str(lon)
+        else:
+            proj = '+proj=eqc +lon_0=' + str(lon)
+    return proj
+
 def conmat2vertexdegree(conmat,mode='ALL'):
     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist())
     vertexdegree = g.degree(mode=mode)
@@ -277,43 +293,62 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
         return [0] * len(conmat_time.id2.unique())
 
 
-def habitatresistance2conmats(buff, hab_filepath, res_mat_filepath, pu_filepath, hab_id):
-    hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs({'init': 'epsg:4326'})
-    habdiss = hab.dissolve(by=hab_id)
-    habdiss[hab_id] = habdiss.index.values.astype(str)
-    habdiss = habdiss.reset_index(drop=True)
-    pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs({'init': 'epsg:4326'})
-    pu['buff'] = pu.geometry.buffer(buff)
+def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_filepath, pu_id):
+    hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
-    habtypes = habdiss[hab_id].values
+    hab_area = hab.to_crs(get_appropriate_projection(hab,'area')).dissolve(by=hab_id)
+    hab_area[hab_id] = hab_area.index.values.astype(str)
+    hab_area = hab_area.reset_index(drop=True)
+
+    hab_dist = hab.to_crs(get_appropriate_projection(hab, 'distance')).dissolve(by=hab_id)
+    hab_dist[hab_id] = hab_dist.index.values.astype(str)
+    hab_dist = hab_dist.reset_index(drop=True)
+
+    pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+
+    pu_area = pu.to_crs(get_appropriate_projection(pu, 'area'))
+
+    pu_dist = pu.to_crs(get_appropriate_projection(pu, 'distance'))
+    pu_dist['buff'] = pu_dist.geometry.buffer(buff)
+
+    habtypes = hab_dist[hab_id].values
     habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0))
 
     G = igraph.Graph()
-    G.add_vertices(pu.index)
+    G.add_vertices([str(i) for i in pu[pu_id]])
 
     area = pandas.DataFrame(numpy.zeros((len(pu), len(habtypes))), columns=habtypes)
-    for index1, pu1row in pu.iterrows():
-        for indexhab, habrow in habdiss.iterrows():
+    for index1, pu1row in pu_area.iterrows():
+        for indexhab, habrow in hab_area.iterrows():
             area.iloc[index1,indexhab] = pu1row.geometry.intersection(habrow.geometry).area
-        for index2, pu2row in pu.iterrows():
-            print(index1, index2)
+    for index1, pu1row in pu_dist.iterrows():
+        for index2, pu2row in pu_dist.iterrows():
+            # print(index1, index2)
             if index1 != index2:
                 if pu1row.buff.intersects(pu2row.buff):
-                    line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.x),
+                    line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.y),
                                                         (pu2row.geometry.centroid.x, pu2row.geometry.centroid.y)])
+                    lineinter = numpy.array(hab_dist.intersection(line).length)
+                    if sum(lineinter)>0:
+                        lineinter = lineinter/sum(lineinter)*line.length
+                        weights = dict(zip(habtypes, numpy.multiply(lineinter, habres).sum(1)))
+                        dist = pu1row.geometry.centroid.distance(pu2row.geometry.centroid)
+                        G.add_edge(str(pu1row[pu_id]), str(pu2row[pu_id]), **weights, distance=dist)
 
-                    lineinter = numpy.array(habdiss.intersection(line).length)
-                    weights = dict(zip(habtypes, numpy.multiply(lineinter, habres).sum(1)))
-                    dist = pu1row.geometry.centroid.distance(pu2row.geometry.centroid)
-                    G.add_edge(index1, index2, **weights, distance=dist)
-
+    G.write_pickle('test')
     conmat = pandas.DataFrame({'habitat': [], 'id1': [], 'id2': [], 'value': []})
+    area = area.divide(area.values.sum(0))
     for h in habtypes:
-        conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h))
+
+        conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h, mode='OUT'))
         conmat_temp = conmat_temp * conmat_temp
+
         # conmat_temp = conmat_temp-conmat_temp.values.min()
-        conmat_temp = abs(conmat_temp / conmat_temp.values.max() - 1).multiply(area[h], axis=0)
-        conmat_temp['id1'] = conmat_temp.index
+        conmat_temp = abs(conmat_temp / conmat_temp.values.max() - 1)
+        conmat_temp = conmat_temp.multiply(area[h], axis=0)
+        conmat_temp = conmat_temp.multiply(area[h], axis=1)
+        conmat_temp.columns = G.vs['name']
+        conmat_temp['id1'] = G.vs['name']
         conmat_temp['habitat'] = h
         conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))
 
