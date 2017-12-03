@@ -296,7 +296,7 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
         return [0] * len(conmat_time.id2.unique())
 
 
-def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_filepath, pu_id):
+def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_filepath, pu_id, progressbar = False):
     hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
     hab_area = hab.to_crs(get_appropriate_projection(hab,'area')).dissolve(by=hab_id)
@@ -320,11 +320,31 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
     G = igraph.Graph()
     G.add_vertices([str(i) for i in pu[pu_id]])
 
+    # progressbar
+    if progressbar:
+        max = pu.shape[0] * 12
+        dlg = wx.ProgressDialog("Rescale Connectivity Matrix",
+                                "Please wait while the rescaled connectivity matrix is being generated.",
+                                maximum=max,
+                                parent=None,
+                                style=wx.PD_AUTO_HIDE
+                                      | wx.PD_ELAPSED_TIME
+                                      | wx.PD_ESTIMATED_TIME
+                                      | wx.PD_REMAINING_TIME
+                                )
+        count = 0
+
     area = pandas.DataFrame(numpy.zeros((len(pu), len(habtypes))), columns=habtypes)
     for index1, pu1row in pu_area.iterrows():
+        if progressbar:
+            count += 1
+            dlg.Update(count)
         for indexhab, habrow in hab_area.iterrows():
             area.iloc[index1,indexhab] = pu1row.geometry.intersection(habrow.geometry).area
     for index1, pu1row in pu_dist.iterrows():
+        if progressbar:
+            count += 10
+            dlg.Update(count)
         for index2, pu2row in pu_dist.iterrows():
             # print(index1, index2)
             if index1 != index2:
@@ -342,6 +362,9 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
     conmat = pandas.DataFrame({'habitat': [], 'id1': [], 'id2': [], 'value': []})
     area = area.divide(area.values.sum(0))
     for h in habtypes:
+        if progressbar:
+            count += int(pu.shape[0]/len(habtypes))
+            dlg.Update(count)
 
         conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h, mode='OUT'))
         conmat_temp = conmat_temp * conmat_temp
@@ -355,4 +378,7 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
         conmat_temp['habitat'] = h
         conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))
 
+    if progressbar:
+        count = max
+        dlg.Update(count)
     return conmat.to_json(orient='split')

@@ -1321,7 +1321,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             hab_id=self.project['filepaths']['land_cu_file_hab_id'],
             res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
             pu_filepath=self.project['filepaths']['pu_filepath'],
-            pu_id=self.project['filepaths']['pu_file_pu_id'])
+            pu_id=self.project['filepaths']['pu_file_pu_id'],
+            progressbar=self.land_PU_CM_progress.GetValue())
 
         pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
             self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")
