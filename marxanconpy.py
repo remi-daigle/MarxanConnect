@@ -12,8 +12,11 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
     rescale the connectivity matrix to match the scale of the planning units
     """
     # load shapefiles
-    pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs({'init': 'epsg:4326'})
-    cu = gpd.GeoDataFrame.from_file(cu_filepath).to_crs({'init': 'epsg:4326'})
+    pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+    cu = gpd.GeoDataFrame.from_file(cu_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+
+    pu = pu.to_crs(get_appropriate_projection(pu, 'area'))
+    cu = cu.to_crs(get_appropriate_projection(cu, 'area'))
 
     # load cu connectivity matrix
     # load correct demographic matrix and transform if necessary
