@@ -137,7 +137,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		fa_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.FA_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that are connected to the 'focus areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.FA_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics, it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations).", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.FA_def.Wrap( -1 )
 		fa_def_sizer.Add( self.FA_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -182,7 +182,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		aa_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.AA_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics (e.g. TBD), it is important to consider 'avoidance areas' for which connectivity should be avoided. Such avoidance areas could include areas heavily infested by invasive species, or areas that are more likely to be invaded (e.g. international shipping ports). Marxan with Connectivity assumes that the planning units within the 'avoidance areas' will otherwise be targeted as normal conservation targets in Marxan. Loading avoidance areas into Marxan with Connectivity allows users to set conservation targets for the areas connected to the 'avoidance areas'", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.AA_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"For some of the connectivity metrics, it is important to consider 'avoidance areas' for which connectivity should be avoided. Such avoidance areas could include areas heavily infested by invasive species or are more likely to be invaded (e.g. international shipping ports), or areas that are potential sources of pollutants (e.g. oil extraction, river outflows).", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.AA_def.Wrap( -1 )
 		aa_def_sizer.Add( self.AA_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -224,7 +224,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -273,7 +273,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.demo_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"The connectivity matrix (or list) is the fundamental input format for demographic data. It describes the movement from donor sites to recipient sites. It can be obtained by directly quantifying the movement of individual organisms (e.g. tagging) or  by modelling the dispersal of individual organisms (e.g. biophysical modelling of larval dispersal). Please indicate your connectivity data units, type, and format in the boxes below, and if necessary use the rescaling tools if the data was not gathered at the same spatial scale as the planning units. \n\nThe demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below. If the connectivity data was collected at a scale different than that of the planning units, you will need to supply a Connectivity Matrix Shapefile which describes the spatial polygons for which the data was gathered.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"The connectivity matrix (or list) is the fundamental input format for demographic data. It describes the movement from donor sites to recipient sites. It can be obtained by directly quantifying the movement of individual organisms (e.g. tagging) or  by modelling the dispersal of individual organisms (e.g. biophysical modelling of larval dispersal). Please indicate your connectivity data units, type, and format in the boxes below, and if necessary use the rescaling tools if the data was not gathered at the same spatial scale as the planning units. The demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below. If the connectivity data was collected at a scale different than that of the planning units, you will need to supply a Connectivity Matrix Shapefile which describes the spatial polygons for which the data was gathered.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_CM_def.Wrap( -1 )
 		demo_cm_def_sizer.Add( self.demo_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -1224,7 +1224,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEval_choice_sizer.Add( self.preEval_choice_txt, 0, wx.ALL, 5 )
 		
-		preEval_metrics_opt_sizer = wx.FlexGridSizer( 2, 4, 0, 0 )
+		fgSizer68 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		fgSizer68.AddGrowableCol( 0 )
+		fgSizer68.SetFlexibleDirection( wx.BOTH )
+		fgSizer68.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		preEval_metrics_opt_sizer = wx.FlexGridSizer( 2, 2, 0, 0 )
 		preEval_metrics_opt_sizer.AddGrowableCol( 1 )
 		preEval_metrics_opt_sizer.SetFlexibleDirection( wx.BOTH )
 		preEval_metrics_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -1237,14 +1242,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_metric_txt.Wrap( -1 )
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 		
-		self.preEval_metric_spacertxt = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.preEval_metric_spacertxt.Wrap( -1 )
-		preEval_metrics_opt_sizer.Add( self.preEval_metric_spacertxt, 0, 0, 5 )
-		
-		self.preEval_metric_spacertxt1 = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.preEval_metric_spacertxt1.Wrap( -1 )
-		preEval_metrics_opt_sizer.Add( self.preEval_metric_spacertxt1, 0, 0, 5 )
-		
 		preEval_metric_shp_choiceChoices = [ u"Planning Units (Demographic Data)", u"Planning Units (Landscape Data)" ]
 		self.preEval_metric_shp_choice = wx.Choice( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_shp_choiceChoices, 0 )
 		self.preEval_metric_shp_choice.SetSelection( 0 )
@@ -1255,16 +1252,32 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEval_metric_choice.SetSelection( 0 )
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_choice, 0, wx.ALL|wx.EXPAND, 5 )
 		
+		
+		fgSizer68.Add( preEval_metrics_opt_sizer, 1, wx.EXPAND, 5 )
+		
+		bSizer56 = wx.BoxSizer( wx.HORIZONTAL )
+		
 		self.plot_freq_metric = wx.Button( self.preEvaluation, wx.ID_ANY, u"Plot Frequency", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.plot_freq_metric.SetToolTip( u"Plot frequency histogram for selected metric" )
 		
-		preEval_metrics_opt_sizer.Add( self.plot_freq_metric, 0, wx.ALL, 5 )
+		bSizer56.Add( self.plot_freq_metric, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 		
 		self.remove_metric = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		preEval_metrics_opt_sizer.Add( self.remove_metric, 0, wx.ALL, 4 )
+		bSizer56.Add( self.remove_metric, 0, wx.ALIGN_BOTTOM|wx.ALL, 4 )
+		
+		self.preEval_create_new = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer56.Add( self.preEval_create_new, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+		
+		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
+		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
+		self.preEval_status_radio.SetSelection( 0 )
+		bSizer56.Add( self.preEval_status_radio, 0, 0, 5 )
 		
 		
-		preEval_choice_sizer.Add( preEval_metrics_opt_sizer, 1, wx.EXPAND, 5 )
+		fgSizer68.Add( bSizer56, 1, wx.EXPAND, 5 )
+		
+		
+		preEval_choice_sizer.Add( fgSizer68, 1, wx.EXPAND, 5 )
 		
 		
 		preEvalMainSizer.Add( preEval_choice_sizer, 1, wx.EXPAND, 5 )
@@ -1457,14 +1470,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spacertext11 = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.spacertext11.Wrap( -1 )
 		preEval_metrics_buttons_sizer.Add( self.spacertext11, 0, wx.ALL, 5 )
-		
-		self.preEval_create_new = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
-		preEval_metrics_buttons_sizer.Add( self.preEval_create_new, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
-		
-		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
-		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
-		self.preEval_status_radio.SetSelection( 0 )
-		preEval_metrics_buttons_sizer.Add( self.preEval_status_radio, 0, 0, 5 )
 		
 		
 		preEvalMainSizer.Add( preEval_metrics_buttons_sizer, 1, wx.EXPAND, 5 )
@@ -1717,13 +1722,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
-		plottingMainSizer.AddGrowableRow( 4 )
-		plottingMainSizer.AddGrowableRow( 6 )
-		plottingMainSizer.AddGrowableRow( 12 )
+		plottingMainSizer.AddGrowableRow( 1 )
+		plottingMainSizer.AddGrowableRow( 2 )
+		plottingMainSizer.AddGrowableRow( 3 )
 		plottingMainSizer.SetFlexibleDirection( wx.BOTH )
 		plottingMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -1735,18 +1740,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		bmap_txt_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.bmap_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Basemap:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bmap_txt.Wrap( -1 )
-		self.bmap_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
-		
-		bmap_txt_sizer.Add( self.bmap_txt, 0, wx.ALL, 5 )
-		
-		self.bmap_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bmap_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot Basemap", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bmap_plot_check.SetValue(True) 
-		bmap_txt_sizer.Add( self.bmap_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		
-		plottingMainSizer.Add( bmap_txt_sizer, 1, wx.EXPAND, 5 )
+		bmap_txt_sizer.Add( self.bmap_plot_check, 0, wx.ALL, 5 )
 		
 		bmap_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -1794,22 +1790,16 @@ class MarxanConnectGUI ( wx.Frame ):
 		bmap_sizer.Add( bmap_options_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		plottingMainSizer.Add( bmap_sizer, 1, wx.EXPAND, 5 )
+		bmap_txt_sizer.Add( bmap_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		plottingMainSizer.Add( bmap_txt_sizer, 1, wx.EXPAND, 5 )
 		
 		lyr1_txt_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.lyr1_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"First Layer:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lyr1_txt.Wrap( -1 )
-		self.lyr1_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
-		
-		lyr1_txt_sizer.Add( self.lyr1_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		self.lyr1_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.lyr1_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot 1st Layer", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.lyr1_plot_check.SetValue(True) 
-		lyr1_txt_sizer.Add( self.lyr1_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		
-		plottingMainSizer.Add( lyr1_txt_sizer, 1, wx.EXPAND, 5 )
+		lyr1_txt_sizer.Add( self.lyr1_plot_check, 0, wx.ALL, 5 )
 		
 		lyr1_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -1914,22 +1904,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		lyr1_sizer.Add( self.lyr1_choice, 1, wx.EXPAND |wx.ALL, 5 )
 		
 		
-		plottingMainSizer.Add( lyr1_sizer, 1, wx.EXPAND, 5 )
+		lyr1_txt_sizer.Add( lyr1_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		plottingMainSizer.Add( lyr1_txt_sizer, 1, wx.EXPAND, 5 )
 		
 		lyr2_txt_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.lyr2_txt = wx.StaticText( self.plottingOptions, wx.ID_ANY, u"Second Layer:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lyr2_txt.Wrap( -1 )
-		self.lyr2_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
-		
-		lyr2_txt_sizer.Add( self.lyr2_txt, 0, wx.ALL, 5 )
-		
-		self.lyr2_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lyr2_plot_check.SetValue(True) 
-		lyr2_txt_sizer.Add( self.lyr2_plot_check, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-		
-		
-		plottingMainSizer.Add( lyr2_txt_sizer, 1, wx.EXPAND, 5 )
+		self.lyr2_plot_check = wx.CheckBox( self.plottingOptions, wx.ID_ANY, u"Plot 2nd Layer", wx.DefaultPosition, wx.DefaultSize, 0 )
+		lyr2_txt_sizer.Add( self.lyr2_plot_check, 0, wx.ALL, 5 )
 		
 		lyr2_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -2034,7 +2017,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		lyr2_sizer.Add( self.lyr2_choice, 1, wx.EXPAND |wx.ALL, 5 )
 		
 		
-		plottingMainSizer.Add( lyr2_sizer, 1, wx.EXPAND, 5 )
+		lyr2_txt_sizer.Add( lyr2_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		plottingMainSizer.Add( lyr2_txt_sizer, 1, wx.EXPAND, 5 )
 		
 		self.plot_map_button = wx.Button( self.plottingOptions, wx.ID_ANY, u"Plot Map", wx.DefaultPosition, wx.DefaultSize, 0 )
 		plottingMainSizer.Add( self.plot_map_button, 0, wx.ALIGN_BOTTOM|wx.ALIGN_RIGHT|wx.ALL, 5 )
