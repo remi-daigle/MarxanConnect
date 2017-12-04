@@ -1600,7 +1600,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		marxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		marxanMainSizer.AddGrowableCol( 0 )
@@ -1608,7 +1608,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxanMainSizer.AddGrowableRow( 4 )
 		marxanMainSizer.AddGrowableRow( 5 )
 		marxanMainSizer.AddGrowableRow( 6 )
-		marxanMainSizer.AddGrowableRow( 7 )
+		marxanMainSizer.AddGrowableRow( 8 )
 		marxanMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		marxanMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -1688,7 +1688,17 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		marxanMainSizer.Add( inputdat_file_sizer, 1, wx.EXPAND, 5 )
 		
-		run_marxan_sizer = wx.FlexGridSizer( 1, 3, 0, 0 )
+		inputdat_symmRadio_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		inputdat_symmRadioChoices = [ u"Asymetric", u"Symmetric" ]
+		self.inputdat_symmRadio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Boundary Definition Type", wx.DefaultPosition, wx.DefaultSize, inputdat_symmRadioChoices, 2, wx.RA_SPECIFY_COLS )
+		self.inputdat_symmRadio.SetSelection( 0 )
+		inputdat_symmRadio_sizer.Add( self.inputdat_symmRadio, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		
+		marxanMainSizer.Add( inputdat_symmRadio_sizer, 1, wx.EXPAND, 5 )
+		
+		run_marxan_sizer = wx.FlexGridSizer( 1, 4, 0, 0 )
 		run_marxan_sizer.AddGrowableCol( 0 )
 		run_marxan_sizer.SetFlexibleDirection( wx.BOTH )
 		run_marxan_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -1707,7 +1717,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", True, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -2164,6 +2174,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxan_dir.Bind( wx.EVT_DIRPICKER_CHANGED, self.on_marxan_dir )
 		self.inputdat_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_inputdat_file )
 		self.customize_inputdat.Bind( wx.EVT_BUTTON, self.on_inedit )
+		self.inputdat_symmRadio.Bind( wx.EVT_RADIOBOX, self.on_inputdat_symmRadio )
 		self.run_marxan_button.Bind( wx.EVT_BUTTON, self.on_run_marxan )
 		self.metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice )
 		self.metric_shp_choice1.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice1 )
@@ -2361,6 +2372,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_inedit( self, event ):
+		event.Skip()
+	
+	def on_inputdat_symmRadio( self, event ):
 		event.Skip()
 	
 	def on_run_marxan( self, event ):

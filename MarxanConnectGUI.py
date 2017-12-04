@@ -121,6 +121,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
         self.project['options']['metricsCalculated'] = False
         self.set_metric_options()
+        self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
 
         # set default file paths
         pfdir = sys.path[0]
@@ -259,6 +260,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
+
+        self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
 
 
 
@@ -1249,6 +1252,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_aa_recipients.Enable(enable=demo_aa_enable)
         self.cf_demo_aa_donors.Enable(enable=demo_aa_enable)
 
+
         self.bd_demo_conn_boundary.Enable(enable=demo_enable)
         self.bd_demo_min_plan_graph.Enable(enable=demo_enable)
 
@@ -1262,10 +1266,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_land_aa_recipients.Enable(enable=land_aa_enable)
         self.cf_land_aa_donors.Enable(enable=land_aa_enable)
 
-        self.bd_demo_conn_boundary.Enable(enable=land_enable)
-        self.bd_demo_min_plan_graph.Enable(enable=land_enable)
+        self.bd_land_conn_boundary.Enable(enable=land_enable)
+        self.bd_land_min_plan_graph.Enable(enable=land_enable)
 
-# ########################## rescaling and matrix generation ###########################################################
+    def on_inputdat_symmRadio(self, event):
+        self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
+
+    # ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
         """
         Rescales the connectivity matrix to match the scale of the planning units
@@ -1674,12 +1681,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]]).to_csv(
                 str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
 
-            if self.BD_filecheck.GetValue():
-                self.export_boundary_file(BD_filepath=self.project['filepaths']['bd_filepath'])
-            if self.PUDAT_filecheck.GetValue():
-                self.export_pudat_file(pudat_filepath=self.project['filepaths']['pudat_filepath'])
+        if self.BD_filecheck.GetValue():
+            self.export_boundary_file(BD_filepath=self.project['filepaths']['bd_filepath'])
+        if self.PUDAT_filecheck.GetValue():
+            self.export_pudat_file(pudat_filepath=self.project['filepaths']['pudat_filepath'])
 
     def export_boundary_file(self, BD_filepath):
+        print('export bound')
+        print(BD_filepath)
         if self.calc_metrics_pu.GetValue():
             self.type = 'demo_pu'
         else:
@@ -1687,10 +1696,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             return
 
         multiple = [self.bd_demo_conn_boundary.GetValue(),
-                    self.bd_demo_min_plan_graph.GetValue()].count(True) > 1
+                    self.bd_demo_min_plan_graph.GetValue(),
+                    self.bd_land_conn_boundary.GetValue(),
+                    self.bd_land_min_plan_graph.GetValue()
+                    ].count(True) > 1
 
         # Export each selected boundary definition            
         if self.bd_demo_conn_boundary.GetValue():
+            print("conn")
             if multiple:
                 pandas.read_json(self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type],
                                  orient='split').to_csv(str.replace(BD_filepath,
@@ -1698,6 +1711,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                     "_conn_boundary_" + self.type + ".dat"),
                                                         index=False)
             else:
+                print('not mult')
                 pandas.read_json(self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type],
                                  orient='split').to_csv(BD_filepath, index=False)
 
@@ -1954,6 +1968,27 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics'] = {}
         self.temp = {}
+
+        # edit input file
+        # Read in the file
+        with open(self.project['filepaths']['marxan_input'], 'r', encoding="utf8") as file:
+            filedata = file.readlines()
+
+        if self.project['options']['inputdat_boundary'] == 'Asymetric':
+            if not 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
+                filedata.insert([index for index, line in enumerate(filedata) if line.startswith('NUMREPS')][0] + 1,
+                            'ASYMMETRICCONNECTIVITY  1\n')
+        else:
+            if 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
+                print([index for index, line in enumerate(filedata) if line.startswith('ASYMMETRICCONNECTIVITY  1\n')][0])
+                filedata.remove('ASYMMETRICCONNECTIVITY  1\n')
+
+        # Write the file out again
+        with open(self.project['filepaths']['marxan_input'], 'w', encoding="utf8") as file:
+            file.write("".join(filedata))
+
+
+
         os.system("start /wait cmd /c " +
                   os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' + self.project['filepaths'][
                       'marxan_input'])
@@ -1986,6 +2021,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
+
+
 
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):

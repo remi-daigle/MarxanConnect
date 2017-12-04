@@ -319,8 +319,8 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
     # progressbar
     if progressbar:
         max = pu.shape[0] * 12
-        dlg = wx.ProgressDialog("Rescale Connectivity Matrix",
-                                "Please wait while the rescaled connectivity matrix is being generated.",
+        dlg = wx.ProgressDialog("Assessing Least-Cost Path",
+                                "Please wait while the least-cost path based connectivity matrices are being generated.",
                                 maximum=max,
                                 parent=None,
                                 style=wx.PD_AUTO_HIDE
