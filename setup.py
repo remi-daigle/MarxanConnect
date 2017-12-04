@@ -30,7 +30,7 @@ if os.name=='nt':
                                                         'Programs','Python','Python35','DLLs','tcl86t.dll'),
                                            os.path.join(os.environ['LOCALAPPDATA'],
                                                         'Programs','Python','Python35','DLLs','tk86t.dll'),
-                                           os.path.join(sys.path[0],'icon_bundle.ico')],
+                                           os.path.join(sys.path[0],'images','icon_bundle.ico'),'images/'],
                          'namespace_packages': ['mpl_toolkits'] }
 
     base = None
@@ -41,7 +41,7 @@ if os.name=='nt':
           version = '0.0.4' ,
           description = '' ,
           options = {'build_exe': build_exe_options},
-          executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'icon_bundle.ico'))])
+          executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'images','icon_bundle.ico'))])
 else:
     # define additional modules (those not automatically found)
     build_exe_options = {'includes': ['numpy.core._methods','packaging.version','packaging.specifiers',
