@@ -75,7 +75,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             frame.Show()
             # self.project['filepaths'] = {}
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
-            # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
+            # # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
             # self.load_project_function()
 
     def set_icon(self, frame):
@@ -143,7 +143,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['land_cu_file_hab_id'] = ""
         self.project['filepaths']['land_res_mat_filepath'] = ""
         self.project['filepaths']['land_res_filepath'] = ""
-        self.project['filepaths']['land_res_file_res_id'] = ""
+        self.project['filepaths']['land_res_file_hab_id'] = ""
         self.project['filepaths']['land_pu_cm_filepath'] = ""
         self.project['filepaths']['land_lp_filepath'] = ""
 
@@ -255,8 +255,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_land_aa_recipients.SetValue(self.project['options']['land_metrics']['aa_recipients'])
         self.cf_land_aa_donors.SetValue(self.project['options']['land_metrics']['aa_donors'])
 
-        self.bd_demo_conn_boundary.SetValue(self.project['options']['land_metrics']['conn_boundary'])
-        self.bd_demo_min_plan_graph.SetValue(self.project['options']['land_metrics']['min_plan_graph'])
+        self.bd_land_conn_boundary.SetValue(self.project['options']['land_metrics']['conn_boundary'])
+        self.bd_land_min_plan_graph.SetValue(self.project['options']['land_metrics']['min_plan_graph'])
 
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
@@ -311,7 +311,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.land_RES_mat_file.SetPath(self.project['filepaths']['land_res_mat_filepath'])
         self.land_RES_file.SetPath(self.project['filepaths']['land_res_filepath'])
         self.set_GUI_id_selection(self.land_RES_file_res_id, self.project['filepaths']['land_res_filepath'],
-                                  self.project['filepaths']['land_res_file_res_id'])
+                                  self.project['filepaths']['land_res_file_hab_id'])
         self.land_PU_CM_file.SetPath(self.project['filepaths']['land_pu_cm_filepath'])
         self.land_LP_file.SetPath(self.project['filepaths']['land_lp_filepath'])
 
@@ -846,11 +846,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Defines Planning Unit file path
         """
+        self.temp = {}
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
         if os.path.isfile(self.project['filepaths']['pu_filepath']):
             self.spatial['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])
-        self.PU_file_pu_id.SetItems(list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])))
-        self.PU_file_pu_id.SetSelection(0)
+        self.temp['items'] = list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']))
+        self.PU_file_pu_id.SetItems(self.temp['items'])
+        if self.project['filepaths']['pu_file_pu_id'] in self.temp['items']:
+            self.PU_file_pu_id.SetStringSelection(self.project['filepaths']['pu_file_pu_id'])
+        else:
+            self.PU_file_pu_id.SetSelection(0)
         self.on_PU_file_pu_id(event=None)
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
@@ -865,9 +870,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Defines Connectivity Unit file path
         """
+        self.temp = {}
         self.project['filepaths']['demo_cu_filepath'] = self.demo_CU_file.GetPath()
-        self.demo_CU_file_pu_id.SetItems(list(gpd.GeoDataFrame.from_file(self.project['filepaths']['demo_cu_filepath'])))
-        self.demo_CU_file_pu_id.SetSelection(0)
+        self.temp['items'] = list(gpd.GeoDataFrame.from_file(self.project['filepaths']['demo_cu_filepath']))
+        self.demo_CU_file_pu_id.SetItems(self.temp['items'])
+        if self.project['filepaths']['demo_cu_file_pu_id'] in self.temp['items']:
+            self.demo_CU_file_pu_id.SetStringSelection(self.project['filepaths']['demo_cu_file_pu_id'])
+        else:
+            self.demo_CU_file_pu_id.SetSelection(0)
         self.on_demo_CU_file_pu_id(event=None)
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
@@ -882,10 +892,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Defines landscape habitat type file path
         """
+        self.temp = {}
         self.project['filepaths']['land_cu_filepath'] = self.land_HAB_file.GetPath()
-        self.land_HAB_file_hab_id.SetItems(
-            list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_cu_filepath'])))
-        self.land_HAB_file_hab_id.SetSelection(0)
+        self.temp['items'] = list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_cu_filepath']))
+        self.land_HAB_file_hab_id.SetItems(self.temp['items'])
+        if self.project['filepaths']['land_cu_file_hab_id'] in self.temp['items']:
+            self.land_HAB_file_hab_id.SetStringSelection(self.project['filepaths']['land_cu_file_hab_id'])
+        else:
+            self.land_HAB_file_hab_id.SetSelection(0)
         self.on_land_HAB_file_hab_id(event=None)
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
@@ -913,7 +927,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Defines landscape resistance surface file path
         """
+        self.temp = {}
         self.project['filepaths']['land_res_filepath'] = self.land_RES_file.GetPath()
+        self.temp['items'] = list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_res_file_hab_id']))
+        self.land_RES_file_res_id.SetItems(self.temp['items'])
+        if self.project['filepaths']['land_res_file_hab_id'] in self.temp['items']:
+            self.land_RES_file_res_id.SetStringSelection(self.project['filepaths']['land_res_file_hab_id'])
+        else:
+            self.land_RES_file_res_id.SetSelection(0)
+
         self.land_RES_file_res_id.SetItems(
             list(gpd.GeoDataFrame.from_file(self.project['filepaths']['land_res_filepath'])))
         self.land_RES_file_res_id.SetSelection(0)
@@ -1654,7 +1676,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                         orient='split').index
             cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             cf = pandas.merge(cf, spec, how='outer', on='name')
-            cf = cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])
+            cf = cf.rename(columns={'id': 'species'}).sort_values(['pu', 'species'])
             cf = cf[cf['amount'] > 0]
             cf[['species', 'pu', 'amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
 
@@ -1678,9 +1700,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                             orient='split').index
             new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
-            new_cf = new_cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])
+            new_cf = new_cf.rename(columns={'id': 'species'})
             new_cf = new_cf[new_cf['amount']>0]
-            pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]]).to_csv(
+            pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]]).sort_values(['pu','species']).to_csv(
                 str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
 
         if self.BD_filecheck.GetValue():
@@ -1731,8 +1753,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def export_pudat_file(self, pudat_filepath):
         self.lock_pudat(pudat_filepath)
-
-        self.temp['pudat'].to_csv(str.replace(self.project['filepaths']['pudat_filepath'], ".dat", "_lock.dat"), index=0)
+        self.temp['pudat'].to_csv(self.project['filepaths']['pudat_filepath'],index=0)
+        # self.temp['pudat'].to_csv(str.replace(self.project['filepaths']['pudat_filepath'], ".dat", "_lock.dat"), index=0)
 
     def lock_pudat(self, pudat_filepath):
         self.temp = {}
@@ -1820,6 +1842,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)
+        self.on_new_spec()
+
 
     def on_preEval_create_new(self, event):
         self.temp = {}
@@ -1906,6 +1930,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)
+        self.on_new_spec()
 
     def on_plot_freq_metric( self, event ):
         self.temp = {}
@@ -2101,16 +2126,16 @@ class spec_customizer(gui.spec_customizer):
         self.parent = parent
 
     def on_spec_ok(self, event):
-        self.parent.project['spec_' + self.parent.type + '_dat'] = pandas.DataFrame(
+        self.parent.project['spec_dat'] = pandas.DataFrame(
             numpy.full((self.spec_grid.GetNumberRows(),
                         self.spec_grid.GetNumberCols()), None))
-        self.parent.project['spec_' + self.parent.type + '_dat'].columns = ["id", "target", "spf", "name"]
+        self.parent.project['spec_dat'].columns = ["id", "target", "spf", "name"]
 
         for c in range(self.spec_grid.GetNumberCols()):
             for r in range(self.spec_grid.GetNumberRows()):
-                self.parent.project['spec_' + self.parent.type + '_dat'].iloc[r, c] = self.spec_grid.GetCellValue(r, c)
-        self.parent.project['spec_' + self.parent.type + '_dat'] = self.parent.project[
-            'spec_' + self.parent.type + '_dat'].to_json()
+                self.parent.project['spec_dat'].iloc[r, c] = self.spec_grid.GetCellValue(r, c)
+        self.parent.project['spec_dat'] = self.parent.project[
+            'spec_dat'].to_json(orient='split')
         self.Hide()
 
     def on_spec_cancel(self, event):
