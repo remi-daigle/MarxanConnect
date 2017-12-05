@@ -250,7 +250,7 @@ def conmat2connboundary(conmat):
     return boundary_dat
 
 def conmat2minplanarboundary(conmat):
-    g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree()
+    g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree(weights='weight')
     mpgmat = g.get_adjacency().data
     mpgmat = pandas.DataFrame(mpgmat)
     mpgmat.columns = conmat.columns

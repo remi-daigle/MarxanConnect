@@ -1655,6 +1655,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             cf = pandas.merge(cf, spec, how='outer', on='name')
             cf = cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])
+            cf = cf[cf['amount'] > 0]
             cf[['species', 'pu', 'amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
 
         elif self.cf_export_radioBox.GetSelection() == 1:
@@ -1678,6 +1679,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
             new_cf = new_cf.rename(columns={'id': 'species'}).sort_values(['species', 'pu'])
+            new_cf = new_cf[new_cf['amount']>0]
             pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]]).to_csv(
                 str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
 
@@ -2093,7 +2095,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_CFT_percent_slider(self, event):
         self.on_new_spec()
 
-
 class spec_customizer(gui.spec_customizer):
     def __init__(self, parent):
         gui.spec_customizer.__init__(self, parent)
@@ -2114,7 +2115,6 @@ class spec_customizer(gui.spec_customizer):
 
     def on_spec_cancel(self, event):
         self.Hide()
-
 
 # ###########################  getting started popup functions #########################################################
 class GettingStarted (wx.Frame):
@@ -2195,7 +2195,6 @@ class file_viewer(wx.Dialog):
 
     def on_file_ok(self,event):
         self.Hide()
-
 
 # ######################################################################################################################
 
