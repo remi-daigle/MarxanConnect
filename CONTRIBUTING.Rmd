@@ -2,6 +2,7 @@
 title: "Contributing"
 output:
   html_document:
+    css: template.css
     keep_md: yes
     toc: yes
     toc_float: yes

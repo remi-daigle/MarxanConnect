@@ -2,6 +2,7 @@
 title: "Marxan Connect"
 output:
   html_document:
+    css: template.css
     toc: yes
     toc_float: yes
 ---

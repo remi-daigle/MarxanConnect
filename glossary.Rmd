@@ -2,6 +2,7 @@
 title: "Glossary"
 output:
   html_document:
+    css: template.css
     number_sections: yes
     toc: yes
     toc_float: yes
