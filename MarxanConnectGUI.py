@@ -1687,8 +1687,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.export_pudat_file(pudat_filepath=self.project['filepaths']['pudat_filepath'])
 
     def export_boundary_file(self, BD_filepath):
-        print('export bound')
-        print(BD_filepath)
         if self.calc_metrics_pu.GetValue():
             self.type = 'demo_pu'
         else:
@@ -1703,7 +1701,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # Export each selected boundary definition            
         if self.bd_demo_conn_boundary.GetValue():
-            print("conn")
             if multiple:
                 pandas.read_json(self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type],
                                  orient='split').to_csv(str.replace(BD_filepath,
@@ -1711,7 +1708,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                     "_conn_boundary_" + self.type + ".dat"),
                                                         index=False)
             else:
-                print('not mult')
                 pandas.read_json(self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type],
                                  orient='split').to_csv(BD_filepath, index=False)
 
@@ -2022,7 +2018,25 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
 
+    def on_view_mvbest(self,event):
+        self.temp = {}
+        for line in open(self.project['filepaths']['marxan_input']):
+            if line.startswith('SCENNAME'):
+                self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
+            elif line.startswith('OUTPUTDIR'):
+                self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
+        file_viewer(parent=self, file=os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest.txt'),
+                    title='mvbest')
 
+    def on_view_sum(self,event):
+        self.temp = {}
+        for line in open(self.project['filepaths']['marxan_input']):
+            if line.startswith('SCENNAME'):
+                self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
+            elif line.startswith('OUTPUTDIR'):
+                self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
+        file_viewer(parent=self, file=os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_sum.txt'),
+                    title='sum')
 
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):
@@ -2065,7 +2079,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                 self.spec_frame.SetSize((w + 16, h + 39 + 20))
                 self.spec_frame.Layout()
-
+                self.spec_frame.spec_grid.AutoSize()
         self.project['spec_dat'] = pandas.DataFrame(
             numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
         self.project['spec_dat'].columns = ["id", "target", "spf", "name"]
@@ -2109,87 +2123,79 @@ class GettingStarted (wx.Frame):
         # set the icon
         parent.set_icon(frame=self)
 
-        # startMainSizer = wx.FlexGridSizer(3, 1, 0, 0)
-        # startMainSizer.AddGrowableRow(0)
-        # #        startMainSizer.AddGrowableRow( 1 )
-        # #        startMainSizer.AddGrowableRow( 2 )
-        # startMainSizer.SetFlexibleDirection(wx.VERTICAL)
-        # startMainSizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
-        #
-        # sizer02 = wx.BoxSizer(wx.HORIZONTAL)
-        #
-        # self.gettingstartedtxt = wx.StaticText(self.gettingStarted,
-        #                                        wx.ID_ANY,
-        #                                        u"Welcome to Marxan with Connectivity!\n\nMarxan with Connectivity"
-        #                                        u" (henceforth the \"app\") is a Graphical User Interface (GUI) to help"
-        #                                        u" conservationists include \"connectivity\" in their protected area"
-        #                                        u" network planning.\n\nThe term \"connectivity\" has a variety of"
-        #                                        u" definitions (i.e. larval connectivity, genetic connectivity, "
-        #                                        u"landscape connectivity, etc) and protected area networks can be "
-        #                                        u"optimized for various connectivity objectives. The app is intended to"
-        #                                        u" guide conservationists through the process of identifying important"
-        #                                        u" aspects of connectivity for their conservation scenarios as well as"
-        #                                        u" highlighting the necessary data.\n\nThe app also includes be a fully"
-        #                                        u" functional python module (in progress) that is operated via command"
-        #                                        u" line that can be used to reproduce an analysis using the project"
-        #                                        u" file generated by the GUI.\n\nTo use this software, please visit the"
-        #                                        u" Tutorial and the Glossary which can be accessed under the help menu,"
-        #                                        u" or the links below (in progress). Otherwise, if you would just like "
-        #                                        u"to get started, please proceed through all the tabs from left to "
-        #                                        u"right starting the \"Spatial Input\". After calculating the"
-        #                                        u" \"Connectivity Metrics\", you can choose to conduct a Marxan"
-        #                                        u" analysis in the app (maybe), export the connectivity metrics for use"
-        #                                        u" in a standalone custom Marxan analysis, or you can visualize the"
-        #                                        u" Connectivity Metrics using the \"Plotting Options\" tab\n\nIf you"
-        #                                        u" would like to report any bugs or request a missing feature, please"
-        #                                        u" post an issue on the GitHub repository which is available in the"
-        #                                        u" help menu, or the link below.",
-        #                                        wx.DefaultPosition,
-        #                                        wx.DefaultSize, 0)
-        # self.gettingstartedtxt.Wrap(-1)
-        # sizer02.Add(self.gettingstartedtxt, 0, wx.ALL | wx.EXPAND, 5)
-        #
-        # startMainSizer.Add(sizer02, 1, wx.EXPAND, 5)
-        #
-        # hyperlinksizer = wx.BoxSizer(wx.VERTICAL)
-        # self.tutoriallink = wx.adv.HyperlinkCtrl(self.gettingStarted,
-        #                                          wx.ID_ANY, u"Tutorial",
-        #                                          u"tutorial.html",
-        #                                          wx.DefaultPosition,
-        #                                          wx.DefaultSize)
-        # hyperlinksizer.Add(self.tutoriallink, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
-        #
-        # self.glossarylink = wx.adv.HyperlinkCtrl(self.gettingStarted,
-        #                                          wx.ID_ANY,
-        #                                          u"Glossary",
-        #                                          u"glossary.html",
-        #                                          wx.DefaultPosition,
-        #                                          wx.DefaultSize)
-        # hyperlinksizer.Add(self.glossarylink, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
-        #
-        # self.githublink = wx.adv.HyperlinkCtrl(self.gettingStarted,
-        #                                        wx.ID_ANY,
-        #                                        u"GitHub Issues",
-        #                                        u"https://github.com/remi-daigle/MarxanConnect/issues",
-        #                                        wx.DefaultPosition,
-        #                                        wx.DefaultSize)
-        # hyperlinksizer.Add(self.githublink, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
-        #
-        # startMainSizer.Add(hyperlinksizer, 1, wx.EXPAND, 5)
-        #
-        # iconsizer = wx.BoxSizer(wx.VERTICAL)
-        #
-        # self.m_bitmap1 = wx.StaticBitmap(self.gettingStarted,
-        #                                  wx.ID_ANY, wx.Bitmap(os.path.join(sys.path[0], 'icon_bundle.ico'),
-        #                                                       wx.BITMAP_TYPE_ANY),
-        #                                  wx.DefaultPosition, wx.DefaultSize, 0)
-        # iconsizer.Add(self.m_bitmap1, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-        #
-        # startMainSizer.Add(iconsizer, 1, wx.EXPAND, 5)
-        #
-        # self.gettingStarted.SetSizer(startMainSizer)
-        # self.gettingStarted.Layout()
-        # startMainSizer.Fit(self.gettingStarted)
+# ########################### file popup viewer #####################################################################
+
+class file_viewer(wx.Dialog):
+    def __init__(self, parent, file, title):
+        wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=title, pos=wx.DefaultPosition,
+                           size=wx.Size(-1, -1), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+
+        self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
+
+        file_mainsizer = wx.FlexGridSizer(0, 1, 0, 0)
+        file_mainsizer.SetFlexibleDirection(wx.BOTH)
+        file_mainsizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
+
+        self.file_grid = wx.grid.Grid(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
+
+        # Load file
+        df = pandas.read_csv(file)
+
+        # Grid
+        self.file_grid.CreateGrid(df.shape[0], df.shape[1])
+        self.file_grid.EnableEditing(False)
+        self.file_grid.EnableGridLines(True)
+        self.file_grid.EnableDragGridSize(False)
+        self.file_grid.SetMargins(0, 0)
+
+        # Columns
+        self.file_grid.EnableDragColMove(False)
+        self.file_grid.EnableDragColSize(True)
+        self.file_grid.SetColLabelSize(30)
+        for col, label in enumerate(df.columns):
+            self.file_grid.SetColLabelValue(col,label)
+            for index in df.index:
+                self.file_grid.SetCellValue(index, col, str(df.iloc[index, col]))
+        self.file_grid.AutoSizeColumns()
+        self.file_grid.SetColLabelAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
+
+        # Rows
+        self.file_grid.EnableDragRowSize(True)
+        self.file_grid.SetRowLabelSize(80)
+        self.file_grid.SetRowLabelAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
+
+        # Cell Defaults
+        self.file_grid.SetDefaultCellAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
+        file_mainsizer.Add(self.file_grid, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, 5)
+
+        file_button_sizer = wx.FlexGridSizer(0, 3, 0, 0)
+        file_button_sizer.AddGrowableCol(0)
+        file_button_sizer.SetFlexibleDirection(wx.BOTH)
+        file_button_sizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
+
+        self.spacer_text = wx.StaticText(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
+        self.spacer_text.Wrap(-1)
+        file_button_sizer.Add(self.spacer_text, 0, wx.ALL, 5)
+
+        self.file_ok = wx.Button(self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0)
+        file_button_sizer.Add(self.file_ok, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+
+        file_mainsizer.Add(file_button_sizer, 1, wx.EXPAND, 5)
+
+        self.SetSizer(file_mainsizer)
+        self.Layout()
+        file_mainsizer.Fit(self)
+
+        self.Centre(wx.BOTH)
+
+        # Connect Events
+        self.file_ok.Bind(wx.EVT_BUTTON, self.on_file_ok)
+
+        self.Show()
+
+    def on_file_ok(self,event):
+        self.Hide()
+
 
 # ######################################################################################################################
 

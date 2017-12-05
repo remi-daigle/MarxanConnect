@@ -224,7 +224,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -1715,6 +1715,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.run_marxan_button = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Run Marxan", wx.DefaultPosition, wx.DefaultSize, 0 )
 		run_marxan_sizer.Add( self.run_marxan_button, 0, wx.ALL, 5 )
 		
+		self.view_sum = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"View sum", wx.DefaultPosition, wx.DefaultSize, 0 )
+		run_marxan_sizer.Add( self.view_sum, 0, wx.ALL, 5 )
+		
+		self.view_mvbest = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"View mvbest", wx.DefaultPosition, wx.DefaultSize, 0 )
+		run_marxan_sizer.Add( self.view_mvbest, 0, wx.ALL, 5 )
+		
 		
 		marxanMainSizer.Add( run_marxan_sizer, 1, wx.EXPAND, 5 )
 		
@@ -1722,7 +1728,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", True, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -2162,6 +2168,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.customize_inputdat.Bind( wx.EVT_BUTTON, self.on_inedit )
 		self.inputdat_symmRadio.Bind( wx.EVT_RADIOBOX, self.on_inputdat_symmRadio )
 		self.run_marxan_button.Bind( wx.EVT_BUTTON, self.on_run_marxan )
+		self.view_sum.Bind( wx.EVT_BUTTON, self.on_view_sum )
+		self.view_mvbest.Bind( wx.EVT_BUTTON, self.on_view_mvbest )
 		self.metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice )
 		self.metric_shp_choice1.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice1 )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
@@ -2364,6 +2372,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_run_marxan( self, event ):
+		event.Skip()
+	
+	def on_view_sum( self, event ):
+		event.Skip()
+	
+	def on_view_mvbest( self, event ):
 		event.Skip()
 	
 	def on_metric_shp_choice( self, event ):
