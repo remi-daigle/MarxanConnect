@@ -1,10 +1,9 @@
 name: "MarxanConnect"
 output_dir: "."
 navbar:
-  title: "Marxan Connect"
-  icon: images/icon_MarxanConnect_bg.png
+  title: '<div><img src="images/icon_small.png" height="63"" width="58" style="position:relative;left:0px; top:-10px;"/></div>'
   left:
-    - text: "Home"
+    - text: "Marxan Connect"
       icon: fa-home
       href: index.html
     - text: "Tutorial"
@@ -20,3 +19,11 @@ navbar:
     - text: "Github"
       icon: fa-github
       href: https://github.com/remi-daigle/MarxanConnect
+      
+output:
+  html_document:
+    css: template.css
+    theme: flatly
+    include:
+      after_body: _footer.html
+    self_contained: false
