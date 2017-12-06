@@ -96,8 +96,6 @@ Authors
 -   **Jo Clarke** - *Consultation*
 -   **Maria Beger** - *Consultation*
 
-(alphabetical aside from first author)
-
 See also the list of [contributors](https://github.com/remi-daigle/MarxanConnect/contributors) who participated in this project.
 
 License

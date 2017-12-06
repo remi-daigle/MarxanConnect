@@ -27,4 +27,5 @@ output:
     include:
       in_header: _header.html
       after_body: _footer.html
+    exclude: ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md
     self_contained: false
