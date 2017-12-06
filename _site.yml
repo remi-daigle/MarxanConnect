@@ -25,5 +25,6 @@ output:
     css: template.css
     theme: flatly
     include:
+      in_header: _header.html
       after_body: _footer.html
     self_contained: false
