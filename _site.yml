@@ -1,0 +1,22 @@
+name: "MarxanConnect"
+output_dir: "."
+navbar:
+  title: "Marxan Connect"
+  icon: images/icon_MarxanConnect_bg.png
+  left:
+    - text: "Home"
+      icon: fa-home
+      href: index.html
+    - text: "Tutorial"
+      icon: fa-graduation-cap
+      href: tutorial.html
+    - text: "Glossary"
+      icon: fa-book  
+      href: glossary.html
+    - text: "Contributing"
+      icon: fa-wrench
+      href: CONTRIBUTING.html
+  right:
+    - text: "Github"
+      icon: fa-github
+      href: https://github.com/remi-daigle/MarxanConnect
