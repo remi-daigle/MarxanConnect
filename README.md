@@ -87,14 +87,14 @@ Authors
 =======
 
 -   **Remi Daigle** - *Initial work, development, maintenance* - [remi-daigle](https://github.com/remi-daigle)
--   **Arieanna Balbar** - *Consultation* - [abalbar](https://github.com/abalbar)
--   **Maria Beger** - *Consultation*
--   **Jo Clarke** - *Consultation*
--   **Caitie Kuempel** - *Consultation* - [cdkuempel](https://github.com/cdkuempel)
--   **Jennifer McGowan** - *Consultation*
 -   **Anna Metaxas** - *Consultation*
--   **Hugh Possingham** - *Consultation*
+-   **Arieanna Balbar** - *Consultation* - [abalbar](https://github.com/abalbar)
+-   **Jennifer McGowan** - *Consultation*
 -   **Eric Anton Treml** - *Consultation*
+-   **Caitie Kuempel** - *Consultation* - [cdkuempel](https://github.com/cdkuempel)
+-   **Hugh Possingham** - *Consultation*
+-   **Jo Clarke** - *Consultation*
+-   **Maria Beger** - *Consultation*
 
 (alphabetical aside from first author)
 
