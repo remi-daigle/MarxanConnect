@@ -478,170 +478,170 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.landscape = wx.Panel( self.conn_category_choicebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		landMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		landMainSizer.AddGrowableCol( 0 )
-		landMainSizer.AddGrowableRow( 6 )
-		landMainSizer.AddGrowableRow( 9 )
+		landMainSizer.AddGrowableRow( 0 )
 		landMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		landMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
-		land_cm_def_sizer = wx.BoxSizer( wx.VERTICAL )
+		land_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.land_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can:  1) load a connectivity matrix directly,  2) load a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or  3) load a habitat type shapefile and an optional resistance matrix, which can used to calculate the connectivity matrix via least-cost path or Euclidean distance analysis.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_CM_def.Wrap( -1 )
 		land_cm_def_sizer.Add( self.land_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		self.m_staticText192 = wx.StaticText( self.landscape, wx.ID_ANY, u" 1) load a connectivity matrix directly,", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText192.Wrap( -1 )
-		land_cm_def_sizer.Add( self.m_staticText192, 0, wx.LEFT|wx.RIGHT, 5 )
-		
-		self.m_staticText193 = wx.StaticText( self.landscape, wx.ID_ANY, u" 2) load a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText193.Wrap( -1 )
-		land_cm_def_sizer.Add( self.m_staticText193, 0, wx.LEFT|wx.RIGHT, 5 )
-		
-		self.m_staticText195 = wx.StaticText( self.landscape, wx.ID_ANY, u" 3) load a habitat type shapefile and an optional resistance matrix, which can used to calculate the connectivity matrix via least-cost path or Euclidean distance analysis.", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText195.Wrap( -1 )
-		land_cm_def_sizer.Add( self.m_staticText195, 0, wx.LEFT|wx.RIGHT, 5 )
 		
 		
 		landMainSizer.Add( land_cm_def_sizer, 1, wx.EXPAND, 5 )
 		
-		land_cm_def_sizer1 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.land_CM_def1 = wx.StaticText( self.landscape, wx.ID_ANY, u" Please indicate your connectivity data type in the box below, and fill in the available filenames.", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.land_CM_def1.Wrap( -1 )
-		land_cm_def_sizer1.Add( self.land_CM_def1, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		
-		landMainSizer.Add( land_cm_def_sizer1, 1, wx.EXPAND, 5 )
+		self.land_type_choice = wx.Choicebook( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.CHB_DEFAULT )
+		self.hab_res = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		hab_res_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		hab_res_sizer.AddGrowableCol( 0 )
+		hab_res_sizer.SetFlexibleDirection( wx.BOTH )
+		hab_res_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		land_radio_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
 		land_radio_sizer.AddGrowableCol( 1 )
 		land_radio_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		land_radio_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		land_matrixTypeRadioBoxChoices = [ u"Habitat Type + Resistance", u"Resistance Surface", u"Connectivity Matrix" ]
-		self.land_matrixTypeRadioBox = wx.RadioBox( self.landscape, wx.ID_ANY, u"Landscape Input Type", wx.DefaultPosition, wx.DefaultSize, land_matrixTypeRadioBoxChoices, 3, wx.RA_SPECIFY_COLS )
-		self.land_matrixTypeRadioBox.SetSelection( 0 )
-		land_radio_sizer.Add( self.land_matrixTypeRadioBox, 0, wx.ALIGN_CENTER|wx.ALL|wx.EXPAND, 5 )
-		
 		land_res_matrixTypeRadioBoxChoices = [ u"Least-Cost Path", u"Euclidean Distance" ]
-		self.land_res_matrixTypeRadioBox = wx.RadioBox( self.landscape, wx.ID_ANY, u"Distance Calculation Type", wx.DefaultPosition, wx.DefaultSize, land_res_matrixTypeRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
+		self.land_res_matrixTypeRadioBox = wx.RadioBox( self.hab_res, wx.ID_ANY, u"Distance Calculation Type", wx.DefaultPosition, wx.DefaultSize, land_res_matrixTypeRadioBoxChoices, 2, wx.RA_SPECIFY_COLS )
 		self.land_res_matrixTypeRadioBox.SetSelection( 0 )
 		land_radio_sizer.Add( self.land_res_matrixTypeRadioBox, 0, wx.ALL, 5 )
 		
 		
-		landMainSizer.Add( land_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
+		hab_res_sizer.Add( land_radio_sizer, 1, wx.ALIGN_CENTER, 5 )
 		
 		land_cu_file_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
 		land_cu_file_sizer.AddGrowableCol( 1 )
 		land_cu_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		land_cu_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.land_HAB_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Habitat Type Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_filetext = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat Type Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_HAB_filetext.Wrap( -1 )
 		self.land_HAB_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		
 		land_cu_file_sizer.Add( self.land_HAB_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.land_HAB_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_HAB_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_cu_file_sizer.Add( self.land_HAB_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
-		self.land_HAB_file_hab_id_txt = wx.StaticText( self.landscape, wx.ID_ANY, u"Habitat ID Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_file_hab_id_txt = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat ID Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_HAB_file_hab_id_txt.Wrap( -1 )
 		self.land_HAB_file_hab_id_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
 		land_cu_file_sizer.Add( self.land_HAB_file_hab_id_txt, 0, wx.ALL, 5 )
 		
 		land_HAB_file_hab_idChoices = []
-		self.land_HAB_file_hab_id = wx.Choice( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, land_HAB_file_hab_idChoices, 0 )
+		self.land_HAB_file_hab_id = wx.Choice( self.hab_res, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, land_HAB_file_hab_idChoices, 0 )
 		self.land_HAB_file_hab_id.SetSelection( 0 )
 		self.land_HAB_file_hab_id.SetToolTip( u"The column which contains the habitat names or ID's." )
 		
 		land_cu_file_sizer.Add( self.land_HAB_file_hab_id, 0, wx.ALL, 5 )
 		
-		self.land_HAB_buff_txt = wx.StaticText( self.landscape, wx.ID_ANY, u"Habitat Neighour Buffer", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_buff_txt = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat Neighour Buffer", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_HAB_buff_txt.Wrap( -1 )
 		self.land_HAB_buff_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
 		land_cu_file_sizer.Add( self.land_HAB_buff_txt, 0, wx.ALL, 5 )
 		
-		self.land_HAB_buff = wx.TextCtrl( self.landscape, wx.ID_ANY, u"0.01", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.land_HAB_buff.SetToolTip( u"Buffer distance under which planning units will be considered connected neighbours in the distance calculations. All distance calculations assume travel in straight lines between the centers of neighbouring planning units." )
+		self.land_HAB_buff = wx.TextCtrl( self.hab_res, wx.ID_ANY, u"1", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_buff.SetToolTip( u"Buffer distance (m) under which planning units will be considered connected neighbours in the distance calculations. All distance calculations assume travel in straight lines between the centers of neighbouring planning units." )
 		
 		land_cu_file_sizer.Add( self.land_HAB_buff, 0, wx.ALL, 5 )
 		
 		
-		landMainSizer.Add( land_cu_file_sizer, 1, wx.EXPAND, 5 )
+		hab_res_sizer.Add( land_cu_file_sizer, 1, wx.EXPAND, 5 )
 		
 		land_cu_cm_file_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
 		land_cu_cm_file_sizer.AddGrowableCol( 1 )
 		land_cu_cm_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		land_cu_cm_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.land_RES_mat_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Resistance Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_RES_mat_filetext = wx.StaticText( self.hab_res, wx.ID_ANY, u"Resistance Matrix", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_RES_mat_filetext.Wrap( -1 )
 		self.land_RES_mat_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
 		land_cu_cm_file_sizer.Add( self.land_RES_mat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.land_RES_mat_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_RES_mat_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_cu_cm_file_sizer.Add( self.land_RES_mat_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
-		self.resistance_mat_customize = wx.Button( self.landscape, wx.ID_ANY, u"Customize", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.resistance_mat_customize = wx.Button( self.hab_res, wx.ID_ANY, u"Customize", wx.DefaultPosition, wx.DefaultSize, 0 )
 		land_cu_cm_file_sizer.Add( self.resistance_mat_customize, 0, wx.ALL, 5 )
 		
 		
-		landMainSizer.Add( land_cu_cm_file_sizer, 1, wx.EXPAND, 5 )
+		hab_res_sizer.Add( land_cu_cm_file_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		self.hab_res.SetSizer( hab_res_sizer )
+		self.hab_res.Layout()
+		hab_res_sizer.Fit( self.hab_res )
+		self.land_type_choice.AddPage( self.hab_res, u"Habitat Type + Resistance", True )
+		self.res_suf = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		land_res_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		land_res_sizer.AddGrowableCol( 0 )
+		land_res_sizer.SetFlexibleDirection( wx.BOTH )
+		land_res_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		land_res_txt_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		self.land_res_seperator = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+		self.land_res_seperator = wx.StaticLine( self.res_suf, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		land_res_txt_sizer.Add( self.land_res_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		self.land_res_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Resistance Surface:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_res_text = wx.StaticText( self.res_suf, wx.ID_ANY, u"Resistance Surface:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_res_text.Wrap( -1 )
 		self.land_res_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
 		
 		land_res_txt_sizer.Add( self.land_res_text, 0, wx.ALL, 5 )
 		
 		
-		landMainSizer.Add( land_res_txt_sizer, 1, wx.EXPAND, 5 )
+		land_res_sizer.Add( land_res_txt_sizer, 1, wx.EXPAND, 5 )
 		
 		land_res_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.land_RES_def = wx.StaticText( self.landscape, wx.ID_ANY, u"Resistance surface shapefile description, is shapefile the best format for this (I don't think so). Think about integration with circuitscape output to use cicuit theory instead of least-cost path", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_RES_def = wx.StaticText( self.res_suf, wx.ID_ANY, u"This feature is not yet operational, please check again in the next version.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_RES_def.Wrap( -1 )
 		land_res_def_sizer.Add( self.land_RES_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
-		landMainSizer.Add( land_res_def_sizer, 1, wx.EXPAND, 5 )
+		land_res_sizer.Add( land_res_def_sizer, 1, wx.EXPAND, 5 )
 		
 		land_res_file_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
 		land_res_file_sizer.AddGrowableCol( 1 )
 		land_res_file_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		land_res_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.land_RES_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Resistance Surface Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_RES_filetext = wx.StaticText( self.res_suf, wx.ID_ANY, u"Resistance Surface Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_RES_filetext.Wrap( -1 )
 		self.land_RES_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
 		
 		land_res_file_sizer.Add( self.land_RES_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.land_RES_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_RES_file = wx.FilePickerCtrl( self.res_suf, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_res_file_sizer.Add( self.land_RES_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
-		self.land_res_file_res_id_txt = wx.StaticText( self.landscape, wx.ID_ANY, u"Resistance Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_res_file_res_id_txt = wx.StaticText( self.res_suf, wx.ID_ANY, u"Resistance Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_res_file_res_id_txt.Wrap( -1 )
 		self.land_res_file_res_id_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
 		land_res_file_sizer.Add( self.land_res_file_res_id_txt, 0, wx.ALL, 5 )
 		
 		land_RES_file_res_idChoices = []
-		self.land_RES_file_res_id = wx.Choice( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, land_RES_file_res_idChoices, 0 )
+		self.land_RES_file_res_id = wx.Choice( self.res_suf, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, land_RES_file_res_idChoices, 0 )
 		self.land_RES_file_res_id.SetSelection( 0 )
 		land_res_file_sizer.Add( self.land_RES_file_res_id, 0, wx.ALL, 5 )
 		
 		
-		landMainSizer.Add( land_res_file_sizer, 1, wx.EXPAND, 5 )
+		land_res_sizer.Add( land_res_file_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		self.res_suf.SetSizer( land_res_sizer )
+		self.res_suf.Layout()
+		land_res_sizer.Fit( self.res_suf )
+		self.land_type_choice.AddPage( self.res_suf, u"Resistance Surface", False )
+		self.con_mat = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.land_type_choice.AddPage( self.con_mat, u"Connectivity Matrix", False )
+		landMainSizer.Add( self.land_type_choice, 1, wx.EXPAND, 5 )
 		
 		land_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
 		
@@ -741,7 +741,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 1 )
@@ -749,15 +749,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		metricsMainSizer.SetFlexibleDirection( wx.BOTH )
 		metricsMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		fgSizer65 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		fgSizer65.SetFlexibleDirection( wx.BOTH )
-		fgSizer65.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		metric_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		metric_sizer.SetFlexibleDirection( wx.BOTH )
+		metric_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		self.cf_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Conservation Features", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_txt.Wrap( -1 )
 		self.cf_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
-		fgSizer65.Add( self.cf_txt, 0, wx.ALL, 5 )
+		metric_sizer.Add( self.cf_txt, 0, wx.ALL, 5 )
 		
 		cf_sizer = wx.FlexGridSizer( 4, 3, 0, 0 )
 		cf_sizer.AddGrowableCol( 0 )
@@ -1081,16 +1081,16 @@ class MarxanConnectGUI ( wx.Frame ):
 		cf_sizer.Add( land_cf_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		fgSizer65.Add( cf_sizer, 1, wx.EXPAND, 5 )
+		metric_sizer.Add( cf_sizer, 1, wx.EXPAND, 5 )
 		
 		self.metrics_seperator = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		fgSizer65.Add( self.metrics_seperator, 0, wx.EXPAND |wx.ALL, 5 )
+		metric_sizer.Add( self.metrics_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
 		self.bd_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Boundary Definition", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bd_txt.Wrap( -1 )
 		self.bd_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
-		fgSizer65.Add( self.bd_txt, 0, wx.ALL, 5 )
+		metric_sizer.Add( self.bd_txt, 0, wx.ALL, 5 )
 		
 		bd_sizer = wx.FlexGridSizer( 4, 3, 0, 0 )
 		bd_sizer.AddGrowableCol( 0 )
@@ -1138,29 +1138,48 @@ class MarxanConnectGUI ( wx.Frame ):
 		bd_sizer.Add( land_bd_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		fgSizer65.Add( bd_sizer, 1, wx.EXPAND, 5 )
+		metric_sizer.Add( bd_sizer, 1, wx.EXPAND, 5 )
 		
 		
-		metricsMainSizer.Add( fgSizer65, 1, wx.EXPAND, 5 )
+		metricsMainSizer.Add( metric_sizer, 1, wx.EXPAND, 5 )
 		
-		fgSizer651 = wx.FlexGridSizer( 0, 1, 0, 0 )
-		fgSizer651.AddGrowableCol( 0 )
-		fgSizer651.SetFlexibleDirection( wx.BOTH )
-		fgSizer651.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		metric_help_sizer = wx.FlexGridSizer( 6, 1, 0, 0 )
+		metric_help_sizer.AddGrowableCol( 0 )
+		metric_help_sizer.AddGrowableRow( 2 )
+		metric_help_sizer.AddGrowableRow( 3 )
+		metric_help_sizer.AddGrowableRow( 4 )
+		metric_help_sizer.AddGrowableRow( 5 )
+		metric_help_sizer.SetFlexibleDirection( wx.BOTH )
+		metric_help_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.cf_txt1 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Definition of:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_txt1.Wrap( -1 )
-		self.cf_txt1.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
+		self.metric_text = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Definition of:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_text.Wrap( -1 )
+		self.metric_text.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
-		fgSizer651.Add( self.cf_txt1, 0, wx.ALL, 5 )
+		metric_help_sizer.Add( self.metric_text, 0, wx.ALL, 5 )
 		
-		preEval_metric_choice1Choices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Google Page Rank", u"Self Recruitment", u"Local Retention", u"Outflux", u"Influx", u"Temporal Connectivity Covariance", u"Focus Area Sink", u"Focus Area Source", u"Avoidance Area Sink", u"Avoidance Area Source", u"Connectivity as boundary", u"Minimum Planar Graph" ]
-		self.preEval_metric_choice1 = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, preEval_metric_choice1Choices, 0 )
-		self.preEval_metric_choice1.SetSelection( 0 )
-		fgSizer651.Add( self.preEval_metric_choice1, 0, wx.ALL|wx.EXPAND, 5 )
+		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Google Page Rank", u"Self Recruitment", u"Local Retention", u"Outflux", u"Influx", u"Temporal Connectivity Covariance", u"Focus Area Sink", u"Focus Area Source", u"Avoidance Area Sink", u"Avoidance Area Source", u"Connectivity as boundary", u"Minimum Planar Graph" ]
+		self.metric_definition_choice = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_definition_choiceChoices, 0 )
+		self.metric_definition_choice.SetSelection( 1 )
+		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		self.metric_definition = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Definition: TBD", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_definition.Wrap( -1 )
+		metric_help_sizer.Add( self.metric_definition, 0, wx.ALL, 5 )
+		
+		self.metric_objectives = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Potential Objectives: TBD", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_objectives.Wrap( -1 )
+		metric_help_sizer.Add( self.metric_objectives, 0, wx.ALL, 5 )
+		
+		self.metric_image = wx.StaticBitmap( self.connectivityMetrics, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+		metric_help_sizer.Add( self.metric_image, 0, wx.ALL, 5 )
+		
+		self.metric_equation = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Equation: TBD", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_equation.Wrap( -1 )
+		metric_help_sizer.Add( self.metric_equation, 0, wx.ALL, 5 )
 		
 		
-		metricsMainSizer.Add( fgSizer651, 1, wx.EXPAND, 5 )
+		metricsMainSizer.Add( metric_help_sizer, 1, wx.EXPAND, 5 )
 		
 		self.m_staticText118 = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText118.Wrap( -1 )
@@ -1728,7 +1747,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -2132,7 +2151,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_PU_CM_file )
 		self.demo_rescale_button.Bind( wx.EVT_BUTTON, self.on_demo_rescale_button )
 		self.demo_LP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_demo_LP_file )
-		self.land_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_land_matrixTypeRadioBox )
+		self.land_type_choice.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.on_land_type_choice )
 		self.land_res_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_land_res_matrixTypeRadioBox )
 		self.land_HAB_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_HAB_file )
 		self.land_HAB_file_hab_id.Bind( wx.EVT_CHOICE, self.on_land_HAB_file_hab_id )
@@ -2149,7 +2168,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.bd_demo_min_plan_graph.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_min_plan_graph )
 		self.bd_land_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_land_conn_boundary )
 		self.bd_land_min_plan_graph.Bind( wx.EVT_CHECKBOX, self.on_bd_land_min_plan_graph )
-		self.preEval_metric_choice1.Bind( wx.EVT_CHOICE, self.on_preEval_metric_choice )
+		self.metric_definition_choice.Bind( wx.EVT_CHOICE, self.on_metric_definition_choice )
 		self.calc_metrics.Bind( wx.EVT_BUTTON, self.on_calc_metrics )
 		self.preEval_metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_shp_choice )
 		self.preEval_metric_choice.Bind( wx.EVT_CHOICE, self.on_preEval_metric_choice )
@@ -2270,7 +2289,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_demo_LP_file( self, event ):
 		event.Skip()
 	
-	def on_land_matrixTypeRadioBox( self, event ):
+	def on_land_type_choice( self, event ):
 		event.Skip()
 	
 	def on_land_res_matrixTypeRadioBox( self, event ):
@@ -2319,7 +2338,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_bd_land_min_plan_graph( self, event ):
 		event.Skip()
 	
-	def on_preEval_metric_choice( self, event ):
+	def on_metric_definition_choice( self, event ):
 		event.Skip()
 	
 	def on_calc_metrics( self, event ):
@@ -2328,6 +2347,8 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_preEval_metric_shp_choice( self, event ):
 		event.Skip()
 	
+	def on_preEval_metric_choice( self, event ):
+		event.Skip()
 	
 	def on_plot_freq_metric( self, event ):
 		event.Skip()

@@ -14,8 +14,8 @@ If you would like to report any bugs or request a missing feature, please post a
 Installing
 ==========
 
-Windows Installer:
-------------------
+Windows Installer
+-----------------
 
 (**WARNING! Marxan Connect is in 'alpha' release and is not yet fully operational, download at your own risk**)
 
@@ -31,7 +31,7 @@ Building from source
 
 Building from source is only necessary if you plan to contribute to the project (see [Contributing](https://remi-daigle.github.io/MarxanConnect/#contributing) section below) or if you want to use the bleeding edge version of the app.
 
-Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (*Please note, I could not build the repository using Anaconda*).
+Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (*Please note, I could not build the app using Anaconda*).
 
 -   Download this repository
 -   If necessary, edit the hard coded file paths in [setup.py](https://github.com/remi-daigle/MarxanConnect/blob/master/setup.py) and [WindowsSetupBuilder.iss](https://github.com/remi-daigle/MarxanConnect/blob/master/WindowsSetupBuilder.iss)

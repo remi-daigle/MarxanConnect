@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -72,7 +72,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted(parent=self)
-            frame.Show()
+            # frame.Show()
             # self.project['filepaths'] = {}
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
             # # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
@@ -115,7 +115,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
         self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
         self.project['options']['land_pu_cm_progress'] = self.land_PU_CM_progress.GetValue()
-        self.project['options']['land_conmat_type'] = self.land_matrixTypeRadioBox.GetStringSelection()
+        self.project['options']['land_conmat_type'] = self.land_type_choice.GetLabelText()
         self.project['options']['land_res_matrixType'] = self.land_res_matrixTypeRadioBox.GetStringSelection()
         self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
@@ -168,7 +168,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
-        self.on_land_matrixTypeRadioBox(event=None)
+        self.on_land_type_choice(event=None)
         self.enable_metrics()
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
@@ -226,7 +226,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         self.land_HAB_buff.SetValue(self.project['options']['land_hab_buff'])
         self.land_PU_CM_progress.SetValue(self.project['options']['land_pu_cm_progress'])
-        self.land_matrixTypeRadioBox.SetStringSelection(self.project['options']['land_conmat_type'])
+        self.land_type_choice.SetLabelText(self.project['options']['land_conmat_type'])
 
         self.cf_demo_in_degree.SetValue(self.project['options']['demo_metrics']['in_degree'])
         self.cf_demo_out_degree.SetValue(self.project['options']['demo_metrics']['out_degree'])
@@ -368,6 +368,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['land_metrics']['conn_boundary'] = self.bd_land_conn_boundary.GetValue()
         self.project['options']['land_metrics']['min_plan_graph'] = self.bd_land_min_plan_graph.GetValue()
 
+    def on_save_project(self, event):
+        """
+        save a project, but call 'on_save_project_as' if project file has not previously been defined
+        """
+        if 'projfile' in self.project['filepaths']:
+            self.set_metric_options()
+            with open(self.project['filepaths']['projfile'], 'w') as fp:
+                json.dump(self.project, fp, indent=4, sort_keys=True)
+        else:
+            self.on_save_project_as(event=None)
+
     def on_save_project_as(self, event):
         """
         Create and show the Open FileDialog to save a project
@@ -386,17 +397,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 json.dump(self.project, fp, indent=4, sort_keys=True)
         dlg.Destroy()
         frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
-
-    def on_save_project(self, event):
-        """
-        save a project, but call 'on_save_project_as' if project file has not previously been defined
-        """
-        if 'projfile' in self.project['filepaths']:
-            self.set_metric_options()
-            with open(self.project['filepaths']['projfile'], 'w') as fp:
-                json.dump(self.project, fp, indent=4, sort_keys=True)
-        else:
-            self.on_save_project_as(event=None)
 
 # ########################## html pop-up functions #####################################################################
 
@@ -1150,15 +1150,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_demo_rescale_edgeRadioBox(self, event):
         self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
 
-    def on_land_matrixTypeRadioBox(self, event):
+    def on_land_type_choice(self, event):
         """
         Hides unnecessary options if rescaling is not necessary
         """
         # hide or unhide
-        self.project['options']['land_matrixType'] = self.land_matrixTypeRadioBox.GetStringSelection()
+        self.project['options']['land_matrixType'] = self.land_type_choice.GetPageText(self.land_type_choice.GetSelection())
         if self.project['options']['land_matrixType'] == "Resistance Surface":
             enable_hab = False
             enable_surface = True
+            self.warn_dialog("This feature is not yet operational, please check back in the next version!")
         elif self.project['options']['land_matrixType'] == "Connectivity Matrix":
             enable_hab = False
             enable_surface = False
@@ -1355,10 +1356,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
             pu_filepath=self.project['filepaths']['pu_filepath'],
             pu_id=self.project['filepaths']['pu_file_pu_id'],
+            res_type=self.project['filepaths']['land_res_matrixType'],
             progressbar=self.land_PU_CM_progress.GetValue())
 
         pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
             self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")
+
+    def on_resistance_mat_customize(self,event):
+        file_viewer(parent=self, file=self.project['filepaths']['land_res_mat_filepath'],
+                    title='Resistance Matrix - WARNING CHANGES WILL NOT BE SAVED, check back in the next version!')
 
 # ##########################  metric related functions ################################################################
 
@@ -1844,7 +1850,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_preEval_metric_choice(event=None)
         self.on_new_spec()
 
-
     def on_preEval_create_new(self, event):
         self.temp = {}
         type = self.get_plot_type(selection=self.preEval_metric_shp_choice.GetStringSelection())
@@ -1964,8 +1969,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 45), sum(self.plot.axes.get_ylim()) / 2, 'Median', rotation=90,verticalalignment='center')
         self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 75), label='test',color='k',linestyle='--')
         self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 70), sum(self.plot.axes.get_ylim()) / 2, 'Upper Quartile', rotation=90,verticalalignment='center')
-        # print()
-
         # change selection to plot tab
         for i in range(self.auinotebook.GetPageCount()):
             if self.auinotebook.GetPageText(i) == "7) Plot":

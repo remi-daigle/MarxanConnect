@@ -292,7 +292,7 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
         return [0] * len(conmat_time.id2.unique())
 
 
-def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_filepath, pu_id, progressbar = False):
+def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_filepath, pu_id, res_type, progressbar = False):
     hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
     hab_area = hab.to_crs(get_appropriate_projection(hab,'area')).dissolve(by=hab_id)
@@ -311,7 +311,12 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
     pu_dist['buff'] = pu_dist.geometry.buffer(buff)
 
     habtypes = hab_dist[hab_id].values
-    habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0))
+
+    # habitat resistance
+    if res_type == "Least-Cost Path":
+        habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0))
+    else:
+        habres = numpy.ones([len(habtypes),len(habtypes)])
 
     G = igraph.Graph()
     G.add_vertices([str(i) for i in pu[pu_id]])
