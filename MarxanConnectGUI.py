@@ -753,6 +753,34 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 else:
                     return str(prefix+'_'+str.replace(text,type+' (','')[:-1])
 
+    def on_plot_export_button( self, event ):
+        self.temp = {}
+        self.temp['pu'] = self.spatial['pu_shp']
+        if 'spec_demo_pu' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat(
+                [self.temp['pu'], pandas.DataFrame.from_dict(self.project['connectivityMetrics']['spec_demo_pu'])],
+                axis=1)
+        if 'spec_land_pu' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat(
+                [self.temp['pu'], pandas.DataFrame.from_dict(self.project['connectivityMetrics']['spec_land_pu'])],
+                axis=1)
+        if 'best_solution' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat([self.temp['pu'], pandas.DataFrame.from_dict(
+                {'best_solution': self.project['connectivityMetrics']['best_solution'],
+                 'select_freq': self.project['connectivityMetrics']['select_freq']})],
+                                            axis=1)
+        if 'status' in self.project['connectivityMetrics']:
+            self.temp['pu'] = pandas.concat([self.temp['pu'], pandas.DataFrame.from_dict(
+                {'status': self.project['connectivityMetrics']['status']})],
+                                            axis=1)
+
+        if self.PUSHP_filecheck.GetValue():
+            self.temp['pu'].to_file(self.project['filepaths']['pushp'])
+        if self.PUCSV_filecheck.GetValue():
+            self.temp['pu'].to_csv(self.project['filepaths']['pucsv'])
+        if self.MAP_filecheck.GetValue():
+            self.plot.figure.savefig(self.project['filepaths']['map'])
+
     def get_plot_type(self, selection):
         if selection == "Planning Units":
             type = 'pu'
@@ -808,38 +836,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.spec_resolve_metric_choice('aa_donors_' + type, selection, "Avoidance Area Donors", type,
                                                       gettext=False) or metric_type
         return metric_type
-
-    def on_plot_export_button( self, event ):
-        self.temp = {}
-        self.temp['pu'] = self.spatial['pu_shp']
-        if 'spec_demo_pu' in self.project['connectivityMetrics']:
-            self.temp['pu'] = pandas.concat(
-                [self.temp['pu'], pandas.DataFrame.from_dict(self.project['connectivityMetrics']['spec_demo_pu'])],
-                axis=1)
-        if 'spec_land_pu' in self.project['connectivityMetrics']:
-            self.temp['pu'] = pandas.concat(
-                [self.temp['pu'], pandas.DataFrame.from_dict(self.project['connectivityMetrics']['spec_land_pu'])],
-                axis=1)
-        if 'best_solution' in self.project['connectivityMetrics']:
-            self.temp['pu'] = pandas.concat([self.temp['pu'], pandas.DataFrame.from_dict(
-                {'best_solution': self.project['connectivityMetrics']['best_solution'],
-                 'select_freq': self.project['connectivityMetrics']['select_freq']})],
-                                            axis=1)
-        if 'status' in self.project['connectivityMetrics']:
-            self.temp['pu'] = pandas.concat([self.temp['pu'], pandas.DataFrame.from_dict(
-                {'status': self.project['connectivityMetrics']['status']})],
-                                            axis=1)
-
-        if self.PUSHP_filecheck.GetValue():
-            print('export shape')
-            self.temp['pu'].to_file("self.project['filepaths']['pushp']")
-        if self.PUCSV_filecheck.GetValue():
-            self.temp['pu'].to_csv(self.project['filepaths']['pucsv'])
-            print('export csv')
-            print(self.temp['pu'])
-        if self.MAP_filecheck.GetValue():
-            print(self.project['filepaths']['map'])
-            print('export map')
 
 # ###########################  file management functions ###############################################################
     def on_PU_file(self, event):
