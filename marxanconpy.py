@@ -360,7 +360,8 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
 
     G.write_pickle('test')
     conmat = pandas.DataFrame({'habitat': [], 'id1': [], 'id2': [], 'value': []})
-    area = area.divide(area.values.sum(0))
+    area = area.T.divide(area.values.sum(1)).T
+    area.fillna(0,inplace=True)
     for h in habtypes:
         if progressbar:
             count += int(pu.shape[0]/len(habtypes))
