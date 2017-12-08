@@ -361,17 +361,16 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
     G.write_pickle('test')
     conmat = pandas.DataFrame({'habitat': [], 'id1': [], 'id2': [], 'value': []})
     area = area.T.divide(area.values.sum(1)).T
-    area.fillna(0,inplace=True)
+    area.fillna(0,inplace=True) # remove nan's
+    area[area<0.00001]=0
     for h in habtypes:
         if progressbar:
             count += int(pu.shape[0]/len(habtypes))
             dlg.Update(count)
 
         conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h, mode='OUT'))
-        conmat_temp = conmat_temp * conmat_temp
-
-        # conmat_temp = conmat_temp-conmat_temp.values.min()
-        conmat_temp = abs(conmat_temp / conmat_temp.values.max() - 1)
+        conmat_temp = (1/(conmat_temp * conmat_temp)).replace(numpy.inf,0)
+        conmat_temp = conmat_temp.divide(conmat_temp.sum(axis=1).max())
         conmat_temp = conmat_temp.multiply(area[h], axis=0)
         conmat_temp = conmat_temp.multiply(area[h], axis=1)
         conmat_temp.columns = G.vs['name']

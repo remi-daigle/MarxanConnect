@@ -50,7 +50,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(0)
+        self.auinotebook.ChangeSelection(2)
 
         self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality. If there is no mortality, rows sum to 1")
         self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row). Columns sum to 1.")
@@ -77,7 +77,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
             self.load_project_function()
-            # self.on_land_generate_button(event=None)
+            self.on_land_generate_button(event=None)
 
     def set_icon(self, frame):
         # set the icon
@@ -115,6 +115,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
         self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
         self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
+        self.project['options']['land_hab_thresh'] = self.land_HAB_thresh.GetValue()
         self.project['options']['land_pu_cm_progress'] = self.land_PU_CM_progress.GetValue()
         self.project['options']['land_conmat_type'] = self.land_type_choice.GetPageText(self.land_type_choice.GetSelection())
         self.project['options']['land_res_matrixType'] = self.land_res_matrixTypeRadioBox.GetStringSelection()
@@ -226,6 +227,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_rescale_edgeRadioBox.SetStringSelection(self.project['options']['demo_conmat_rescale_edge'])
 
         self.land_HAB_buff.SetValue(self.project['options']['land_hab_buff'])
+        self.land_HAB_thresh.SetValue(self.project['options']['land_hab_thresh'])
         self.land_PU_CM_progress.SetValue(self.project['options']['land_pu_cm_progress'])
         for i in range(self.land_type_choice.GetPageCount()):
             if self.land_type_choice.GetPageText(i) == self.project['options']['land_conmat_type']:
@@ -910,13 +912,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['land_cu_file_hab_id'] = self.land_HAB_file_hab_id.GetStringSelection()
 
-    def on_land_HAB_buff(self, event):
-        """
-        Defines landscape type connectivity buffer (i.e. the distance between neighbouring planning units at which they
-        will be connected for the least cost path analysis.)
-        """
-        self.project['filepaths']['land_hab_buff'] = self.land_HAB_buff.GetValue()
-
     def on_land_RES_mat_file(self, event):
         """
         Defines landscape habitat resistance matrix file path
@@ -1194,6 +1189,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.resistance_mat_customize.Enable(enable_hab)
         self.land_HAB_buff.Enable(enable_hab)
         self.land_HAB_buff_txt.Enable(enable_hab)
+        self.land_HAB_thresh.Enable(enable_hab)
+        self.land_HAB_thresh_txt.Enable(enable_hab)
         self.land_res_matrixTypeRadioBox.Enable(enable_hab)
 
         self.land_RES_filetext.Enable(enable_surface)
@@ -1216,6 +1213,20 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.land_RES_mat_filetext.Enable(enable_hab)
         self.land_RES_mat_file.Enable(enable_hab)
         self.resistance_mat_customize.Enable(enable_hab)
+
+    def on_land_HAB_buff(self, event):
+        """
+        Defines landscape type connectivity buffer (i.e. the distance between neighbouring planning units at which they
+        will be connected for the least cost path analysis.)
+        """
+        self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
+
+    def on_land_HAB_thresh(self, event):
+        """
+        Threshold under which habitat connectivity values is considered null. Ranges from 0 to 1. Without a threshold,
+         values for in/out degrees, and betweenness centrality will be homogeneous throughout each habitat type.
+        """
+        self.project['options']['land_hab_thresh'] = self.land_HAB_thresh.GetValue()
 
     def on_demo_PU_CM_progress(self, event):
         """
@@ -1452,14 +1463,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 elif self.temp['format'] == "Edge List with Habitat":
                     self.temp[self.type + '_conmat_hab'] = pandas.read_csv(
                         self.project['filepaths'][self.type + '_cm_filepath'])
+                    self.temp[self.type + '_conmat_hab'].loc[self.temp[self.type + '_conmat_hab']['value'] < float(
+                        self.project['options']['land_hab_thresh']),'value'] = 0
+
                     self.temp[self.type + '_conmat'] = {}
                     for h in self.temp[self.type + '_conmat_hab']['habitat'].unique():
                         self.temp[self.type + '_conmat'][h] = self.temp[self.type + '_conmat_hab'][
                             self.temp[self.type + '_conmat_hab']['habitat'] == h].pivot_table(values='value', index='id1',
                                                                                           columns='id2')
 
-                    self.temp[self.type + '_conmat'] = self.temp[
-                        self.type + '_conmat_hab'].to_json(orient='split')
             else:
                 self.warn_dialog(message="File not found: " + self.project['filepaths'][self.type + '_cm_filepath'])
 

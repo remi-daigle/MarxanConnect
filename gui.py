@@ -538,19 +538,37 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		land_cu_file_sizer.Add( self.land_HAB_file_hab_id, 0, wx.ALL, 5 )
 		
+		
+		hab_res_sizer.Add( land_cu_file_sizer, 1, wx.EXPAND, 5 )
+		
+		land_cu_limits_sizer = wx.FlexGridSizer( 0, 4, 0, 0 )
+		land_cu_limits_sizer.SetFlexibleDirection( wx.HORIZONTAL )
+		land_cu_limits_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
 		self.land_HAB_buff_txt = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat Neighour Buffer", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_HAB_buff_txt.Wrap( -1 )
 		self.land_HAB_buff_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		
-		land_cu_file_sizer.Add( self.land_HAB_buff_txt, 0, wx.ALL, 5 )
+		land_cu_limits_sizer.Add( self.land_HAB_buff_txt, 0, wx.ALL, 5 )
 		
 		self.land_HAB_buff = wx.TextCtrl( self.hab_res, wx.ID_ANY, u"1", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_HAB_buff.SetToolTip( u"Buffer distance (m) under which planning units will be considered connected neighbours in the distance calculations. All distance calculations assume travel in straight lines between the centers of neighbouring planning units." )
 		
-		land_cu_file_sizer.Add( self.land_HAB_buff, 0, wx.ALL, 5 )
+		land_cu_limits_sizer.Add( self.land_HAB_buff, 0, wx.ALL, 5 )
+		
+		self.land_HAB_thresh_txt = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat Connectivity Lower Threshold", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_thresh_txt.Wrap( -1 )
+		self.land_HAB_thresh_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+		
+		land_cu_limits_sizer.Add( self.land_HAB_thresh_txt, 0, wx.ALL, 5 )
+		
+		self.land_HAB_thresh = wx.TextCtrl( self.hab_res, wx.ID_ANY, u"0.001", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_HAB_thresh.SetToolTip( u"Threshold under which habitat connectivity values is considered null. Ranges from 0 to 1. Without a threshold, values for in/out degrees, and betweenness centrality will be homogeneous throughout each habitat type." )
+		
+		land_cu_limits_sizer.Add( self.land_HAB_thresh, 0, wx.ALL, 5 )
 		
 		
-		hab_res_sizer.Add( land_cu_file_sizer, 1, wx.EXPAND, 5 )
+		hab_res_sizer.Add( land_cu_limits_sizer, 1, wx.EXPAND, 5 )
 		
 		land_cu_cm_file_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
 		land_cu_cm_file_sizer.AddGrowableCol( 1 )
@@ -2156,6 +2174,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_HAB_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_HAB_file )
 		self.land_HAB_file_hab_id.Bind( wx.EVT_CHOICE, self.on_land_HAB_file_hab_id )
 		self.land_HAB_buff.Bind( wx.EVT_TEXT, self.on_land_HAB_buff )
+		self.land_HAB_thresh.Bind( wx.EVT_TEXT, self.on_land_HAB_thresh )
 		self.land_RES_mat_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_RES_mat_file )
 		self.resistance_mat_customize.Bind( wx.EVT_BUTTON, self.on_resistance_mat_customize )
 		self.land_RES_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_RES_file )
@@ -2302,6 +2321,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_land_HAB_buff( self, event ):
+		event.Skip()
+	
+	def on_land_HAB_thresh( self, event ):
 		event.Skip()
 	
 	def on_land_RES_mat_file( self, event ):
