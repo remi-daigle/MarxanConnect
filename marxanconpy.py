@@ -293,28 +293,33 @@ def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
 
 
 def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_filepath, pu_id, res_type, progressbar = False):
-    hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
-
-    hab_area = hab.to_crs(get_appropriate_projection(hab,'area')).dissolve(by=hab_id)
-    hab_area[hab_id] = hab_area.index.values.astype(str)
-    hab_area = hab_area.reset_index(drop=True)
-
-    hab_dist = hab.to_crs(get_appropriate_projection(hab, 'distance')).dissolve(by=hab_id)
-    hab_dist[hab_id] = hab_dist.index.values.astype(str)
-    hab_dist = hab_dist.reset_index(drop=True)
-
     pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+    pu = pu.sort_values(pu_id)
+    pu = pu.reset_index(drop=True)
 
-    pu_area = pu.to_crs(get_appropriate_projection(pu, 'area'))
+    area_proj = get_appropriate_projection(pu, 'area')
+    dist_proj = get_appropriate_projection(pu, 'distance')
 
-    pu_dist = pu.to_crs(get_appropriate_projection(pu, 'distance'))
+    pu_area = pu.to_crs(area_proj)
+    pu_dist = pu.to_crs(dist_proj)
     pu_dist['buff'] = pu_dist.geometry.buffer(buff)
+
+    hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+    hab['diss'] = hab[hab_id]
+    hab = hab.dissolve(by='diss')
+    hab = hab.reset_index(drop=True)
+    hab.crs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+    hab = hab.sort_values(hab_id)
+
+    hab_area = hab.to_crs(area_proj)
+    hab_dist = hab.to_crs(dist_proj)
+
 
     habtypes = hab_dist[hab_id].values
 
     # habitat resistance
     if res_type == "Least-Cost Path":
-        habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0))
+        habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0).sort_index())
     else:
         habres = numpy.ones([len(habtypes),len(habtypes)])
 
@@ -335,7 +340,7 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
                                 )
         count = 0
 
-    area = pandas.DataFrame(numpy.zeros((len(pu), len(habtypes))), columns=habtypes)
+    area = pandas.DataFrame(numpy.zeros((len(pu), len(habtypes))),index=pu_area[pu_id], columns=habtypes)
     for index1, pu1row in pu_area.iterrows():
         if progressbar:
             count += 1
@@ -352,13 +357,13 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
                     line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.y),
                                                         (pu2row.geometry.centroid.x, pu2row.geometry.centroid.y)])
                     lineinter = numpy.array(hab_dist.intersection(line).length)
-                    if sum(lineinter)>0:
+                    if sum(lineinter)>(line.length*0.5):
                         lineinter = lineinter/sum(lineinter)*line.length
                         weights = dict(zip(habtypes, numpy.multiply(lineinter, habres).sum(1)))
                         dist = pu1row.geometry.centroid.distance(pu2row.geometry.centroid)
                         G.add_edge(str(pu1row[pu_id]), str(pu2row[pu_id]), **weights, distance=dist)
 
-    G.write_pickle('test')
+
     conmat = pandas.DataFrame({'habitat': [], 'id1': [], 'id2': [], 'value': []})
     area = area.T.divide(area.values.sum(1)).T
     area.fillna(0,inplace=True) # remove nan's
@@ -373,11 +378,13 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
         conmat_temp = conmat_temp.divide(conmat_temp.sum(axis=1).max())
         conmat_temp = conmat_temp.multiply(area[h], axis=0)
         conmat_temp = conmat_temp.multiply(area[h], axis=1)
-        conmat_temp.columns = G.vs['name']
-        conmat_temp['id1'] = G.vs['name']
-        conmat_temp['habitat'] = h
-        conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))
-
+        if conmat_temp.values.sum() > 0:
+            conmat_temp.columns = G.vs['name']
+            conmat_temp['id1'] = G.vs['name']
+            conmat_temp['habitat'] = h
+            conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))
+        else:
+            print("Warning: Habitat '"+str(h)+"' has no connectivity between planning units, excluding from further analyses")
     if progressbar:
         count = max
         dlg.Update(count)

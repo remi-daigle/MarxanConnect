@@ -47,10 +47,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(2)
+        self.auinotebook.ChangeSelection(0)
 
         self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality. If there is no mortality, rows sum to 1")
         self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row). Columns sum to 1.")
@@ -72,12 +72,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted(parent=self)
-            # frame.Show()
-            self.project['filepaths'] = {}
-            self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
+            frame.Show()
+            # self.project['filepaths'] = {}
+            # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
-            self.load_project_function()
-            self.on_land_generate_button(event=None)
+            # self.project['filepaths']['projfile'] = "C:\\Users\\Remi-Work\\Desktop\\MarxanConnect\\data\\GBR_demographic_gridded_example\\GBR_demographic_gridded_example.MarCon"
+            # self.load_project_function()
+            # self.on_land_generate_button(event=None)
 
     def set_icon(self, frame):
         # set the icon
@@ -861,6 +862,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_PU_file_pu_id(event=None)
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
+        self.on_FA_file(event=None)
+        self.on_AA_file(event=None)
 
     def on_PU_file_pu_id(self, event):
         """
@@ -1471,6 +1474,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         self.temp[self.type + '_conmat'][h] = self.temp[self.type + '_conmat_hab'][
                             self.temp[self.type + '_conmat_hab']['habitat'] == h].pivot_table(values='value', index='id1',
                                                                                           columns='id2')
+                        if not self.temp[self.type + '_conmat'][h].values.sum()>0:
+                            del self.temp[self.type + '_conmat'][h]
+                            self.warn_dialog("All connectivity values for habitat '"+str(h)+"' are below the Habitat Connectivity Lower Threshold, excluding from further analyses")
 
             else:
                 self.warn_dialog(message="File not found: " + self.project['filepaths'][self.type + '_cm_filepath'])
