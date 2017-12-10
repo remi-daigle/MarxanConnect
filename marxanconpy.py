@@ -15,8 +15,9 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
     pu = gpd.GeoDataFrame.from_file(pu_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
     cu = gpd.GeoDataFrame.from_file(cu_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
-    pu = pu.to_crs(get_appropriate_projection(pu, 'area'))
-    cu = cu.to_crs(get_appropriate_projection(cu, 'area'))
+    proj = get_appropriate_projection(pu, 'area')
+    pu = pu.to_crs(proj)
+    cu = cu.to_crs(proj)
 
     # load cu connectivity matrix
     # load correct demographic matrix and transform if necessary
