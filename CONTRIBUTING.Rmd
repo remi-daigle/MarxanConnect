@@ -14,7 +14,8 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 # Issue Posting Process
 
-1. Use the [Issue Template](https://github.com/remi-daigle/MarxanConnect/blob/master/ISSUE_TEMPLATE.md)
+1. Check the [Issues](https://github.com/remi-daigle/MarxanConnect/issues) before posting to avoid duplication.
+2. Use the [Issue Template](https://github.com/remi-daigle/MarxanConnect/blob/master/ISSUE_TEMPLATE.md).
 
 # Pull Request Process
 
