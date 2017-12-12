@@ -124,6 +124,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
         self.project['options']['metricsCalculated'] = False
         self.set_metric_options()
+        self.project['options']['cf_export'] = self.cf_export_radioBox.GetStringSelection()
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
 
         # set default file paths
@@ -268,6 +269,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
 
+        self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
         self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
 
 
@@ -762,7 +764,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_plot_export_button( self, event ):
         self.temp = {}
-        self.temp['pu'] = self.spatial['pu_shp']
+        self.temp['pu'] = self.spatial['pu_shp'].to_crs("+proj=longlat +datum=WGS84")
         if 'spec_demo_pu' in self.project['connectivityMetrics']:
             self.temp['pu'] = pandas.concat(
                 [self.temp['pu'], pandas.DataFrame.from_dict(self.project['connectivityMetrics']['spec_demo_pu'])],
@@ -1327,7 +1329,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_inputdat_symmRadio(self, event):
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
 
-    # ########################## rescaling and matrix generation ###########################################################
+    def on_cf_export_radioBox( self, event ):
+        self.project['options']['cf_export'] = self.cf_export_radioBox.GetStringSelection()
+
+# ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
         """
         Rescales the connectivity matrix to match the scale of the planning units
@@ -1694,17 +1699,24 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices("pre-eval")
 
     def on_export_metrics(self, event):
-        if not 'spec_demo_pu' in self.project['connectivityMetrics']:
+        cf = {}
+        spec = {}
+        for type in ['spec_demo_pu','spec_land_pu']:
+            if type in self.project['connectivityMetrics']:
+                for k in self.project['connectivityMetrics'][type].keys():
+                    cf[k] = self.project['connectivityMetrics'][type].copy().pop(k)
+
+        spec = pandas.read_json(self.project['spec_dat'], orient='split')
+        if len(cf) == 0:
             self.warn_dialog(message="Conservation features can only be exported for planning units.")
             return
 
         # Export or append feature files
         if self.cf_export_radioBox.GetSelection() == 0:
             # export spec
-            spec = pandas.read_json(self.project['spec_dat'], orient='split')
+
             spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
             # export conservation features
-            cf = self.project['connectivityMetrics']['spec_' + self.type].copy()
             cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
             cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             cf = pandas.merge(cf, spec, how='outer', on='name')
@@ -1718,16 +1730,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
 
             # append spec
-            new_spec = pandas.read_json(self.project['spec_dat'], orient='split')
+            new_spec = spec.copy()
             new_spec['id'] = new_spec['id'] + max(old_spec['id'])
-
+            print(pandas.concat([old_spec, new_spec]))
             pandas.concat([old_spec, new_spec]).fillna(0.0).to_csv(
                 str.replace(self.project['filepaths']['spec_filepath'],
                             ".dat",
                             "_appended.dat")
                 , index=0)
             # append conservation features
-            new_cf = self.project['connectivityMetrics']['spec_' + self.type].copy()
+            new_cf = cf.copy()
             new_cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
             new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
             new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
@@ -1742,39 +1754,25 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.export_pudat_file(pudat_filepath=self.project['filepaths']['pudat_filepath'])
 
     def export_boundary_file(self, BD_filepath):
-        if self.calc_metrics_pu.GetValue():
-            self.type = 'demo_pu'
-        else:
+        self.all_types = []
+        for type in ['demo_pu', 'land_pu']:
+            if 'spec_'+type in self.project['connectivityMetrics']:
+                self.all_types += [type]
+        if len(self.all_types)==0:
             self.warn_dialog(message="Boundary files can only be exported for planning units.")
             return
+        multiple = len(self.project['connectivityMetrics']['boundary'].keys()) > 1
 
-        multiple = [self.bd_demo_conn_boundary.GetValue(),
-                    self.bd_demo_min_plan_graph.GetValue(),
-                    self.bd_land_conn_boundary.GetValue(),
-                    self.bd_land_min_plan_graph.GetValue()
-                    ].count(True) > 1
-
-        # Export each selected boundary definition            
-        if self.bd_demo_conn_boundary.GetValue():
+        for k in self.project['connectivityMetrics']['boundary']:
+            # Export each selected boundary definition
             if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type],
+                pandas.read_json(self.project['connectivityMetrics']['boundary'][k],
                                  orient='split').to_csv(str.replace(BD_filepath,
                                                                     ".dat",
-                                                                    "_conn_boundary_" + self.type + ".dat"),
+                                                                    "_" + k + ".dat"),
                                                         index=False)
             else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type],
-                                 orient='split').to_csv(BD_filepath, index=False)
-
-        if self.bd_demo_min_plan_graph.GetValue():
-            if multiple:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type],
-                                 orient='split').to_csv(str.replace(BD_filepath,
-                                                                    ".dat",
-                                                                    "_min_plan_graph_" + self.type + ".dat"),
-                                                        index=False)
-            else:
-                pandas.read_json(self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type],
+                pandas.read_json(self.project['connectivityMetrics']['boundary'][k],
                                  orient='split').to_csv(BD_filepath, index=False)
 
         # warn when multiple boundary definitions

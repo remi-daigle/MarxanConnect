@@ -224,7 +224,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -474,7 +474,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demographic.SetSizer( demoMainSizer )
 		self.demographic.Layout()
 		demoMainSizer.Fit( self.demographic )
-		self.conn_category_choicebook.AddPage( self.demographic, u"Demographic Input", True )
+		self.conn_category_choicebook.AddPage( self.demographic, u"Demographic Input", False )
 		self.landscape = wx.Panel( self.conn_category_choicebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		landMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		landMainSizer.AddGrowableCol( 0 )
@@ -752,7 +752,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.landscape.SetSizer( landMainSizer )
 		self.landscape.Layout()
 		landMainSizer.Fit( self.landscape )
-		self.conn_category_choicebook.AddPage( self.landscape, u"Landscape Input", False )
+		self.conn_category_choicebook.AddPage( self.landscape, u"Landscape Input", True )
 		conn_input_mainsizer.Add( self.conn_category_choicebook, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -1521,7 +1521,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		cf_export_radioBoxChoices = [ u"Export", u"Append" ]
 		self.cf_export_radioBox = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"Metrics", wx.DefaultPosition, wx.DefaultSize, cf_export_radioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.cf_export_radioBox.SetSelection( 0 )
+		self.cf_export_radioBox.SetSelection( 1 )
 		cf_export_sizer.Add( self.cf_export_radioBox, 0, wx.ALL, 5 )
 		
 		cf_file_export_sizer = wx.FlexGridSizer( 0, 2, 0, 0 )
@@ -1642,7 +1642,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		marxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		marxanMainSizer.AddGrowableCol( 0 )
@@ -2158,6 +2158,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.fa_status_radioBox.Bind( wx.EVT_RADIOBOX, self.on_fa_status_radioBox )
 		self.AA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_AA_file )
 		self.aa_status_radioBox.Bind( wx.EVT_RADIOBOX, self.on_aa_status_radioBox )
+		self.conn_category_choicebook.Bind( wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.on_conn_category_choice )
 		self.demo_matrixTypeRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixTypeRadioBox )
 		self.demo_matrixFormatRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_matrixFormatRadioBox )
 		self.demo_rescaleRadioBox.Bind( wx.EVT_RADIOBOX, self.on_demo_rescaleRadioBox )
@@ -2194,10 +2195,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plot_freq_metric.Bind( wx.EVT_BUTTON, self.on_plot_freq_metric )
 		self.remove_metric.Bind( wx.EVT_BUTTON, self.on_remove_metric )
 		self.preEval_create_new.Bind( wx.EVT_BUTTON, self.on_preEval_create_new )
-		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file )
+		self.cf_export_radioBox.Bind( wx.EVT_RADIOBOX, self.on_cf_export_radioBox )
+		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CF_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
-		self.SPEC_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CT_file_append )
+		self.SPEC_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_SPEC_file )
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
 		self.PUDAT_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUDAT_file )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
@@ -2273,6 +2275,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_aa_status_radioBox( self, event ):
+		event.Skip()
+	
+	def on_conn_category_choice( self, event ):
 		event.Skip()
 	
 	def on_demo_matrixTypeRadioBox( self, event ):
@@ -2381,7 +2386,10 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_preEval_create_new( self, event ):
 		event.Skip()
 	
-	def on_CT_file( self, event ):
+	def on_cf_export_radioBox( self, event ):
+		event.Skip()
+	
+	def on_CF_file( self, event ):
 		event.Skip()
 	
 	def on_CFT_percent_slider( self, event ):
@@ -2390,7 +2398,7 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_customize_spec( self, event ):
 		event.Skip()
 	
-	def on_CT_file_append( self, event ):
+	def on_SPEC_file( self, event ):
 		event.Skip()
 	
 	def on_BD_file( self, event ):
