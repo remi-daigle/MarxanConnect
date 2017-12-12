@@ -82,11 +82,6 @@ tmap_leaflet(p) %>%
               labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"),
               colors = c("#7570b3","#1b9e77","#d95f02"),
               title = "Layers")
-
-library(RColorBrewer)
-
-YlOrRd <- colorRamp(brewer.pal(9,"YlOrRd"))
-YlOrRd(1)
 ```
 
 then the output:
@@ -100,19 +95,17 @@ output <- read.csv('data/GBR_demographic_gridded_example/output/pu.csv') %>%
            aa_included = as.logical(gsub("True",TRUE,.$aa_included)),
            status = as.character(status)) %>% 
     st_as_sf()
-# names(output)
 
 ```
 
 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 map <- leaflet(output) %>% 
     addTiles()
 
 groups <- names(output)[c(-1,-2,-length(names(output)))]
 
 for(i in groups){
-    print(i)
     z <- unlist(data.frame(output)[i])
     if(is.numeric(z)){
         pal <- colorBin("YlOrRd", domain = z)

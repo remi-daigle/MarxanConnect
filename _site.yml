@@ -22,6 +22,8 @@ navbar:
       
 output:
   html_document:
+    fig_width: 8.5
+    fig_height: 6
     css: template.css
     theme: flatly
     include:
