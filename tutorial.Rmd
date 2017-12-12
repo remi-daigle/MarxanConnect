@@ -1,9 +1,173 @@
 ---
 title: "Tutorial"
 output:
-  html_document:
+  html_document: 
+    code_folding: hide
     toc: yes
     toc_float: yes
+bibliography: references.bib
 ---
 
-Coming soon!
+
+# Overview
+
+This page provides an overview of 'how-to' incorporate connectivity into Marxan [@Ball2009-cp], some instructions for using Marxan Connect combined with example of workflows using both demographic and landscape connectivity data.
+
+The maps and plots shown in this tutorial were created in R using the shapefile exported from the "Plotting Options" tab of Marxan Connect. The R code used to make the plots can be revealed by clicking on the `Code` button below 
+
+```{r load packages,message=FALSE, warning=FALSE}
+library(sf)
+library(leaflet)
+library(tmap)
+library(tidyverse)
+
+# set default projection for leaflet
+proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
+```
+
+
+## Using connectivity data as a 'feature'
+
+[@DAloia2017-jp]
+
+
+
+## Using connectivity data as 'boundary definitions'
+
+[@Beger2010-ir]
+
+# Introduction
+
+## Spatial Input
+
+## Connectivity Input
+
+## Connectivity Metrics
+
+## Pre-Evaluation
+
+## Marxan Analysis
+
+## Plotting Options
+
+# Workflow Examples
+
+The following section provides examples of possible workflows. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid.
+
+## Demographic Data
+
+
+Let's see all the input layers:
+
+```{r load all layers,results='hide'}
+# planning units
+pu <- st_read('data/GBR_demographic_gridded_example/hex_planning_units.shp') %>% 
+    st_transform(proj)
+
+# focus areas (IUCN level I or II protected areas)
+fa <- st_read('data/GBR_demographic_gridded_example/IUCN_IorII.shp') %>% 
+    st_transform(proj)
+
+# avoidance areas (ports)
+aa <- st_read('data/GBR_demographic_gridded_example/ports.shp') %>% 
+    st_transform(proj)
+```
+
+```{r}
+p <- qtm(pu,fill = '#7570b3') + 
+    qtm(fa,fill = '#1b9e77') +
+    qtm(aa,fill = '#d95f02')
+tmap_leaflet(p) %>% 
+    addLegend(position = "topright",
+              labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"),
+              colors = c("#7570b3","#1b9e77","#d95f02"),
+              title = "Layers")
+
+library(RColorBrewer)
+
+YlOrRd <- colorRamp(brewer.pal(9,"YlOrRd"))
+YlOrRd(1)
+```
+
+then the output:
+
+```{r}
+# planning units with output
+output <- read.csv('data/GBR_demographic_gridded_example/output/pu.csv') %>% 
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           best_solution = as.logical(best_solution),
+           fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
+           aa_included = as.logical(gsub("True",TRUE,.$aa_included)),
+           status = as.character(status)) %>% 
+    st_as_sf()
+# names(output)
+
+```
+
+
+```{r}
+map <- leaflet(output) %>% 
+    addTiles()
+
+groups <- names(output)[c(-1,-2,-length(names(output)))]
+
+for(i in groups){
+    print(i)
+    z <- unlist(data.frame(output)[i])
+    if(is.numeric(z)){
+        pal <- colorBin("YlOrRd", domain = z)
+    }else{
+        pal <- colorFactor("YlOrRd", domain = z)
+    }
+    
+    map = map %>%
+        addPolygons(fillColor = ~pal(z),
+                    fillOpacity = 0.6,
+                    weight=0.5,
+                    color="white",
+                    group=i,
+                    label = as.character(z)) %>%
+            addLegend(pal = pal,
+                      values = z,
+                      title = i,
+                      group = i,
+                      position="bottomleft") 
+    
+    
+}
+map <- map %>% 
+    addLayersControl(overlayGroups  = groups,
+                     options = layersControlOptions(collapsed = FALSE))
+
+for(i in groups){
+    map <- map %>% hideGroup(i)
+}
+map %>% 
+    showGroup("select_freq")
+```
+
+### Gridded Marxan Analysis
+
+### Feature Based Marxan Analysis
+
+## Landscape Data
+
+
+```{r plot shape,results='hide'}
+habitats <- st_read('data/shapefiles/habitat.shp') %>% 
+    st_transform(proj)
+```
+
+
+```{r}
+p <- tm_shape(habitats) +
+    tm_fill("habitat",title="Habitat Type") 
+tmap_leaflet(p)
+```
+
+
+### Gridded Marxan Analysis
+
+### Feature Based Marxan Analysis
+
+# References

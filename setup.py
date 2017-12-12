@@ -26,6 +26,7 @@ if os.name=='nt':
                                       'matplotlib.backends.backend_tkagg','tkinter','tkinter.filedialog','igraph',
                                       'igraph.vendor.texttable'],
                          'include_files': ['data/','gui.py','glossary.html','tutorial.html','contributing.html',
+                                           'index.html','site_libs/',
                                            os.path.join(os.environ['LOCALAPPDATA'],
                                                         'Programs','Python','Python35','DLLs','tcl86t.dll'),
                                            os.path.join(os.environ['LOCALAPPDATA'],

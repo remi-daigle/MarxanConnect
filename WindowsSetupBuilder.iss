@@ -57,10 +57,4 @@ Root: HKCR; SubKey: ".MarCon"; ValueType: string; ValueData: "MarxanConnectProje
 Root: HKCR; SubKey: "MarxanConnectProject"; ValueType: string; ValueData: "Marxan with Connectivity Project File"; Flags: uninsdeletekey
 Root: HKCR; SubKey: "MarxanConnectProject\Shell\Open\Command"; ValueType: string; ValueData: """{app}\MarxanConnectGUI.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; Subkey: "MarxanConnectProject\DefaultIcon"; ValueType: string; ValueData: "{app}\MarxanConnectGUI.exe,0"; Flags: uninsdeletevalue
-
-[Dirs]
-Name: "{app}\data\shapefiles\"
-Name: "{app}\data\"
-Name: "{app}\data\shapefiles\"
-Name: "{app}\data\"
-Name: "{app}\data\shapefiles\"
+
