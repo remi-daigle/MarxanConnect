@@ -47,7 +47,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -72,7 +72,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             frame = GettingStarted(parent=self)
-            frame.Show()
+            # frame.Show()
             # self.project['filepaths'] = {}
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
@@ -103,8 +103,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # create project list to store project specific data
         self.spatial = {}
         self.project = {}
-        self.project['workingdirectory'] = os.path.expanduser(os.path.join("~", "Documents"))
         self.project['filepaths'] = {}
+        self.workingdirectory = sys.path[0] #os.path.expanduser(os.path.join("~", "Documents"))
         self.project['options'] = {}
 
         # set default options
@@ -128,9 +128,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
 
         # set default file paths
-        pfdir = sys.path[0]
-        docdir = self.project['workingdirectory']
-
         # spatial input
         self.project['filepaths']['pu_filepath'] = ""
         self.project['filepaths']['pu_file_pu_id'] = ""
@@ -152,21 +149,36 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['land_lp_filepath'] = ""
 
         # Marxan metrics files
-        self.project['filepaths']['cf_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "puvspr2.dat")
-        self.project['filepaths']['spec_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "spec.dat")
-        self.project['filepaths']['bd_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "boundary.dat")
-        self.project['filepaths']['pudat_filepath'] = os.path.join(pfdir, "data", "GBR", "input", "pu.dat")
+        self.project['filepaths']['cf_filepath'] = os.path.join("~", "input", "puvspr2.dat")
+        self.project['filepaths']['spec_filepath'] = os.path.join("~", "input", "spec.dat")
+        self.project['filepaths']['bd_filepath'] = os.path.join("~", "input", "boundary.dat")
+        self.project['filepaths']['pudat_filepath'] = os.path.join("~", "input", "pu.dat")
 
         # Marxan analysis
-        self.project['filepaths']['marxan_input'] = os.path.join(pfdir, "data", "GBR", "input.dat")
-        self.project['filepaths']['marxan_dir'] = os.path.join(pfdir, "Marxan243")
+        self.project['filepaths']['marxan_input'] = os.path.join("~", "input.dat")
+        self.project['filepaths']['marxan_dir'] = os.path.join("~", "Marxan243")
 
         # Export plot data
-        self.project['filepaths']['pushp'] = os.path.join(pfdir, "pu.shp")
-        self.project['filepaths']['pucsv'] = os.path.join(pfdir, "pu.csv")
-        self.project['filepaths']['map'] = os.path.join(pfdir, "map.png")
+        self.project['filepaths']['pushp'] = os.path.join("~", "pu.shp")
+        self.project['filepaths']['pucsv'] = os.path.join("~", "pu.csv")
+        self.project['filepaths']['map'] = os.path.join("~", "map.png")
+
+        # if called at launch time, no need to ask users to create a new project file right away
+        if not launch:
+            dlg = wx.FileDialog(self, "Create a new project file:", style=wx.FD_SAVE, wildcard=wc_MarCon)
+            if dlg.ShowModal() == wx.ID_OK:
+                self.project['filepaths']['projfile'] = dlg.GetPath()
+                self.project['filepaths']['projfilename'] = dlg.GetFilename()
+                self.workingdirectory = dlg.GetDirectory()
+                with open(self.project['filepaths']['projfile'], 'w') as fp:
+                    json.dump(self.project, fp, indent=4, sort_keys=True)
+                frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+            dlg.Destroy()
 
         # set default file paths in GUI
+        for p in self.project['filepaths']:
+            self.project['filepaths'][p] = self.project['filepaths'][p].replace("~\\",
+                                                                                self.workingdirectory + "\\")
         self.set_GUI_filepaths()
 
         # trigger functions which enable/disable options
@@ -180,25 +192,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices(2)
         self.colormap_metric_choices("pre-eval")
 
-        # if called at launch time, no need to ask users to create a new project file right away
-        if not launch:
-            dlg = wx.FileDialog(self, "Create a new project file:", style=wx.FD_SAVE, wildcard=wc_MarCon)
-            if dlg.ShowModal() == wx.ID_OK:
-                self.project['filepaths']['projfile'] = dlg.GetPath()
-                self.project['filepaths']['projfilename'] = dlg.GetFilename()
-                self.project['workingdirectory'] = dlg.GetDirectory()
-                with open(self.project['filepaths']['projfile'], 'w') as fp:
-                    json.dump(self.project, fp, indent=4, sort_keys=True)
-                frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
-            dlg.Destroy()
-
     def on_load_project(self, event):
         """
         Create and show the Open FileDialog to load a project
         """
         dlg = wx.FileDialog(
             self, message="Choose a file",
-            defaultDir=self.project['workingdirectory'],
             defaultFile="",
             wildcard=wc_MarCon,
             style=wx.FD_OPEN | wx.FD_CHANGE_DIR
@@ -207,6 +206,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project = {}
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = dlg.GetPath()
+            self.workingdirectory = dlg.GetDirectory()
         dlg.Destroy()
 
         self.load_project_function()
@@ -215,6 +215,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.spatial = {}
         with open(self.project['filepaths']['projfile'], 'r') as fp:
             self.project = json.loads(fp.read())
+
+        for p in self.project['filepaths']:
+            if p != "working_directory":
+                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
+                    "~\\",self.workingdirectory + "\\")
 
         self.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
@@ -383,8 +388,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         if 'projfile' in self.project['filepaths']:
             self.set_metric_options()
-            with open(self.project['filepaths']['projfile'], 'w') as fp:
+            self.projfile = self.project['filepaths']['projfile']
+            for p in self.project['filepaths']:
+                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
+                    self.workingdirectory + "\\", "~\\")
+            with open(self.projfile, 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
+            for p in self.project['filepaths']:
+                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
+                    "~\\",self.workingdirectory + "\\")
         else:
             self.on_save_project_as(event=None)
 
@@ -394,16 +406,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         dlg = wx.FileDialog(
             self, message="Save file as ...",
-            defaultDir=self.project['workingdirectory'],
+            defaultDir=self.workingdirectory,
             defaultFile="", wildcard=wc_MarCon, style=wx.FD_SAVE
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.project['filepaths']['projfilename'] = dlg.GetFilename()
-            self.project['workingdirectory'] = dlg.GetDirectory()
+            self.workingdirectory = dlg.GetDirectory()
             self.set_metric_options()
-            with open(self.project['filepaths']['projfile'], 'w') as fp:
+            self.projfile = self.project['filepaths']['projfile']
+            for p in self.project['filepaths']:
+                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
+                    self.workingdirectory + "\\", "~\\")
+            with open(self.projfile, 'w') as fp:
                 json.dump(self.project, fp, indent=4, sort_keys=True)
+            for p in self.project['filepaths']:
+                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
+                    "~\\", self.workingdirectory + "\\")
         dlg.Destroy()
         frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
@@ -1781,42 +1800,43 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                      " edited to include type.", caption="Warning!")
 
     def lock_pudat(self, pudat_filepath):
-        self.temp = {}
-        self.temp['pudat'] = pandas.read_csv(pudat_filepath)
-        if os.path.isfile(self.project['filepaths']['fa_filepath']):
-            if self.fa_status_radioBox.GetStringSelection() == "Locked out":
-                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 3
-            if self.fa_status_radioBox.GetStringSelection() == "Locked in":
-                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 2
+        if os.path.isfile(self.project['filepaths']['pudat_filepath']):
+            self.temp = {}
+            self.temp['pudat'] = pandas.read_csv(pudat_filepath)
+            if os.path.isfile(self.project['filepaths']['fa_filepath']):
+                if self.fa_status_radioBox.GetStringSelection() == "Locked out":
+                    self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 3
+                if self.fa_status_radioBox.GetStringSelection() == "Locked in":
+                    self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 2
 
-        if os.path.isfile(self.project['filepaths']['aa_filepath']):
-            if self.aa_status_radioBox.GetStringSelection() == "Locked out":
-                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['aa_included']), 'status'] = 3
-            if self.aa_status_radioBox.GetStringSelection() == "Locked in":
-                self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['aa_included']), 'status'] = 2
+            if os.path.isfile(self.project['filepaths']['aa_filepath']):
+                if self.aa_status_radioBox.GetStringSelection() == "Locked out":
+                    self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['aa_included']), 'status'] = 3
+                if self.aa_status_radioBox.GetStringSelection() == "Locked in":
+                    self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['aa_included']), 'status'] = 2
 
-        self.temp['all_metrics'] = []
-        if 'connectivityMetrics' in self.project:
-            if 'spec_demo_pu' in self.project['connectivityMetrics']:
-                self.temp['all_metrics'] += self.project['connectivityMetrics']['spec_demo_pu']
-            if 'spec_land_pu' in self.project['connectivityMetrics']:
-                self.temp['all_metrics'] += self.project['connectivityMetrics']['spec_land_pu']
+            self.temp['all_metrics'] = []
+            if 'connectivityMetrics' in self.project:
+                if 'spec_demo_pu' in self.project['connectivityMetrics']:
+                    self.temp['all_metrics'] += self.project['connectivityMetrics']['spec_demo_pu']
+                if 'spec_land_pu' in self.project['connectivityMetrics']:
+                    self.temp['all_metrics'] += self.project['connectivityMetrics']['spec_land_pu']
 
-        for self.temp['metric'] in self.temp['all_metrics']:
-            if 'demo_pu' in self.temp['metric']:
-                self.temp['metric_values'] = self.project['connectivityMetrics']['spec_demo_pu'][self.temp['metric']]
-            if 'land_pu' in self.temp['metric']:
-                self.temp['metric_values'] = self.project['connectivityMetrics']['spec_land_pu'][self.temp['metric']]
+            for self.temp['metric'] in self.temp['all_metrics']:
+                if 'demo_pu' in self.temp['metric']:
+                    self.temp['metric_values'] = self.project['connectivityMetrics']['spec_demo_pu'][self.temp['metric']]
+                if 'land_pu' in self.temp['metric']:
+                    self.temp['metric_values'] = self.project['connectivityMetrics']['spec_land_pu'][self.temp['metric']]
 
-            if self.temp['metric'].endswith('lockout'):
-                self.temp['pudat'].loc[numpy.array(self.temp['metric_values']) != 0, 'status'] = 3
-            if self.temp['metric'].endswith('lockin'):
-                self.temp['pudat'].loc[numpy.array(self.temp['metric_values']) != 0, 'status'] = 2
+                if self.temp['metric'].endswith('lockout'):
+                    self.temp['pudat'].loc[numpy.array(self.temp['metric_values']) != 0, 'status'] = 3
+                if self.temp['metric'].endswith('lockin'):
+                    self.temp['pudat'].loc[numpy.array(self.temp['metric_values']) != 0, 'status'] = 2
 
-            self.project['connectivityMetrics']['status'] = self.temp['pudat']['status'].tolist()
-            self.colormap_shapefile_choices()
-            self.colormap_metric_choices(1)
-            self.colormap_metric_choices(2)
+                self.project['connectivityMetrics']['status'] = self.temp['pudat']['status'].tolist()
+                self.colormap_shapefile_choices()
+                self.colormap_metric_choices(1)
+                self.colormap_metric_choices(2)
 
     def export_pudat_file(self, pudat_filepath):
         self.lock_pudat(pudat_filepath)
