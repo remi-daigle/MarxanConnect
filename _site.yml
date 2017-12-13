@@ -15,6 +15,9 @@ navbar:
     - text: "Contributing"
       icon: fa-wrench
       href: CONTRIBUTING.html
+    - text: "Code of Conduct"
+      icon: fa-balance-scale
+      href: CODE_OF_CONDUCT.html
   right:
     - text: "Github"
       icon: fa-github
