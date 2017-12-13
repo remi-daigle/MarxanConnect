@@ -179,8 +179,10 @@ tmap_leaflet(p) %>%
 
 The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics as well as the definition of new boundaries based on the strength of the connection (i.e. the number of exchanged individuals) as opposed to the physical length of a shared boundary.
 
+For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653
+
 ```{r}
-spec <- read.csv("data/GBR_demographic_gridded_example/connectivity_matrix.csv")
+conmat <- read.csv("data/GBR_demographic_gridded_example/connectivity_matrix.csv")[1:7,1:7]
 datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 ```
 
