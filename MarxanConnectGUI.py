@@ -107,6 +107,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         open a new project and name/save a new project file
         """
         # create project list to store project specific data
+        self.spatial = {}
         self.project = {}
         self.project['filepaths'] = {}
         self.workingdirectory = sys.path[0] #os.path.expanduser(os.path.join("~", "Documents"))
@@ -460,7 +461,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
 
     def on_about(self, event):
-        dlg = wx.MessageBox(message="Version: v0.0.2\n(C) 2017 Remi Daigle\n",
+        dlg = wx.MessageBox(message="Version: v0.0.5\n(C) 2017 Remi Daigle\n",
                             caption="About Marxan with Connectivity",
                             style=wx.OK)
         dlg.Destroy()
@@ -879,7 +880,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.temp = {}
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
         if os.path.isfile(self.project['filepaths']['pu_filepath']):
-            self.spatial['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])
+            self.spatial['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+            self.spatial['pu_proj'] = marxanconpy.get_appropriate_projection(self.spatial['pu_shp'], 'area')
+            self.spatial['pu_shp'] = self.spatial['pu_shp'].to_crs(self.spatial['pu_proj'])
             self.temp['items'] = list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']))
             self.PU_file_pu_id.SetItems(self.temp['items'])
             if self.project['filepaths']['pu_file_pu_id'] in self.temp['items']:
@@ -1023,13 +1026,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['fa_filepath'] = self.FA_file.GetPath()
         if os.path.isfile(self.project['filepaths']['fa_filepath']):
             if 'pu_shp' in self.spatial:
-                self.spatial['fa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['fa_filepath'])
+                self.spatial['fa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['fa_filepath']).to_crs(self.spatial['pu_proj'])
                 self.spatial['fa_shp']['diss'] = 1
                 self.spatial['fa_shp'] = self.spatial['fa_shp'].dissolve(by='diss')
                 self.spatial['pu_shp']['fa_included'] = 0
                 for index, purow in self.spatial['pu_shp'].iterrows():
                     self.spatial['pu_shp'].loc[index,'fa_included'] = self.spatial[
                         'fa_shp'].geometry.intersects(purow.geometry).bool()
+                print(self.spatial['pu_shp']['fa_included'].values.sum())
         # enable metrics
         self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.enable_metrics()
@@ -1041,12 +1045,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['aa_filepath'] = self.AA_file.GetPath()
         if os.path.isfile(self.project['filepaths']['aa_filepath']):
             if 'pu_shp' in self.spatial:
-                self.spatial['aa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['aa_filepath'])
+                self.spatial['aa_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['aa_filepath']).to_crs(self.spatial['pu_proj'])
                 self.spatial['aa_shp']['diss'] = 1
                 self.spatial['aa_shp'] = self.spatial['aa_shp'].dissolve(by='diss')
                 self.spatial['pu_shp']['aa_included'] = 0
                 for index, purow in self.spatial['pu_shp'].iterrows():
                     self.spatial['pu_shp'].loc[index,'aa_included'] = self.spatial['aa_shp'].geometry.intersects(purow.geometry).bool()
+                print(self.spatial['pu_shp']['aa_included'].values.sum())
         # enable metrics
         self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.enable_metrics()
