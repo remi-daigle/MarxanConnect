@@ -183,7 +183,7 @@ For the sake of you web browser, this table only contains the 7 row and columns 
 
 ```{r}
 conmat <- read.csv("data/GBR_demographic_gridded_example/connectivity_matrix.csv")[1:7,1:7]
-datatable(spec,rownames = FALSE, options = list(searching = FALSE))
+datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 In this example we've chosen to append the new connectivity based conservation metrics to the existing Marxan files.
