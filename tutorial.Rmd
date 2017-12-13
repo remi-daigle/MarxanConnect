@@ -57,6 +57,8 @@ The following section provides examples of possible workflows. It is important t
 
 ## Demographic Data
 
+Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/data/GBR_demographic_gridded_example)
+
 
 Let's see all the input layers:
 

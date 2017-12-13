@@ -3,19 +3,22 @@ import sys
 import os
 from cx_Freeze import setup, Executable
 
+version = "v0.0.4"
+
+# Read in the file
+with open('gui.py', 'r', encoding="utf8") as file :
+  filedata = file.read()
+
+# Replace the target string
+filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
+filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
+
+# Write the file out again
+with open('gui.py', 'w', encoding="utf8") as file:
+  file.write(filedata)
+
 if os.name=='nt':
     # editing out deprecated functions in gui.py
-    # Read in the file
-    with open('gui.py', 'r', encoding="utf8") as file :
-      filedata = file.read()
-
-    # Replace the target string
-    filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
-    filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
-
-    # Write the file out again
-    with open('gui.py', 'w', encoding="utf8") as file:
-      file.write(filedata)
 
     # prep for cx_Freeze
     os.environ['TCL_LIBRARY'] = os.path.join(os.environ['LOCALAPPDATA'],'Programs','Python','Python35','tcl','tcl8.6')
@@ -39,7 +42,7 @@ if os.name=='nt':
         base = 'Win32GUI'
 
     setup(name = 'MarxanConnectGUI' ,
-          version = '0.0.4' ,
+          version = version ,
           description = '' ,
           options = {'build_exe': build_exe_options},
           executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'images','icon_bundle.ico'))])
@@ -54,7 +57,7 @@ else:
     mac_options = {'iconfile': os.path.join(sys.path[0], 'icon_mac.icns')}
 
     setup(name='MarxanConnectGUI',
-          version='0.0.4',
+          version=version,
           description='',
           options={'build_exe': build_exe_options,
                    'bdist_mac': mac_options},

@@ -37,6 +37,10 @@ wc_MarCon = "Marxan with Connectivity Project (*.MarCon)|*.MarCon|" \
             "All files (*.*)|*.*"
 
 
+if len(sys.argv) > 1:
+    os.chdir(os.path.dirname(sys.argv[0]))
+print(os.getcwd())
+
 class MarxanConnectGUI(gui.MarxanConnectGUI):
     def __init__(self, parent):
         """
@@ -47,7 +51,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -62,17 +66,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # Either load or launch new project
         if len(sys.argv) > 1:
+            self.spatial = {}
             self.project = {}
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = str(sys.argv[1])
+            self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
             self.load_project_function()
         else:
             # launch a blank new project
             self.on_new_project(event=None, launch=True)
 
             # launch Getting started window
-            frame = GettingStarted(parent=self)
-            # frame.Show()
+            GettingStartedframe = GettingStarted(parent=self)
+            GettingStartedframe.Show()
             # self.project['filepaths'] = {}
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
@@ -101,7 +107,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         open a new project and name/save a new project file
         """
         # create project list to store project specific data
-        self.spatial = {}
         self.project = {}
         self.project['filepaths'] = {}
         self.workingdirectory = sys.path[0] #os.path.expanduser(os.path.join("~", "Documents"))
@@ -460,10 +465,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                             style=wx.OK)
         dlg.Destroy()
 
-    def on_GettingStarted (self, event):
+    def on_getting_started (self, event):
         # insert getting started tab and hyperlinks (wxFormBuilder can't handle hyperlinks)
-        frame = GettingStarted (parent=self)
-        frame.Show()
+        print('getting started')
+        GettingStartedframeframe = GettingStarted (parent=self)
+        GettingStartedframeframe.Show()
 
 # ##########################  warning functions ########################################################################
     def warn_dialog(self, message, caption="Warning!"):
