@@ -33,13 +33,12 @@ import json
 import marxanconpy
 
 # define wildcards
-wc_MarCon = "Marxan with Connectivity Project (*.MarCon)|*.MarCon|" \
+wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
             "All files (*.*)|*.*"
 
 
 if len(sys.argv) > 1:
     os.chdir(os.path.dirname(sys.argv[0]))
-print(os.getcwd())
 
 class MarxanConnectGUI(gui.MarxanConnectGUI):
     def __init__(self, parent):
@@ -253,6 +252,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_eig_vect_cent.SetValue(self.project['options']['demo_metrics']['eig_vect_cent'])
         self.cf_demo_google.SetValue(self.project['options']['demo_metrics']['google'])
         self.cf_demo_self_recruit.SetValue(self.project['options']['demo_metrics']['self_recruit'])
+        self.cf_demo_local_retention.SetValue(self.project['options']['demo_metrics']['local_retention'])
         self.cf_demo_outflux.SetValue(self.project['options']['demo_metrics']['outflux'])
         self.cf_demo_influx.SetValue(self.project['options']['demo_metrics']['influx'])
         self.cf_demo_stochasticity.SetValue(self.project['options']['demo_metrics']['stochasticity'])
@@ -363,6 +363,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_metrics']['eig_vect_cent'] = self.cf_demo_eig_vect_cent.GetValue()
         self.project['options']['demo_metrics']['google'] = self.cf_demo_google.GetValue()
         self.project['options']['demo_metrics']['self_recruit'] = self.cf_demo_self_recruit.GetValue()
+        self.project['options']['demo_metrics']['local_retention'] = self.cf_demo_local_retention.GetValue()
         self.project['options']['demo_metrics']['outflux'] = self.cf_demo_outflux.GetValue()
         self.project['options']['demo_metrics']['influx'] = self.cf_demo_influx.GetValue()
         self.project['options']['demo_metrics']['stochasticity'] = self.cf_demo_stochasticity.GetValue()
@@ -461,14 +462,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
 
     def on_about(self, event):
-        dlg = wx.MessageBox(message="Version: v0.0.5\n(C) 2017 Remi Daigle\n",
+        dlg = wx.MessageBox(message="Version: v0.0.4\n(C) 2017 Remi Daigle\n",
                             caption="About Marxan with Connectivity",
                             style=wx.OK)
         dlg.Destroy()
 
     def on_getting_started (self, event):
         # insert getting started tab and hyperlinks (wxFormBuilder can't handle hyperlinks)
-        print('getting started')
         GettingStartedframeframe = GettingStarted (parent=self)
         GettingStartedframeframe.Show()
 
@@ -856,6 +856,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('self_recruit_' + type, selection, "Self Recruitment", type,
                                                       gettext=False) or metric_type
+        metric_type = self.spec_resolve_metric_choice('local_retention_' + type, selection, "Local Retention", type,
+                                                      gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('outflux_' + type, selection, "Outflux", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('influx_' + type, selection, "Influx", type,
@@ -1033,7 +1035,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 for index, purow in self.spatial['pu_shp'].iterrows():
                     self.spatial['pu_shp'].loc[index,'fa_included'] = self.spatial[
                         'fa_shp'].geometry.intersects(purow.geometry).bool()
-                print(self.spatial['pu_shp']['fa_included'].values.sum())
         # enable metrics
         self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.enable_metrics()
@@ -1051,7 +1052,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.spatial['pu_shp']['aa_included'] = 0
                 for index, purow in self.spatial['pu_shp'].iterrows():
                     self.spatial['pu_shp'].loc[index,'aa_included'] = self.spatial['aa_shp'].geometry.intersects(purow.geometry).bool()
-                print(self.spatial['pu_shp']['aa_included'].values.sum())
         # enable metrics
         self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.enable_metrics()
@@ -1292,6 +1292,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 demo_fa_enable = False
                 demo_fa_time_enable = False
 
+            if self.demo_matrixTypeRadioBox.GetStringSelection() == "Probability":
+                demo_prob_enable = True
+            else:
+                demo_prob_enable = False
+            if self.demo_matrixTypeRadioBox.GetStringSelection() == "Migration":
+                demo_mig_enable = True
+            else:
+                demo_mig_enable = False
             if self.demo_matrixTypeRadioBox.GetStringSelection() == "Flux":
                 demo_ind_enable = True
             else:
@@ -1305,6 +1313,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             demo_enable = False
             demo_fa_enable = False
             demo_fa_time_enable = False
+            demo_prob_enable = False
+            demo_mig_enable = False
             demo_ind_enable = False
             demo_aa_enable = False
 
@@ -1330,7 +1340,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_between_cent.Enable(enable=demo_enable)
         self.cf_demo_eig_vect_cent.Enable(enable=demo_enable)
         self.cf_demo_google.Enable(enable=demo_enable)
-        self.cf_demo_self_recruit.Enable(enable=demo_enable)
+        self.cf_demo_self_recruit.Enable(enable=demo_mig_enable)
+        self.cf_demo_local_retention.Enable(enable=demo_prob_enable)
         self.cf_demo_outflux.Enable(enable=demo_ind_enable)
         self.cf_demo_influx.Enable(enable=demo_ind_enable)
         self.cf_demo_stochasticity.Enable(enable=demo_fa_time_enable)
@@ -1574,6 +1585,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['spec_' + self.type]['self_recruit_' + self.type] = \
                         marxanconpy.conmat2selfrecruit(self.temp[self.type + '_conmat'])
 
+                if self.cf_demo_local_retention.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['local_retention_' + self.type] = \
+                        marxanconpy.conmat2selfrecruit(self.temp[self.type + '_conmat'])
+
                 if self.cf_demo_outflux.GetValue():
                     self.project['connectivityMetrics']['spec_' + self.type]['outflux_' + self.type] = \
                         marxanconpy.conmat2outflux(self.temp[self.type + '_conmat'])
@@ -1636,7 +1651,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         self.warn_dialog(message="No 'Focus Area' has been specified. Please load a focus area file in "
                                                  "the Spatial Input tab")
                         return
-
 
                 if self.bd_demo_conn_boundary.GetValue():
                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
@@ -1762,7 +1776,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # append spec
             new_spec = spec.copy()
             new_spec['id'] = new_spec['id'] + max(old_spec['id'])
-            print(pandas.concat([old_spec, new_spec]))
             pandas.concat([old_spec, new_spec]).fillna(0.0).to_csv(
                 str.replace(self.project['filepaths']['spec_filepath'],
                             ".dat",

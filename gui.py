@@ -43,7 +43,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.github = wx.MenuItem( self.debug, wx.ID_ANY, u"GitHub issues", wx.EmptyString, wx.ITEM_NORMAL )
 		self.debug.Append( self.github )
 		
-		self.debug_mode = wx.MenuItem( self.debug, wx.ID_ANY, u"Debug Mode", wx.EmptyString, wx.ITEM_NORMAL )
+		self.debug_mode = wx.MenuItem( self.debug, wx.ID_ANY, u"Debug Mode"+ u"\t" + u"Ctrl+D", wx.EmptyString, wx.ITEM_NORMAL )
 		self.debug.Append( self.debug_mode )
 		
 		self.menu.Append( self.debug, u"Debug" ) 
@@ -822,6 +822,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
+		self.cf_demo_local_retention = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Local Retention", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_local_retention.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
+		
+		demo_cf_sizer.Add( self.cf_demo_local_retention, 0, wx.ALL, 5 )
+		
 		self.cf_demo_influx_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_demo_influx_panel.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants/elements. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
 		
@@ -985,6 +990,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cf_land_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		land_cf_sizer.Add( self.cf_land_self_recruit, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
+		
+		self.cf_demo_land_retention1 = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Local Retention", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_land_retention1.Hide()
+		self.cf_demo_land_retention1.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
+		
+		land_cf_sizer.Add( self.cf_demo_land_retention1, 0, wx.ALL, 5 )
 		
 		self.cf_land_import_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.cf_land_import_panel.Hide()
@@ -1189,7 +1200,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_objectives.Wrap( -1 )
 		metric_help_sizer.Add( self.metric_objectives, 0, wx.ALL, 5 )
 		
-		self.metric_image = wx.StaticBitmap( self.connectivityMetrics, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.metric_image = wx.StaticBitmap( self.connectivityMetrics, wx.ID_ANY, wx.Bitmap( u"images/icon_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		metric_help_sizer.Add( self.metric_image, 0, wx.ALL, 5 )
 		
 		self.metric_equation = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Equation: TBD", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -2634,7 +2645,7 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Clarke, J; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Clarke, J; Beger, M. 2018. Marxan Connect v0.0.4. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
 		
