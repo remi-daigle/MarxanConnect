@@ -341,7 +341,68 @@ div.tocify {
 </div>
 
 
+<div id="in-degree" class="section level2">
+<h2><span class="header-section-number">0.1</span> In Degree</h2>
+<p><span class="math display">\[\displaystyle{BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}\]</span></p>
+<p><img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}"></p>
+<div class="figure">
+<embed src="http://www.sciweavers.org/tex2img.php?eq=1%2Bsin%28mc%5E2%29&amp;bc=White&amp;fc=Black&amp;im=jpg&amp;fs=12&amp;ff=arev&amp;edit=" />
+<p class="caption">equation</p>
+</div>
+<div class="figure">
+<embed src="https://latex.codecogs.com/svg.latex?x%3D%5Cfrac%7B-b%5Cpm%5Csqrt%7Bb%5E2-4ac%7D%7D%7B2a%7D" />
+<p class="caption">x=</p>
+</div>
+</div>
+<div id="out-degree" class="section level2">
+<h2><span class="header-section-number">0.2</span> Out Degree</h2>
+</div>
+<div id="betweenness-centrality" class="section level2">
+<h2><span class="header-section-number">0.3</span> Betweenness Centrality</h2>
+<p>The betweenness centrality of planning unit <span class="math inline">\({\displaystyle v}\)</span> (<span class="math inline">\({\displaystyle BC(v)}\)</span>) in a graph <span class="math inline">\({\displaystyle G:=(V,E)}\)</span> with <span class="math inline">\({\displaystyle V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({\displaystyle E}\)</span> edges (<em>i.e.</em> connections) is</p>
+<p><span class="math inline">\(\displaystyle{BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}\)</span></p>
+<p>where <span class="math inline">\({\displaystyle \sigma _{st}}\)</span> is total number of shortest paths from planning unit <span class="math inline">\({\displaystyle s}\)</span> to planning unit <span class="math inline">\({\displaystyle t}\)</span> and <span class="math inline">\({\displaystyle \sigma _{st}(v)}\)</span> is the number of those paths that pass through <span class="math inline">\({\displaystyle v}\)</span>.</p>
+</div>
+<div id="eigenvector-centrality" class="section level2">
+<h2><span class="header-section-number">0.4</span> Eigenvector Centrality</h2>
+<p>The Eigenvector centrality of planning unit <span class="math inline">\({\displaystyle v}\)</span> (<span class="math inline">\({\displaystyle EVC(v)}\)</span>) in a graph <span class="math inline">\({\displaystyle G:=(V,E)}\)</span> with <span class="math inline">\({\displaystyle V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({\displaystyle E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({\displaystyle A=(a_{v,t})}\)</span> be the adjacency matrix</p>
+<p><span class="math inline">\({\displaystyle EVC(v) = \frac{1}{\lambda} \sum_{t \in M(v)}x_t = \frac{1}{\lambda} \sum_{t \in G} a_{v,t}}\)</span></p>
+<p>where <span class="math inline">\({\displaystyle \lambda }\)</span> is the leading eigenvalue.</p>
+</div>
+<div id="google-pagerank" class="section level2">
+<h2><span class="header-section-number">0.5</span> Google PageRank</h2>
+<p>The Google PageRank centrality of planning unit <span class="math inline">\({\displaystyle v}\)</span> (<span class="math inline">\({\displaystyle PRC(v)}\)</span>) in a graph <span class="math inline">\({\displaystyle G:=(V,E)}\)</span> with <span class="math inline">\({\displaystyle V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({\displaystyle E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({\displaystyle A=(a_{v,t})}\)</span> be the adjacency matrix</p>
+<p><span class="math inline">\({\displaystyle PRC(v) = (1-d) + d\sum{}\)</span></p>
+<p>where <span class="math inline">\({\displaystyle \lambda }\)</span> is the leading eigenvalue.</p>
+</div>
+<div id="self-recruitment" class="section level2">
+<h2><span class="header-section-number">0.6</span> Self Recruitment</h2>
+</div>
+<div id="local-retention" class="section level2">
+<h2><span class="header-section-number">0.7</span> Local Retention</h2>
+</div>
+<div id="influx" class="section level2">
+<h2><span class="header-section-number">0.8</span> Influx</h2>
+</div>
+<div id="outflux" class="section level2">
+<h2><span class="header-section-number">0.9</span> Outflux</h2>
+</div>
+<div id="temporal-connectivity-covariance" class="section level2">
+<h2><span class="header-section-number">0.10</span> Temporal Connectivity Covariance</h2>
+</div>
+<div id="focus-area-recipients" class="section level2">
+<h2><span class="header-section-number">0.11</span> Focus Area Recipients</h2>
+</div>
+<div id="focus-area-donors" class="section level2">
+<h2><span class="header-section-number">0.12</span> Focus Area Donors</h2>
+</div>
+<div id="avoidance-area-recipients" class="section level2">
+<h2><span class="header-section-number">0.13</span> Avoidance Area Recipients</h2>
+</div>
+<div id="avoidance-area-donors" class="section level2">
+<h2><span class="header-section-number">0.14</span> Avoidance Area Donors</h2>
 <p><strong>More Coming Soon!</strong></p>
+</div>
 <div id="boundary-definitions" class="section level1">
 <h1><span class="header-section-number">1</span> Boundary Definitions</h1>
 <p>Alternative <code>boundary.dat</code> calculations</p>
@@ -545,7 +606,7 @@ div.tocify {
 <h2><span class="header-section-number">3.1</span> Vertex Degree</h2>
 <p>The vertex degree indicates the number of connections for each planning unit</p>
 </div>
-<div id="betweenness-centrality" class="section level2">
+<div id="betweenness-centrality-1" class="section level2">
 <h2><span class="header-section-number">3.2</span> Betweenness Centrality</h2>
 <p>Betweenness Centrality is an indicator of a planning unit’s centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit.</p>
 </div>
@@ -553,7 +614,7 @@ div.tocify {
 <h2><span class="header-section-number">3.3</span> Eigen Vector Centrality</h2>
 <p>Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes</p>
 </div>
-<div id="self-recruitment" class="section level2">
+<div id="self-recruitment-1" class="section level2">
 <h2><span class="header-section-number">3.4</span> Self-Recruitment</h2>
 <p>Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit.</p>
 </div>

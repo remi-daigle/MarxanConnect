@@ -28,6 +28,8 @@ import numpy
 # import networkx as nx
 import subprocess
 import json
+import bs4
+
 
 # import MarxanConnect python module
 import marxanconpy
@@ -50,10 +52,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(0)
+        self.auinotebook.ChangeSelection(2)
 
         self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality. If there is no mortality, rows sum to 1")
         self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row). Columns sum to 1.")
@@ -77,7 +79,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             GettingStartedframe = GettingStarted(parent=self)
-            GettingStartedframe.Show()
+            # GettingStartedframe.Show()
             # self.project['filepaths'] = {}
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\testing.MarCon"
             # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Documents\\landscape.MarCon"
@@ -471,6 +473,28 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # insert getting started tab and hyperlinks (wxFormBuilder can't handle hyperlinks)
         GettingStartedframeframe = GettingStarted (parent=self)
         GettingStartedframeframe.Show()
+
+    def on_metric_definition_choice(self,event):
+        soup = bs4.BeautifulSoup(open("glossary.html"),"html.parser")
+
+        # collect plot in this list
+        plot = []
+
+        # find the node with id of "Plot"
+        # mark = soup.find(id="eigen-vector-centrality")
+
+        # walk through the siblings of the parent (H2) node
+        # until we reach the next H2 node
+        # for elt in mark.parent.nextSiblingGenerator():
+        #     if elt.name == "h2":
+        #         break
+        #     if hasattr(elt, "text"):
+        #         plot.append(elt.text)
+
+        # enjoy
+        # self.metric_definition_html.SetPage(str(soup))
+        self.metric_definition_html.LoadPage("glossary.html")
+        self.m_richText2.GetB
 
 # ##########################  warning functions ########################################################################
     def warn_dialog(self, message, caption="Warning!"):

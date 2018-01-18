@@ -10,6 +10,8 @@
 import wx
 import wx.xrc
 import wx.aui
+import wx.html
+import wx.richtext
 import wx.grid
 
 ###########################################################################
@@ -224,7 +226,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -807,12 +809,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cf_sizer.Add( self.cf_demo_between_cent, 0, wx.ALL, 5 )
 		
-		self.cf_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigen Vector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigenvector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unit in the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
 		
 		demo_cf_sizer.Add( self.cf_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
-		self.cf_demo_google = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Google Page Rank", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_google = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Google PageRank", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_demo_google.SetToolTip( u"Calculates the Google PageRank values of a graph. Higher ranking planning units will have a higher influence on the network." )
 		
 		demo_cf_sizer.Add( self.cf_demo_google, 0, wx.ALL, 5 )
@@ -1174,38 +1176,22 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		metric_help_sizer = wx.FlexGridSizer( 6, 1, 0, 0 )
 		metric_help_sizer.AddGrowableCol( 0 )
+		metric_help_sizer.AddGrowableRow( 1 )
 		metric_help_sizer.AddGrowableRow( 2 )
 		metric_help_sizer.AddGrowableRow( 3 )
-		metric_help_sizer.AddGrowableRow( 4 )
-		metric_help_sizer.AddGrowableRow( 5 )
 		metric_help_sizer.SetFlexibleDirection( wx.BOTH )
 		metric_help_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.metric_text = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Definition of:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.metric_text.Wrap( -1 )
-		self.metric_text.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
-		
-		metric_help_sizer.Add( self.metric_text, 0, wx.ALL, 5 )
 		
 		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigen Vector Centrality", u"Google Page Rank", u"Self Recruitment", u"Local Retention", u"Outflux", u"Influx", u"Temporal Connectivity Covariance", u"Focus Area Sink", u"Focus Area Source", u"Avoidance Area Sink", u"Avoidance Area Source", u"Connectivity as boundary", u"Minimum Planar Graph" ]
 		self.metric_definition_choice = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_definition_choiceChoices, 0 )
 		self.metric_definition_choice.SetSelection( 1 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		self.metric_definition = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Definition: TBD", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.metric_definition.Wrap( -1 )
-		metric_help_sizer.Add( self.metric_definition, 0, wx.ALL, 5 )
+		self.metric_definition_html = wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )
+		metric_help_sizer.Add( self.metric_definition_html, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		self.metric_objectives = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Potential Objectives: TBD", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.metric_objectives.Wrap( -1 )
-		metric_help_sizer.Add( self.metric_objectives, 0, wx.ALL, 5 )
-		
-		self.metric_image = wx.StaticBitmap( self.connectivityMetrics, wx.ID_ANY, wx.Bitmap( u"images/icon_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
-		metric_help_sizer.Add( self.metric_image, 0, wx.ALL, 5 )
-		
-		self.metric_equation = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Equation: TBD", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.metric_equation.Wrap( -1 )
-		metric_help_sizer.Add( self.metric_equation, 0, wx.ALL, 5 )
+		self.m_richText2 = wx.richtext.RichTextCtrl( self.connectivityMetrics, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0|wx.VSCROLL|wx.HSCROLL|wx.NO_BORDER|wx.WANTS_CHARS )
+		metric_help_sizer.Add( self.m_richText2, 1, wx.EXPAND |wx.ALL, 5 )
 		
 		
 		metricsMainSizer.Add( metric_help_sizer, 1, wx.EXPAND, 5 )
@@ -1246,7 +1232,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
 		self.preEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		preEvalMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		preEvalMainSizer.AddGrowableCol( 0 )

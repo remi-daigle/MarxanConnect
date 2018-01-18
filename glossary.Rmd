@@ -7,6 +7,61 @@ output:
     toc_float: yes
 ---
 
+##In Degree
+
+$$\displaystyle{BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}$$
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
+
+![equation](http://www.sciweavers.org/tex2img.php?eq=1%2Bsin%28mc%5E2%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=)
+
+![\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}](https://latex.codecogs.com/svg.latex?x%3D%5Cfrac%7B-b%5Cpm%5Csqrt%7Bb%5E2-4ac%7D%7D%7B2a%7D)
+
+
+## Out Degree
+
+## Betweenness Centrality 
+
+The betweenness centrality of planning unit ${\displaystyle v}$ (${\displaystyle BC(v)}$) in a graph ${\displaystyle G:=(V,E)}$ with ${\displaystyle V}$ vertices (*i.e.* planning units) and ${\displaystyle E}$ edges (*i.e.* connections) is
+
+$\displaystyle{BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}$
+
+where ${\displaystyle \sigma _{st}}$ is total number of shortest paths from planning unit ${\displaystyle s}$ to planning unit ${\displaystyle t}$ and ${\displaystyle \sigma _{st}(v)}$ is the number of those paths that pass through ${\displaystyle v}$.
+
+## Eigenvector Centrality
+
+The Eigenvector centrality of planning unit ${\displaystyle v}$ (${\displaystyle EVC(v)}$) in a graph ${\displaystyle G:=(V,E)}$ with ${\displaystyle V}$ vertices (*i.e.* planning units) and ${\displaystyle E}$ edges (*i.e.* connections), let ${\displaystyle A=(a_{v,t})}$ be the adjacency matrix
+
+${\displaystyle EVC(v) = \frac{1}{\lambda} \sum_{t \in M(v)}x_t = \frac{1}{\lambda} \sum_{t \in G} a_{v,t}}$
+
+where ${\displaystyle \lambda }$ is the leading eigenvalue.
+
+## Google PageRank
+
+The Google PageRank centrality of planning unit ${\displaystyle v}$ (${\displaystyle PRC(v)}$) in a graph ${\displaystyle G:=(V,E)}$ with ${\displaystyle V}$ vertices (*i.e.* planning units) and ${\displaystyle E}$ edges (*i.e.* connections), let ${\displaystyle A=(a_{v,t})}$ be the adjacency matrix
+
+${\displaystyle PRC(v) = (1-d) + d\sum{}$
+
+where ${\displaystyle \lambda }$ is the leading eigenvalue.
+
+## Self Recruitment
+
+## Local Retention
+
+## Influx
+
+## Outflux
+
+## Temporal Connectivity Covariance
+
+## Focus Area Recipients
+
+## Focus Area Donors
+
+## Avoidance Area Recipients
+
+## Avoidance Area Donors
+
 **More Coming Soon!**
 
 # Boundary Definitions
