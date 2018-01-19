@@ -475,26 +475,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         GettingStartedframeframe.Show()
 
     def on_metric_definition_choice(self,event):
-        soup = bs4.BeautifulSoup(open("glossary.html"),"html.parser")
-
-        # collect plot in this list
-        plot = []
+        print(self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))
+        soup = bs4.BeautifulSoup(open("glossary_webtex.html"),"html.parser")
 
         # find the node with id of "Plot"
-        # mark = soup.find(id="eigen-vector-centrality")
-
-        # walk through the siblings of the parent (H2) node
-        # until we reach the next H2 node
-        # for elt in mark.parent.nextSiblingGenerator():
-        #     if elt.name == "h2":
-        #         break
-        #     if hasattr(elt, "text"):
-        #         plot.append(elt.text)
-
-        # enjoy
-        # self.metric_definition_html.SetPage(str(soup))
-        self.metric_definition_html.LoadPage("glossary.html")
-        self.m_richText2.GetB
+        div = soup.find(id=self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))
+        self.metric_definition_html.SetPage(str(div))
 
 # ##########################  warning functions ########################################################################
     def warn_dialog(self, message, caption="Warning!"):
@@ -874,9 +860,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('between_cent_' + type, selection, "Betweenness Centrality", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('eig_vect_cent_' + type, selection, "Eigen Vector Centrality", type,
+        metric_type = self.spec_resolve_metric_choice('eig_vect_cent_' + type, selection, "Eigenvector Centrality", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('google_' + type, selection, "Google Page Rank", type,
+        metric_type = self.spec_resolve_metric_choice('google_' + type, selection, "Google PageRank", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('self_recruit_' + type, selection, "Self Recruitment", type,
                                                       gettext=False) or metric_type

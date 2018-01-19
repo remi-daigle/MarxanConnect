@@ -6,7 +6,8 @@ web: index.Rmd glossary.Rmd tutorial.Rmd CONTRIBUTING.Rmd
 	rm -rf site_libs; \
 	Rscript -e "rmarkdown::render_site()"; \
 	Rscript -e "rmarkdown::render('index.Rmd', output_format='github_document', output_file='README.md')"; \
-	rm README.html; rm ISSUE_TEMPLATE.html; rm PULL_REQUEST_TEMPLATE.html; \
+	pandoc --standalone glossary.md -o glossary_webtex.html --webtex --section-divs
+	rm README.html; rm ISSUE_TEMPLATE.html; rm PULL_REQUEST_TEMPLATE.html; rm glossary.md \
 
 exe: gui.py MarxanConnectGUI.py setup.py WindowsSetupBuilder.iss
     # builds the executable

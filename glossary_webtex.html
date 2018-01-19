@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Glossary</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Glossary</h1>
+</div>
+<div id="in-degree" class="section level2">
+<h2>In Degree</h2>
+</div>
+<div id="out-degree" class="section level2">
+<h2>Out Degree</h2>
+</div>
+<div id="betweenness-centrality" class="section level2">
+<h2>Betweenness Centrality</h2>
+<p>The betweenness centrality of planning unit <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20v%7D" alt="{\displaystyle v}" title="{\displaystyle v}" /> (<img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20BC%28v%29%7D" alt="{\displaystyle BC(v)}" title="{\displaystyle BC(v)}" />) in a graph <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20G%3A%3D%28V%2CE%29%7D" alt="{\displaystyle G:=(V,E)}" title="{\displaystyle G:=(V,E)}" /> with <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20V%7D" alt="{\displaystyle V}" title="{\displaystyle V}" /> vertices (<em>i.e.</em> planning units) and <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20E%7D" alt="{\displaystyle E}" title="{\displaystyle E}" /> edges (<em>i.e.</em> connections) is</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%5Cdisplaystyle%7BBC%28v%29%3D%20%5Csum_%7Bs%20%5Cne%20v%20%5Cne%20t%20%5Cin%20V%7D%5Cfrac%7B%7B%5Csigma_%7Bst%7D%28v%29%7D%7D%7B%5Csigma_%7Bst%7D%7D%7D" alt="\displaystyle{BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}" title="\displaystyle{BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}" /></p>
+<p>where <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20%5Csigma%20_%7Bst%7D%7D" alt="{\displaystyle \sigma _{st}}" title="{\displaystyle \sigma _{st}}" /> is total number of shortest paths from planning unit <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20s%7D" alt="{\displaystyle s}" title="{\displaystyle s}" /> to planning unit <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20t%7D" alt="{\displaystyle t}" title="{\displaystyle t}" /> and <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20%5Csigma%20_%7Bst%7D%28v%29%7D" alt="{\displaystyle \sigma _{st}(v)}" title="{\displaystyle \sigma _{st}(v)}" /> is the number of those paths that pass through <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20v%7D" alt="{\displaystyle v}" title="{\displaystyle v}" />.</p>
+</div>
+<div id="eigenvector-centrality" class="section level2">
+<h2>Eigenvector Centrality</h2>
+<p>The Eigenvector centrality of planning unit <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20v%7D" alt="{\displaystyle v}" title="{\displaystyle v}" /> (<img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20EVC%28v%29%7D" alt="{\displaystyle EVC(v)}" title="{\displaystyle EVC(v)}" />) in a graph <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20G%3A%3D%28V%2CE%29%7D" alt="{\displaystyle G:=(V,E)}" title="{\displaystyle G:=(V,E)}" /> with <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20V%7D" alt="{\displaystyle V}" title="{\displaystyle V}" /> vertices (<em>i.e.</em> planning units) and <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20E%7D" alt="{\displaystyle E}" title="{\displaystyle E}" /> edges (<em>i.e.</em> connections), let <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20A%3D%28a_%7Bv%2Ct%7D%29%7D" alt="{\displaystyle A=(a_{v,t})}" title="{\displaystyle A=(a_{v,t})}" /> be the adjacency matrix</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20EVC%28v%29%20%3D%20%5Cfrac%7B1%7D%7B%5Clambda%7D%20%5Csum_%7Bt%20%5Cin%20M%28v%29%7Dx_t%20%3D%20%5Cfrac%7B1%7D%7B%5Clambda%7D%20%5Csum_%7Bt%20%5Cin%20G%7D%20a_%7Bv%2Ct%7D%7D" alt="{\displaystyle EVC(v) = \frac{1}{\lambda} \sum_{t \in M(v)}x_t = \frac{1}{\lambda} \sum_{t \in G} a_{v,t}}" title="{\displaystyle EVC(v) = \frac{1}{\lambda} \sum_{t \in M(v)}x_t = \frac{1}{\lambda} \sum_{t \in G} a_{v,t}}" /></p>
+<p>where <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20%5Clambda%20%7D" alt="{\displaystyle \lambda }" title="{\displaystyle \lambda }" /> is the leading eigenvalue.</p>
+</div>
+<div id="google-pagerank" class="section level2">
+<h2>Google PageRank</h2>
+<p>The Google PageRank centrality of planning unit <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20v%7D" alt="{\displaystyle v}" title="{\displaystyle v}" /> (<img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20PRC%28v%29%7D" alt="{\displaystyle PRC(v)}" title="{\displaystyle PRC(v)}" />) in a graph <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20G%3A%3D%28V%2CE%29%7D" alt="{\displaystyle G:=(V,E)}" title="{\displaystyle G:=(V,E)}" /> with <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20V%7D" alt="{\displaystyle V}" title="{\displaystyle V}" /> vertices (<em>i.e.</em> planning units) and <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20E%7D" alt="{\displaystyle E}" title="{\displaystyle E}" /> edges (<em>i.e.</em> connections), let <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20A%3D%28a_%7Bv%2Ct%7D%29%7D" alt="{\displaystyle A=(a_{v,t})}" title="{\displaystyle A=(a_{v,t})}" /> be the adjacency matrix</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20PRC%28v%29%20%3D%20%281-d%29%20%2B%20d%5Csum%7B%7D" alt="{\displaystyle PRC(v) = (1-d) + d\sum{}" title="{\displaystyle PRC(v) = (1-d) + d\sum{}" /></p>
+<p>where <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%7B%5Cdisplaystyle%20%5Clambda%20%7D" alt="{\displaystyle \lambda }" title="{\displaystyle \lambda }" /> is the leading eigenvalue.</p>
+</div>
+<div id="self-recruitment" class="section level2">
+<h2>Self Recruitment</h2>
+</div>
+<div id="local-retention" class="section level2">
+<h2>Local Retention</h2>
+</div>
+<div id="influx" class="section level2">
+<h2>Influx</h2>
+</div>
+<div id="outflux" class="section level2">
+<h2>Outflux</h2>
+</div>
+<div id="temporal-connectivity-covariance" class="section level2">
+<h2>Temporal Connectivity Covariance</h2>
+</div>
+<div id="focus-area-recipients" class="section level2">
+<h2>Focus Area Recipients</h2>
+</div>
+<div id="focus-area-donors" class="section level2">
+<h2>Focus Area Donors</h2>
+</div>
+<div id="avoidance-area-recipients" class="section level2">
+<h2>Avoidance Area Recipients</h2>
+</div>
+<div id="avoidance-area-donors" class="section level2">
+<h2>Avoidance Area Donors</h2>
+<p><strong>More Coming Soon!</strong></p>
+</div>
+<div id="boundary-definitions" class="section level1">
+<h1>Boundary Definitions</h1>
+<p>Alternative <code>boundary.dat</code> calculations</p>
+<div id="connectivity-as-boundary" class="section level2">
+<h2>Connectivity as Boundary</h2>
+<p>description</p>
+</div>
+<div id="minimum-planar-graph" class="section level2">
+<h2>Minimum Planar Graph</h2>
+<p>description</p>
+</div>
+</div>
+<div id="connectivity" class="section level1">
+<h1>Connectivity</h1>
+<p>description (with units)</p>
+<div id="connectivity-categories" class="section level2">
+<h2>Connectivity Categories</h2>
+<div id="demographic-connectivity" class="section level3">
+<h3>Demographic Connectivity</h3>
+<p>description</p>
+</div>
+<div id="genetic-connectivity" class="section level3">
+<h3>Genetic Connectivity</h3>
+<p>description</p>
+</div>
+<div id="landscape-connectivity" class="section level3">
+<h3>Landscape Connectivity</h3>
+<p>description</p>
+</div>
+</div>
+<div id="connectivity-types" class="section level2">
+<h2>Connectivity Types</h2>
+<p>Each connectivity category has multiple types of data that can be used by Marxan with Connectivity:</p>
+<div id="settlement" class="section level3">
+<h3>Settlement</h3>
+<p>description</p>
+</div>
+<div id="local-immigration" class="section level3">
+<h3>Local Immigration</h3>
+<p>description</p>
+</div>
+<div id="dispersal-flux" class="section level3">
+<h3>Dispersal Flux</h3>
+<p>description</p>
+</div>
+<div id="migration" class="section level3">
+<h3>Migration</h3>
+<p>description</p>
+</div>
+</div>
+<div id="data-formats" class="section level2">
+<h2>Data Formats</h2>
+<p>Marxan with Connectivity can accept 2 types of connectivity data, Matrices and Lists:</p>
+<div id="connectivity-matrix" class="section level3">
+<h3>Connectivity Matrix</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">...</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>1</strong></td>
+<td align="center">0.1</td>
+<td align="center">0.02</td>
+<td align="center">0.005</td>
+<td align="center">0.01</td>
+<td align="center">...</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2</strong></td>
+<td align="center">0.006</td>
+<td align="center">0.2</td>
+<td align="center">0.007</td>
+<td align="center">0.009</td>
+<td align="center">...</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>3</strong></td>
+<td align="center">0.01</td>
+<td align="center">0.003</td>
+<td align="center">0.25</td>
+<td align="center">0.02</td>
+<td align="center">...</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>4</strong></td>
+<td align="center">0.022</td>
+<td align="center">0.017</td>
+<td align="center">0.001</td>
+<td align="center">0.2</td>
+<td align="center">...</td>
+</tr>
+<tr class="odd">
+<td align="center">...</td>
+<td align="center">...</td>
+<td align="center">...</td>
+<td align="center">...</td>
+<td align="center">...</td>
+<td align="center">...</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="connectivity-list" class="section level3">
+<h3>Connectivity List</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="center">id1</th>
+<th align="center">id2</th>
+<th align="center">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0.1</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">0.02</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">0.005</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">0.01</td>
+</tr>
+<tr class="odd">
+<td align="center">...</td>
+<td align="center">...</td>
+<td align="center">...</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="connectivity-list-with-time" class="section level3">
+<h3>Connectivity List with Time</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="center">time</th>
+<th align="center">id1</th>
+<th align="center">id2</th>
+<th align="center">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0.1</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">0.02</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">0.005</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">0.01</td>
+</tr>
+<tr class="odd">
+<td align="center">...</td>
+<td align="center">...</td>
+<td align="center">...</td>
+<td align="center">...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="conservation-feature" class="section level1">
+<h1>Conservation Feature</h1>
+<p>description</p>
+<div id="vertex-degree" class="section level2">
+<h2>Vertex Degree</h2>
+<p>The vertex degree indicates the number of connections for each planning unit</p>
+</div>
+<div id="betweenness-centrality-1" class="section level2">
+<h2>Betweenness Centrality</h2>
+<p>Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit.</p>
+</div>
+<div id="eigen-vector-centrality" class="section level2">
+<h2>Eigen Vector Centrality</h2>
+<p>Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes</p>
+</div>
+<div id="self-recruitment-1" class="section level2">
+<h2>Self-Recruitment</h2>
+<p>Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit.</p>
+</div>
+<div id="temporal-connectivity-correlation" class="section level2">
+<h2>Temporal Connectivity Correlation</h2>
+<p>description</p>
+</div>
+</div>
+<div id="focus-areas" class="section level1">
+<h1>Focus Areas</h1>
+<p>For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'.</p>
+</div>
+<div id="planning-units" class="section level1">
+<h1>Planning Units</h1>
+<p>description</p>
+</div>
+<div id="shapefile" class="section level1">
+<h1>Shapefile</h1>
+<p>description</p>
+</div>
+</body>
+</html>
