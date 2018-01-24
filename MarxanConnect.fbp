@@ -12805,7 +12805,7 @@
                                                     <property name="caption"></property>
                                                     <property name="caption_visible">1</property>
                                                     <property name="center_pane">0</property>
-                                                    <property name="choices">&quot;In Degree&quot; &quot;Out Degree&quot; &quot;Betweenness Centrality&quot; &quot;Eigenvector Centrality&quot; &quot;Google PageRank&quot; &quot;Self Recruitment&quot; &quot;Local Retention&quot; &quot;Outflux&quot; &quot;Influx&quot; &quot;Temporal Connectivity Covariance&quot; &quot;Focus Area Sink&quot; &quot;Focus Area Source&quot; &quot;Avoidance Area Sink&quot; &quot;Avoidance Area Source&quot; &quot;Connectivity as boundary&quot; &quot;Minimum Planar Graph&quot;</property>
+                                                    <property name="choices">&quot;In Degree&quot; &quot;Out Degree&quot; &quot;Betweenness Centrality&quot; &quot;Eigenvector Centrality&quot; &quot;Google PageRank&quot; &quot;Self Recruitment&quot; &quot;Local Retention&quot; &quot;Outflux&quot; &quot;Influx&quot; &quot;Temporal Connectivity Covariance&quot; &quot;Focus Area Recipients&quot; &quot;Focus Area Donors&quot; &quot;Avoidance Area Recipients&quot; &quot;Avoidance Area Donors&quot; &quot;Connectivity as boundary&quot; &quot;Minimum Planar Graph&quot;</property>
                                                     <property name="close_button">1</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>

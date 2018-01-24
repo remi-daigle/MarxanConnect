@@ -6,56 +6,22 @@ output:
     number_sections: yes
     toc: yes
     toc_float: yes
+bibliography: references.bib
 ---
-
-##In Degree
-
-
-## Out Degree
-
-## Betweenness Centrality 
-
-The betweenness centrality of planning unit ${\displaystyle v}$ (${\displaystyle BC(v)}$) in a graph ${\displaystyle G:=(V,E)}$ with ${\displaystyle V}$ vertices (*i.e.* planning units) and ${\displaystyle E}$ edges (*i.e.* connections) is
-
-$\displaystyle{BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}$
-
-where ${\displaystyle \sigma _{st}}$ is total number of shortest paths from planning unit ${\displaystyle s}$ to planning unit ${\displaystyle t}$ and ${\displaystyle \sigma _{st}(v)}$ is the number of those paths that pass through ${\displaystyle v}$.
-
-## Eigenvector Centrality
-
-The Eigenvector centrality of planning unit ${\displaystyle v}$ (${\displaystyle EVC(v)}$) in a graph ${\displaystyle G:=(V,E)}$ with ${\displaystyle V}$ vertices (*i.e.* planning units) and ${\displaystyle E}$ edges (*i.e.* connections), let ${\displaystyle A=(a_{v,t})}$ be the adjacency matrix
-
-${\displaystyle EVC(v) = \frac{1}{\lambda} \sum_{t \in M(v)}x_t = \frac{1}{\lambda} \sum_{t \in G} a_{v,t}}$
-
-where ${\displaystyle \lambda }$ is the leading eigenvalue.
-
-## Google PageRank
-
-The Google PageRank centrality of planning unit ${\displaystyle v}$ (${\displaystyle PRC(v)}$) in a graph ${\displaystyle G:=(V,E)}$ with ${\displaystyle V}$ vertices (*i.e.* planning units) and ${\displaystyle E}$ edges (*i.e.* connections), let ${\displaystyle A=(a_{v,t})}$ be the adjacency matrix
-
-${\displaystyle PRC(v) = (1-d) + d\sum{}$
-
-where ${\displaystyle \lambda }$ is the leading eigenvalue.
-
-## Self Recruitment
-
-## Local Retention
-
-## Influx
-
-## Outflux
-
-## Temporal Connectivity Covariance
-
-## Focus Area Recipients
-
-## Focus Area Donors
-
-## Avoidance Area Recipients
-
-## Avoidance Area Donors
-
 **More Coming Soon!**
+
+```{r load packages,message=FALSE, warning=FALSE, echo=FALSE}
+library(igraph)
+library(tidyverse)
+library(ggraph)
+library(gganimate)
+library(tidygraph)
+library(RColorBrewer)
+library(d3Network)
+```
+
+
+
 
 # Boundary Definitions
 
@@ -145,29 +111,568 @@ Marxan with Connectivity can accept 2 types of connectivity data, Matrices and L
 
 description
 
-## Vertex Degree
+## In Degree
 
-The vertex degree indicates the number of connections for each planning unit
+**Definition**: The in degree indicates the number of connections into each planning unit.
 
-## Betweenness Centrality
+**Objectives**: Prioritize for areas which receive input from many other planning units. These planning units may have higher biodiversity (ref) and population resilience (ref) as a result of the high in degree.
 
-Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit.
+**Equation**: The in degree of a planning unit ${v}$ (${ID(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections).
 
-## Eigen Vector Centrality
+$${\displaystyle ID(v) = deg^{-}(v)}$$
 
-Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes
+where ${deg^{-}(v)}$ is the number if inward pointing ${E}$ for planning unit ${v}$.
 
-## Self-Recruitment
+**Illustration**
 
-Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit.
+```{r,message=FALSE, echo=FALSE, fig.width=5, fig.height = 5}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(FALSE,FALSE,FALSE,TRUE,FALSE,
+                                   TRUE,FALSE,FALSE,FALSE,TRUE,
+                                   TRUE,TRUE,FALSE,TRUE,TRUE,
+                                   FALSE,TRUE,FALSE,FALSE,TRUE,
+                                   FALSE,TRUE,FALSE,TRUE,FALSE),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
 
-## Temporal Connectivity Correlation
+G <- graph_from_adjacency_matrix(AdjacencyMatrix)
+V(G)$metric <- igraph::degree(G,mode = "in")
 
-description
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="In Degree", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Out Degree
+
+**Definition**: The out degree indicates the number of connections out of each planning unit.
+
+**Objectives**: Prioritize for areas which deliver output to many other planning units. These planning units may influence many other planning units.
+
+**Equation**: The in degree of a planning unit ${v}$ (${OD(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections).
+
+$${\displaystyle OD(v) = deg^{+}(v)}$$
+
+where ${deg^{+}(v)}$ is the number of outward pointing ${E}$ for planning unit ${v}$.
+
+**Illustration**
+
+```{r,message=FALSE, echo=FALSE, fig.width=5, fig.height = 5}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(FALSE,FALSE,FALSE,TRUE,FALSE,
+                                   TRUE,FALSE,FALSE,FALSE,TRUE,
+                                   TRUE,TRUE,FALSE,TRUE,TRUE,
+                                   FALSE,TRUE,FALSE,FALSE,TRUE,
+                                   FALSE,TRUE,FALSE,TRUE,FALSE),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix)
+V(G)$metric <- igraph::degree(G,mode = "out")
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="Out Degree", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Betweenness Centrality 
+
+**Definition**: The betweeness centrality of a planning unit indicates the number of shortest paths between pairs of planning units that pass through that planning unit.
+
+**Objectives**: Prioritize for areas which may act as crucial stepping stones.
+
+**Equation**: The betweenness centrality of a planning unit ${v}$ (${BC(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections) is
+
+$$\displaystyle {BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}$$
+
+where ${\sigma _{st}}$ is total number of shortest paths from planning unit ${s}$ to planning unit ${t}$ and ${\sigma _{st}(v)}$ is the number of those paths that pass through ${v}$.
+
+**Illustration**
+
+```{r,message=FALSE, echo=FALSE, fig.width=5, fig.height = 5}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(FALSE,FALSE,FALSE,TRUE,FALSE,
+                                   TRUE,FALSE,FALSE,FALSE,TRUE,
+                                   TRUE,TRUE,FALSE,TRUE,TRUE,
+                                   FALSE,TRUE,FALSE,FALSE,TRUE,
+                                   FALSE,TRUE,FALSE,TRUE,FALSE),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix)
+V(G)$metric <- igraph::betweenness(G)
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="Betweenness Centrality", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Eigenvector Centrality
+
+**Definition**: The eigenvector centrality indicates the influence that planning unit has on the network...
+
+**Objectives**: Prioritize for areas which ...
+
+**Equation**: The Eigenvector centrality of a planning unit ${v}$ (${EVC(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix
+
+$${\displaystyle EVC(v) =  \frac{1}{\lambda} \sum_{t \in G} c_{v,t}}$$
+
+where ${\lambda }$ is the leading eigenvalue.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$metric <- igraph::eigen_centrality(G,directed = TRUE)$vector
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="Eigenvector Centrality", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Google PageRank
+
+**Definition**: The PageRank indicates the number and quality of connections to a planning unit to determine an estimated importance of the planning unit.
+
+**Objectives**: Prioritize for areas which receive input from many other planning units. These planning units may have higher biodiversity (ref) and population resilience (ref) as a result of the high in degree.
+
+**Equation**: The weighted PageRank of a planning unit ${v}$ (${PR(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$$\displaystyle PR(v) = 1-d+d\sum_{v\ne t\in V}PR(t)c_{v,t}c_{t,v}$$
+
+where $d$ is the damping factor set to 0.85 by default.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$metric <- igraph::page.rank(G,directed = TRUE)$vector
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="PageRank", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Self Recruitment
+
+**Definition**: The self recruitment indicates the proportion of locally produced recruits relative to all local recruits.
+
+**Objectives**: Prioritize for areas which are relatively self-sustaining?
+
+**Equation**: The self recruitment of a planning unit ${v}$ (${SR(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$${\displaystyle SR(v) = \frac{c_{v,v}N_v}{\sum_{t \in V}c_{t,v}N_v}}$$
+
+where ${N_v}$ is the number of potential recruits produced in planning unit ${t}$.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height=6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0,0,
+                                   0,0.1,0,0,0,
+                                   0,0,0.05,0,0,
+                                   0,0,0,0.001,0,
+                                   0,0,0,0,0.001),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$metric <- diag(AdjacencyMatrix)
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_loop(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="Self Recruitment", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Local Retention
+
+**Definition**: The local retention indicates the proportion of potential recruits produced in planning unit ${t}$ which are retained in in planning unit ${t}$. 
+
+**Objectives**: Prioritize for areas which are relatively self-sustaining?
+
+**Equation**: The local retention of a planning unit ${v}$ (${LR(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$$\displaystyle LR(v) = c_{v,v}$$
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height=6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0,0,
+                                   0,0.1,0,0,0,
+                                   0,0,0.05,0,0,
+                                   0,0,0,0.001,0,
+                                   0,0,0,0,0.001),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$metric <- diag(AdjacencyMatrix)
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_loop(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="Local Retention", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Influx
+
+**Definition**: The influx indicates the amount of nutrients, energy, or organisms coming into a planning unit.
+
+**Objectives**: Prioritize for areas which are heavily subsidized by other planning units 
+
+**Equation**: The influx of a planning unit ${v}$ (${IF(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$${\displaystyle IF(v) = \sum_{t \ne v \in V}c_{t,v}N_t}$$
+
+where ${N_t}$ is the number of potential recruits produced in planning unit ${t}$.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+diag(AdjacencyMatrix) <- 0
+V(G)$metric <- colSums(AdjacencyMatrix)
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Flux Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="Influx", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Outflux
+
+**Definition**: The outflux indicates the amount of nutrients, energy, or organisms coming out of a planning unit.
+
+**Objectives**: Prioritize for areas which subsidize other planning units (e.g. maximize spillover).
+
+**Equation**: The influx of a planning unit ${v}$ (${OF(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$${\displaystyle OF(v) = \sum_{t \ne v \in V}c_{v,t}N_v}$$
+
+where ${N_v}$ is the number of potential recruits produced in planning unit ${v}$.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+diag(AdjacencyMatrix) <- 0
+V(G)$metric <- rowSums(AdjacencyMatrix)
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Flux Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric),size = 8) + 
+    scale_colour_gradientn(name="Outflux", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Temporal Connectivity Covariance
+
+**Definition**: The temporal connectivity covariance indicates...
+
+**Objectives**: Prioritize for areas which ...
+
+**Equation**: The temporal connectivity covariance of a planning unit ${v}$ (${TCC(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${A=(a_{v,t})}$ be the adjacency matrix
+
+$${\displaystyle TCC(v) = }$$
+
+where ${}$ is .
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix1 <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+AdjacencyMatrix2 <- matrix(data = c(0,0,0,0.1,0,
+                                   0.01,0,0,0,0.01,
+                                   0.1,0.05,0,0.01,0.1,
+                                   0,0.1,0,0,0.5,
+                                   0,0.01,0,0.01,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+AdjacencyMatrix3 <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.015,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G1 <- graph_from_adjacency_matrix(AdjacencyMatrix1, weighted=TRUE)
+E(G1)$year <- "Year 1"
+V(G1)$type <- c("Planning Unit","Focus Area","Planning Unit","Focus Area","Planning Unit")
+G2 <- graph_from_adjacency_matrix(AdjacencyMatrix2, weighted=TRUE)
+E(G2)$year <- "Year 2"
+G3 <- graph_from_adjacency_matrix(AdjacencyMatrix3, weighted=TRUE)
+E(G3)$year <- "Year 3"
+G4 <- graph_from_adjacency_matrix(AdjacencyMatrix2, weighted=TRUE)
+E(G4)$year <- "Year 4"
+
+graph <- graph_join(graph_join(as_tbl_graph(G1),as_tbl_graph(G2),by="name"),graph_join(as_tbl_graph(G3),as_tbl_graph(G4),by="name"),by="name")
+
+p <- ggraph(graph,layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..,frame=year), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(shape=type),size = 8) + 
+    scale_shape(name="")+
+    scale_colour_gradientn(name="Avoidance Area Donors", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+gganimate(p,"images/temporalconnectivity.gif")
+```
+
+![](images/temporalconnectivity.gif)
+
+## Focus Area Recipients
+
+**Definition**: The focus area recipients indicates the amount of nutrients, energy, or organisms coming into a planning unit from the focus area.
+
+**Objectives**: Prioritize for areas which are subsidized by the focus area (e.g. create stepping stones).
+
+**Equation**: The focus area recipients of a planning unit ${v}$ (${FAR(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$${\displaystyle FAR(v) = \sum_{t \ne v \in V(FA)}c_{t,v}N_t}$$
+
+where ${N_t}$ is the amount of nutrients, energy, or organisms produced in planning unit ${t}$ and ${V(FA)}$ are the ${V}$ which spatially overlap with the focus area.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$type <- c("Planning Unit","Focus Area","Planning Unit","Focus Area","Planning Unit")
+
+V(G)$metric <- colSums(AdjacencyMatrix[V(G)$type=="Focus Area",])
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric,shape=type),size = 8) + 
+    scale_shape(name="")+
+    scale_colour_gradientn(name="Focus Area Recipient", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Focus Area Donors
+
+**Definition**: The focus area donors indicates the amount of nutrients, energy, or organisms coming into the focus area from a planning unit.
+
+**Objectives**: Prioritize for areas which subsidize the focus area (e.g. create stepping stones).
+
+**Equation**: The focus area donors of a planning unit ${v}$ (${FAD(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$${\displaystyle FAD(v) = \sum_{t \ne v \in V(FA)}c_{v,t}N_v}$$
+
+where ${N_v}$ is the amount of nutrients, energy, or organisms produced in planning unit ${v}$ and ${V(FA)}$ are the ${V}$ which spatially overlap with the focus area.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$type <- c("Planning Unit","Focus Area","Planning Unit","Focus Area","Planning Unit")
+
+V(G)$metric <- rowSums(AdjacencyMatrix[,V(G)$type=="Focus Area"])
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric,shape=type),size = 8) + 
+    scale_shape(name="")+
+    scale_colour_gradientn(name="Focus Area Donors", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Avoidance Area Recipients
+
+**Definition**: The avoidance area recipients indicates the amount of nutrients, energy, or organisms coming into a planning unit from the avoidance area.
+
+**Objectives**: Prioritize for areas which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hotspots).
+
+**Equation**: The avoidance area recipients of a planning unit ${v}$ (${AAR(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$${\displaystyle AAR(v) = \sum_{t \ne v \in V(AA)}c_{t,v}N_t}$$
+
+where ${N_t}$ is the amount of nutrients, energy, or organisms produced in planning unit ${t}$ and ${V(AA)}$ are the ${V}$ which spatially overlap with the avoidance area.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$type <- c("Planning Unit","Focus Area","Planning Unit","Focus Area","Planning Unit")
+
+V(G)$metric <- colSums(AdjacencyMatrix[V(G)$type=="Focus Area",])
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric,shape=type),size = 8) + 
+    scale_shape(name="")+
+    scale_colour_gradientn(name="Focus Area Recipient", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
+## Avoidance Area Donors
+
+**Definition**: The avoidance area donors indicates the amount of nutrients, energy, or organisms coming into the avoidance area from a planning unit.
+
+**Objectives**: Prioritize for areas which subsidize the avoidance area (e.g. increase resilience for impacted zones).
+
+**Equation**: The avoidance area donors of a planning unit ${v}$ (${FAD(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity matrix.
+
+$${\displaystyle AAD(v) = \sum_{t \ne v \in V(AA)}c_{v,t}N_v}$$
+
+where ${N_v}$ is the amount of nutrients, energy, or organisms produced in planning unit ${v}$ and ${V(FA)}$ are the ${V}$ which spatially overlap with the avoidance area.
+
+**Illustration**
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height = 6}
+PU <- LETTERS[1:5]
+AdjacencyMatrix <- matrix(data = c(0,0,0,0.01,0,
+                                   0.1,0,0,0,0.1,
+                                   0.01,0.05,0,0.01,0.01,
+                                   0,0.01,0,0,0.05,
+                                   0,0.1,0,0.1,0),
+                          nrow = 5,
+                          ncol = 5,
+                          dimnames = list(PU,PU))
+
+G <- graph_from_adjacency_matrix(AdjacencyMatrix, weighted=TRUE)
+V(G)$type <- c("Planning Unit","Avoidance Area","Planning Unit","Avoidance Area","Planning Unit")
+
+V(G)$metric <- rowSums(AdjacencyMatrix[,V(G)$type=="Avoidance Area"])
+
+ggraph(as_tbl_graph(G),layout="fr") + 
+    geom_edge_fan(aes(colour=weight,alpha = ..index..), start_cap = circle(4, 'mm'), end_cap = circle(4, 'mm'), edge_width = 1.25) + 
+    scale_edge_colour_gradientn("Weight",colours=brewer.pal(5,"PuRd"),guide = guide_edge_colourbar(barwidth = 10))+
+    scale_edge_alpha('Edge direction', guide = 'edge_direction') +
+    geom_node_point(aes(colour = metric,shape=type),size = 8) + 
+    scale_shape(name="")+
+    scale_colour_gradientn(name="Avoidance Area Donors", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
+    theme_void() + theme(legend.position="top",legend.box="vertical")
+```
+
 
 # Focus Areas
 
-For some of the connectivity metrics (e.g. Temporal Connectivity Correlation), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'.
+For some of the connectivity metrics (e.g. Temporal Connectivity Correlation, or Focus Area Donors), it is important to consider 'focus areas' for which connectivity should be optimised. Such focus areas could include existing protected areas, important habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan with Connectivity assumes that the planning units within the 'focus areas' will otherwise be targeted as normal conservation targets in Marxan. Loading focus areas into Marxan with Connectivity allows users to set conservation targets for the areas that complement the 'focus areas'.
 
 # Planning Units
 
@@ -175,5 +680,5 @@ description
 
 # Shapefile
 
-description
+A popular geospatial data format by [esri](esri.com) (e.g. ArcGIS), but is supported by many open source GIS (e.g. QGIS) and statistical programming languages (e.g. R, Python)
 
