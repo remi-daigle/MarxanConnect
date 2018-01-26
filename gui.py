@@ -286,9 +286,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_radio_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		demo_radio_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		demo_matrixTypeRadioBoxChoices = [ u"Probability", u"Migration", u"Flux" ]
+		demo_matrixTypeRadioBoxChoices = [ u"Probability", u"Migration", u"Flow" ]
 		self.demo_matrixTypeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Connectivity Matrix Type", wx.DefaultPosition, wx.DefaultSize, demo_matrixTypeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
-		self.demo_matrixTypeRadioBox.SetSelection( 0 )
+		self.demo_matrixTypeRadioBox.SetSelection( 2 )
 		demo_radio_sizer.Add( self.demo_matrixTypeRadioBox, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		demo_matrixFormatRadioBoxChoices = [ u"Matrix", u"Edge List", u"Edge List with Time" ]
@@ -794,156 +794,46 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_cf_sizer.Add( self.demo_cf_txt, 0, wx.ALL, 5 )
 		
 		self.cf_demo_in_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"In Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_in_degree.SetToolTip( u"The in degree indicates the number of connections into each planning unit" )
-		
 		demo_cf_sizer.Add( self.cf_demo_in_degree, 0, wx.ALL, 5 )
 		
 		self.cf_demo_out_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Out Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_out_degree.SetToolTip( u"The out degree indicates the number of connections from each planning unit" )
-		
 		demo_cf_sizer.Add( self.cf_demo_out_degree, 0, wx.ALL, 5 )
 		
 		self.cf_demo_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_between_cent.SetToolTip( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
-		
 		demo_cf_sizer.Add( self.cf_demo_between_cent, 0, wx.ALL, 5 )
 		
 		self.cf_demo_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigenvector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unit in the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
-		
 		demo_cf_sizer.Add( self.cf_demo_eig_vect_cent, 0, wx.ALL, 5 )
 		
 		self.cf_demo_google = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Google PageRank", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_google.SetToolTip( u"Calculates the Google PageRank values of a graph. Higher ranking planning units will have a higher influence on the network." )
-		
 		demo_cf_sizer.Add( self.cf_demo_google, 0, wx.ALL, 5 )
 		
 		self.cf_demo_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_self_recruit.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
-		
 		demo_cf_sizer.Add( self.cf_demo_self_recruit, 0, wx.ALL, 5 )
 		
 		self.cf_demo_local_retention = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Local Retention", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_local_retention.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
-		
 		demo_cf_sizer.Add( self.cf_demo_local_retention, 0, wx.ALL, 5 )
 		
-		self.cf_demo_influx_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_influx_panel.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants/elements. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
+		self.cf_demo_inflow = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Inflow", wx.DefaultPosition, wx.DefaultSize, 0 )
+		demo_cf_sizer.Add( self.cf_demo_inflow, 0, wx.ALL, 5 )
 		
-		cf_demo_influx_sizer = wx.BoxSizer( wx.VERTICAL )
+		self.cf_demo_outflow = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflow", wx.DefaultPosition, wx.DefaultSize, 0 )
+		demo_cf_sizer.Add( self.cf_demo_outflow, 0, wx.ALL, 5 )
 		
-		self.cf_demo_influx = wx.CheckBox( self.cf_demo_influx_panel, wx.ID_ANY, u"Influx", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_influx.SetToolTip( u"Influx optimizes for areas which receive higher numbers of immigrants/elements. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
+		self.cf_demo_stochasticity = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
+		demo_cf_sizer.Add( self.cf_demo_stochasticity, 0, wx.ALL, 5 )
 		
-		cf_demo_influx_sizer.Add( self.cf_demo_influx, 0, wx.ALL, 5 )
+		self.cf_demo_fa_recipients = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		demo_cf_sizer.Add( self.cf_demo_fa_recipients, 0, wx.ALL, 5 )
 		
+		self.cf_demo_fa_donors = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		demo_cf_sizer.Add( self.cf_demo_fa_donors, 0, wx.ALL, 5 )
 		
-		self.cf_demo_influx_panel.SetSizer( cf_demo_influx_sizer )
-		self.cf_demo_influx_panel.Layout()
-		cf_demo_influx_sizer.Fit( self.cf_demo_influx_panel )
-		demo_cf_sizer.Add( self.cf_demo_influx_panel, 1, 0, 5 )
+		self.cf_demo_aa_recipients = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		demo_cf_sizer.Add( self.cf_demo_aa_recipients, 0, wx.ALL, 5 )
 		
-		self.cf_demo_outflux_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_outflux_panel.SetToolTip( u"Outflux optimizes for areas with high local production. It gives a higher value to planning units from which greater numbers of elements/individuals originate. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
-		
-		cf_demo_outflux_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_outflux = wx.CheckBox( self.cf_demo_outflux_panel, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_outflux.SetToolTip( u"Outflux optimizes for areas with high local production. It gives a higher value to planning units from which greater numbers of elements/individuals originate. This is only available if the connectivity matrix is a 'Flux' matrix, or local production has been provided. " )
-		
-		cf_demo_outflux_sizer.Add( self.cf_demo_outflux, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_outflux_panel.SetSizer( cf_demo_outflux_sizer )
-		self.cf_demo_outflux_panel.Layout()
-		cf_demo_outflux_sizer.Fit( self.cf_demo_outflux_panel )
-		demo_cf_sizer.Add( self.cf_demo_outflux_panel, 1, 0, 5 )
-		
-		self.cf_demo_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_stochasticity_panel.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab." )
-		
-		cf_demo_stochasticity_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_stochasticity = wx.CheckBox( self.cf_demo_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_stochasticity.Enable( False )
-		self.cf_demo_stochasticity.SetToolTip( u"Uses spatial and temporal stochasticity in connectivity to identify planning units that increase metapopulation growth and stability. It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab." )
-		
-		cf_demo_stochasticity_sizer.Add( self.cf_demo_stochasticity, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_stochasticity_panel.SetSizer( cf_demo_stochasticity_sizer )
-		self.cf_demo_stochasticity_panel.Layout()
-		cf_demo_stochasticity_sizer.Fit( self.cf_demo_stochasticity_panel )
-		demo_cf_sizer.Add( self.cf_demo_stochasticity_panel, 1, 0, 0 )
-		
-		self.cf_demo_fa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_fa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_fa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_fa_recipients = wx.CheckBox( self.cf_demo_fa_recipients_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_fa_recipients.Enable( False )
-		self.cf_demo_fa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_fa_recipients_sizer.Add( self.cf_demo_fa_recipients, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_fa_recipients_panel.SetSizer( cf_demo_fa_recipients_sizer )
-		self.cf_demo_fa_recipients_panel.Layout()
-		cf_demo_fa_recipients_sizer.Fit( self.cf_demo_fa_recipients_panel )
-		demo_cf_sizer.Add( self.cf_demo_fa_recipients_panel, 1, 0, 0 )
-		
-		self.cf_demo_fa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_fa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_fa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_fa_donors = wx.CheckBox( self.cf_demo_fa_donors_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_fa_donors.Enable( False )
-		self.cf_demo_fa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_demo_fa_donors_sizer.Add( self.cf_demo_fa_donors, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_fa_donors_panel.SetSizer( cf_demo_fa_donors_sizer )
-		self.cf_demo_fa_donors_panel.Layout()
-		cf_demo_fa_donors_sizer.Fit( self.cf_demo_fa_donors_panel )
-		demo_cf_sizer.Add( self.cf_demo_fa_donors_panel, 1, 0, 0 )
-		
-		self.cf_demo_aa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_demo_aa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_aa_recipients = wx.CheckBox( self.cf_demo_aa_recipients_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_aa_recipients.Enable( False )
-		self.cf_demo_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_demo_aa_recipients_sizer.Add( self.cf_demo_aa_recipients, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_aa_recipients_panel.SetSizer( cf_demo_aa_recipients_sizer )
-		self.cf_demo_aa_recipients_panel.Layout()
-		cf_demo_aa_recipients_sizer.Fit( self.cf_demo_aa_recipients_panel )
-		demo_cf_sizer.Add( self.cf_demo_aa_recipients_panel, 1, 0, 0 )
-		
-		self.cf_demo_aa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_demo_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab.  Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_demo_aa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_demo_aa_donors = wx.CheckBox( self.cf_demo_aa_donors_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_aa_donors.Enable( False )
-		self.cf_demo_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_demo_aa_donors_sizer.Add( self.cf_demo_aa_donors, 0, wx.ALL, 5 )
-		
-		
-		self.cf_demo_aa_donors_panel.SetSizer( cf_demo_aa_donors_sizer )
-		self.cf_demo_aa_donors_panel.Layout()
-		cf_demo_aa_donors_sizer.Fit( self.cf_demo_aa_donors_panel )
-		demo_cf_sizer.Add( self.cf_demo_aa_donors_panel, 1, 0, 0 )
+		self.cf_demo_aa_donors = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		demo_cf_sizer.Add( self.cf_demo_aa_donors, 0, wx.ALL, 5 )
 		
 		
 		cf_sizer.Add( demo_cf_sizer, 1, wx.EXPAND, 5 )
@@ -957,155 +847,58 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_cf_sizer.Add( self.land_cf_txt, 0, wx.ALL, 5 )
 		
 		self.cf_land_in_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"In Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_in_degree.Enable( False )
-		self.cf_land_in_degree.SetToolTip( u"The in degree indicates the number of connections into each planning unit" )
-		
 		land_cf_sizer.Add( self.cf_land_in_degree, 0, wx.ALL, 5 )
 		
 		self.cf_land_out_degree = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Out Degree", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_out_degree.Enable( False )
-		self.cf_land_out_degree.SetToolTip( u"The out degree indicates the number of connections from each planning unit" )
-		
 		land_cf_sizer.Add( self.cf_land_out_degree, 0, wx.ALL, 5 )
 		
 		self.cf_land_between_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Betweenness Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_between_cent.Enable( False )
-		self.cf_land_between_cent.SetToolTip( u"Betweenness Centrality is an indicator of a planning unit's centrality in a network. It is equal to the number of shortest paths from all connections to all others that pass through that planning unit." )
-		
 		land_cf_sizer.Add( self.cf_land_between_cent, 0, wx.ALL, 5 )
 		
 		self.cf_land_eig_vect_cent = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Eigenvector Centrality", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_eig_vect_cent.Enable( False )
-		self.cf_land_eig_vect_cent.SetToolTip( u"Eigen Vector Centrality is a measure of the influence of a planning unit in a network. It assigns relative scores to all planning unitin the network based on the concept that connections to high-scoring planning unit contribute more to the score of the planning unit in question than equal connections to low-scoring nodes" )
-		
 		land_cf_sizer.Add( self.cf_land_eig_vect_cent, 0, wx.ALL, 5 )
 		
 		self.cf_land_google = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Google PageRank", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_google.SetToolTip( u"Calculates the Google PageRank values of a graph. Higher ranking planning units will have a higher influence on the network." )
-		
 		land_cf_sizer.Add( self.cf_land_google, 0, wx.ALL, 5 )
 		
 		self.cf_land_self_recruit = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Self Recruitment", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_self_recruit.SetValue(True) 
 		self.cf_land_self_recruit.Hide()
-		self.cf_land_self_recruit.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		land_cf_sizer.Add( self.cf_land_self_recruit, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
-		self.cf_demo_land_retention1 = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Local Retention", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_demo_land_retention1.Hide()
-		self.cf_demo_land_retention1.SetToolTip( u"Self Recruitment is the proportion of new recruits from a planning unit that will stay in that planning unit." )
+		self.cf_land_retention = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Local Retention", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_retention.Hide()
 		
-		land_cf_sizer.Add( self.cf_demo_land_retention1, 0, wx.ALL, 5 )
+		land_cf_sizer.Add( self.cf_land_retention, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
-		self.cf_land_import_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_import_panel.Hide()
-		self.cf_land_import_panel.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
+		self.cf_land_import = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_import.Hide()
 		
-		cf_land_import_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_land_import = wx.CheckBox( self.cf_land_import_panel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_import.SetToolTip( u"Import optimizes for areas which receive higher numbers of immigrants. This is only available if the units of the connectivity matrix is \"Individuals\". " )
-		
-		cf_land_import_sizer.Add( self.cf_land_import, 0, wx.ALL, 5 )
-		
-		
-		self.cf_land_import_panel.SetSizer( cf_land_import_sizer )
-		self.cf_land_import_panel.Layout()
-		cf_land_import_sizer.Fit( self.cf_land_import_panel )
-		land_cf_sizer.Add( self.cf_land_import_panel, 1, wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
+		land_cf_sizer.Add( self.cf_land_import, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
 		self.cf_land_outflux = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflux", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.cf_land_outflux.SetValue(True) 
 		self.cf_land_outflux.Hide()
-		self.cf_land_outflux.SetToolTip( u"Self Recruitment is the propotion of new recruits from a planning unit that will stay in that planning unit." )
 		
 		land_cf_sizer.Add( self.cf_land_outflux, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
-		self.cf_land_stochasticity_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_stochasticity_panel.Hide()
-		self.cf_land_stochasticity_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
+		self.cf_land_stochasticity = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_land_stochasticity.Hide()
 		
-		cf_land_stochasticity_sizer = wx.BoxSizer( wx.VERTICAL )
+		land_cf_sizer.Add( self.cf_land_stochasticity, 0, wx.ALL|wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 5 )
 		
-		self.cf_land_stochasticity = wx.CheckBox( self.cf_land_stochasticity_panel, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_stochasticity.Enable( False )
+		self.cf_land_fa_recipients = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		land_cf_sizer.Add( self.cf_land_fa_recipients, 0, wx.ALL, 5 )
 		
-		cf_land_stochasticity_sizer.Add( self.cf_land_stochasticity, 0, wx.ALL, 5 )
+		self.cf_land_fa_donors = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		land_cf_sizer.Add( self.cf_land_fa_donors, 0, wx.ALL, 5 )
 		
+		self.cf_land_aa_recipients = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
+		land_cf_sizer.Add( self.cf_land_aa_recipients, 0, wx.ALL, 5 )
 		
-		self.cf_land_stochasticity_panel.SetSizer( cf_land_stochasticity_sizer )
-		self.cf_land_stochasticity_panel.Layout()
-		cf_land_stochasticity_sizer.Fit( self.cf_land_stochasticity_panel )
-		land_cf_sizer.Add( self.cf_land_stochasticity_panel, 1, wx.RESERVE_SPACE_EVEN_IF_HIDDEN, 0 )
-		
-		self.cf_land_fa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_fa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse to from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_fa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_land_fa_recipients = wx.CheckBox( self.cf_land_fa_recipients_panel, wx.ID_ANY, u"Focus Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_fa_recipients.Enable( False )
-		self.cf_land_fa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_fa_recipients_sizer.Add( self.cf_land_fa_recipients, 0, wx.ALL, 5 )
-		
-		
-		self.cf_land_fa_recipients_panel.SetSizer( cf_land_fa_recipients_sizer )
-		self.cf_land_fa_recipients_panel.Layout()
-		cf_land_fa_recipients_sizer.Fit( self.cf_land_fa_recipients_panel )
-		land_cf_sizer.Add( self.cf_land_fa_recipients_panel, 1, 0, 0 )
-		
-		self.cf_land_fa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_fa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_fa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_land_fa_donors = wx.CheckBox( self.cf_land_fa_donors_panel, wx.ID_ANY, u"Focus Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_fa_donors.Enable( False )
-		self.cf_land_fa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the focus areas. It is only available if a focus area shapefile was provided under the Spatial Input tab." )
-		
-		cf_land_fa_donors_sizer.Add( self.cf_land_fa_donors, 0, wx.ALL, 5 )
-		
-		
-		self.cf_land_fa_donors_panel.SetSizer( cf_land_fa_donors_sizer )
-		self.cf_land_fa_donors_panel.Layout()
-		cf_land_fa_donors_sizer.Fit( self.cf_land_fa_donors_panel )
-		land_cf_sizer.Add( self.cf_land_fa_donors_panel, 1, 0, 0 )
-		
-		self.cf_land_aa_recipients_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_aa_recipients_panel.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_land_aa_recipients_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_land_aa_recipients = wx.CheckBox( self.cf_land_aa_recipients_panel, wx.ID_ANY, u"Avoidance Area Recipients", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_aa_recipients.Enable( False )
-		self.cf_land_aa_recipients.SetToolTip( u"Finds the planning units to which organisms will disperse from the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_land_aa_recipients_sizer.Add( self.cf_land_aa_recipients, 0, wx.ALL, 5 )
-		
-		
-		self.cf_land_aa_recipients_panel.SetSizer( cf_land_aa_recipients_sizer )
-		self.cf_land_aa_recipients_panel.Layout()
-		cf_land_aa_recipients_sizer.Fit( self.cf_land_aa_recipients_panel )
-		land_cf_sizer.Add( self.cf_land_aa_recipients_panel, 1, 0, 0 )
-		
-		self.cf_land_aa_donors_panel = wx.Panel( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.cf_land_aa_donors_panel.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_land_aa_donors_sizer = wx.BoxSizer( wx.VERTICAL )
-		
-		self.cf_land_aa_donors = wx.CheckBox( self.cf_land_aa_donors_panel, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.cf_land_aa_donors.Enable( False )
-		self.cf_land_aa_donors.SetToolTip( u"Finds the planning units from which organisms will originate for the avoidance areas. It is only available if a avoidance area shapefile was provided under the Spatial Input tab. Returns the inverse of the score since it is assumed connectivity is to be minimized" )
-		
-		cf_land_aa_donors_sizer.Add( self.cf_land_aa_donors, 0, wx.ALL, 5 )
-		
-		
-		self.cf_land_aa_donors_panel.SetSizer( cf_land_aa_donors_sizer )
-		self.cf_land_aa_donors_panel.Layout()
-		cf_land_aa_donors_sizer.Fit( self.cf_land_aa_donors_panel )
-		land_cf_sizer.Add( self.cf_land_aa_donors_panel, 1, 0, 0 )
+		self.cf_land_aa_donors = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Avoidance Area Donors", wx.DefaultPosition, wx.DefaultSize, 0 )
+		land_cf_sizer.Add( self.cf_land_aa_donors, 0, wx.ALL, 5 )
 		
 		
 		cf_sizer.Add( land_cf_sizer, 1, wx.EXPAND, 5 )
@@ -1155,13 +948,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_bd_sizer.Add( self.land_bd_txt, 0, wx.ALL, 5 )
 		
 		self.bd_land_conn_boundary = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Connectivity as boundary", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bd_land_conn_boundary.Enable( False )
-		
 		land_bd_sizer.Add( self.bd_land_conn_boundary, 0, wx.ALL, 5 )
 		
 		self.bd_land_min_plan_graph = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Minimum Planar Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bd_land_min_plan_graph.Enable( False )
-		
 		land_bd_sizer.Add( self.bd_land_min_plan_graph, 0, wx.ALL, 5 )
 		
 		
@@ -1179,7 +968,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		metric_help_sizer.SetFlexibleDirection( wx.BOTH )
 		metric_help_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Outflux", u"Influx", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as boundary", u"Minimum Planar Graph" ]
+		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Outflow", u"Inflow", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as boundary", u"Minimum Planar Graph" ]
 		self.metric_definition_choice = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_definition_choiceChoices, 0 )
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )

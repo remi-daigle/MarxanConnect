@@ -52,17 +52,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
 
         # set help page
-        self.metric_definition_choice.ChangeSelection(0)
+        self.on_metric_definition_choice(event=None)
 
         self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality. If there is no mortality, rows sum to 1")
         self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row). Columns sum to 1.")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flux matrix, each cell represents the number of elements/individuals moving from site A (row) to site B (column) per unit time.")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flow matrix, each cell represents the number of elements/individuals moving from site A (row) to site B (column) per unit time.")
 
         self.demo_matrixFormatRadioBox.SetItemToolTip(0,"Matrix format data has the connectivity values arranged is a square format (i.e.the same number of rows and columns). The row names are the donor sites and the column names are the recipient sites ")
         self.demo_matrixFormatRadioBox.SetItemToolTip(1,"Edge Edge Listwith habi has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
@@ -258,8 +258,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_google.SetValue(self.project['options']['demo_metrics']['google'])
         self.cf_demo_self_recruit.SetValue(self.project['options']['demo_metrics']['self_recruit'])
         self.cf_demo_local_retention.SetValue(self.project['options']['demo_metrics']['local_retention'])
-        self.cf_demo_outflux.SetValue(self.project['options']['demo_metrics']['outflux'])
-        self.cf_demo_influx.SetValue(self.project['options']['demo_metrics']['influx'])
+        self.cf_demo_outflow.SetValue(self.project['options']['demo_metrics']['outflow'])
+        self.cf_demo_inflow.SetValue(self.project['options']['demo_metrics']['inflow'])
         self.cf_demo_stochasticity.SetValue(self.project['options']['demo_metrics']['stochasticity'])
         self.cf_demo_fa_recipients.SetValue(self.project['options']['demo_metrics']['fa_recipients'])
         self.cf_demo_fa_donors.SetValue(self.project['options']['demo_metrics']['fa_donors'])
@@ -369,8 +369,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['demo_metrics']['google'] = self.cf_demo_google.GetValue()
         self.project['options']['demo_metrics']['self_recruit'] = self.cf_demo_self_recruit.GetValue()
         self.project['options']['demo_metrics']['local_retention'] = self.cf_demo_local_retention.GetValue()
-        self.project['options']['demo_metrics']['outflux'] = self.cf_demo_outflux.GetValue()
-        self.project['options']['demo_metrics']['influx'] = self.cf_demo_influx.GetValue()
+        self.project['options']['demo_metrics']['outflow'] = self.cf_demo_outflow.GetValue()
+        self.project['options']['demo_metrics']['inflow'] = self.cf_demo_inflow.GetValue()
         self.project['options']['demo_metrics']['stochasticity'] = self.cf_demo_stochasticity.GetValue()
         self.project['options']['demo_metrics']['fa_recipients'] = self.cf_demo_fa_recipients.GetValue()
         self.project['options']['demo_metrics']['fa_donors'] = self.cf_demo_fa_donors.GetValue()
@@ -478,7 +478,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         GettingStartedframeframe.Show()
 
     def on_metric_definition_choice(self,event):
-        print(self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))
         soup = bs4.BeautifulSoup(open("glossary_webtex.html"),"html.parser")
 
         # find the node with id of "Plot"
@@ -767,8 +766,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.spec_resolve_metric_choice('eig_vect_cent_', "Eigen Vector Centrality", plot_type, choices)
                     self.spec_resolve_metric_choice('google_', "Google Page Rank", plot_type, choices)
                     self.spec_resolve_metric_choice('self_recruit_', "Self Recruitment", plot_type, choices)
-                    self.spec_resolve_metric_choice('outflux_', "Outflux", plot_type, choices)
-                    self.spec_resolve_metric_choice('influx_', "Influx", plot_type, choices)
+                    self.spec_resolve_metric_choice('outflow_', "Outflow", plot_type, choices)
+                    self.spec_resolve_metric_choice('inflow_', "Inflow", plot_type, choices)
                     self.spec_resolve_metric_choice('temp_conn_cov_', "Temporal Connectivity Covariance", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_recipients_', "Focus Area Recipients", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_donors_', "Focus Area Donors", plot_type, choices)
@@ -871,9 +870,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('local_retention_' + type, selection, "Local Retention", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('outflux_' + type, selection, "Outflux", type,
+        metric_type = self.spec_resolve_metric_choice('outflow_' + type, selection, "Outflow", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('influx_' + type, selection, "Influx", type,
+        metric_type = self.spec_resolve_metric_choice('inflow_' + type, selection, "Inflow", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('temp_conn_cov_' + type, selection, "Temporal Connectivity Covariance", type,
                                                       gettext=False) or metric_type
@@ -1313,7 +1312,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 demo_mig_enable = True
             else:
                 demo_mig_enable = False
-            if self.demo_matrixTypeRadioBox.GetStringSelection() == "Flux":
+            if self.demo_matrixTypeRadioBox.GetStringSelection() == "flow":
                 demo_ind_enable = True
             else:
                 demo_ind_enable = False
@@ -1355,8 +1354,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_google.Enable(enable=demo_enable)
         self.cf_demo_self_recruit.Enable(enable=demo_mig_enable)
         self.cf_demo_local_retention.Enable(enable=demo_prob_enable)
-        self.cf_demo_outflux.Enable(enable=demo_ind_enable)
-        self.cf_demo_influx.Enable(enable=demo_ind_enable)
+        self.cf_demo_outflow.Enable(enable=demo_ind_enable)
+        self.cf_demo_inflow.Enable(enable=demo_ind_enable)
         self.cf_demo_stochasticity.Enable(enable=demo_fa_time_enable)
         self.cf_demo_fa_recipients.Enable(enable=demo_fa_enable)
         self.cf_demo_fa_donors.Enable(enable=demo_fa_enable)
@@ -1602,21 +1601,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['spec_' + self.type]['local_retention_' + self.type] = \
                         marxanconpy.conmat2selfrecruit(self.temp[self.type + '_conmat'])
 
-                if self.cf_demo_outflux.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['outflux_' + self.type] = \
-                        marxanconpy.conmat2outflux(self.temp[self.type + '_conmat'])
+                if self.cf_demo_outflow.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['outflow_' + self.type] = \
+                        marxanconpy.conmat2outflow(self.temp[self.type + '_conmat'])
 
-                if self.cf_demo_influx.GetValue():
-                    self.project['connectivityMetrics']['spec_' + self.type]['influx_' + self.type] = \
-                        marxanconpy.conmat2influx(self.temp[self.type + '_conmat'])
+                if self.cf_demo_inflow.GetValue():
+                    self.project['connectivityMetrics']['spec_' + self.type]['inflow_' + self.type] = \
+                        marxanconpy.conmat2inflow(self.temp[self.type + '_conmat'])
 
-                if self.demo_matrixTypeRadioBox.GetStringSelection() != "Flux":
+                if self.demo_matrixTypeRadioBox.GetStringSelection() != "flow":
                     if self.cf_demo_fa_recipients.GetValue() or\
                         self.cf_demo_fa_donors.GetValue() or\
                         self.cf_demo_aa_recipients.GetValue() or\
                         self.cf_demo_aa_donors.GetValue():
                         self.warn_dialog(message="Calculating any 'donors' or 'recipients' metrics using a connectivity"
-                                                 " matrix with units other than 'Individuals' assumes outflux from all "
+                                                 " matrix with units other than 'Individuals' assumes outflow from all "
                                                  "planning units is equal.")
 
                 if self.cf_demo_fa_recipients.GetValue():
