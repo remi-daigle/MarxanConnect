@@ -14,8 +14,8 @@
 <p><strong>More Coming Soon!</strong></p>
 <div id="boundary-definitions" class="section level1">
 <h1>Boundary Definitions</h1>
-<p>In Marxan, the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>) in conjunction with the Boundary Length Modifier help achieve a solution that has a reasonable edge to area ratio. Typically these boundaries are numerically defined as the physical length of the shared shared boundary between planning units. Marxan Connect allows users to use connectivity data as boundary definitions (see <span class="citation">@Beger2010-ir</span>). This engourages the selection of connected networks of protected areas and minimizes the effective &quot;edge&quot; of the network based on movement information.</p>
-<p>Alternatively (or in conjuction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#conservation_feature">Conservation Features</a>.</p>
+<p>In Marxan, the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>) in conjunction with the Boundary Length Modifier help achieve a solution that has a reasonable edge to area ratio. Typically these boundaries are numerically defined as the physical length of the shared shared boundary between planning units. Marxan Connect allows users to use connectivity data as boundary definitions (see <span class="citation">@Beger2010-ir</span>). This encourages the selection of connected networks of protected areas and minimizes the effective &quot;edge&quot; of the network based on movement information.</p>
+<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#conservation_feature">Conservation Features</a>.</p>
 <div id="connectivity-as-boundary" class="section level2">
 <h2>Connectivity as Boundary</h2>
 <p>Incorporates the connectivity data into the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>; see <span class="citation">@Beger2010-ir</span>).</p>
@@ -172,9 +172,12 @@
 </tr>
 </tbody>
 </table>
-<p>The value column contain information about the connectivity between those sites at that particular time, but their exact value depends on whether the edge list is a <a href="glossary.html#probability">Probability</a>, a <a href="glossary.html#migration">Migration</a>, or a <a href="glossary.html#flow">Flow</a> edge list ## Data Types</p>
-<p>Marxan Connect can accept different types of connectivity data:</p>
+<p>The value column contain information about the connectivity between those sites at that particular time, but their exact value depends on whether the edge list is a <a href="glossary.html#probability">Probability</a>, a <a href="glossary.html#migration">Migration</a>, or a <a href="glossary.html#flow">Flow</a> edge list</p>
 </div>
+</div>
+<div id="data-types" class="section level2">
+<h2>Data Types</h2>
+<p>Marxan Connect can accept different types of connectivity data:</p>
 <div id="flow" class="section level3">
 <h3>Flow</h3>
 <p>Flow represents the amount of nutrients, energy, or organisms that move from one planning unit to another.</p>
@@ -295,7 +298,7 @@
 </div>
 <div id="probability" class="section level3">
 <h3>Probability</h3>
-<p>Probability represents the proportion of of nutrients, energy, or organisms produced in the donor planning unit which move to the recipient plannint unit. If there is no mortality, then rows sum to 1.</p>
+<p>Probability represents the proportion of of nutrients, energy, or organisms produced in the donor planning unit which move to the recipient planning unit. If there is no mortality, then rows sum to 1.</p>
 <p>Example Probability Matrix:</p>
 <table>
 <thead>
@@ -357,7 +360,7 @@
 <div id="conservation-feature" class="section level1">
 <h1>Conservation Feature</h1>
 <p>Marxan Connect can calculate various connectivity metrics that represent the process of ecological connectivity (e.g. centrality, outflow). These metrics can be used as conservation features in Marxan.</p>
-<p>Alternatively (or in conjuction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#boundary_definitions">Boundary Definitions</a>.</p>
+<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#boundary_definitions">Boundary Definitions</a>.</p>
 <div id="in-degree" class="section level2">
 <h2>In Degree</h2>
 <p><strong>Definition</strong>: The in degree indicates the number of connections into each planning unit <span class="citation">[@Minor2007-fb]</span>.</p>
@@ -449,7 +452,7 @@
 </div>
 <div id="temporal-connectivity-covariance" class="section level2">
 <h2>Temporal Connectivity Covariance</h2>
-<p><strong>Definition</strong>: The temporal connectivity covariance indicates the temporal complimentarity of planning units to existing connections within the focus area.</p>
+<p><strong>Definition</strong>: The temporal connectivity covariance indicates the temporal complementarity of planning units to existing connections within the focus area.</p>
 <p>It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab.</p>
 <p><em>Warning: This metric is still experimental 'beta' phase</em></p>
 <p><strong>Objectives</strong>: Prioritize for areas which that increase focus area metapopulation growth and stability.</p>
