@@ -782,13 +782,13 @@ div.tocify {
 </div>
 <div id="temporal-connectivity-covariance" class="section level2">
 <h2>Temporal Connectivity Covariance</h2>
-<p><strong>Definition</strong>: The temporal connectivity covariance indicates the temporal complementarity of planning units to existing connections within the focus area.</p>
+<p><strong>Definition</strong>: The temporal connectivity covariance indicates the temporal complementarity of planning units to existing connections within the focus area <span class="citation">(Watson et al. 2012)</span>.</p>
 <p>It is only available if a connectivity ‘List with Time’ was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab.</p>
 <p><em>Warning: This metric is still experimental ‘beta’ phase</em></p>
 <p><strong>Objectives</strong>: Prioritize for areas which that increase focus area metapopulation growth and stability.</p>
 <p><strong>Equation</strong>: The temporal connectivity covariance of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({TCC(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({A=(a_{v,t})}\)</span> be the adjacency matrix</p>
 <p><span class="math display">\[{\displaystyle TCC(v) = -\sum_{i \in E_{v,FA}} \sum_{j \in E_{FA,FA}}Cov(E_i,E_j)}\]</span></p>
-<p>where <span class="math inline">\({E(FA)}\)</span> are the <span class="math inline">\({E}\)</span> the link 2 planning units, both of which spatially overlap with the focus area. focus area and <span class="math inline">\({Cov()}\)</span> is the temporal covariance.</p>
+<p>where <span class="math inline">\({E_{FA,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that link 2 planning units, both of which spatially overlap with the focus area, <span class="math inline">\({E_{v,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that originate in <span class="math inline">\({v}\)</span> and end in a planning unit which spatially overlaps with the focus area, and <span class="math inline">\({Cov()}\)</span> is the temporal covariance.</p>
 <p><strong>Illustration</strong></p>
 <div class="figure">
 <img src="images/temporalconnectivity.gif" alt="" />
@@ -924,6 +924,9 @@ div.tocify {
 </div>
 <div id="ref-Minor2007-fb">
 <p>Minor, Emily S, and Dean L Urban. 2007. “Graph Theory as a Proxy for Spatially Explicit Population Models in Conservation Planning.” <em>Ecol. Appl.</em> 17 (6): 1771–82.</p>
+</div>
+<div id="ref-Watson2012-ug">
+<p>Watson, James R, Bruce E Kendall, David A Siegel, and Satoshi Mitarai. 2012. “Changing Seascapes, Stochastic Connectivity, and Marine Metapopulation Dynamics.” <em>Am. Nat.</em> 180 (1): 99–112.</p>
 </div>
 </div>
 </div>

@@ -465,7 +465,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Temporal Connectivity Covariance
 
-**Definition**: The temporal connectivity covariance indicates the temporal complementarity of planning units to existing connections within the focus area.
+**Definition**: The temporal connectivity covariance indicates the temporal complementarity of planning units to existing connections within the focus area [@Watson2012-ug].
 
 It is only available if a connectivity 'List with Time' was provided under Demographic Input in the Connectivity Input tab as well as a focus area shapefile under the Spatial Input tab.
 
@@ -478,7 +478,7 @@ It is only available if a connectivity 'List with Time' was provided under Demog
 
 $${\displaystyle TCC(v) = -\sum_{i \in E_{v,FA}} \sum_{j \in E_{FA,FA}}Cov(E_i,E_j)}$$
 
-where ${E(FA)}$ are the ${E}$ the link 2 planning units, both of which spatially overlap with the focus area. focus area and ${Cov()}$ is the temporal covariance.
+where ${E_{FA,FA}}$ are the ${E}$ that link 2 planning units, both of which spatially overlap with the focus area, ${E_{v,FA}}$ are the ${E}$ that originate in ${v}$ and end in a planning unit which spatially overlaps with the focus area, and ${Cov()}$ is the temporal covariance.
 
 **Illustration**
 
