@@ -52,7 +52,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
