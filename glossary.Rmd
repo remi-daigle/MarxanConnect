@@ -15,22 +15,21 @@ library(ggraph)
 library(gganimate)
 library(tidygraph)
 library(RColorBrewer)
-library(d3Network)
 ```
 
-# Boundary Definitions
+# Linkage Definitions
 
-In Marxan, the boundary definitions (*i.e.* `boundary.dat`) in conjunction with the Boundary Length Modifier (BLM) can help achieve a solution with a reasonable edge to area ratio (*i.e.* minimize edge while still achieving representativity targets). Typically boundaries are numerically defined as the physical length of the shared boundary between planning units. Marxan Connect allows users to use boundary definitions to incorporate connectivity data (see @Beger2010-ir) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective "edge" of the network based on movement information.
+In Marxan, the linkage definitions (*i.e.* `boundary.dat`) in conjunction with the Boundary Length Modifier (BLM) can help achieve a solution with a reasonable edge to area ratio (*i.e.* minimize edge while still achieving representativity targets). Typically boundaries are numerically defined as the physical length of the shared boundary between planning units. Marxan Connect allows users to use linkage definitions to incorporate connectivity data (see @Beger2010-ir) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective "edge" of the network based on movement information.
 
 Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using [Conservation Features](glossary.html#conservation_feature).
 
 ## Connectivity as Boundary
 
-Incorporates the connectivity data into the boundary definitions (*i.e.* `boundary.dat`; see @Beger2010-ir). 
+Incorporates the connectivity data into the linkage definitions (*i.e.* `boundary.dat`; see @Beger2010-ir). 
 
 ## Minimum Planar Graph
 
-Incorporates the connectivity data into the boundary definitions (*i.e.* `boundary.dat`) after transforming into a minimum planar graph (see @Fall2007-ku).
+Incorporates the connectivity data into the linkage definitions (*i.e.* `boundary.dat`) after transforming into a minimum planar graph (see @Fall2007-ku).
 
 
 # Data Formats
@@ -130,7 +129,7 @@ Example Probability Matrix:
 
 Marxan Connect can calculate various connectivity metrics (e.g. centrality, outflow), which can be used as conservation features in Marxan. 
 
-Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis using [Boundary Definitions](glossary.html#boundary_definitions).
+Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis using [Linkage Definitions](glossary.html#linkage_definitions).
 
 ## In Degree
 

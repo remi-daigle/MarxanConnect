@@ -225,7 +225,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -909,7 +909,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metrics_seperator = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metric_sizer.Add( self.metrics_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		self.bd_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Boundary Definition", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Linkage Definition", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bd_txt.Wrap( -1 )
 		self.bd_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
@@ -1376,7 +1376,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		bd_file_sizer.SetFlexibleDirection( wx.BOTH )
 		bd_file_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.BD_filecheck = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Export Boundary Definition to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.BD_filecheck = wx.CheckBox( self.preEvaluation, wx.ID_ANY, u"Export Linkage Definition to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.BD_filecheck.SetValue(True) 
 		bd_file_sizer.Add( self.BD_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
@@ -1513,7 +1513,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		inputdat_symmRadio_sizer = wx.BoxSizer( wx.VERTICAL )
 		
 		inputdat_symmRadioChoices = [ u"Asymetric", u"Symmetric" ]
-		self.inputdat_symmRadio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Boundary Definition Type", wx.DefaultPosition, wx.DefaultSize, inputdat_symmRadioChoices, 2, wx.RA_SPECIFY_COLS )
+		self.inputdat_symmRadio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Linkage Definition Type", wx.DefaultPosition, wx.DefaultSize, inputdat_symmRadioChoices, 2, wx.RA_SPECIFY_COLS )
 		self.inputdat_symmRadio.SetSelection( 0 )
 		inputdat_symmRadio_sizer.Add( self.inputdat_symmRadio, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
@@ -1545,7 +1545,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", True, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )

@@ -11,17 +11,17 @@
 <div id="header">
 <h1 class="title">Glossary</h1>
 </div>
-<div id="boundary-definitions" class="section level1">
-<h1>Boundary Definitions</h1>
-<p>In Marxan, the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>) in conjunction with the Boundary Length Modifier (BLM) can help achieve a solution with a reasonable edge to area ratio (<em>i.e.</em> minimize edge while still achieving representativity targets). Typically boundaries are numerically defined as the physical length of the shared boundary between planning units. Marxan Connect allows users to use boundary definitions to incorporate connectivity data (see <span class="citation">@Beger2010-ir</span>) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective &quot;edge&quot; of the network based on movement information.</p>
+<div id="linkage-definitions" class="section level1">
+<h1>Linkage Definitions</h1>
+<p>In Marxan, the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>) in conjunction with the Boundary Length Modifier (BLM) can help achieve a solution with a reasonable edge to area ratio (<em>i.e.</em> minimize edge while still achieving representativity targets). Typically boundaries are numerically defined as the physical length of the shared boundary between planning units. Marxan Connect allows users to use linkage definitions to incorporate connectivity data (see <span class="citation">@Beger2010-ir</span>) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective &quot;edge&quot; of the network based on movement information.</p>
 <p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#conservation_feature">Conservation Features</a>.</p>
 <div id="connectivity-as-boundary" class="section level2">
 <h2>Connectivity as Boundary</h2>
-<p>Incorporates the connectivity data into the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>; see <span class="citation">@Beger2010-ir</span>).</p>
+<p>Incorporates the connectivity data into the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>; see <span class="citation">@Beger2010-ir</span>).</p>
 </div>
 <div id="minimum-planar-graph" class="section level2">
 <h2>Minimum Planar Graph</h2>
-<p>Incorporates the connectivity data into the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>) after transforming into a minimum planar graph (see <span class="citation">@Fall2007-ku</span>).</p>
+<p>Incorporates the connectivity data into the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>) after transforming into a minimum planar graph (see <span class="citation">@Fall2007-ku</span>).</p>
 </div>
 </div>
 <div id="data-formats" class="section level1">
@@ -359,7 +359,7 @@
 <div id="conservation-feature" class="section level1">
 <h1>Conservation Feature</h1>
 <p>Marxan Connect can calculate various connectivity metrics (e.g. centrality, outflow), which can be used as conservation features in Marxan.</p>
-<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis using <a href="glossary.html#boundary_definitions">Boundary Definitions</a>.</p>
+<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis using <a href="glossary.html#linkage_definitions">Linkage Definitions</a>.</p>
 <div id="in-degree" class="section level2">
 <h2>In Degree</h2>
 <p><strong>Definition</strong>: In degree indicates the number of connections into each planning unit <span class="citation">[@Minor2007-fb]</span>.</p>

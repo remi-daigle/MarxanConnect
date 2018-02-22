@@ -341,17 +341,17 @@ div.tocify {
 </div>
 
 
-<div id="boundary-definitions" class="section level1">
-<h1>Boundary Definitions</h1>
-<p>In Marxan, the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>) in conjunction with the Boundary Length Modifier (BLM) can help achieve a solution with a reasonable edge to area ratio (<em>i.e.</em> minimize edge while still achieving representativity targets). Typically boundaries are numerically defined as the physical length of the shared boundary between planning units. Marxan Connect allows users to use boundary definitions to incorporate connectivity data (see <span class="citation">Beger et al. (2010)</span>) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective “edge” of the network based on movement information.</p>
+<div id="linkage-definitions" class="section level1">
+<h1>Linkage Definitions</h1>
+<p>In Marxan, the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>) in conjunction with the Boundary Length Modifier (BLM) can help achieve a solution with a reasonable edge to area ratio (<em>i.e.</em> minimize edge while still achieving representativity targets). Typically boundaries are numerically defined as the physical length of the shared boundary between planning units. Marxan Connect allows users to use linkage definitions to incorporate connectivity data (see <span class="citation">Beger et al. (2010)</span>) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective “edge” of the network based on movement information.</p>
 <p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#conservation_feature">Conservation Features</a>.</p>
 <div id="connectivity-as-boundary" class="section level2">
 <h2>Connectivity as Boundary</h2>
-<p>Incorporates the connectivity data into the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>; see <span class="citation">Beger et al. (2010)</span>).</p>
+<p>Incorporates the connectivity data into the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>; see <span class="citation">Beger et al. (2010)</span>).</p>
 </div>
 <div id="minimum-planar-graph" class="section level2">
 <h2>Minimum Planar Graph</h2>
-<p>Incorporates the connectivity data into the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>) after transforming into a minimum planar graph (see <span class="citation">Fall et al. (2007)</span>).</p>
+<p>Incorporates the connectivity data into the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>) after transforming into a minimum planar graph (see <span class="citation">Fall et al. (2007)</span>).</p>
 </div>
 </div>
 <div id="data-formats" class="section level1">
@@ -689,7 +689,7 @@ div.tocify {
 <div id="conservation-feature" class="section level1">
 <h1>Conservation Feature</h1>
 <p>Marxan Connect can calculate various connectivity metrics (e.g. centrality, outflow), which can be used as conservation features in Marxan.</p>
-<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis using <a href="glossary.html#boundary_definitions">Boundary Definitions</a>.</p>
+<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis using <a href="glossary.html#linkage_definitions">Linkage Definitions</a>.</p>
 <div id="in-degree" class="section level2">
 <h2>In Degree</h2>
 <p><strong>Definition</strong>: In degree indicates the number of connections into each planning unit <span class="citation">(Minor and Urban 2007)</span>.</p>
@@ -698,7 +698,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle ID(v) = deg^{-}(v)}\]</span></p>
 <p>where <span class="math inline">\({deg^{-}(v)}\)</span> is the number if inward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-1-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-1-1.png" alt="" /><!-- --></p>
 </div>
 <div id="out-degree" class="section level2">
 <h2>Out Degree</h2>
@@ -708,7 +708,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle OD(v) = deg^{+}(v)}\]</span></p>
 <p>where <span class="math inline">\({deg^{+}(v)}\)</span> is the number of outward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-2-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-2-1.png" alt="" /><!-- --></p>
 </div>
 <div id="betweenness-centrality" class="section level2">
 <h2>Betweenness Centrality</h2>
@@ -718,7 +718,7 @@ div.tocify {
 <p><span class="math display">\[\displaystyle {BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}\]</span></p>
 <p>where <span class="math inline">\({\sigma _{st}}\)</span> is total number of shortest paths from planning unit <span class="math inline">\({s}\)</span> to planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({\sigma _{st}(v)}\)</span> is the number of those paths that pass through <span class="math inline">\({v}\)</span>.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-3-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-3-1.png" alt="" /><!-- --></p>
 </div>
 <div id="eigenvector-centrality" class="section level2">
 <h2>Eigenvector Centrality</h2>
@@ -728,7 +728,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle EVC(v) =  \frac{1}{\lambda} \sum_{t \in G} c_{v,t}}\]</span></p>
 <p>where <span class="math inline">\({\lambda }\)</span> is the leading eigenvalue.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-4-1.png" alt="" /><!-- --></p>
 </div>
 <div id="google-pagerank" class="section level2">
 <h2>Google PageRank</h2>
@@ -738,7 +738,7 @@ div.tocify {
 <p><span class="math display">\[\displaystyle PR(v) = 1-d+d\sum_{v\ne t\in V}PR(t)c_{v,t}c_{t,v}\]</span></p>
 <p>where <span class="math inline">\(d\)</span> is the damping factor set to 0.85 by default.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-5-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-5-1.png" alt="" /><!-- --></p>
 </div>
 <div id="self-recruitment" class="section level2">
 <h2>Self Recruitment</h2>
@@ -748,7 +748,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle SR(v) = \frac{c_{v,v}N_v}{\sum_{t \in V}c_{t,v}N_v}}\]</span></p>
 <p>where <span class="math inline">\({N_v}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({t}\)</span>.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-6-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-6-1.png" alt="" /><!-- --></p>
 </div>
 <div id="local-retention" class="section level2">
 <h2>Local Retention</h2>
@@ -757,7 +757,7 @@ div.tocify {
 <p><strong>Equation</strong>: The local retention of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({LR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[\displaystyle LR(v) = c_{v,v}\]</span></p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-7-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-7-1.png" alt="" /><!-- --></p>
 </div>
 <div id="inflow" class="section level2">
 <h2>Inflow</h2>
@@ -767,7 +767,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle IF(v) = \sum_{t \ne v \in V}c_{t,v}N_t}\]</span></p>
 <p>where <span class="math inline">\({N_t}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({t}\)</span>.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-8-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-8-1.png" alt="" /><!-- --></p>
 </div>
 <div id="outflow" class="section level2">
 <h2>Outflow</h2>
@@ -777,7 +777,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle OF(v) = \sum_{t \ne v \in V}c_{v,t}N_v}\]</span></p>
 <p>where <span class="math inline">\({N_v}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({v}\)</span>.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-9-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-9-1.png" alt="" /><!-- --></p>
 </div>
 <div id="temporal-connectivity-covariance" class="section level2">
 <h2>Temporal Connectivity Covariance</h2>
@@ -790,7 +790,7 @@ div.tocify {
 <p>where <span class="math inline">\({E_{FA,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that link 2 planning units, both of which spatially overlap with the focus area, <span class="math inline">\({E_{v,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that originate in <span class="math inline">\({v}\)</span> and end in a planning unit which spatially overlaps with the focus area, and <span class="math inline">\({Cov()}\)</span> is the temporal covariance.</p>
 <p><strong>Illustration</strong></p>
 <div class="figure">
-<img src="images/temporalconnectivity.gif" />
+<img src="images/temporalconnectivity.gif" alt="" />
 
 </div>
 </div>
@@ -802,7 +802,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle FAR(v) = \sum_{t \ne v \in V(FA)}c_{t,v}N_t}\]</span></p>
 <p>where <span class="math inline">\({N_t}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the focus area.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-11-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-11-1.png" alt="" /><!-- --></p>
 </div>
 <div id="focus-area-donors" class="section level2">
 <h2>Focus Area Donors</h2>
@@ -812,7 +812,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle FAD(v) = \sum_{t \ne v \in V(FA)}c_{v,t}N_v}\]</span></p>
 <p>where <span class="math inline">\({N_v}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({v}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the focus area.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-12-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-12-1.png" alt="" /><!-- --></p>
 </div>
 <div id="avoidance-area-recipients" class="section level2">
 <h2>Avoidance Area Recipients</h2>
@@ -822,7 +822,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle AAR(v) = \sum_{t \ne v \in V(AA)}c_{t,v}N_t}\]</span></p>
 <p>where <span class="math inline">\({N_t}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({V(AA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the avoidance area.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-13-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-13-1.png" alt="" /><!-- --></p>
 </div>
 <div id="avoidance-area-donors" class="section level2">
 <h2>Avoidance Area Donors</h2>
@@ -832,7 +832,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle AAD(v) = \sum_{t \ne v \in V(AA)}c_{v,t}N_v}\]</span></p>
 <p>where <span class="math inline">\({N_v}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({v}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the avoidance area.</p>
 <p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-14-1.png" /><!-- --></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-14-1.png" alt="" /><!-- --></p>
 </div>
 </div>
 <div id="focus-areas" class="section level1">
