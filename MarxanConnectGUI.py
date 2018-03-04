@@ -467,7 +467,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
 
     def on_about(self, event):
-        dlg = wx.MessageBox(message="Version: v0.0.4\n(C) 2017 Remi Daigle\n",
+        dlg = wx.MessageBox(message="Version: v0.1.0\n(C) 2017 Remi Daigle\n",
                             caption="About Marxan with Connectivity",
                             style=wx.OK)
         dlg.Destroy()
@@ -1668,9 +1668,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
                         marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'])
 
-                if self.bd_demo_min_plan_graph.GetValue():
-                    self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
-                        marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
+                # if self.bd_demo_min_plan_graph.GetValue():
+                #     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
+                #         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
 
             # calculate landscape metrics ############################################################################
             if self.type[-7:] == 'land_pu':
@@ -1737,9 +1737,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type + "_" + str(h)] = \
                             marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
 
-                    if self.bd_land_min_plan_graph.GetValue():
-                        self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type + "_" + str(h)] = \
-                            marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'][h])
+                    # if self.bd_land_min_plan_graph.GetValue():
+                    #     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type + "_" + str(h)] = \
+                    #         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'][h])
 
 
         # create initial spec

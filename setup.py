@@ -3,7 +3,7 @@ import sys
 import os
 from cx_Freeze import setup, Executable
 
-version = "v0.0.4"
+version = "v0.1.0"
 
 # Read in the file
 with open('gui.py', 'r', encoding="utf8") as file :

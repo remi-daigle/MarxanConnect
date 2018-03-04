@@ -475,7 +475,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demographic.SetSizer( demoMainSizer )
 		self.demographic.Layout()
 		demoMainSizer.Fit( self.demographic )
-		self.conn_category_choicebook.AddPage( self.demographic, u"Demographic Input", True )
+		self.conn_category_choicebook.AddPage( self.demographic, u"Demographic Input", False )
 		self.landscape = wx.Panel( self.conn_category_choicebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		landMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		landMainSizer.AddGrowableCol( 0 )
@@ -753,14 +753,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.landscape.SetSizer( landMainSizer )
 		self.landscape.Layout()
 		landMainSizer.Fit( self.landscape )
-		self.conn_category_choicebook.AddPage( self.landscape, u"Landscape Input", False )
+		self.conn_category_choicebook.AddPage( self.landscape, u"Landscape Input", True )
 		conn_input_mainsizer.Add( self.conn_category_choicebook, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		self.connectivityInput.SetSizer( conn_input_mainsizer )
 		self.connectivityInput.Layout()
 		conn_input_mainsizer.Fit( self.connectivityInput )
-		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityInput, u"2) Connectivity Input", True, wx.NullBitmap )
 		self.connectivityMetrics = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		metricsMainSizer = wx.FlexGridSizer( 0, 2, 0, 0 )
 		metricsMainSizer.AddGrowableCol( 1 )
@@ -909,7 +909,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metrics_seperator = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metric_sizer.Add( self.metrics_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		self.bd_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Linkage Definition", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Ecological Distance as Boundary Definition", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bd_txt.Wrap( -1 )
 		self.bd_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
@@ -934,6 +934,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		demo_bd_sizer.Add( self.bd_demo_conn_boundary, 0, wx.ALL, 5 )
 		
 		self.bd_demo_min_plan_graph = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Minimum Planar Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_demo_min_plan_graph.Hide()
+		
 		demo_bd_sizer.Add( self.bd_demo_min_plan_graph, 0, wx.ALL, 5 )
 		
 		
@@ -951,6 +953,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_bd_sizer.Add( self.bd_land_conn_boundary, 0, wx.ALL, 5 )
 		
 		self.bd_land_min_plan_graph = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Minimum Planar Graph", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_land_min_plan_graph.Hide()
+		
 		land_bd_sizer.Add( self.bd_land_min_plan_graph, 0, wx.ALL, 5 )
 		
 		
@@ -1545,7 +1549,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -2414,7 +2418,7 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Clarke, J; Beger, M. 2018. Marxan Connect v0.0.4. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Clarke, J; Beger, M. 2018. Marxan Connect v0.1.0. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
 		

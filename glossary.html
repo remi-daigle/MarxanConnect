@@ -341,25 +341,166 @@ div.tocify {
 </div>
 
 
-<div id="linkage-definitions" class="section level1">
-<h1>Linkage Definitions</h1>
-<p>In Marxan, the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>) in conjunction with the Boundary Length Modifier (BLM) can help achieve a solution with a reasonable edge to area ratio (<em>i.e.</em> minimize edge while still achieving representativity targets). Typically boundaries are numerically defined as the physical length of the shared boundary between planning units. Marxan Connect allows users to use linkage definitions to incorporate connectivity data (see <span class="citation">Beger et al. (2010)</span>) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective “edge” of the network based on movement information.</p>
-<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#conservation_feature">Conservation Features</a>.</p>
-<div id="connectivity-as-boundary" class="section level2">
-<h2>Connectivity as Boundary</h2>
-<p>Incorporates the connectivity data into the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>; see <span class="citation">Beger et al. (2010)</span>).</p>
+<div id="avoidance-areas" class="section level1">
+<h1>Avoidance Areas</h1>
+<p>For some of the connectivity metrics (e.g. Focus Area Donors), it is important to consider ‘focus areas’ for which connectivity should be considered. Examples of such focus areas are existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan Connect assumes that the planning units within the focus areas will otherwise be protected. Loading focus areas into Marxan Connect allows users to set conservation targets for other areas that complement focus areas, or to “lock-in” (fixed in the final reserve) the planning units which are overlap the focus area.</p>
 </div>
-<div id="minimum-planar-graph" class="section level2">
-<h2>Minimum Planar Graph</h2>
-<p>Incorporates the connectivity data into the linkage definitions (<em>i.e.</em> <code>boundary.dat</code>) after transforming into a minimum planar graph (see <span class="citation">Fall et al. (2007)</span>).</p>
+<div id="conservation-feature" class="section level1">
+<h1>Conservation Feature</h1>
+<p>Marxan Connect can calculate various network metrics (e.g. centrality) and several metapopulation-like measures (e.g., out-flow), which can be used as conservation features in Marxan.</p>
+<p>It should be noted that both of approaches of incorporating connectivity into Marxan (as conservation features or as an <a href="glossary.html#ecological_distance">Ecological Distance</a> as a Boundary Definition) can be used alone or in combination. In all cases, an appropriate level of sensitivity testing should be completed to help with interpretation and communication of outcomes.</p>
+<div id="in-degree" class="section level2">
+<h2>In-Degree</h2>
+<p><strong>Definition</strong>: Out-degree indicates the number of connections leaving from each planning unit <span class="citation">(Minor and Urban 2007)</span>. This metric ignores edge weights or strengths, and can be calculated from <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>, and <a href="glossary.html#probability"><span class="math inline">\({P}\)</span></a> .</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which receive input from a larger number of other planning units. The recipient planning units with a high In-degree may have higher genetic diversity <span class="citation">(Almany et al. 2009; Munguía-Vega et al. 2015)</span>, species diversity (ref) and population resilience through greater rescue potential (ref) as a result of the high in number of incoming connections. However, planning units with high In-degree may be susceptible to outbreaks and invasive species <span class="citation">(<em>e.g.</em> Hock et al. 2014)</span></p>
+<p><strong>Equation</strong>: The in degree of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({ID(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections).</p>
+<p><span class="math display">\[{\displaystyle ID(v) = deg^{-}(v)}\]</span></p>
+<p>where <span class="math inline">\({deg^{-}(v)}\)</span> is the number if inward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-1-1.png" alt="" /><!-- --></p>
+</div>
+<div id="out-degree" class="section level2">
+<h2>Out-Degree</h2>
+<p><strong>Definition</strong>: Out degree indicates the number of connections originating from each planning unit <span class="citation">(Minor and Urban 2007)</span>. This metric ignores edge weights or strengths, and can be calculated from <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>, and <a href="glossary.html#probability"><span class="math inline">\({P}\)</span></a>.</p>
+<p><strong>Possible Objectives</strong>: Prioritize for planning units which have a high number of connections going out to other planning units. Out-degree is often seen as a proxy for â€˜influenceâ€™, where a high out-degree signifies a larger influence on many other units. Units with an extremely high out-degree are considered hubs and may have a influence on local and network-wide dynamics.</p>
+<p><strong>Equation</strong>: The in degree of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({OD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections).</p>
+<p><span class="math display">\[{\displaystyle OD(v) = deg^{+}(v)}\]</span></p>
+<p>where <span class="math inline">\({deg^{+}(v)}\)</span> is the number of outward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-2-1.png" alt="" /><!-- --></p>
+</div>
+<div id="betweenness-centrality" class="section level2">
+<h2>Betweenness Centrality</h2>
+<p><strong>Definition</strong>: Betweenness centrality is a measure of the relative number of all shortest paths across a network (i.e., between all possible pairs of planning units) that pass through the focal planning unit <span class="citation">(Minor and Urban 2007)</span>. Here, every edge (<em>i.e.</em> connection), irrespective of strength, is given a length of 1. This metric ignores edge weights or strengths, and can be calculated from <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>, and <a href="glossary.html#probability"><span class="math inline">\({P}\)</span></a>.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which may act as important stepping stones among other planning units (those that have a high betweenness centrality).</p>
+<p><strong>Equation</strong>: The betweenness centrality of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({BC(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections) is</p>
+<p><span class="math display">\[\displaystyle {BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}\]</span></p>
+<p>where <span class="math inline">\({\sigma _{st}}\)</span> is total number of shortest paths from planning unit <span class="math inline">\({s}\)</span> to planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({\sigma _{st}(v)}\)</span> is the number of those paths that pass through <span class="math inline">\({v}\)</span>.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-3-1.png" alt="" /><!-- --></p>
+</div>
+<div id="eigenvector-centrality" class="section level2">
+<h2>Eigenvector Centrality</h2>
+<p><strong>Definition</strong>: Eigenvector centrality indicates the influence (considers number of connections and their weight) that a planning unit has on the network <span class="citation">(D’Aloia et al. 2017)</span>. This metric requires appropriate edge weights or strengths, and should only be calculated from a properly structured migration matrix, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>. Eigenvector centrality is functionally similar to Google PageRank, but Eigenvector centrality is limited by the required matrix and the algorithm used to calculate it may not perform well with sparsely connected network.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which are important to maintaining or influencing connectivity dynamics across the whole planning area (<em>i.e.</em> study extent).</p>
+<p><strong>Equation</strong>: The Eigenvector centrality of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({EVC(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (migration) matrix</p>
+<p><span class="math display">\[{\displaystyle EVC(v) =  \frac{1}{\lambda} \sum_{t \in G} c_{v,t}}\]</span></p>
+<p>where <span class="math inline">\({\lambda }\)</span> is the leading eigenvalue.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-4-1.png" alt="" /><!-- --></p>
+</div>
+<div id="google-pagerank" class="section level2">
+<h2>Google PageRank</h2>
+<p><strong>Definition</strong>: PageRank uses the number and quality (weight) of connections associated with a planning unit, to estimate the importance of the planning unit. PageRank is functionally similar to Eigenvector Centrality, and is recommended for well connected planning areas. Appropriate matrices to be used with the PageRank algorithm include the <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>, and <a href="glossary.html#probability"><span class="math inline">\({P}\)</span></a>.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which are important to maintaining or influencing connectivity within the whole planning area (<em>i.e.</em> study extent).</p>
+<p><strong>Equation</strong>: The weighted PageRank of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({PR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability? migration?) matrix.</p>
+<p><span class="math display">\[\displaystyle PR(v) = 1-d+d\sum_{v\ne t\in V}PR(t)c_{v,t}c_{t,v}\]</span></p>
+<p>where <span class="math inline">\(d\)</span> is the damping factor set to 0.85 by default.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-5-1.png" alt="" /><!-- --></p>
+</div>
+<div id="self-recruitment" class="section level2">
+<h2>Self-Recruitment</h2>
+<p><strong>Definition</strong>: Self-recruitment is the diagonal of the migration matrix, [M]. It is the proportion of individuals that arrived to a planning unit that originated from that same planning unit <span class="citation">(see D’Aloia et al. 2017; Lett et al. 2015)</span>.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which are dominated by locally-produced individuals. High self-recruitment sites is often used as a proxy for isolation. A high self-recruitment value may indicate a greater degree of isolation. Note that it should be used cautiously, as high self recruitment does not equate high recruitment (<em>e.g.</em> a planning unit can be 100% self-recruiting when only one individual arrives, which also originated from that unit).</p>
+<p><strong>Equation</strong>: The self recruitment of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({SR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[{\displaystyle SR(v) = \frac{c_{v,v}N_v}{\sum_{t \in V}c_{t,v}N_v}}\]</span></p>
+<p>where <span class="math inline">\({N_v}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({t}\)</span>.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-6-1.png" alt="" /><!-- --></p>
+</div>
+<div id="local-retention" class="section level2">
+<h2>Local Retention</h2>
+<p><strong>Definition</strong>: Local retention is the diagonal of the probability matrix, [P], and is the proportion of those individuals originating from a planning unit that are retained within that planning unit. Therefore, this value is independent of contributions from all other planning units <span class="citation">(Lett et al. 2015)</span>.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which retain a large proportion of the individuals produced. This may be used as a proxy for the planning unit to be self-sustaining (ref ).</p>
+<p><strong>Equation</strong>: The local retention of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({LR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[\displaystyle LR(v) = c_{v,v}\]</span></p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-7-1.png" alt="" /><!-- --></p>
+</div>
+<div id="in-flow" class="section level2">
+<h2>In-flow</h2>
+<p><strong>Definition</strong>: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, after the diagonal is removed.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which receives larger amounts of individuals from other planning units.</p>
+<p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({IF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[{\displaystyle IF(v) = \sum_{t \ne v \in V}c_{t,v}N_t}\]</span></p>
+<p>where <span class="math inline">\({N_t}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({t}\)</span>.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-8-1.png" alt="" /><!-- --></p>
+</div>
+<div id="out-flow" class="section level2">
+<h2>Out-flow</h2>
+<p><strong>Definition</strong>: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, after the diagonal is removed.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize other planning units (e.g. maximize spillover).</p>
+<p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({OF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[{\displaystyle OF(v) = \sum_{t \ne v \in V}c_{v,t}N_v}\]</span></p>
+<p>where <span class="math inline">\({N_v}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({v}\)</span>.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-9-1.png" alt="" /><!-- --></p>
+</div>
+<div id="temporal-connectivity-covariance" class="section level2">
+<h2>Temporal Connectivity Covariance</h2>
+<p><strong>Warning</strong>: This metric is still <strong>experimental</strong> ‘beta’ phase, use at your own risk!</p>
+<p><strong>Definition</strong>: Temporal connectivity covariance indicates the temporal complementarity (<em>i.e.</em> negative covariance) of connections from a planning unit to the focus areas to existing connections within the focus area <span class="citation">(Watson et al. 2012)</span>.</p>
+<p>The option to calculate it is only available if a connectivity ‘List with Time’ was provided under Demographic Input in the Connectivity Input tab, and a focus area shapefile was provided under the Spatial Input tab.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which increase focus area metapopulation growth and stability.</p>
+<p><strong>Equation</strong>: The temporal connectivity covariance of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({TCC(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({A=(a_{v,t})}\)</span> be the adjacency matrix</p>
+<p><span class="math display">\[{\displaystyle TCC(v) = -\sum_{i \in E_{v,FA}} \sum_{j \in E_{FA,FA}}Cov(E_i,E_j)}\]</span></p>
+<p>where <span class="math inline">\({E_{FA,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that link 2 planning units, both of which spatially overlap with the focus area, <span class="math inline">\({E_{v,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that originate in <span class="math inline">\({v}\)</span> and end in a planning unit which spatially overlaps with the focus area, and <span class="math inline">\({Cov()}\)</span> is the temporal covariance.</p>
+<p><strong>Illustration</strong></p>
+<div class="figure">
+<img src="images/temporalconnectivity.gif" alt="" />
+
+</div>
+</div>
+<div id="focus-area-recipients" class="section level2">
+<h2>Focus Area Recipients</h2>
+<p><strong>Definition</strong>: A â€˜focus areaâ€™ may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix [F] or migration matrix [M].</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which are subsidized by the focus area (<em>e.g.</em> fully protected reserves).</p>
+<p><strong>Equation</strong>: The focus area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[{\displaystyle FAR(v) = \sum_{t \ne v \in V(FA)}c_{t,v}N_t}\]</span></p>
+<p>where <span class="math inline">\({N_t}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the focus area.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-11-1.png" alt="" /><!-- --></p>
+</div>
+<div id="focus-area-donors" class="section level2">
+<h2>Focus Area Donors</h2>
+<p><strong>Definition</strong>: A â€˜focus areaâ€™ may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas â€“ these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix [F], or possibly the probability matrix [P], if local production data has been provided.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize the focus area (e.g. protect demographic sources to existing protected areas).</p>
+<p><strong>Equation</strong>: The focus area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[{\displaystyle FAD(v) = \sum_{t \ne v \in V(FA)}c_{v,t}N_v}\]</span></p>
+<p>where <span class="math inline">\({N_v}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({v}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the focus area.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-12-1.png" alt="" /><!-- --></p>
+</div>
+<div id="avoidance-area-recipients" class="section level2">
+<h2>Avoidance Area Recipients</h2>
+<p><strong>Definition</strong>: An â€˜avoidance areaâ€™ may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that receive <em>fewer</em> individuals from these avoidance areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix [F] or migration matrix [M]. <strong>Warning</strong>: This metric should be discretized since scoring low on this metric is desired.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots).</p>
+<p><strong>Equation</strong>: The avoidance area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({AAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[{\displaystyle AAR(v) = \sum_{t \ne v \in V(AA)}c_{t,v}N_t}\]</span></p>
+<p>where <span class="math inline">\({N_t}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({V(AA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the avoidance area.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-13-1.png" alt="" /><!-- --></p>
+</div>
+<div id="avoidance-area-donors" class="section level2">
+<h2>Avoidance Area Donors</h2>
+<p><strong>Definition</strong>: An â€˜avoidance areaâ€™ may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas â€“ these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix [F], or possibly the probability matrix [P], if local production data has been provided.</p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize the avoidance area (e.g. increase resilience for impacted zones).</p>
+<p><strong>Equation</strong>: The avoidance area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
+<p><span class="math display">\[{\displaystyle AAD(v) = \sum_{t \ne v \in V(AA)}c_{v,t}N_v}\]</span></p>
+<p>where <span class="math inline">\({N_v}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({v}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the avoidance area.</p>
+<p><strong>Illustration</strong></p>
+<p><img src="glossary_files/figure-html/unnamed-chunk-14-1.png" alt="" /><!-- --></p>
 </div>
 </div>
 <div id="data-formats" class="section level1">
 <h1>Data Formats</h1>
-<p>Marxan Connect can accept different formats of connectivity data:</p>
+<p>â€œConnectivityâ€ means very different things in different ecological and conservation contexts. Although there is no standard in how these data should be incorporated into the conservation planning process, Marxan Connect has the flexibility to accept different formats of connectivity data to accommodate a broad suite of situations. As with any model, great care should be taken in developing and using these data.</p>
+<p>Typically, the values in a connectivity matrix represents the movement of individuals between planning units or some likelihood of movement, but values could also represent geographic distance, gene flow, mass transfer (e.g., of carbon), nutrients, energy, etc. Care should be taken into ensuring the data used are appropriate for the analyses performed within Marxan Connect.</p>
 <div id="connectivity-matrix" class="section level2">
 <h2>Connectivity Matrix</h2>
-<p>We use a broad definition of connectivity matrix. The the donor site IDs are shown in the first column contains and the recipient site IDs in the first row.</p>
+<p>The connectivity matrix is how we refer to the generic data structure where donor (or source) sites are rows and the recipient (or destination) sites are the columns. Donor IDs are shown in the first column (<em>i.e.</em> unique for each source site) and the recipient site IDs in the first row (<em>i.e.</em>,* unique for each destination ). Note, most Marxan Connect requires that the source sites and the destination sites are exactly the same (forming a square matrix), match the ID’s of the planning units, and arranged in the same order.</p>
 <table>
 <thead>
 <tr class="header">
@@ -414,11 +555,11 @@ div.tocify {
 </tr>
 </tbody>
 </table>
-<p>The cells contain information about the connectivity between those sites, but their exact value depends on whether the connectivity matrix is a <a href="glossary.html#probability">Probability</a>, a <a href="glossary.html#migration">Migration</a>, or a <a href="glossary.html#flow">Flow</a> matrix</p>
+<p>The elements (<em>i.e.</em> cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (<em>e.g.</em> <a href="glossary.html#probability">Probability</a>, <a href="glossary.html#migration">Migration</a>, or <a href="glossary.html#flow">Flow</a>).</p>
 </div>
 <div id="edge-list" class="section level2">
 <h2>Edge List</h2>
-<p>The first column contains the donor site IDs and second column contains the recipient site IDs.</p>
+<p>The value column is an alternative (yet equivalent) representation of the connectivity matrix. For sparse matrices, this may be a much more efficient data structure. The first column contains the donor site IDs, the second column contains the recipient site IDs, and the third column contains the connectivity value. In this representation, each non-zero element of the connectivity matrix is represented by a row.</p>
 <table>
 <thead>
 <tr class="header">
@@ -455,11 +596,11 @@ div.tocify {
 </tr>
 </tbody>
 </table>
-<p>The value column contains information about the connectivity between those sites, but their exact value depends on whether the edge list is a <a href="glossary.html#probability">Probability</a>, a <a href="glossary.html#migration">Migration</a>, or a <a href="glossary.html#flow">Flow</a> edge list</p>
+<p>The value column contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (<em>e.g.</em> <a href="glossary.html#probability">Probability</a>, <a href="glossary.html#migration">Migration</a>, or <a href="glossary.html#flow">Flow</a>).</p>
 </div>
 <div id="edge-list-with-time" class="section level2">
 <h2>Edge List with Time</h2>
-<p>The first column contains time, the second column contains the donor site IDs and the third column contains the recipient site IDs.</p>
+<p>Here, the Edge List structure from above is duplicated for each unique time-step. The first column now contains the time-step ID , The remaining columns are exactly as Edge List, above (donor site ID, recipient site ID, and connectivity value).</p>
 <table>
 <thead>
 <tr class="header">
@@ -502,75 +643,22 @@ div.tocify {
 </tr>
 </tbody>
 </table>
-<p>The value column contain information about the connectivity between those sites at that particular time, but their exact value depends on whether the edge list is a <a href="glossary.html#probability">Probability</a>, a <a href="glossary.html#migration">Migration</a>, or a <a href="glossary.html#flow">Flow</a> edge list</p>
+<p>The elements (<em>i.e.</em> cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (<em>e.g.</em> <a href="glossary.html#probability">Probability</a>, <a href="glossary.html#migration">Migration</a>, or <a href="glossary.html#flow">Flow</a>).</p>
 </div>
 </div>
 <div id="data-types" class="section level1">
 <h1>Data Types</h1>
-<p>Marxan Connect can accept different types of connectivity data:</p>
+<p>Marxan Connect can accept different types of common connectivity data:</p>
 <div id="flow" class="section level2">
 <h2>Flow</h2>
-<p>Flow represents the amount (individuals, grams, etc) of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> (Genes, Organisms, Nutrients, Energy) that move from one planning unit to another.</p>
+<p>The data in the Flow matrix, <span class="math inline">\({F}\)</span>, represents the <em>amount</em> of movement between planning units. In the Flow matrix, we assume larger values represent greater flow, zero represents no flow, and there is no limits imposed on these values. If the sum for each row (donor) across all columns (recipient) does not equal the total amount produced from each donor planning unit (<em>i.e.</em> some are lost to mortality or from leaving the system), then the total produced (<em>i.e.</em> <a href="glossary.html#local_production">Local Production</a> should to be provided for appropriate interpretation of some metrics.</p>
 <p>Example Flow Matrix:</p>
-<table>
-<thead>
-<tr class="header">
-<th align="center"></th>
-<th align="center">1</th>
-<th align="center">2</th>
-<th align="center">3</th>
-<th align="center">4</th>
-<th align="center">…</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center"><strong>1</strong></td>
-<td align="center">1</td>
-<td align="center">2</td>
-<td align="center">5</td>
-<td align="center">1</td>
-<td align="center">…</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>2</strong></td>
-<td align="center">6</td>
-<td align="center">2</td>
-<td align="center">7</td>
-<td align="center">9</td>
-<td align="center">…</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>3</strong></td>
-<td align="center">1</td>
-<td align="center">3</td>
-<td align="center">3</td>
-<td align="center">2</td>
-<td align="center">…</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>4</strong></td>
-<td align="center">22</td>
-<td align="center">17</td>
-<td align="center">3</td>
-<td align="center">2</td>
-<td align="center">…</td>
-</tr>
-<tr class="odd">
-<td align="center">…</td>
-<td align="center">…</td>
-<td align="center">…</td>
-<td align="center">…</td>
-<td align="center">…</td>
-<td align="center">…</td>
-</tr>
-</tbody>
-</table>
+<p>| | 1 | 2 | 3 | 4 | … | |:—:|:—–:|:—–:|:—–:|:—–:|:—–:| |<strong>1</strong>| 1 | 2 | 5 | 1 | … | |<strong>2</strong>| 6 | 2 | 7 | 9 | … | |<strong>3</strong>| 1 | 3 | 3 | 2 | … | |<strong>4</strong>| 22 | 17 | 3 | 2 | … | | … | … | … | … | … | … | Note, these data could be represented as an Edge List as well.</p>
 </div>
 <div id="migration" class="section level2">
 <h2>Migration</h2>
-<p>Migration represents the proportion of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> of those which arrive in a recipient planning unit originated in a donor planning unit. Columns sum to 1.</p>
-<p>Example Flow Matrix:</p>
+<p>The Migration matrix, <span class="math inline">\({M}\)</span>, (adopted from the metapopulation modelling <span class="citation">(Caswell 2014)</span> and population genetic <span class="citation">(Bodmer and Cavalli-Sforza 1968)</span> literature), quantifies the <em>proportion</em> of those individuals <em>arriving</em> at a recipient planning unit that originated from a donor planning unit. As a result, all elements of this matrix are relative to the destination. This can be derived from a Flow matrix by dividing all elements of this matrix by their respective column sums, as a result, columns in the migration matrix sum to 1.</p>
+<p>Example migration Matrix:</p>
 <table>
 <thead>
 <tr class="header">
@@ -625,10 +713,11 @@ div.tocify {
 </tr>
 </tbody>
 </table>
+<p>Note, these data could be represented as an Edge List as well.</p>
 </div>
 <div id="probability" class="section level2">
 <h2>Probability</h2>
-<p>Probability represents the proportion of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> of those originating in a donor planning unit which arrive in a recipient planning unit. If there is no mortality, then rows sum to 1.</p>
+<p>The probability matrix, , <span class="math inline">\({P}\)</span>, represents the <em>proportion</em> of those individuals <em>originating</em> from a donor planning unit which arrive into a recipient planning unit. The values of this matrix are therefore relative to the amount released from the donor unit (often influenced by amount or quality of habitat in that planning unit). The rows of this matrix often sum to a value much less than one as many individuals die or are lost from the system of interest. Rows may sum to one if either all individuals that originate from a source planning unit successfully arrive to a planning unit (e.g., no mortality), or if the matrix was normalized with respect to sums across columns (often done if the user is only interested in relative strengths of connectivity and not realistic levels of connectivity), then rows will sum to 1. Either matrix is appropriate, but the assumptions need to be considered when interpreting the results.</p>
 <p>Example Probability Matrix:</p>
 <table>
 <thead>
@@ -684,168 +773,40 @@ div.tocify {
 </tr>
 </tbody>
 </table>
+<p>Note, these data could be represented as an Edge List as well.</p>
 </div>
 </div>
-<div id="conservation-feature" class="section level1">
-<h1>Conservation Feature</h1>
-<p>Marxan Connect can calculate various connectivity metrics (e.g. centrality, outflow), which can be used as conservation features in Marxan.</p>
-<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis using <a href="glossary.html#linkage_definitions">Linkage Definitions</a>.</p>
-<div id="in-degree" class="section level2">
-<h2>In Degree</h2>
-<p><strong>Definition</strong>: In degree indicates the number of connections into each planning unit <span class="citation">(Minor and Urban 2007)</span>.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which receive input from a relative abundance of other planning units. The recipient planning units may have higher biodiversity (ref) and population resilience (ref) as a result of the high in degree.</p>
-<p><strong>Equation</strong>: The in degree of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({ID(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections).</p>
-<p><span class="math display">\[{\displaystyle ID(v) = deg^{-}(v)}\]</span></p>
-<p>where <span class="math inline">\({deg^{-}(v)}\)</span> is the number if inward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-1-1.png" alt="" /><!-- --></p>
-</div>
-<div id="out-degree" class="section level2">
-<h2>Out Degree</h2>
-<p><strong>Definition</strong>: Out degree indicates the number of connections originating from each planning unit <span class="citation">(Minor and Urban 2007)</span>.</p>
-<p><strong>Objectives</strong>: Prioritize for areas which deliver output to many other planning units. These planning units may influence many other planning units.</p>
-<p><strong>Equation</strong>: The in degree of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({OD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections).</p>
-<p><span class="math display">\[{\displaystyle OD(v) = deg^{+}(v)}\]</span></p>
-<p>where <span class="math inline">\({deg^{+}(v)}\)</span> is the number of outward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-2-1.png" alt="" /><!-- --></p>
-</div>
-<div id="betweenness-centrality" class="section level2">
-<h2>Betweenness Centrality</h2>
-<p><strong>Definition</strong>: Betweenness centrality of a planning unit indicates the number of shortest paths between pairs of planning units that pass through that planning unit. It ignores the weights of each connection <span class="citation">(Minor and Urban 2007)</span>.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which may act as critical stepping stones among other planning units.</p>
-<p><strong>Equation</strong>: The betweenness centrality of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({BC(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections) is</p>
-<p><span class="math display">\[\displaystyle {BC(v)= \sum_{s \ne v \ne t \in V}\frac{{\sigma_{st}(v)}}{\sigma_{st}}}\]</span></p>
-<p>where <span class="math inline">\({\sigma _{st}}\)</span> is total number of shortest paths from planning unit <span class="math inline">\({s}\)</span> to planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({\sigma _{st}(v)}\)</span> is the number of those paths that pass through <span class="math inline">\({v}\)</span>.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-3-1.png" alt="" /><!-- --></p>
-</div>
-<div id="eigenvector-centrality" class="section level2">
-<h2>Eigenvector Centrality</h2>
-<p><strong>Definition</strong>: Eigenvector centrality indicates the influence (considers number of connections and their weight) that a planning unit has on the network <span class="citation">(D’Aloia et al. 2017)</span>. Eigenvector centrality is functionally similar to <a href="%22glossary.html#google_pagerank%22">Google PageRank</a>, and is recommended for well connected planning areas.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which are important to maintaining connectivity within the whole planning area.</p>
-<p><strong>Equation</strong>: The Eigenvector centrality of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({EVC(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (migration) matrix</p>
-<p><span class="math display">\[{\displaystyle EVC(v) =  \frac{1}{\lambda} \sum_{t \in G} c_{v,t}}\]</span></p>
-<p>where <span class="math inline">\({\lambda }\)</span> is the leading eigenvalue.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-4-1.png" alt="" /><!-- --></p>
-</div>
-<div id="google-pagerank" class="section level2">
-<h2>Google PageRank</h2>
-<p><strong>Definition</strong>: PageRank indicates the number and quality (weight) of connections to a planning unit which represents an estimated importance of the planning unit. PageRank is functionally similar to <a href="%22glossary.html#google_pagerank%22">Eigenvector Centrality</a>, and is recommended for sparsely connected planning areas.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which are important to maintaining connectivity within the whole study area.</p>
-<p><strong>Equation</strong>: The weighted PageRank of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({PR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability? migration?) matrix.</p>
-<p><span class="math display">\[\displaystyle PR(v) = 1-d+d\sum_{v\ne t\in V}PR(t)c_{v,t}c_{t,v}\]</span></p>
-<p>where <span class="math inline">\(d\)</span> is the damping factor set to 0.85 by default.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-5-1.png" alt="" /><!-- --></p>
-</div>
-<div id="self-recruitment" class="section level2">
-<h2>Self Recruitment</h2>
-<p><strong>Definition</strong>: Self recruitment indicates the proportion of recruits produced in a planning unit relative to all recruits to that planning unit <span class="citation">(D’Aloia et al. 2017)</span>.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which are more self-sustaining.</p>
-<p><strong>Equation</strong>: The self recruitment of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({SR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[{\displaystyle SR(v) = \frac{c_{v,v}N_v}{\sum_{t \in V}c_{t,v}N_v}}\]</span></p>
-<p>where <span class="math inline">\({N_v}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({t}\)</span>.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-6-1.png" alt="" /><!-- --></p>
-</div>
-<div id="local-retention" class="section level2">
-<h2>Local Retention</h2>
-<p><strong>Definition</strong>: Local retention indicates the proportion of potential recruits produced in a planning unit which are retained within that planning unit.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which are relatively self-sustaining.</p>
-<p><strong>Equation</strong>: The local retention of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({LR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[\displaystyle LR(v) = c_{v,v}\]</span></p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-7-1.png" alt="" /><!-- --></p>
-</div>
-<div id="inflow" class="section level2">
-<h2>Inflow</h2>
-<p><strong>Definition</strong>: Inflow indicates the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> arriving into a planning unit.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which are heavily subsidized by other planning units.</p>
-<p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({IF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[{\displaystyle IF(v) = \sum_{t \ne v \in V}c_{t,v}N_t}\]</span></p>
-<p>where <span class="math inline">\({N_t}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({t}\)</span>.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-8-1.png" alt="" /><!-- --></p>
-</div>
-<div id="outflow" class="section level2">
-<h2>Outflow</h2>
-<p><strong>Definition</strong>: The outflow indicates the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> leaving a planning unit.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which subsidize other planning units (e.g. maximize spillover).</p>
-<p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({OF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[{\displaystyle OF(v) = \sum_{t \ne v \in V}c_{v,t}N_v}\]</span></p>
-<p>where <span class="math inline">\({N_v}\)</span> is the number of potential recruits produced in planning unit <span class="math inline">\({v}\)</span>.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-9-1.png" alt="" /><!-- --></p>
-</div>
-<div id="temporal-connectivity-covariance" class="section level2">
-<h2>Temporal Connectivity Covariance</h2>
-<p><strong>Definition</strong>: Temporal connectivity covariance indicates the temporal complementarity (<em>i.e.</em> negative covariance) of connections from a planning unit to the focus areas to existing connections within the focus area <span class="citation">(Watson et al. 2012)</span>.</p>
-<p>The option to calculate it is only available if a connectivity ‘List with Time’ was provided under Demographic Input in the Connectivity Input tab, and a focus area shapefile was provided under the Spatial Input tab.</p>
-<p><em>Warning: This metric is still experimental ‘beta’ phase</em></p>
-<p><strong>Objectives</strong>: Prioritize planning units which increase focus area metapopulation growth and stability.</p>
-<p><strong>Equation</strong>: The temporal connectivity covariance of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({TCC(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({A=(a_{v,t})}\)</span> be the adjacency matrix</p>
-<p><span class="math display">\[{\displaystyle TCC(v) = -\sum_{i \in E_{v,FA}} \sum_{j \in E_{FA,FA}}Cov(E_i,E_j)}\]</span></p>
-<p>where <span class="math inline">\({E_{FA,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that link 2 planning units, both of which spatially overlap with the focus area, <span class="math inline">\({E_{v,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that originate in <span class="math inline">\({v}\)</span> and end in a planning unit which spatially overlaps with the focus area, and <span class="math inline">\({Cov()}\)</span> is the temporal covariance.</p>
-<p><strong>Illustration</strong></p>
-<div class="figure">
-<img src="images/temporalconnectivity.gif" alt="" />
+<div id="ecological-distance" class="section level1">
+<h1>Ecological Distance</h1>
+<p>In Marxan, the boundary definitions (<em>i.e.</em> <code>boundary.dat</code>), quantifying the shared boundary length among adjacent planning units, in conjunction with the Boundary Length Modifier (BLM), a weighting parameter to ‘tune’ the influence of the boundaries, can help achieve a solution with a reasonable edge to area ratio (<em>i.e.</em> minimize edge while still achieving representation targets). Typically boundaries are quantified as the length of the shared boundary between planning units. Marxan Connect allows users to use alternative boundary definitions, “Ecological Distance”, to incorporate connectivity data (see <span class="citation">Beger et al. (2010)</span>) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective “edge” of the entire system based on the supplied connectivity data.</p>
+<p>Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using <a href="glossary.html#conservation_feature">Conservation Features</a>, where important sites for connectivity can be targeted directly.</p>
+<div id="connectivity-as-ecological-distance" class="section level2">
+<h2>Connectivity as Ecological Distance</h2>
+<p>Directly substitutes the supplied connectivity data for the boundary lengths in the boundary definitions (<em>i.e.</em> ecological distance) file (<em>i.e.</em> <code>boundary.dat</code>; see <span class="citation">Beger et al. (2010)</span>). This approach assumes the user has provided appropriate connectivity data (<em>e.g.</em> appropriate scale, units, and rank-order).</p>
+<!--
+Removing MPG for now, the app was not calculating correctly!
+## Minimum Planar Graph
 
-</div>
-</div>
-<div id="focus-area-recipients" class="section level2">
-<h2>Focus Area Recipients</h2>
-<p><strong>Definition</strong>: The focus area recipients indicates the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> coming into planning units from the focus area.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which are subsidized by the focus area.</p>
-<p><strong>Equation</strong>: The focus area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[{\displaystyle FAR(v) = \sum_{t \ne v \in V(FA)}c_{t,v}N_t}\]</span></p>
-<p>where <span class="math inline">\({N_t}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the focus area.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-11-1.png" alt="" /><!-- --></p>
-</div>
-<div id="focus-area-donors" class="section level2">
-<h2>Focus Area Donors</h2>
-<p><strong>Definition</strong>: Focus area donors indicates the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> arriving into the focus area from planning units.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which subsidize the focus area (e.g. protect demographic sources to existing protected areas).</p>
-<p><strong>Equation</strong>: The focus area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[{\displaystyle FAD(v) = \sum_{t \ne v \in V(FA)}c_{v,t}N_v}\]</span></p>
-<p>where <span class="math inline">\({N_v}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({v}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the focus area.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-12-1.png" alt="" /><!-- --></p>
-</div>
-<div id="avoidance-area-recipients" class="section level2">
-<h2>Avoidance Area Recipients</h2>
-<p><strong>Definition</strong>: Avoidance area recipients indicates the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> arriving into planning units from the avoidance area.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots).</p>
-<p><strong>Equation</strong>: The avoidance area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({AAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[{\displaystyle AAR(v) = \sum_{t \ne v \in V(AA)}c_{t,v}N_t}\]</span></p>
-<p>where <span class="math inline">\({N_t}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({t}\)</span> and <span class="math inline">\({V(AA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the avoidance area.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-13-1.png" alt="" /><!-- --></p>
-</div>
-<div id="avoidance-area-donors" class="section level2">
-<h2>Avoidance Area Donors</h2>
-<p><strong>Definition</strong>: Avoidance area donors indicates the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> arriving into the avoidance area from planning units.</p>
-<p><strong>Objectives</strong>: Prioritize planning units which subsidize the avoidance area (e.g. increase resilience for impacted zones).</p>
-<p><strong>Equation</strong>: The avoidance area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
-<p><span class="math display">\[{\displaystyle AAD(v) = \sum_{t \ne v \in V(AA)}c_{v,t}N_v}\]</span></p>
-<p>where <span class="math inline">\({N_v}\)</span> is the amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in planning unit <span class="math inline">\({v}\)</span> and <span class="math inline">\({V(FA)}\)</span> are the <span class="math inline">\({V}\)</span> which spatially overlap with the avoidance area.</p>
-<p><strong>Illustration</strong></p>
-<p><img src="glossary_files/figure-html/unnamed-chunk-14-1.png" alt="" /><!-- --></p>
+Incorporates the connectivity data into the ecological distance (*i.e.* `boundary.dat`) after transforming into a minimum planar graph (see @Fall2007-ku).  
+TODO:  add more specific information here. Plus assumptions.  
+-->
 </div>
 </div>
 <div id="focus-areas" class="section level1">
 <h1>Focus Areas</h1>
-<p>For some of the connectivity metrics (e.g. Temporal Connectivity Correlation, or Focus Area Donors), it is important to consider ‘focus areas’ for which connectivity should be optimized. Examples of such focus areas are existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan Connect assumes that the planning units within the focus areas will otherwise be protected. Loading focus areas into Marxan Connect allows users to set conservation targets for other areas that complement focus areas, or to “lock-in” (fixed in the final reserve) the planning units which are overlap the focus area.</p>
+<p>For some of the connectivity metrics (e.g. Focus Area Donors), it is important to consider ‘focus areas’ for which connectivity should be considered. Examples of such focus areas are existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan Connect assumes that the planning units within the focus areas will otherwise be protected. Loading focus areas into Marxan Connect allows users to set conservation targets for other areas that complement focus areas, or to “lock-in” (fixed in the final reserve) the planning units which are overlap the focus area.</p>
 </div>
 <div id="local-production" class="section level1">
 <h1>Local Production</h1>
-<p>The amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in each planning unit</p>
+<p>The amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> produced in each planning unit (user supplied data).</p>
+</div>
+<div id="planning-units" class="section level1">
+<h1>Planning Units</h1>
+<p>Spatial sub-units of the entire planning area (<em>i.e.</em> domain, or study area). Can be gridded (<em>e.g.</em> hexagonal) or feature based (e.g. reefs) as in Marxan.</p>
 </div>
 <div id="resistance-matrix" class="section level1">
 <h1>Resistance Matrix</h1>
-<p>Contains habitat specific values for resistance to movement through this habitat. Home habitat IDs are in the first column and IDs for habitats through which movement may occur are in the first row.</p>
+<p>Used to calculate isolation by resistance type connectivity matrices <span class="citation">(<em>e.g.</em> McRae and Nürnberger 2006)</span>. Contains habitat or species specific values for resistance to movement through each habitat type. Home habitat IDs are in the first column and IDs for habitats through which movement may occur are in the first row.</p>
 <table>
 <thead>
 <tr class="header">
@@ -901,28 +862,42 @@ div.tocify {
 </tbody>
 </table>
 </div>
-<div id="planning-units" class="section level1">
-<h1>Planning Units</h1>
-<p>Spatial sub-units of the entire planning area. Can be gridded (<em>e.g.</em> hexagonal) or feature based (e.g. reefs) as in Marxan.</p>
-</div>
 <div id="shapefile" class="section level1">
 <h1>Shapefile</h1>
-<p>A popular geospatial data format by <a href="esri.com">esri</a> (e.g. ArcGIS), but is supported by many open source GIS (e.g. QGIS) and statistical programming languages (e.g. R, Python)</p>
+<p>An open-source geospatial data format produced by ESRI (developers of ArcGIS), commonly read, written, and analyzed in many open source GIS platforms (e.g. QGIS) and statistical programming languages (e.g. R, Python)</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references">
+<div id="ref-Almany2009-vt">
+<p>Almany, G R, S R Connolly, D D Heath, J D Hogan, G P Jones, L J McCook, M Mills, R L Pressey, and D H Williamson. 2009. “Connectivity, Biodiversity Conservation and the Design of Marine Reserve Networks for Coral Reefs.” <em>Coral Reefs</em> 28 (2). Springer-Verlag: 339–51.</p>
+</div>
 <div id="ref-Beger2010-ir">
 <p>Beger, Maria, Simon Linke, Matt Watts, Eddie Game, Eric Treml, Ian Ball, and Hugh P Possingham. 2010. “Incorporating Asymmetric Connectivity into Spatial Decision Making for Conservation.” <em>Conservation Letters</em> 3 (5). Blackwell Publishing Inc: 359–68.</p>
+</div>
+<div id="ref-Bodmer1968-vw">
+<p>Bodmer, W F, and L L Cavalli-Sforza. 1968. “A Migration Matrix Model for the Study of Random Genetic Drift.” <em>Genetics</em> 59 (4). Genetics Soc America: 565–92.</p>
+</div>
+<div id="ref-Caswell2014-la">
+<p>Caswell, Hal. 2014. “Matrix Population Models.” In <em>Wiley StatsRef: Statistics Reference Online</em>. John Wiley &amp; Sons, Ltd.</p>
 </div>
 <div id="ref-DAloia2017-jp">
 <p>D’Aloia, Cassidy C, Rémi M Daigle, Isabelle M Côté, Janelle M R Curtis, Frédéric Guichard, and Marie-Josée Fortin. 2017. “A Multiple-Species Framework for Integrating Movement Processes Across Life Stages into the Design of Marine Protected Areas.” <em>Biol. Conserv.</em> 216 (December): 93–100.</p>
 </div>
-<div id="ref-Fall2007-ku">
-<p>Fall, Andrew, Marie-Josée Fortin, Micheline Manseau, and Dan O’Brien. 2007. “Spatial Graphs: Principles and Applications for Habitat Connectivity.” <em>Ecosystems</em> 10 (3). Springer-Verlag: 448–61.</p>
+<div id="ref-Hock2014-or">
+<p>Hock, Karlo, Nicholas H Wolff, Scott A Condie, Kenneth R N Anthony, and Peter J Mumby. 2014. “Connectivity Networks Reveal the Risks of Crown-of-Thorns Starfish Outbreaks on the Great Barrier Reef.” <em>J. Appl. Ecol.</em> 51 (5): 1188–96.</p>
+</div>
+<div id="ref-Lett2015-wv">
+<p>Lett, Christophe, Tri Nguyen-Huu, Marion Cuif, Pablo Saenz-Agudelo, and David M Kaplan. 2015. “Linking Local Retention, Self-Recruitment, and Persistence in Marine Metapopulations.” <em>Ecology</em> 96 (8): 2236–44.</p>
+</div>
+<div id="ref-McRae2006-nf">
+<p>McRae, Brad H, and B Nürnberger. 2006. “ISOLATION BY RESISTANCE.” <em>Evolution</em> 60 (8). The Society for the Study of Evolution: 1551–61.</p>
 </div>
 <div id="ref-Minor2007-fb">
 <p>Minor, Emily S, and Dean L Urban. 2007. “Graph Theory as a Proxy for Spatially Explicit Population Models in Conservation Planning.” <em>Ecol. Appl.</em> 17 (6): 1771–82.</p>
+</div>
+<div id="ref-Munguia-Vega2015-rh">
+<p>Munguía-Vega, Adrián, Andrea Sáenz-Arroyo, Ashley P Greenley, Jose Antonio Espinoza-Montes, Stephen R Palumbi, Marisa Rossetto, and Fiorenza Micheli. 2015. “Marine Reserves Help Preserve Genetic Diversity After Impacts Derived from Climate Variability: Lessons from the Pink Abalone in Baja California.” <em>Global Ecology and Conservation</em> 4 (July): 264–76.</p>
 </div>
 <div id="ref-Watson2012-ug">
 <p>Watson, James R, Bruce E Kendall, David A Siegel, and Satoshi Mitarai. 2012. “Changing Seascapes, Stochastic Connectivity, and Marine Metapopulation Dynamics.” <em>Am. Nat.</em> 180 (1): 99–112.</p>

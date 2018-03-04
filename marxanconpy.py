@@ -250,16 +250,16 @@ def conmat2connboundary(conmat):
     boundary_dat = boundary_dat.query('boundary>0').to_json(orient='split')
     return boundary_dat
 
-def conmat2minplanarboundary(conmat):
-    g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree(weights='weight')
-    mpgmat = g.get_adjacency().data
-    mpgmat = pandas.DataFrame(mpgmat)
-    mpgmat.columns = conmat.columns
-    mpgmat['id1'] = conmat.index
-    boundary_dat = mpgmat.melt(id_vars=['id1'])
-    boundary_dat.columns = ['id1', 'id2', 'boundary']
-    boundary_dat = boundary_dat.query('boundary>0').to_json(orient='split')
-    return boundary_dat
+# def conmat2minplanarboundary(conmat):
+#     g = igraph.Graph.Weighted_Adjacency(conmat.as_matrix().tolist()).spanning_tree(weights='weight')
+#     mpgmat = g.get_adjacency().data
+#     mpgmat = pandas.DataFrame(mpgmat)
+#     mpgmat.columns = conmat.columns
+#     mpgmat['id1'] = conmat.index
+#     boundary_dat = mpgmat.melt(id_vars=['id1'])
+#     boundary_dat.columns = ['id1', 'id2', 'boundary']
+#     boundary_dat = boundary_dat.query('boundary>0').to_json(orient='split')
+#     return boundary_dat
 
 def conmattime2temp_conn_cov(conmat_time, fa_filepath, pu_filepath):
     fa = gpd.GeoDataFrame.from_file(fa_filepath)
