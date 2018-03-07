@@ -52,10 +52,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
-        self.auinotebook.ChangeSelection(2)
+        self.auinotebook.ChangeSelection(0)
 
         # set help page
         self.on_metric_definition_choice(event=None)
@@ -82,12 +82,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             GettingStartedframe = GettingStarted(parent=self)
-            # GettingStartedframe.Show()
+            GettingStartedframe.Show()
             # self.project['filepaths'] = {}
-            self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Desktop\\MarxanConnect\\data\\test.MarCon"
+            # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Desktop\\MarxanConnect\\data\\test.MarCon"
             # self.project['filepaths']['projfile'] = "C:\\Users\\Remi-Work\\Desktop\\MarxanConnect\\data\\GBR_demographic_gridded_example\\GBR_demographic_gridded_example.MarCon"
-            self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
-            self.load_project_function()
+            # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
+            # self.load_project_function()
 
     def set_icon(self, frame):
         # set the icon
@@ -1520,7 +1520,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # start progressbar
         max = 100 * len(self.all_types)
-        print(max)
         dlg = wx.ProgressDialog("Calculating Connectivity Metrics",
                                 "Please wait while the connectivity metrics are being calculated.",
                                 maximum = max,
@@ -1665,7 +1664,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     dlg.Update(count)
 
                     if self.cf_demo_eig_vect_cent.GetValue():
-                        print(self.demo_matrixTypeRadioBox.GetStringSelection())
                         self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type + typesuffix] = \
                             marxanconpy.conmat2eigvectcent(
                                 marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
