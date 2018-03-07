@@ -420,7 +420,7 @@ div.tocify {
 </div>
 <div id="in-flow" class="section level2">
 <h2>In-flow</h2>
-<p><strong>Definition</strong>: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, after the diagonal is removed.</p>
+<p><strong>Definition</strong>: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, <span class="math inline">\({F}\)</span>(glossary.html#flow), after the diagonal is removed.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which receives larger amounts of individuals from other planning units.</p>
 <p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({IF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle IF(v) = \sum_{t \ne v \in V}c_{t,v}N_t}\]</span></p>
@@ -430,7 +430,7 @@ div.tocify {
 </div>
 <div id="out-flow" class="section level2">
 <h2>Out-flow</h2>
-<p><strong>Definition</strong>: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, after the diagonal is removed.</p>
+<p><strong>Definition</strong>: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, <span class="math inline">\({F}\)</span>(glossary.html#flow), after the diagonal is removed.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize other planning units (e.g. maximize spillover).</p>
 <p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({OF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle OF(v) = \sum_{t \ne v \in V}c_{v,t}N_v}\]</span></p>
@@ -455,7 +455,7 @@ div.tocify {
 </div>
 <div id="focus-area-recipients" class="section level2">
 <h2>Focus Area Recipients</h2>
-<p><strong>Definition</strong>: A â€˜focus areaâ€™ may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix [F] or migration matrix [M].</p>
+<p><strong>Definition</strong>: A “focus area” may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow) or migration matrix <span class="math inline">\({M}\)</span>(glossary.html#migration).</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which are subsidized by the focus area (<em>e.g.</em> fully protected reserves).</p>
 <p><strong>Equation</strong>: The focus area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle FAR(v) = \sum_{t \ne v \in V(FA)}c_{t,v}N_t}\]</span></p>
@@ -465,7 +465,7 @@ div.tocify {
 </div>
 <div id="focus-area-donors" class="section level2">
 <h2>Focus Area Donors</h2>
-<p><strong>Definition</strong>: A â€˜focus areaâ€™ may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas â€“ these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix [F], or possibly the probability matrix [P], if local production data has been provided.</p>
+<p><strong>Definition</strong>: A “focus area” may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas â€“ these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow).</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize the focus area (e.g. protect demographic sources to existing protected areas).</p>
 <p><strong>Equation</strong>: The focus area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle FAD(v) = \sum_{t \ne v \in V(FA)}c_{v,t}N_v}\]</span></p>
@@ -475,7 +475,7 @@ div.tocify {
 </div>
 <div id="avoidance-area-recipients" class="section level2">
 <h2>Avoidance Area Recipients</h2>
-<p><strong>Definition</strong>: An â€˜avoidance areaâ€™ may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that receive <em>fewer</em> individuals from these avoidance areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix [F] or migration matrix [M]. <strong>Warning</strong>: This metric should be discretized since scoring low on this metric is desired.</p>
+<p><strong>Definition</strong>: An “avoidance area” may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that receive <em>fewer</em> individuals from these avoidance areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow) or migration matrix <span class="math inline">\({M}\)</span>(glossary.html#migration). <strong>Warning</strong>: This metric should be discretized since scoring low on this metric is desired.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots).</p>
 <p><strong>Equation</strong>: The avoidance area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({AAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle AAR(v) = \sum_{t \ne v \in V(AA)}c_{t,v}N_t}\]</span></p>
@@ -485,7 +485,7 @@ div.tocify {
 </div>
 <div id="avoidance-area-donors" class="section level2">
 <h2>Avoidance Area Donors</h2>
-<p><strong>Definition</strong>: An â€˜avoidance areaâ€™ may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas â€“ these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix [F], or possibly the probability matrix [P], if local production data has been provided.</p>
+<p><strong>Definition</strong>: An “avoidance area” may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas â€“ these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow).</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize the avoidance area (e.g. increase resilience for impacted zones).</p>
 <p><strong>Equation</strong>: The avoidance area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle AAD(v) = \sum_{t \ne v \in V(AA)}c_{v,t}N_v}\]</span></p>
@@ -496,7 +496,7 @@ div.tocify {
 </div>
 <div id="data-formats" class="section level1">
 <h1>Data Formats</h1>
-<p>â€œConnectivityâ€ means very different things in different ecological and conservation contexts. Although there is no standard in how these data should be incorporated into the conservation planning process, Marxan Connect has the flexibility to accept different formats of connectivity data to accommodate a broad suite of situations. As with any model, great care should be taken in developing and using these data.</p>
+<p>“Connectivity”&quot; means very different things in different ecological and conservation contexts. Although there is no standard in how these data should be incorporated into the conservation planning process, Marxan Connect has the flexibility to accept different formats of connectivity data to accommodate a broad suite of situations. As with any model, great care should be taken in developing and using these data.</p>
 <p>Typically, the values in a connectivity matrix represents the movement of individuals between planning units or some likelihood of movement, but values could also represent geographic distance, gene flow, mass transfer (e.g., of carbon), nutrients, energy, etc. Care should be taken into ensuring the data used are appropriate for the analyses performed within Marxan Connect.</p>
 <div id="connectivity-matrix" class="section level2">
 <h2>Connectivity Matrix</h2>
@@ -645,6 +645,53 @@ div.tocify {
 </table>
 <p>The elements (<em>i.e.</em> cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (<em>e.g.</em> <a href="glossary.html#probability">Probability</a>, <a href="glossary.html#migration">Migration</a>, or <a href="glossary.html#flow">Flow</a>).</p>
 </div>
+<div id="edge-list-with-type" class="section level2">
+<h2>Edge List with Type</h2>
+<p>Here, the Edge List structure from above is duplicated for each unique type (<em>e.g.</em> species, or dispersal trait). The first column now contains the type ID, The remaining columns are exactly as Edge List, above (donor site ID, recipient site ID, and connectivity value).</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Type</th>
+<th align="center">id1</th>
+<th align="center">id2</th>
+<th align="center">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0.1</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">0.02</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">0.005</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">0.01</td>
+</tr>
+<tr class="odd">
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+</tbody>
+</table>
+<p>The elements (<em>i.e.</em> cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (<em>e.g.</em> <a href="glossary.html#probability">Probability</a>, <a href="glossary.html#migration">Migration</a>, or <a href="glossary.html#flow">Flow</a>).</p>
+</div>
 </div>
 <div id="data-types" class="section level1">
 <h1>Data Types</h1>
@@ -653,7 +700,61 @@ div.tocify {
 <h2>Flow</h2>
 <p>The data in the Flow matrix, <span class="math inline">\({F}\)</span>, represents the <em>amount</em> of movement between planning units. In the Flow matrix, we assume larger values represent greater flow, zero represents no flow, and there is no limits imposed on these values. If the sum for each row (donor) across all columns (recipient) does not equal the total amount produced from each donor planning unit (<em>i.e.</em> some are lost to mortality or from leaving the system), then the total produced (<em>i.e.</em> <a href="glossary.html#local_production">Local Production</a> should to be provided for appropriate interpretation of some metrics.</p>
 <p>Example Flow Matrix:</p>
-<p>| | 1 | 2 | 3 | 4 | … | |:—:|:—–:|:—–:|:—–:|:—–:|:—–:| |<strong>1</strong>| 1 | 2 | 5 | 1 | … | |<strong>2</strong>| 6 | 2 | 7 | 9 | … | |<strong>3</strong>| 1 | 3 | 3 | 2 | … | |<strong>4</strong>| 22 | 17 | 3 | 2 | … | | … | … | … | … | … | … | Note, these data could be represented as an Edge List as well.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>1</strong></td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">1</td>
+<td align="center">…</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2</strong></td>
+<td align="center">6</td>
+<td align="center">2</td>
+<td align="center">7</td>
+<td align="center">9</td>
+<td align="center">…</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>3</strong></td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">…</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>4</strong></td>
+<td align="center">22</td>
+<td align="center">17</td>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">…</td>
+</tr>
+<tr class="odd">
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+</tbody>
+</table>
+<p>Note, these data could be represented as an Edge List as well.</p>
 </div>
 <div id="migration" class="section level2">
 <h2>Migration</h2>
@@ -717,7 +818,7 @@ div.tocify {
 </div>
 <div id="probability" class="section level2">
 <h2>Probability</h2>
-<p>The probability matrix, , <span class="math inline">\({P}\)</span>, represents the <em>proportion</em> of those individuals <em>originating</em> from a donor planning unit which arrive into a recipient planning unit. The values of this matrix are therefore relative to the amount released from the donor unit (often influenced by amount or quality of habitat in that planning unit). The rows of this matrix often sum to a value much less than one as many individuals die or are lost from the system of interest. Rows may sum to one if either all individuals that originate from a source planning unit successfully arrive to a planning unit (e.g., no mortality), or if the matrix was normalized with respect to sums across columns (often done if the user is only interested in relative strengths of connectivity and not realistic levels of connectivity), then rows will sum to 1. Either matrix is appropriate, but the assumptions need to be considered when interpreting the results.</p>
+<p>The probability matrix, <span class="math inline">\({P}\)</span>, represents the <em>proportion</em> of those individuals <em>originating</em> from a donor planning unit which arrive into a recipient planning unit. The values of this matrix are therefore relative to the amount released from the donor unit (often influenced by amount or quality of habitat in that planning unit). The rows of this matrix often sum to a value much less than one as many individuals die or are lost from the system of interest. Rows may sum to one if either all individuals that originate from a source planning unit successfully arrive to a planning unit (e.g., no mortality), or if the matrix was normalized with respect to sums across columns (often done if the user is only interested in relative strengths of connectivity and not realistic levels of connectivity), then rows will sum to 1. Either matrix is appropriate, but the assumptions need to be considered when interpreting the results.</p>
 <p>Example Probability Matrix:</p>
 <table>
 <thead>

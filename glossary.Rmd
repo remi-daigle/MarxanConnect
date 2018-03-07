@@ -284,7 +284,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## In-flow
 
-**Definition**: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, [${F}$](glossary.html#flow), after the diagonal is removed. 
+**Definition**: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, ${F}$(glossary.html#flow), after the diagonal is removed. 
 
 **Possible Objectives**: Prioritize planning units which receives larger amounts of individuals from other planning units.
 
@@ -322,7 +322,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Out-flow
 
-**Definition**: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, [${F}$](glossary.html#flow), after the diagonal is removed. 
+**Definition**: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, ${F}$(glossary.html#flow), after the diagonal is removed. 
 
 **Possible Objectives**: Prioritize planning units which subsidize other planning units (e.g. maximize spillover).
 
@@ -433,7 +433,7 @@ gganimate(p,"images/temporalconnectivity.gif")
 
 ## Focus Area Recipients
 
-**Definition**: A ‘focus area’ may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [F] or migration matrix [M].
+**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix ${F}$(glossary.html#flow) or migration matrix ${M}$(glossary.html#migration).
 
 **Possible Objectives**: Prioritize planning units which are subsidized by the focus area (*e.g.* fully protected reserves).
 
@@ -473,7 +473,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Focus Area Donors
 
-**Definition**: A ‘focus area’ may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas – these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix [F], or possibly the probability matrix [P], if local production data has been provided. 
+**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas – these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix ${F}$(glossary.html#flow). 
 
 **Possible Objectives**: Prioritize planning units which subsidize the focus area (e.g. protect demographic sources to existing protected areas).
 
@@ -513,7 +513,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Avoidance Area Recipients
 
-**Definition**: An ‘avoidance area’ may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that receive *fewer* individuals from these avoidance areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [F] or migration matrix [M]. **Warning**: This metric should be discretized since scoring low on this metric is desired. 
+**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that receive *fewer* individuals from these avoidance areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix ${F}$(glossary.html#flow) or migration matrix ${M}$(glossary.html#migration). **Warning**: This metric should be discretized since scoring low on this metric is desired. 
 
 **Possible Objectives**: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots).
 
@@ -553,7 +553,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Avoidance Area Donors
 
-**Definition**: An ‘avoidance area’ may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas  – these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix [F], or possibly the probability matrix [P], if local production data has been provided.
+**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas  – these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix ${F}$(glossary.html#flow).
 
 **Possible Objectives**: Prioritize planning units which subsidize the avoidance area (e.g. increase resilience for impacted zones).
 
@@ -594,7 +594,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 # Data Formats
 
-“Connectivity” means very different things in different ecological and conservation contexts. Although there is no standard in how these data should be incorporated into the conservation planning process, Marxan Connect has the flexibility to accept different formats of connectivity data to accommodate a broad suite of situations. As with any model, great care should be taken in developing and using these data.
+"Connectivity"" means very different things in different ecological and conservation contexts. Although there is no standard in how these data should be incorporated into the conservation planning process, Marxan Connect has the flexibility to accept different formats of connectivity data to accommodate a broad suite of situations. As with any model, great care should be taken in developing and using these data.
 
 Typically, the values in a connectivity matrix represents the movement of individuals between planning units or some likelihood of movement, but values could also represent geographic distance, gene flow, mass transfer (e.g., of carbon), nutrients, energy, etc. Care should be taken into ensuring the data used are appropriate for the analyses performed within Marxan Connect.  
 
@@ -641,6 +641,21 @@ Here, the Edge List structure from above is duplicated for each unique time-step
 
 The elements (*i.e.* cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (*e.g.* [Probability](glossary.html#probability), [Migration](glossary.html#migration), or [Flow](glossary.html#flow)).
 
+## Edge List with Type
+
+Here, the Edge List structure from above is duplicated for each unique type (*e.g.* species, or dispersal trait). The first column now contains the type ID, The remaining columns are exactly as Edge List, above (donor site ID, recipient site ID, and connectivity value). 
+
+| Type | id1 | id2 | value |
+|:----:|:---:|:---:|:-----:|
+|   1  |  1  |  1  |  0.1  |
+|   1  |  1  |  2  |  0.02 |
+|   1  |  1  |  3  | 0.005 |
+|   1  |  1  |  4  |  0.01 |
+|  ... | ... | ... |  ...  |
+
+
+The elements (*i.e.* cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (*e.g.* [Probability](glossary.html#probability), [Migration](glossary.html#migration), or [Flow](glossary.html#flow)).
+
 # Data Types
 
 Marxan Connect can accept different types of common connectivity data:
@@ -653,11 +668,12 @@ Example Flow Matrix:
 
 |     |   1   |   2   |   3   |   4   |  ...  |
 |:---:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|**1**|  1  |  2 | 5 |  1 |  ...  |
-|**2**| 6 |  2  | 7 | 9 |  ...  |
-|**3**|  1 | 3 |  3 |  2 |  ...  |
-|**4**| 22 | 17 | 3 |  2  |  ...  |
+|**1**|   1   |   2   |   5   |   1   |  ...  |
+|**2**|   6   |   2   |   7   |   9   |  ...  |
+|**3**|   1   |   3   |   3   |   2   |  ...  |
+|**4**|  22   |  17   |   3   |   2   |  ...  |
 | ... |  ...  |  ...  |  ...  |  ...  |  ...  |
+
 Note, these data could be represented as an Edge List as well.
 
 ## Migration
@@ -678,7 +694,7 @@ Note, these data could be represented as an Edge List as well.
 
 ## Probability
 
-The probability matrix, , ${P}$, represents the *proportion* of those individuals *originating* from a donor planning unit which arrive into a recipient planning unit. The values of this matrix are therefore relative to the amount released from the donor unit (often influenced by amount or quality of habitat in that planning unit). The rows of this matrix often sum to a value much less than one as many individuals die or are lost from the system of interest. Rows may sum to one if  either all individuals that originate from a source planning unit successfully arrive to a planning unit (e.g., no mortality), or if the matrix was normalized with respect to sums across columns (often done if the user is only interested in relative strengths of connectivity and not realistic levels of connectivity), then rows will sum to 1. Either matrix is appropriate, but the assumptions need to be considered when interpreting the results.
+The probability matrix, ${P}$, represents the *proportion* of those individuals *originating* from a donor planning unit which arrive into a recipient planning unit. The values of this matrix are therefore relative to the amount released from the donor unit (often influenced by amount or quality of habitat in that planning unit). The rows of this matrix often sum to a value much less than one as many individuals die or are lost from the system of interest. Rows may sum to one if  either all individuals that originate from a source planning unit successfully arrive to a planning unit (e.g., no mortality), or if the matrix was normalized with respect to sums across columns (often done if the user is only interested in relative strengths of connectivity and not realistic levels of connectivity), then rows will sum to 1. Either matrix is appropriate, but the assumptions need to be considered when interpreting the results.
 
 Example Probability Matrix:
 

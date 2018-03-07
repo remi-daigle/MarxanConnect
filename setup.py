@@ -2,10 +2,9 @@
 import sys
 import os
 from cx_Freeze import setup, Executable
+import re
 
-version = "v0.1.0"
-
-# Read in the file
+# Read in the gui.py file to remove deprecated functions
 with open('gui.py', 'r', encoding="utf8") as file :
   filedata = file.read()
 
@@ -17,6 +16,21 @@ filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
 with open('gui.py', 'w', encoding="utf8") as file:
   file.write(filedata)
 
+from marxanconpy import MarxanConnectVersion
+
+# Read in the gui.py file to remove deprecated functions
+with open('WindowsSetupBuilder.iss', 'r', encoding="utf8") as file :
+  filedata = file.read()
+
+# Replace the target string
+filedata = re.sub('#define MyAppVersion "v....."', '#define MyAppVersion "' + MarxanConnectVersion + '"',filedata)
+filedata = re.sub('OutputBaseFilename=MarxanConnect-v.....-windows-setup', 'OutputBaseFilename=MarxanConnect-' + MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
+
+# Write the file out again
+with open('WindowsSetupBuilder.iss', 'w', encoding="utf8") as file:
+  file.write(filedata)
+
+# build the exe
 if os.name=='nt':
     # editing out deprecated functions in gui.py
 
@@ -41,8 +55,8 @@ if os.name=='nt':
     if sys.platform == 'win32':
         base = 'Win32GUI'
 
-    setup(name = 'MarxanConnectGUI' ,
-          version = version ,
+    setup(name = 'MarxanConnectGUI',
+          version = MarxanConnectVersion,
           description = '' ,
           options = {'build_exe': build_exe_options},
           executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'images','icon_bundle.ico'))])
@@ -57,7 +71,7 @@ else:
     mac_options = {'iconfile': os.path.join(sys.path[0], 'icon_mac.icns')}
 
     setup(name='MarxanConnectGUI',
-          version=version,
+          version = MarxanConnectVersion,
           description='',
           options={'build_exe': build_exe_options,
                    'bdist_mac': mac_options},

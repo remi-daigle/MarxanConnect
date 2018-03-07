@@ -6,6 +6,7 @@ import igraph
 import wx
 import os
 
+MarxanConnectVersion = "v0.1.0"
 
 def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,edge,progressbar=False):
     """
@@ -390,3 +391,27 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
         count = max
         dlg.Update(count)
     return conmat.to_json(orient='split')
+
+def convert_matrix_type(current,desired,matrix,localProd):
+    if current == desired:
+        return matrix
+    elif current == "Probability":
+        if desired == "Migration":
+            matrix = matrix * localProd['production'].values[:, numpy.newaxis]
+            matrix = matrix / matrix.sum(axis=0)
+        elif desired == "Flow":
+            matrix = matrix * localProd['production'].values[:, numpy.newaxis]
+        else:
+            print("Warning: " + desired + " not a recognized matrix type.")
+    elif current == "Migration":
+        print("Warning: Migration Matrices cannot be converted without knowing local recruitment")
+    elif current == "Flow":
+        if desired == "Migration":
+            matrix = matrix / matrix.sum(axis=0)
+        elif desired == "Probability":
+            matrix = matrix / matrix.sum(axis=1)[:, numpy.newaxis]
+        else:
+            print("Warning: " + desired + " not a recognized matrix type.")
+    else:
+        print("Warning: " + current + " not a recognized matrix type.")
+    return matrix

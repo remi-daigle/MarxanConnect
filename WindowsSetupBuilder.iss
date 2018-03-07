@@ -57,4 +57,4 @@ Root: HKCR; SubKey: ".MarCon"; ValueType: string; ValueData: "MarxanConnectProje
 Root: HKCR; SubKey: "MarxanConnectProject"; ValueType: string; ValueData: "Marxan Connect Project File"; Flags: uninsdeletekey
 Root: HKCR; SubKey: "MarxanConnectProject\Shell\Open\Command"; ValueType: string; ValueData: """{app}\MarxanConnectGUI.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; Subkey: "MarxanConnectProject\DefaultIcon"; ValueType: string; ValueData: "{app}\MarxanConnectGUI.exe,0"; Flags: uninsdeletevalue
-
+
