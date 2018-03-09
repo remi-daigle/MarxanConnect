@@ -1,0 +1,292 @@
+---
+title: "Tutorial"
+output:
+  html_document: 
+    number_sections: yes
+    code_folding: hide
+    toc: yes
+    toc_float: yes
+bibliography: references.bib
+---
+
+
+# Overview
+
+This page provides an overview of 'how-to' incorporate connectivity into Marxan [@Ball2009-cp], some instructions for using Marxan Connect combined with example of workflows using both demographic and landscape connectivity data.
+
+The maps and plots shown in this tutorial were created in R using the shapefile exported from the "Plotting Options" tab of Marxan Connect. The R code used to make the plots can be revealed by clicking on the `Code` button below 
+
+```{r load packages,message=FALSE, warning=FALSE}
+library(sf)
+library(leaflet)
+library(tmap)
+library(tidyverse)
+library(DT)
+
+
+# set default projection for leaflet
+proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
+```
+
+
+## Using connectivity data as a 'feature'
+
+Read [@DAloia2017-jp] as an example.
+
+
+
+## Using connectivity data as 'boundary definitions'
+
+Read [@Beger2010-ir] as an example.
+
+# Introduction
+
+## Spatial Input
+
+## Connectivity Input
+
+## Connectivity Metrics
+
+## Pre-Evaluation
+
+## Marxan Analysis
+
+## Plotting Options
+
+## Project Files
+
+Marxan Connect allows users to save Marxan Connect Project files (.MarCon) which is a JSON formatted text file that stores all the filepaths, options, and connectivity metrics defined by the user. This not only allows users to start off from their last save point, but it also allows project portability and reproducibility. It is recommended to keep Marxan Connect Project files in the root directory of your project folder (i.e. the folder that contains all the Marxan inputs, outputs, etc) since all filepaths outside this folder will be recorded as absolute paths and then the Marxan Connect Project file will not work on another computer.
+
+# Workflow Examples
+
+The following section provides examples of possible workflows. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid.
+
+## Demographic Data
+
+Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../data/GBR_demographic_gridded_example). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `GBR_demographic_gridded_example.MarCon`.
+
+Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files. The files include hexagonal planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
+
+### `spec.dat`
+
+```{r}
+spec <- read.csv("../data/GBR_demographic_gridded_example/input/spec.dat")
+datatable(spec,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### `puvspr.dat`
+
+```{r}
+puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/puvspr.dat")
+datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### `pu.dat`
+
+```{r}
+pu <- read.csv("../data/GBR_demographic_gridded_example/input/pu.dat")
+datatable(pu,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### Inital Conservation Features
+
+```{r}
+puvspr_wide <- puvspr %>% 
+    left_join(select(spec,"id","name"),
+              by=c("species"="id")) %>% 
+    select(-species) %>% 
+    spread(key="name",value="amount")
+
+# planning units with output
+output <- read.csv('../data/GBR_demographic_gridded_example/output/pu_no_connect.csv') %>% 
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           best_solution = as.logical(best_solution)) %>% 
+    st_as_sf() %>% 
+    left_join(puvspr_wide,by=c("FID"="pu"))
+
+```
+
+```{r,warning=FALSE,message=FALSE}
+map <- leaflet(output) %>% 
+    addTiles()
+
+groups <- names(output)[c(-1,-2,-length(names(output)))]
+
+for(i in groups){
+    z <- unlist(data.frame(output)[i])
+    if(is.numeric(z)){
+        pal <- colorBin("YlOrRd", domain = z)
+    }else{
+        pal <- colorFactor("YlOrRd", domain = z)
+    }
+    
+    map = map %>%
+        addPolygons(fillColor = ~pal(z),
+                    fillOpacity = 0.6,
+                    weight=0.5,
+                    color="white",
+                    group=i,
+                    label = as.character(z)) %>%
+            addLegend(pal = pal,
+                      values = z,
+                      title = i,
+                      group = i,
+                      position="bottomleft") 
+    
+    
+}
+map <- map %>% 
+    addLayersControl(overlayGroups  = groups,
+                     options = layersControlOptions(collapsed = FALSE))
+
+for(i in groups){
+    map <- map %>% hideGroup(i)
+}
+map %>% 
+    showGroup("select_freq")
+```
+
+### Adding Connectivity
+
+Let's begin by examining the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas).
+
+```{r load all layers,results='hide'}
+# planning units
+pu <- st_read('../data/GBR_demographic_gridded_example/hex_planning_units.shp') %>% 
+    st_transform(proj)
+
+# focus areas (IUCN level I or II protected areas)
+fa <- st_read('../data/GBR_demographic_gridded_example/IUCN_IorII.shp') %>% 
+    st_transform(proj)
+
+# avoidance areas (ports)
+aa <- st_read('../data/GBR_demographic_gridded_example/ports.shp') %>% 
+    st_transform(proj)
+```
+
+```{r}
+p <- qtm(pu,fill = '#7570b3') + 
+    qtm(fa,fill = '#1b9e77') +
+    qtm(aa,fill = '#d95f02')
+tmap_leaflet(p) %>% 
+    addLegend(position = "topright",
+              labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"),
+              colors = c("#7570b3","#1b9e77","#d95f02"),
+              title = "Layers")
+```
+
+### `connectivity_matrix.csv`
+
+The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics as well as the definition of new boundaries based on the strength of the connection (i.e. the number of exchanged individuals) as opposed to the physical length of a shared boundary.
+
+For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653
+
+```{r}
+conmat <- read.csv("../data/GBR_demographic_gridded_example/connectivity_matrix.csv")[1:7,1:7]
+datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
+```
+
+In this example we've chosen to append the new connectivity based conservation metrics to the existing Marxan files.
+
+### `spec_appended.dat`
+
+```{r}
+spec <- read.csv("../data/GBR_demographic_gridded_example/input/spec_appended.dat")
+datatable(spec,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### `puvspr_appended.dat`
+
+```{r}
+puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/puvspr_appended.dat")
+datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### `boundary.dat`
+
+```{r}
+puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/boundary.dat")
+datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+```
+
+
+Finally, running Marxan with the connectivity conservation features and boundary definitions results in a different solution.
+
+```{r}
+# planning units with output
+output <- read.csv('../data/GBR_demographic_gridded_example/output/pu.csv') %>% 
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           best_solution = as.logical(best_solution),
+           fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
+           aa_included = as.logical(gsub("True",TRUE,.$aa_included)),
+           status = as.character(status)) %>% 
+    st_as_sf()
+
+```
+
+
+```{r,warning=FALSE,message=FALSE}
+map <- leaflet(output) %>% 
+    addTiles()
+
+groups <- names(output)[c(-1,-2,-length(names(output)))]
+
+for(i in groups){
+    z <- unlist(data.frame(output)[i])
+    if(is.numeric(z)){
+        pal <- colorBin("YlOrRd", domain = z)
+    }else{
+        pal <- colorFactor("YlOrRd", domain = z)
+    }
+    
+    map = map %>%
+        addPolygons(fillColor = ~pal(z),
+                    fillOpacity = 0.6,
+                    weight=0.5,
+                    color="white",
+                    group=i,
+                    label = as.character(z)) %>%
+            addLegend(pal = pal,
+                      values = z,
+                      title = i,
+                      group = i,
+                      position="bottomleft") 
+    
+    
+}
+map <- map %>% 
+    addLayersControl(overlayGroups  = groups,
+                     options = layersControlOptions(collapsed = FALSE))
+
+for(i in groups){
+    map <- map %>% hideGroup(i)
+}
+map %>% 
+    showGroup("select_freq")
+```
+
+### Gridded Marxan Analysis
+
+### Feature Based Marxan Analysis
+
+## Landscape Data
+
+
+```{r plot shape,results='hide'}
+habitats <- st_read('../data/shapefiles/habitat.shp') %>% 
+    st_transform(proj)
+```
+
+
+```{r}
+p <- tm_shape(habitats) +
+    tm_fill("habitat",title="Habitat Type") 
+tmap_leaflet(p)
+```
+
+
+### Gridded Marxan Analysis
+
+### Feature Based Marxan Analysis
+
+# References
