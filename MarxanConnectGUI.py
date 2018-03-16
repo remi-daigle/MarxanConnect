@@ -84,8 +84,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             GettingStartedframe = GettingStarted(parent=self)
             GettingStartedframe.Show()
             # self.project['filepaths'] = {}
-            # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Desktop\\MarxanConnect\\data\\test.MarCon"
-            # self.project['filepaths']['projfile'] = "C:\\Users\\Remi-Work\\Desktop\\MarxanConnect\\data\\GBR_demographic_gridded_example\\GBR_demographic_gridded_example.MarCon"
+            # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Desktop\\begermethod\\tutorial.MarCon"
             # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
             # self.load_project_function()
 
@@ -94,7 +93,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]:
             try:
-                icon = wx.Icon(os.path.join(sys.path[0], 'images\\icon_bundle.ico'),
+                icon = wx.Icon(os.path.join(sys.path[0], 'docs\\images\\icon_bundle.ico'),
                                wx.BITMAP_TYPE_ICO,
                                desiredWidth=sz,
                                desiredHeight=sz)
@@ -445,16 +444,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             os.system("open " + html)
 
     def on_glossary(self, event):
-        self.openhtml("glossary.html")
+        self.openhtml("docs\\glossary.html")
 
     def on_tutorial(self, event):
-        self.openhtml("tutorial.html")
+        self.openhtml("docs\\tutorial.html")
 
     def on_github(self, event):
         self.openhtml("https://github.com/remi-daigle/MarxanConnect/issues")
 
     def on_contributing(self, event):
-        self.openhtml("contributing.html")
+        self.openhtml("docs\\contributing.html")
 
     def on_license(self, event):
         with open('LICENSE', 'r', encoding="utf8") as file:
@@ -476,11 +475,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         GettingStartedframeframe.Show()
 
     def on_metric_definition_choice(self,event):
-        soup = bs4.BeautifulSoup(open("glossary_webtex.html"),"html.parser")
+        soup = bs4.BeautifulSoup(open("docs\\glossary_webtex.html"),"html.parser")
 
         # find the node with id of "Plot"
         div = soup.find(id=self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))
-        self.metric_definition_html.SetPage(str(div))
+        self.metric_definition_html.SetPage(str(div).replace("glossary_files","docs/glossary_files"))
 
 # ##########################  warning functions ########################################################################
     def warn_dialog(self, message, caption="Warning!"):
@@ -761,11 +760,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.spec_resolve_metric_choice('in_degree_', "In Degree", plot_type, choices)
                     self.spec_resolve_metric_choice('out_degree_', "Out Degree", plot_type, choices)
                     self.spec_resolve_metric_choice('between_cent_', "Betweenness Centrality", plot_type, choices)
-                    self.spec_resolve_metric_choice('eig_vect_cent_', "Eigen Vector Centrality", plot_type, choices)
+                    self.spec_resolve_metric_choice('eig_vect_cent_', "Eigenvector Centrality", plot_type, choices)
                     self.spec_resolve_metric_choice('google_', "Google Page Rank", plot_type, choices)
                     self.spec_resolve_metric_choice('self_recruit_', "Self Recruitment", plot_type, choices)
-                    self.spec_resolve_metric_choice('outflow_', "Outflow", plot_type, choices)
-                    self.spec_resolve_metric_choice('inflow_', "Inflow", plot_type, choices)
+                    self.spec_resolve_metric_choice('outflow_', "Out-Flow", plot_type, choices)
+                    self.spec_resolve_metric_choice('inflow_', "In-Flow", plot_type, choices)
                     self.spec_resolve_metric_choice('temp_conn_cov_', "Temporal Connectivity Covariance", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_recipients_', "Focus Area Recipients", plot_type, choices)
                     self.spec_resolve_metric_choice('fa_donors_', "Focus Area Donors", plot_type, choices)
@@ -848,6 +847,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         return type
 
     def get_metric_type(self, selection, type):
+
+        metric_tyoe = None
+
         metric_type = self.spec_resolve_metric_choice('select_freq', selection, "Selection Frequency", type,
                                                       gettext=False)
         metric_type = self.spec_resolve_metric_choice('best_solution', selection, "Best Solution", type,
@@ -868,9 +870,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('local_retention_' + type, selection, "Local Retention", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('outflow_' + type, selection, "Outflow", type,
+        metric_type = self.spec_resolve_metric_choice('outflow_' + type, selection, "Out-Flow", type,
                                                       gettext=False) or metric_type
-        metric_type = self.spec_resolve_metric_choice('inflow_' + type, selection, "Inflow", type,
+        metric_type = self.spec_resolve_metric_choice('inflow_' + type, selection, "In-Flow", type,
                                                       gettext=False) or metric_type
         metric_type = self.spec_resolve_metric_choice('temp_conn_cov_' + type, selection, "Temporal Connectivity Covariance", type,
                                                       gettext=False) or metric_type
@@ -1367,7 +1369,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_eig_vect_cent.Enable(enable=demo_mig_enable or demo_ind_enable or lp_enable)
         self.cf_demo_google.Enable(enable=demo_enable)
         self.cf_demo_self_recruit.Enable(enable=demo_mig_enable or demo_ind_enable or lp_enable)
-        self.cf_demo_local_retention.Enable(enable=demo_prob_enable or lp_enable and demo_ind_enable)
+        self.cf_demo_local_retention.Enable(enable=demo_prob_enable or demo_ind_enable)
         self.cf_demo_outflow.Enable(enable=demo_ind_enable or lp_enable and demo_prob_enable)
         self.cf_demo_inflow.Enable(enable=demo_ind_enable or lp_enable and demo_prob_enable)
         self.cf_demo_stochasticity.Enable(enable=demo_fa_time_enable)
@@ -1940,44 +1942,43 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         spec = pandas.read_json(self.project['spec_dat'], orient='split')
         if len(cf) == 0:
-            self.warn_dialog(message="Conservation features can only be exported for planning units.")
-            return
+            self.warn_dialog(message="No conservation features associated with planning units were calculated.")
+        else:
+            # Export or append feature files
+            if self.cf_export_radioBox.GetSelection() == 0:
+                # export spec
 
-        # Export or append feature files
-        if self.cf_export_radioBox.GetSelection() == 0:
-            # export spec
+                spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
+                # export conservation features
+                cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
+                cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
+                cf = pandas.merge(cf, spec, how='outer', on='name')
+                cf = cf.rename(columns={'id': 'species'}).sort_values(['pu', 'species'])
+                cf = cf[cf['amount'] > 0]
+                cf[['species', 'pu', 'amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
 
-            spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
-            # export conservation features
-            cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
-            cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
-            cf = pandas.merge(cf, spec, how='outer', on='name')
-            cf = cf.rename(columns={'id': 'species'}).sort_values(['pu', 'species'])
-            cf = cf[cf['amount'] > 0]
-            cf[['species', 'pu', 'amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
+            elif self.cf_export_radioBox.GetSelection() == 1:
+                # append
+                old_spec = pandas.read_csv(self.project['filepaths']['spec_filepath'])
+                old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
 
-        elif self.cf_export_radioBox.GetSelection() == 1:
-            # append
-            old_spec = pandas.read_csv(self.project['filepaths']['spec_filepath'])
-            old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
-
-            # append spec
-            new_spec = spec.copy()
-            new_spec['id'] = new_spec['id'] + max(old_spec['id'])
-            pandas.concat([old_spec, new_spec]).fillna(0.0).to_csv(
-                str.replace(self.project['filepaths']['spec_filepath'],
-                            ".dat",
-                            "_appended.dat")
-                , index=0)
-            # append conservation features
-            new_cf = cf.copy()
-            new_cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
-            new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
-            new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
-            new_cf = new_cf.rename(columns={'id': 'species'})
-            new_cf = new_cf[new_cf['amount']>0]
-            pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]]).sort_values(['pu','species']).to_csv(
-                str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
+                # append spec
+                new_spec = spec.copy()
+                new_spec['id'] = new_spec['id'] + max(old_spec['id'])
+                pandas.concat([old_spec, new_spec]).fillna(0.0).to_csv(
+                    str.replace(self.project['filepaths']['spec_filepath'],
+                                ".dat",
+                                "_appended.dat")
+                    , index=0)
+                # append conservation features
+                new_cf = cf.copy()
+                new_cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
+                new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
+                new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
+                new_cf = new_cf.rename(columns={'id': 'species'})
+                new_cf = new_cf[new_cf['amount']>0]
+                pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]]).sort_values(['pu','species']).to_csv(
+                    str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
 
         if self.BD_filecheck.GetValue():
             self.export_boundary_file(BD_filepath=self.project['filepaths']['bd_filepath'])
@@ -2066,30 +2067,30 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
                                                      type=self.get_plot_type(
                                                          selection=self.preEval_metric_shp_choice.GetStringSelection()))
+        if not metric_type == None:
+            if 'spec_' + type in self.project['connectivityMetrics']:
+                self.temp['metric'] = self.project['connectivityMetrics']['spec_' + type][metric_type]
 
-        if 'spec_' + type in self.project['connectivityMetrics']:
-            self.temp['metric'] = self.project['connectivityMetrics']['spec_' + type][metric_type]
-
-            self.preEval_grid.SetCellValue(0, 0, str(sum(self.temp['metric'])))
-            self.preEval_grid.SetCellValue(1, 0, str(numpy.mean(self.temp['metric'])))
-            self.preEval_grid.SetCellValue(2, 0, str(numpy.std(self.temp['metric'])))
-            self.preEval_grid.SetCellValue(3, 0, str(min(self.temp['metric'])))
-            self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 25)))
-            self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 50)))
-            self.preEval_grid.SetCellValue(6, 0, str(numpy.percentile(self.temp['metric'], 75)))
-            self.preEval_grid.SetCellValue(7, 0, str(max(self.temp['metric'])))
-            if 'aa_included' in self.spatial:
-                self.preEval_grid.SetCellValue(8, 0, str((sum(
-                    self.spatial['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
-                    self.temp['metric']) * 100)))
-            else:
-                self.preEval_grid.SetCellValue(8, 0, 'NA')
-            if 'fa_included' in self.spatial:
-                self.preEval_grid.SetCellValue(9, 0, str((sum(
-                    self.spatial['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
-                    self.temp['metric']) * 100)))
-            else:
-                self.preEval_grid.SetCellValue(9, 0, 'NA')
+                self.preEval_grid.SetCellValue(0, 0, str(sum(self.temp['metric'])))
+                self.preEval_grid.SetCellValue(1, 0, str(numpy.mean(self.temp['metric'])))
+                self.preEval_grid.SetCellValue(2, 0, str(numpy.std(self.temp['metric'])))
+                self.preEval_grid.SetCellValue(3, 0, str(min(self.temp['metric'])))
+                self.preEval_grid.SetCellValue(4, 0, str(numpy.percentile(self.temp['metric'], 25)))
+                self.preEval_grid.SetCellValue(5, 0, str(numpy.percentile(self.temp['metric'], 50)))
+                self.preEval_grid.SetCellValue(6, 0, str(numpy.percentile(self.temp['metric'], 75)))
+                self.preEval_grid.SetCellValue(7, 0, str(max(self.temp['metric'])))
+                if 'aa_included' in self.spatial:
+                    self.preEval_grid.SetCellValue(8, 0, str((sum(
+                        self.spatial['pu_shp']['aa_included'].multiply(self.temp['metric'])) / sum(
+                        self.temp['metric']) * 100)))
+                else:
+                    self.preEval_grid.SetCellValue(8, 0, 'NA')
+                if 'fa_included' in self.spatial:
+                    self.preEval_grid.SetCellValue(9, 0, str((sum(
+                        self.spatial['pu_shp']['fa_included'].multiply(self.temp['metric'])) / sum(
+                        self.temp['metric']) * 100)))
+                else:
+                    self.preEval_grid.SetCellValue(9, 0, 'NA')
 
     def on_plot_freq_metric( self, event ):
         self.temp = {}

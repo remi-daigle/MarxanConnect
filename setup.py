@@ -42,13 +42,12 @@ if os.name=='nt':
     build_exe_options = {'includes': ['numpy.core._methods', 'numpy.lib.format','matplotlib.backends.backend_qt5agg',
                                       'matplotlib.backends.backend_tkagg','tkinter','tkinter.filedialog','igraph',
                                       'igraph.vendor.texttable'],
-                         'include_files': ['data/','gui.py','glossary.html','glossary_webtex.html','glossary_files/',
-                                           'tutorial.html','contributing.html','index.html','site_libs/',
+                         'include_files': ['data/','gui.py', 'docs/',
                                            os.path.join(os.environ['LOCALAPPDATA'],
                                                         'Programs','Python','Python35','DLLs','tcl86t.dll'),
                                            os.path.join(os.environ['LOCALAPPDATA'],
                                                         'Programs','Python','Python35','DLLs','tk86t.dll'),
-                                           os.path.join(sys.path[0],'images','icon_bundle.ico'),'images/'],
+                                           os.path.join(sys.path[0],'docs','images','icon_bundle.ico')],
                          'namespace_packages': ['mpl_toolkits'] }
 
     base = None
@@ -59,16 +58,16 @@ if os.name=='nt':
           version = MarxanConnectVersion,
           description = '' ,
           options = {'build_exe': build_exe_options},
-          executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'images','icon_bundle.ico'))])
+          executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'docs','images','icon_bundle.ico'))])
 else:
     # define additional modules (those not automatically found)
     build_exe_options = {'includes': ['numpy.core._methods','packaging.version','packaging.specifiers',
                                       'packaging.requirements','igraph.vendor.texttable'],
-                         'include_files': ['data/', 'gui.py', 'glossary.html', 'tutorial.html', 'contributing.html',
+                         'include_files': ['data/', 'gui.py', 'docs/',
                                            os.path.join(sys.path[0], 'icon_mac.icns')],
                          }
 
-    mac_options = {'iconfile': os.path.join(sys.path[0], 'icon_mac.icns')}
+    mac_options = {'iconfile': os.path.join(sys.path[0],'docs','images', 'icon_mac.icns')}
 
     setup(name='MarxanConnectGUI',
           version = MarxanConnectVersion,

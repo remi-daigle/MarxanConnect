@@ -1,5 +1,5 @@
 body  {
-    background: url("../images/icon_MarxanConnect_bg.png") no-repeat fixed center;
+    background: url("images/icon_MarxanConnect_bg.png") no-repeat fixed center;
 }
 
 .navbar-nav > li > a {padding-top:30px !important; padding-bottom:30px !important;}

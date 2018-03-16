@@ -1,7 +1,7 @@
 name: MarxanConnect
 output_dir: '.'
 navbar:
-  title: <div><img src="../images/icon_small.png" height="63"" width="58" style="position:relative;left:0px;
+  title: <div><img src="images/icon_small.png" height="63"" width="58" style="position:relative;left:0px;
     top:-10px;"/></div>
   left:
   - text: Marxan Connect

@@ -426,7 +426,7 @@ p <- ggraph(graph,layout="fr") +
     scale_shape(name="")+
     scale_colour_gradientn(name="Avoidance Area Donors", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
     theme_void() + theme(legend.position="top",legend.box="vertical")
-gganimate(p,"../images/temporalconnectivity.gif")
+gganimate(p,"images/temporalconnectivity.gif")
 ```
 
 ![](images/temporalconnectivity.gif)

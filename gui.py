@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Nov  6 2017)
+## Python code generated with wxFormBuilder (version Jan 23 2018)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -225,7 +225,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -774,10 +774,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.cf_demo_local_retention = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Local Retention", wx.DefaultPosition, wx.DefaultSize, 0 )
 		demo_cf_sizer.Add( self.cf_demo_local_retention, 0, wx.ALL, 5 )
 		
-		self.cf_demo_inflow = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Inflow", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_inflow = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"In-Flow", wx.DefaultPosition, wx.DefaultSize, 0 )
 		demo_cf_sizer.Add( self.cf_demo_inflow, 0, wx.ALL, 5 )
 		
-		self.cf_demo_outflow = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Outflow", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cf_demo_outflow = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Out-Flow", wx.DefaultPosition, wx.DefaultSize, 0 )
 		demo_cf_sizer.Add( self.cf_demo_outflow, 0, wx.ALL, 5 )
 		
 		self.cf_demo_stochasticity = wx.CheckBox( self.connectivityMetrics, wx.ID_ANY, u"Temporal Connectivity Covariance", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -932,7 +932,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		metric_help_sizer.SetFlexibleDirection( wx.BOTH )
 		metric_help_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Outflow", u"Inflow", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as boundary", u"Minimum Planar Graph" ]
+		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Out-Flow", u"In-Flow", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as boundary", u"Minimum Planar Graph" ]
 		self.metric_definition_choice = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_definition_choiceChoices, 0 )
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
@@ -1416,7 +1416,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanwebsite = wx.adv.HyperlinkCtrl( self.marxanAnalysis, wx.ID_ANY, u"Marxan Website", u"http://marxan.net/index.php/marxan", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
 		marxanMainSizer.Add( self.marxanwebsite, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
-		self.marxan_logo = wx.StaticBitmap( self.marxanAnalysis, wx.ID_ANY, wx.Bitmap( u"images/marxanlogo.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.marxan_logo = wx.StaticBitmap( self.marxanAnalysis, wx.ID_ANY, wx.Bitmap( u"docs/images/marxanlogo.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		marxanMainSizer.Add( self.marxan_logo, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		marxan_ref_sizer = wx.BoxSizer( wx.HORIZONTAL )
@@ -1476,7 +1476,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		inputdat_symmRadio_sizer = wx.BoxSizer( wx.VERTICAL )
 		
-		inputdat_symmRadioChoices = [ u"Asymetric", u"Symmetric" ]
+		inputdat_symmRadioChoices = [ u"Asymmetric", u"Symmetric" ]
 		self.inputdat_symmRadio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Linkage Definition Type", wx.DefaultPosition, wx.DefaultSize, inputdat_symmRadioChoices, 2, wx.RA_SPECIFY_COLS )
 		self.inputdat_symmRadio.SetSelection( 0 )
 		inputdat_symmRadio_sizer.Add( self.inputdat_symmRadio, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
@@ -1873,7 +1873,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -2321,7 +2321,7 @@ class GettingStarted ( wx.Frame ):
 		self.m_hyperlink3 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Glossary", u"glossary.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
 		fgSizer62.Add( self.m_hyperlink3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
 		
-		self.m_hyperlink4 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Github Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		self.m_hyperlink4 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Report Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
 		fgSizer62.Add( self.m_hyperlink4, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -2329,10 +2329,9 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer52 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		fgSizer63 = wx.FlexGridSizer( 3, 1, 0, 0 )
+		fgSizer63 = wx.FlexGridSizer( 2, 1, 0, 0 )
 		fgSizer63.AddGrowableCol( 0 )
 		fgSizer63.AddGrowableRow( 1 )
-		fgSizer63.AddGrowableRow( 2 )
 		fgSizer63.SetFlexibleDirection( wx.BOTH )
 		fgSizer63.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -2340,7 +2339,7 @@ class GettingStarted ( wx.Frame ):
 		self.m_staticText1001.Wrap( -1 )
 		fgSizer63.Add( self.m_staticText1001, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.ALL, 5 )
 		
-		self.m_bitmap2 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/CHONelogo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
+		self.m_bitmap2 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/CHONelogo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 		fgSizer63.Add( self.m_bitmap2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		
@@ -2348,7 +2347,7 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer63 = wx.BoxSizer( wx.VERTICAL )
 		
-		self.m_bitmap3 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/icon_MarxanConnect.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_bitmap3 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/icon_MarxanConnect.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer63.Add( self.m_bitmap3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -2365,8 +2364,11 @@ class GettingStarted ( wx.Frame ):
 		self.m_staticText10013.Wrap( -1 )
 		fgSizer631.Add( self.m_staticText10013, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.ALL, 5 )
 		
-		self.m_bitmap41 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/University-of-Queensland-UQ-logo_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_bitmap41 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/University-of-Queensland-UQ-logo_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer631.Add( self.m_bitmap41, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		
+		self.m_bitmap10 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/NSERC_C_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer631.Add( self.m_bitmap10, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		
 		bSizer52.Add( fgSizer631, 1, wx.EXPAND, 5 )
@@ -2394,19 +2396,19 @@ class GettingStarted ( wx.Frame ):
 		fgSizer78.SetFlexibleDirection( wx.BOTH )
 		fgSizer78.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_bitmap5 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/800px-Leeds_University_logo_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_bitmap5 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/800px-Leeds_University_logo_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer78.Add( self.m_bitmap5, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
 		
-		self.m_bitmap4 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/The Nature Conservancy_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_bitmap4 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/The Nature Conservancy_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer78.Add( self.m_bitmap4, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.m_bitmap51 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/dal-logo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_bitmap51 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/dal-logo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer78.Add( self.m_bitmap51, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		self.m_bitmap52 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/University_of_Melbourne_logo_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_bitmap52 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/University_of_Melbourne_logo_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer78.Add( self.m_bitmap52, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		self.m_bitmap21 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"images/ceed_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
+		self.m_bitmap21 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/ceed_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 		fgSizer78.Add( self.m_bitmap21, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
 		

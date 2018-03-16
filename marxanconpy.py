@@ -6,7 +6,7 @@ import igraph
 import wx
 import os
 
-MarxanConnectVersion = "v0.1.0"
+MarxanConnectVersion = "v0.1.1"
 
 def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,edge,progressbar=False):
     """
@@ -192,12 +192,12 @@ def conmat2google(conmat):
     eigvectcent = g.pagerank(weights='weight')
     return eigvectcent
 
-def conmat2outflux(conmat):
+def conmat2outflow(conmat):
     cm = conmat.copy().as_matrix()
     numpy.fill_diagonal(cm, 0)
     return cm.sum(1).tolist()
 
-def conmat2influx(conmat):
+def conmat2inflow(conmat):
     cm = conmat.copy().as_matrix()
     numpy.fill_diagonal(cm, 0)
     return cm.sum(0).tolist()
@@ -393,6 +393,7 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
     return conmat.to_json(orient='split')
 
 def convert_matrix_type(current,desired,matrix,localProd):
+    print("converting ",current," to ",desired)
     if current == desired:
         return matrix
     elif current == "Probability":
@@ -409,9 +410,9 @@ def convert_matrix_type(current,desired,matrix,localProd):
         if desired == "Migration":
             matrix = matrix / matrix.sum(axis=0)
         elif desired == "Probability":
-            matrix = matrix / matrix.sum(axis=1)[:, numpy.newaxis]
+            matrix = matrix.divide(matrix.sum(axis=1).values,axis="rows")
         else:
             print("Warning: " + desired + " not a recognized matrix type.")
     else:
         print("Warning: " + current + " not a recognized matrix type.")
-    return matrix
+    return matrix.fillna(0)
