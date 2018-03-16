@@ -72,6 +72,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if len(sys.argv) > 1:
             self.spatial = {}
             self.project = {}
+            self.project['version'] = marxanconpy.MarxanConnectVersion
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = str(sys.argv[1])
             self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
@@ -111,6 +112,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # create project list to store project specific data
         self.spatial = {}
         self.project = {}
+        self.project['version'] = marxanconpy.MarxanConnectVersion
         self.project['filepaths'] = {}
         self.workingdirectory = sys.path[0] #os.path.expanduser(os.path.join("~", "Documents"))
         self.project['options'] = {}
@@ -211,6 +213,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.project = {}
+            self.project['version'] = marxanconpy.MarxanConnectVersion
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.workingdirectory = dlg.GetDirectory()
