@@ -3,6 +3,7 @@ import sys
 import os
 from cx_Freeze import setup, Executable
 import re
+from marxanconpy import MarxanConnectVersion
 
 # Read in the gui.py file to remove deprecated functions
 with open('gui.py', 'r', encoding="utf8") as file :
@@ -11,12 +12,11 @@ with open('gui.py', 'r', encoding="utf8") as file :
 # Replace the target string
 filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
 filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
+filedata = re.sub('Marxan Connect v.....', 'Marxan Connect ' + MarxanConnectVersion, filedata)
 
 # Write the file out again
 with open('gui.py', 'w', encoding="utf8") as file:
   file.write(filedata)
-
-from marxanconpy import MarxanConnectVersion
 
 # Read in the gui.py file to remove deprecated functions
 with open('WindowsSetupBuilder.iss', 'r', encoding="utf8") as file :

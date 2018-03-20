@@ -57,7 +57,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.auinotebook.ChangeSelection(0)
 
         # set help page
-        self.on_metric_definition_choice(event=None)
+        # self.on_metric_definition_choice(event=None) #currently disabled so that help appears blank/less intimidating
 
         self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality. If there is no mortality, rows sum to 1")
         self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row). Columns sum to 1.")

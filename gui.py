@@ -2329,9 +2329,10 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer52 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		fgSizer63 = wx.FlexGridSizer( 2, 1, 0, 0 )
+		fgSizer63 = wx.FlexGridSizer( 3, 1, 0, 0 )
 		fgSizer63.AddGrowableCol( 0 )
 		fgSizer63.AddGrowableRow( 1 )
+		fgSizer63.AddGrowableRow( 2 )
 		fgSizer63.SetFlexibleDirection( wx.BOTH )
 		fgSizer63.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -2340,7 +2341,10 @@ class GettingStarted ( wx.Frame ):
 		fgSizer63.Add( self.m_staticText1001, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.ALL, 5 )
 		
 		self.m_bitmap2 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/CHONelogo-small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
-		fgSizer63.Add( self.m_bitmap2, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+		fgSizer63.Add( self.m_bitmap2, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM, 20 )
+		
+		self.m_bitmap10 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/NSERC_C_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer63.Add( self.m_bitmap10, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.TOP, 20 )
 		
 		
 		bSizer52.Add( fgSizer63, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.EXPAND, 5 )
@@ -2353,10 +2357,9 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer52.Add( bSizer63, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 		
-		fgSizer631 = wx.FlexGridSizer( 3, 1, 0, 0 )
+		fgSizer631 = wx.FlexGridSizer( 2, 1, 0, 0 )
 		fgSizer631.AddGrowableCol( 0 )
 		fgSizer631.AddGrowableRow( 1 )
-		fgSizer631.AddGrowableRow( 2 )
 		fgSizer631.SetFlexibleDirection( wx.BOTH )
 		fgSizer631.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -2367,9 +2370,6 @@ class GettingStarted ( wx.Frame ):
 		self.m_bitmap41 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/University-of-Queensland-UQ-logo_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer631.Add( self.m_bitmap41, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 		
-		self.m_bitmap10 = wx.StaticBitmap( self.m_panel27, wx.ID_ANY, wx.Bitmap( u"docs/images/NSERC_C_small.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer631.Add( self.m_bitmap10, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
 		
 		bSizer52.Add( fgSizer631, 1, wx.EXPAND, 5 )
 		
@@ -2378,7 +2378,7 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Clarke, J; Beger, M. 2018. Marxan Connect v0.1.0. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Clarke, J; Beger, M. 2018. Marxan Connect v0.1.1. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
 		
