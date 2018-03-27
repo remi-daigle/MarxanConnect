@@ -95,7 +95,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]:
             try:
-                icon = wx.Icon(os.path.join(sys.path[0], 'docs\\images\\icon_bundle.ico'),
+                icon = wx.Icon(os.path.join(sys.path[0], 'docs' , 'images' , 'icon_bundle.ico'),
                                wx.BITMAP_TYPE_ICO,
                                desiredWidth=sz,
                                desiredHeight=sz)
@@ -448,16 +448,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             os.system("open " + html)
 
     def on_glossary(self, event):
-        self.openhtml("docs\\glossary.html")
+        self.openhtml(os.path.join("docs" , "glossary.html"))
 
     def on_tutorial(self, event):
-        self.openhtml("docs\\tutorial.html")
+        self.openhtml(os.path.join("docs" , "tutorial.html"))
 
     def on_github(self, event):
         self.openhtml("https://github.com/remi-daigle/MarxanConnect/issues")
 
     def on_contributing(self, event):
-        self.openhtml("docs\\contributing.html")
+        self.openhtml(os.path.join("docs" , "contributing.html"))
 
     def on_license(self, event):
         with open('LICENSE', 'r', encoding="utf8") as file:
@@ -475,11 +475,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_getting_started (self, event):
         # insert getting started tab and hyperlinks (wxFormBuilder can't handle hyperlinks)
-        GettingStartedframeframe = GettingStarted (parent=self)
-        GettingStartedframeframe.Show()
+        GettingStartedframe = GettingStarted (parent=self)
+        GettingStartedframe.Show()
 
     def on_metric_definition_choice(self,event):
-        soup = bs4.BeautifulSoup(open("docs\\glossary_webtex.html"),"html.parser")
+        soup = bs4.BeautifulSoup(open(os.path.join("docs" , "glossary_webtex.html")),"html.parser")
 
         # find the node with id of "Plot"
         div = soup.find(id=self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))
@@ -490,7 +490,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Warning
         """
-        warndlg = wx.MessageBox(message, caption, style=wx.OK | wx.ICON_WARNING)
+        wx.MessageBox(message, caption, style=wx.OK | wx.ICON_WARNING)
 
 # ##########################  map plotting functions ###################################################################
     def on_plot_map_button(self, event):
@@ -852,7 +852,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def get_metric_type(self, selection, type):
 
-        metric_tyoe = None
+        metric_type = None
 
         metric_type = self.spec_resolve_metric_choice('select_freq', selection, "Selection Frequency", type,
                                                       gettext=False)
@@ -2409,6 +2409,7 @@ class GettingStarted (wx.Frame):
         gui.GettingStarted.__init__(self, parent)
         # set the icon
         parent.set_icon(frame=self)
+        self.SetWindowStyle(wx.STAY_ON_TOP)
 
 # ########################### file popup viewer #####################################################################
 
