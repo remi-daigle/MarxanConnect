@@ -1896,9 +1896,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                     if self.bd_land_conn_boundary.GetValue():
                         if bd_land_conn_boundary_done == False:
-                            if t == 'default_type_replace':
+                            if h == 'default_type_replace':
                                 self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                    marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][t])
+                                    marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
                             else:
                                 self.temp[self.type + '_conmat_mean'] = self.temp[self.type + '_conmat_many'][
                                     ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
@@ -1908,7 +1908,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                     index='id1',
                                     columns='id2')
                                 self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                    marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][t])
+                                    marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
 
                                 self.warn_dialog(
                                     message="A connectivity " + self.temp['format'] + " was provided. The Ecological "
@@ -2260,7 +2260,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         with open(self.project['filepaths']['marxan_input'], 'r', encoding="utf8") as file:
             filedata = file.readlines()
 
-        if self.project['options']['inputdat_boundary'] == 'Asymetric':
+        if self.project['options']['inputdat_boundary'] == 'Asymmetric':
             if not 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
                 filedata.insert([index for index, line in enumerate(filedata) if line.startswith('NUMREPS')][0] + 1,
                             'ASYMMETRICCONNECTIVITY  1\n')
@@ -2409,7 +2409,7 @@ class GettingStarted (wx.Frame):
         gui.GettingStarted.__init__(self, parent)
         # set the icon
         parent.set_icon(frame=self)
-        self.SetWindowStyle(wx.STAY_ON_TOP)
+        self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL|wx.STAY_ON_TOP)
 
 # ########################### file popup viewer #####################################################################
 
