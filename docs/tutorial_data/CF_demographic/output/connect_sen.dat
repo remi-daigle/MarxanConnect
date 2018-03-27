@@ -1,0 +1,19 @@
+Number of Planning Units 653
+Number of Conservation Values 21
+Starting proportion 0.50
+Connection modifier 1.00
+
+Clumping - default step function
+Algorithm Used :Annealing and Iterative Improvement
+No Heuristic used 
+Number of iterations 1000000
+Initial temperature set adaptively
+Cooling factor set adaptively
+Number of temperature decreases 10000
+
+Cost Threshold Disabled
+Threshold penalty factor A N/A
+Threshold penalty factor B N/A
+
+Random Seed -1
+Number of runs 20
