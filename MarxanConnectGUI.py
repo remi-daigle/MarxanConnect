@@ -33,6 +33,8 @@ import bs4
 # import MarxanConnect python module
 import marxanconpy
 
+os.environ["UBUNTU_MENUPROXY"]="0"
+
 # define wildcards
 wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
             "All files (*.*)|*.*"
@@ -763,7 +765,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.spec_resolve_metric_choice('out_degree_', "Out Degree", plot_type, choices)
                     self.spec_resolve_metric_choice('between_cent_', "Betweenness Centrality", plot_type, choices)
                     self.spec_resolve_metric_choice('eig_vect_cent_', "Eigenvector Centrality", plot_type, choices)
-                    self.spec_resolve_metric_choice('google_', "Google Page Rank", plot_type, choices)
+                    self.spec_resolve_metric_choice('google_', "Google PageRank", plot_type, choices)
                     self.spec_resolve_metric_choice('self_recruit_', "Self Recruitment", plot_type, choices)
                     self.spec_resolve_metric_choice('outflow_', "Out-Flow", plot_type, choices)
                     self.spec_resolve_metric_choice('inflow_', "In-Flow", plot_type, choices)
@@ -1957,6 +1959,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 cf = pandas.merge(cf, spec, how='outer', on='name')
                 cf = cf.rename(columns={'id': 'species'}).sort_values(['pu', 'species'])
                 cf = cf[cf['amount'] > 0]
+                cf = cf.sort_values(by=['pu'])
                 cf[['species', 'pu', 'amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
 
             elif self.cf_export_radioBox.GetSelection() == 1:
