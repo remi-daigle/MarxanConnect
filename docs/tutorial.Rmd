@@ -70,47 +70,47 @@ Before adding connectivity to the mix, let's have a look at the 'traditional' Ma
 ### `spec.dat`
 
 ```{r}
-spec <- read.csv("../data/GBR_demographic_gridded_example/input/spec.dat")
+spec <- read.csv("tutorial_data/CF_demographic/input/spec.dat")
 datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### `puvspr.dat`
 
 ```{r}
-puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/puvspr.dat")
+puvspr <- read.csv("tutorial_data/CF_demographic/input/puvspr.dat")
 datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### `pu.dat`
 
 ```{r}
-pu <- read.csv("../data/GBR_demographic_gridded_example/input/pu.dat")
+pu <- read.csv("tutorial_data/CF_demographic/input/pu.dat")
 datatable(pu,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### Inital Conservation Features
 
 ```{r}
-puvspr_wide <- puvspr %>% 
+puvspr_wide <- puvspr %>%
     left_join(select(spec,"id","name"),
-              by=c("species"="id")) %>% 
-    select(-species) %>% 
+              by=c("species"="id")) %>%
+    select(-species) %>%
     spread(key="name",value="amount")
 
 # planning units with output
-output <- read.csv('../data/GBR_demographic_gridded_example/output/pu_no_connect.csv') %>% 
+output <- read.csv("tutorial_data/CF_demographic/output/pu_no_connect.csv") %>%
     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution)) %>% 
-    st_as_sf() %>% 
+           best_solution = as.logical(best_solution)) %>%
+    st_as_sf() %>%
     left_join(puvspr_wide,by=c("FID"="pu"))
 
 ```
 
 ```{r,warning=FALSE,message=FALSE}
-map <- leaflet(output) %>% 
+map <- leaflet(output) %>%
     addTiles()
 
-groups <- names(output)[c(-1,-2,-length(names(output)))]
+groups <- names(select(output,-best_solution,-select_freq))[c(-1,-2,-length(names(output)))]
 
 for(i in groups){
     z <- unlist(data.frame(output)[i])
@@ -119,7 +119,7 @@ for(i in groups){
     }else{
         pal <- colorFactor("YlOrRd", domain = z)
     }
-    
+
     map = map %>%
         addPolygons(fillColor = ~pal(z),
                     fillOpacity = 0.6,
@@ -131,19 +131,19 @@ for(i in groups){
                       values = z,
                       title = i,
                       group = i,
-                      position="bottomleft") 
-    
-    
+                      position="bottomleft")
+
+
 }
-map <- map %>% 
+map <- map %>%
     addLayersControl(overlayGroups  = groups,
                      options = layersControlOptions(collapsed = FALSE))
 
 for(i in groups){
     map <- map %>% hideGroup(i)
 }
-map %>% 
-    showGroup("select_freq")
+map %>%
+    showGroup("BIORE_102")
 ```
 
 ### Adding Connectivity
@@ -152,23 +152,23 @@ Let's begin by examining the spatial layers we've added in order to incorporate 
 
 ```{r load all layers,results='hide'}
 # planning units
-pu <- st_read('../data/GBR_demographic_gridded_example/hex_planning_units.shp') %>% 
+pu <- st_read("tutorial_data/CF_demographic/hex_planning_units.shp") %>% 
     st_transform(proj)
 
-# focus areas (IUCN level I or II protected areas)
-fa <- st_read('../data/GBR_demographic_gridded_example/IUCN_IorII.shp') %>% 
+#focus areas (IUCN level I or II protected areas)
+fa <- st_read("tutorial_data/CF_demographic/IUCN_IorII.shp") %>%
     st_transform(proj)
 
 # avoidance areas (ports)
-aa <- st_read('../data/GBR_demographic_gridded_example/ports.shp') %>% 
+aa <- st_read("tutorial_data/CF_demographic/ports.shp") %>%
     st_transform(proj)
 ```
 
 ```{r}
-p <- qtm(pu,fill = '#7570b3') + 
+p <- qtm(pu,fill = '#7570b3') +
     qtm(fa,fill = '#1b9e77') +
     qtm(aa,fill = '#d95f02')
-tmap_leaflet(p) %>% 
+tmap_leaflet(p) %>%
     addLegend(position = "topright",
               labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"),
               colors = c("#7570b3","#1b9e77","#d95f02"),
@@ -182,8 +182,8 @@ The connectivity data is at the 'heart' of Marxan Connect's functionality. It al
 For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653
 
 ```{r}
-conmat <- read.csv("../data/GBR_demographic_gridded_example/connectivity_matrix.csv")[1:7,1:7]
-datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
+# conmat <- read.csv("../data/GBR_demographic_gridded_example/connectivity_matrix.csv")[1:7,1:7]
+# datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 In this example we've chosen to append the new connectivity based conservation metrics to the existing Marxan files.
@@ -191,97 +191,97 @@ In this example we've chosen to append the new connectivity based conservation m
 ### `spec_appended.dat`
 
 ```{r}
-spec <- read.csv("../data/GBR_demographic_gridded_example/input/spec_appended.dat")
-datatable(spec,rownames = FALSE, options = list(searching = FALSE))
+# spec <- read.csv("../data/GBR_demographic_gridded_example/input/spec_appended.dat")
+# datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### `puvspr_appended.dat`
 
 ```{r}
-puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/puvspr_appended.dat")
-datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+# puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/puvspr_appended.dat")
+# datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### `boundary.dat`
 
 ```{r}
-puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/boundary.dat")
-datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+# puvspr <- read.csv("../data/GBR_demographic_gridded_example/input/boundary.dat")
+# datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
 ```
 
 
 Finally, running Marxan with the connectivity conservation features and boundary definitions results in a different solution.
 
 ```{r}
-# planning units with output
-output <- read.csv('../data/GBR_demographic_gridded_example/output/pu.csv') %>% 
-    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution),
-           fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
-           aa_included = as.logical(gsub("True",TRUE,.$aa_included)),
-           status = as.character(status)) %>% 
-    st_as_sf()
+# # planning units with output
+# output <- read.csv('../data/GBR_demographic_gridded_example/output/pu.csv') %>% 
+#     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+#            best_solution = as.logical(best_solution),
+#            fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
+#            aa_included = as.logical(gsub("True",TRUE,.$aa_included)),
+#            status = as.character(status)) %>% 
+#     st_as_sf()
 
 ```
 
 
 ```{r,warning=FALSE,message=FALSE}
-map <- leaflet(output) %>% 
-    addTiles()
-
-groups <- names(output)[c(-1,-2,-length(names(output)))]
-
-for(i in groups){
-    z <- unlist(data.frame(output)[i])
-    if(is.numeric(z)){
-        pal <- colorBin("YlOrRd", domain = z)
-    }else{
-        pal <- colorFactor("YlOrRd", domain = z)
-    }
-    
-    map = map %>%
-        addPolygons(fillColor = ~pal(z),
-                    fillOpacity = 0.6,
-                    weight=0.5,
-                    color="white",
-                    group=i,
-                    label = as.character(z)) %>%
-            addLegend(pal = pal,
-                      values = z,
-                      title = i,
-                      group = i,
-                      position="bottomleft") 
-    
-    
-}
-map <- map %>% 
-    addLayersControl(overlayGroups  = groups,
-                     options = layersControlOptions(collapsed = FALSE))
-
-for(i in groups){
-    map <- map %>% hideGroup(i)
-}
-map %>% 
-    showGroup("select_freq")
-```
-
-### Gridded Marxan Analysis
-
-### Feature Based Marxan Analysis
-
-## Landscape Data
-
-
-```{r plot shape,results='hide'}
-habitats <- st_read('../data/shapefiles/habitat.shp') %>% 
-    st_transform(proj)
-```
-
-
-```{r}
-p <- tm_shape(habitats) +
-    tm_fill("habitat",title="Habitat Type") 
-tmap_leaflet(p)
+# map <- leaflet(output) %>% 
+#     addTiles()
+# 
+# groups <- names(output)[c(-1,-2,-length(names(output)))]
+# 
+# for(i in groups){
+#     z <- unlist(data.frame(output)[i])
+#     if(is.numeric(z)){
+#         pal <- colorBin("YlOrRd", domain = z)
+#     }else{
+#         pal <- colorFactor("YlOrRd", domain = z)
+#     }
+#     
+#     map = map %>%
+#         addPolygons(fillColor = ~pal(z),
+#                     fillOpacity = 0.6,
+#                     weight=0.5,
+#                     color="white",
+#                     group=i,
+#                     label = as.character(z)) %>%
+#             addLegend(pal = pal,
+#                       values = z,
+#                       title = i,
+#                       group = i,
+#                       position="bottomleft") 
+#     
+#     
+# }
+# map <- map %>% 
+#     addLayersControl(overlayGroups  = groups,
+#                      options = layersControlOptions(collapsed = FALSE))
+# 
+# for(i in groups){
+#     map <- map %>% hideGroup(i)
+# }
+# map %>% 
+#     showGroup("select_freq")
+# ```
+# 
+# ### Gridded Marxan Analysis
+# 
+# ### Feature Based Marxan Analysis
+# 
+# ## Landscape Data
+# 
+# 
+# ```{r plot shape,results='hide'}
+# habitats <- st_read('../data/shapefiles/habitat.shp') %>% 
+#     st_transform(proj)
+# ```
+# 
+# 
+# ```{r}
+# p <- tm_shape(habitats) +
+#     tm_fill("habitat",title="Habitat Type") 
+# tmap_leaflet(p)
 ```
 
 
