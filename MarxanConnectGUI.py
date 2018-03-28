@@ -286,8 +286,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
 
+        # self.BD_filecheck.SetValue(self.project['options']['bd_filecheck'])
+        # self.PUDAT_filecheck.SetValue(self.project['options']['pudat_filecheck'])
+
+        # self.marxanBit_Radio.SetStringSelection(self.project['options']['marxan_bit'])
         self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
-        self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
+
+        # self.PUSHP_filecheck.SetValue(self.project['options']['pushp_filecheck'])
+        # self.PUCSV_filecheck.SetValue(self.project['options']['pucsv_filecheck'])
+        # self.MAP_filecheck.SetValue(self.project['options']['map_filecheck'])
 
 
 
@@ -1092,7 +1099,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_BD_file(self, event):
         """
-        Defines Focus Areas file path
+        Defines boundary definition file path
         """
         self.project['filepaths']['bd_filepath'] = self.BD_file.GetPath()
 
@@ -1102,6 +1109,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['pudat_filepath'] = self.PUDAT_file.GetPath()
         self.lock_pudat(self.project['filepaths']['pudat_filepath'])
+
 
     def on_marxan_dir(self, event):
         """
@@ -1115,37 +1123,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['marxan_input'] = self.inputdat_file.GetPath()
 
-    def check_matrix_list_format(self, format, filepath):
-        # warn if matrix is wrong format
-        if format == "Matrix":
-            self.conmat = pandas.read_csv(filepath, index_col=0)
-        else:
-            if format == "Edge List":
-                self.ncol = 3
-                self.expected = numpy.array(['id1', 'id2', 'value'])
-            elif format == "Edge List with Type":
-                self.ncol = 4
-                self.expected = numpy.array(['type', 'id1', 'id2', 'value'])
-            elif format == "Edge List with Time":
-                self.ncol = 4
-                self.expected = numpy.array(['time', 'id1', 'id2', 'value'])
-            self.conmat = pandas.read_csv(filepath)
-            self.message = "See the Glossary for 'Data Formats' under 'Connectivity'."
-            self.warn = False
-            if not self.conmat.shape[1] == self.ncol:
-                self.message = self.message + " The " + format + " Data Format expects exactly " + self.ncol + " columns, not " + \
-                               str(self.conmat.shape[1]) + " in the file."
-                self.warn = True
-
-            self.missing = [c not in self.conmat.columns for c in self.expected]
-            if any(self.missing):
-                self.message = self.message + " The " + format + " Data Format expects column header(s) '" + \
-                               str(self.expected[self.missing]) + \
-                               "' which may be missing in the file."
-                self.warn = True
-            if self.warn:
-                self.warn_dialog(message=self.message)
-        return
 
     def on_PUSHP_file( self, event ):
         """
@@ -1294,6 +1271,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
 
+    def on_BD_filecheck(self, event):
+        """
+        Option to export boundary.dat
+        """
+        self.project['options']['bd_filecheck'] = self.BD_filecheck.GetValue()
+
+    def on_PUDAT_filecheck(self, event):
+        """
+        Option to export pu.dat
+        """
+        self.project['options']['pudat_filecheck'] = self.PUDAT_filecheck.GetValue()
+
     def on_debug_mode(self, event):
         """
         Shows/Hides the debug window.
@@ -1407,11 +1396,35 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.bd_demo_conn_boundary.GetValue():
             self.bd_land_conn_boundary.SetValue(False)
 
+    def on_marxanBit_Radio( self, event ):
+        """
+        Option for Marxan bit version
+        """
+        self.project['options']['marxan_bit'] = self.marxanBit_Radio.GetStringSelection()
+
     def on_inputdat_symmRadio(self, event):
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
 
     def on_cf_export_radioBox( self, event ):
         self.project['options']['cf_export'] = self.cf_export_radioBox.GetStringSelection()
+
+    def on_PUSHP_filecheck(self, event):
+        """
+        Option to export pu.shp
+        """
+        self.project['options']['pushp_filecheck'] = self.PUSHP_filecheck.GetValue()
+
+    def on_PUCSV_filecheck(self, event):
+        """
+        Option to export pu.csv
+        """
+        self.project['options']['pucsv_filecheck'] = self.PUSHP_filecheck.GetValue()
+
+    def on_MAP_filecheck(self, event):
+        """
+        Option to export pu.png
+        """
+        self.project['options']['map_filecheck'] = self.PUSHP_filecheck.GetValue()
 
 
 # ########################## rescaling and matrix generation ###########################################################
@@ -1484,6 +1497,39 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def on_resistance_mat_customize(self, event):
         file_viewer(parent=self, file=self.project['filepaths']['land_res_mat_filepath'],
                     title='Resistance Matrix - WARNING CHANGES WILL NOT BE SAVED, check back in the next version!')
+
+    def check_matrix_list_format(self, format, filepath):
+        # warn if matrix is wrong format
+        if format == "Matrix":
+            self.conmat = pandas.read_csv(filepath, index_col=0)
+        else:
+            if format == "Edge List":
+                self.ncol = 3
+                self.expected = numpy.array(['id1', 'id2', 'value'])
+            elif format == "Edge List with Type":
+                self.ncol = 4
+                self.expected = numpy.array(['type', 'id1', 'id2', 'value'])
+            elif format == "Edge List with Time":
+                self.ncol = 4
+                self.expected = numpy.array(['time', 'id1', 'id2', 'value'])
+            self.conmat = pandas.read_csv(filepath)
+            self.message = "See the Glossary for 'Data Formats' under 'Connectivity'."
+            self.warn = False
+            if not self.conmat.shape[1] == self.ncol:
+                self.message = self.message + " The " + format + " Data Format expects exactly " + self.ncol + " columns, not " + \
+                               str(self.conmat.shape[1]) + " in the file."
+                self.warn = True
+
+            self.missing = [c not in self.conmat.columns for c in self.expected]
+            if any(self.missing):
+                self.message = self.message + " The " + format + " Data Format expects column header(s) '" + \
+                               str(self.expected[self.missing]) + \
+                               "' which may be missing in the file."
+                self.warn = True
+            if self.warn:
+                self.warn_dialog(message=self.message)
+        return
+
 
 # ##########################  metric related functions ################################################################
 
@@ -2274,9 +2320,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 
 
-        os.system("start /wait cmd /c " +
-                  os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' + self.project['filepaths'][
-                      'marxan_input'])
+        if self.project['options']['marxan_bit']=="64-bit":
+            os.system("start /wait cmd /c " +
+                  os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan_x64.exe') + ' ' +
+                      self.project['filepaths']['marxan_input'])
+        else:
+            os.system("start /wait cmd /c " +
+                      os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' +
+                      self.project['filepaths']['marxan_input'])
 
         # calculate selection frequency
         for line in open(self.project['filepaths']['marxan_input']):

@@ -225,7 +225,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -1392,9 +1392,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxanMainSizer.AddGrowableCol( 0 )
 		marxanMainSizer.AddGrowableRow( 1 )
 		marxanMainSizer.AddGrowableRow( 4 )
-		marxanMainSizer.AddGrowableRow( 5 )
 		marxanMainSizer.AddGrowableRow( 6 )
-		marxanMainSizer.AddGrowableRow( 8 )
+		marxanMainSizer.AddGrowableRow( 7 )
+		marxanMainSizer.AddGrowableRow( 9 )
 		marxanMainSizer.SetFlexibleDirection( wx.VERTICAL )
 		marxanMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_NONE )
 		
@@ -1444,6 +1444,18 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		
 		marxanMainSizer.Add( marxan_dir_sizer, 1, wx.EXPAND, 5 )
+		
+		marxanBit_Radio_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		marxanBit_RadioChoices = [ u"32-bit", u"64-bit" ]
+		self.marxanBit_Radio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Bit Version", wx.DefaultPosition, wx.DefaultSize, marxanBit_RadioChoices, 2, wx.RA_SPECIFY_COLS )
+		self.marxanBit_Radio.SetSelection( 1 )
+		self.marxanBit_Radio.SetToolTip( u"Processing speed is typically higher with the 64-bit version of Marxan, but this is only compatible with 64-bit computers. Asymmetric linkage definitions may not be compatible with 32-bit Marxan." )
+		
+		marxanBit_Radio_sizer.Add( self.marxanBit_Radio, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		
+		marxanMainSizer.Add( marxanBit_Radio_sizer, 1, wx.EXPAND, 5 )
 		
 		inputdat_txt_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
@@ -1873,7 +1885,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", False, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -1943,10 +1955,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
 		self.customize_spec.Bind( wx.EVT_BUTTON, self.on_customize_spec )
 		self.SPEC_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_SPEC_file )
+		self.BD_filecheck.Bind( wx.EVT_CHECKBOX, self.on_BD_filecheck )
 		self.BD_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_BD_file )
+		self.PUDAT_filecheck.Bind( wx.EVT_CHECKBOX, self.on_PUDAT_filecheck )
 		self.PUDAT_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUDAT_file )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
 		self.marxan_dir.Bind( wx.EVT_DIRPICKER_CHANGED, self.on_marxan_dir )
+		self.marxanBit_Radio.Bind( wx.EVT_RADIOBOX, self.on_marxanBit_Radio )
 		self.inputdat_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_inputdat_file )
 		self.customize_inputdat.Bind( wx.EVT_BUTTON, self.on_inedit )
 		self.inputdat_symmRadio.Bind( wx.EVT_RADIOBOX, self.on_inputdat_symmRadio )
@@ -1956,8 +1971,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice )
 		self.metric_shp_choice1.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice1 )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
+		self.PUSHP_filecheck.Bind( wx.EVT_CHECKBOX, self.on_PUSHP_filecheck )
 		self.PUSHP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUSHP_file )
+		self.PUCSV_filecheck.Bind( wx.EVT_CHECKBOX, self.on_PUCSV_filecheck )
 		self.PUCSV_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PUCSV_file )
+		self.MAP_filecheck.Bind( wx.EVT_CHECKBOX, self.on_MAP_filecheck )
 		self.MAP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_MAP_file )
 		self.plot_export_button.Bind( wx.EVT_BUTTON, self.on_plot_export_button )
 	
@@ -2143,7 +2161,13 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_SPEC_file( self, event ):
 		event.Skip()
 	
+	def on_BD_filecheck( self, event ):
+		event.Skip()
+	
 	def on_BD_file( self, event ):
+		event.Skip()
+	
+	def on_PUDAT_filecheck( self, event ):
 		event.Skip()
 	
 	def on_PUDAT_file( self, event ):
@@ -2153,6 +2177,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_marxan_dir( self, event ):
+		event.Skip()
+	
+	def on_marxanBit_Radio( self, event ):
 		event.Skip()
 	
 	def on_inputdat_file( self, event ):
@@ -2182,10 +2209,19 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_plot_map_button( self, event ):
 		event.Skip()
 	
+	def on_PUSHP_filecheck( self, event ):
+		event.Skip()
+	
 	def on_PUSHP_file( self, event ):
 		event.Skip()
 	
+	def on_PUCSV_filecheck( self, event ):
+		event.Skip()
+	
 	def on_PUCSV_file( self, event ):
+		event.Skip()
+	
+	def on_MAP_filecheck( self, event ):
 		event.Skip()
 	
 	def on_MAP_file( self, event ):
