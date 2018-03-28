@@ -1345,6 +1345,7 @@
     },
     "options": {
         "aa_status": "Status-quo",
+        "bd_filecheck": true,
         "calc_metrics_cu": false,
         "calc_metrics_pu": true,
         "cf_export": "Append",
