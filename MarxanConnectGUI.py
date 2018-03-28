@@ -286,15 +286,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
 
-        # self.BD_filecheck.SetValue(self.project['options']['bd_filecheck'])
-        # self.PUDAT_filecheck.SetValue(self.project['options']['pudat_filecheck'])
+        self.BD_filecheck.SetValue(self.project['options']['bd_filecheck'])
+        self.PUDAT_filecheck.SetValue(self.project['options']['pudat_filecheck'])
 
-        # self.marxanBit_Radio.SetStringSelection(self.project['options']['marxan_bit'])
+        self.marxanBit_Radio.SetStringSelection(self.project['options']['marxan_bit'])
         self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
 
-        # self.PUSHP_filecheck.SetValue(self.project['options']['pushp_filecheck'])
-        # self.PUCSV_filecheck.SetValue(self.project['options']['pucsv_filecheck'])
-        # self.MAP_filecheck.SetValue(self.project['options']['map_filecheck'])
+        self.PUSHP_filecheck.SetValue(self.project['options']['pushp_filecheck'])
+        self.PUCSV_filecheck.SetValue(self.project['options']['pucsv_filecheck'])
+        self.MAP_filecheck.SetValue(self.project['options']['map_filecheck'])
 
 
 
@@ -1418,7 +1418,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Option to export pu.csv
         """
-        self.project['options']['pucsv_filecheck'] = self.PUSHP_filecheck.GetValue()
+        self.project['options']['pucsv_filecheck'] = self.PUCSV_filecheck.GetValue()
 
     def on_MAP_filecheck(self, event):
         """

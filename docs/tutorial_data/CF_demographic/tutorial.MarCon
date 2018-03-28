@@ -7940,7 +7940,12 @@
         },
         "land_pu_cm_progress": true,
         "land_res_matrixType": "Least-Cost Path",
-        "metricsCalculated": true
+        "map_filecheck": false,
+        "marxan_bit": "64-bit",
+        "metricsCalculated": true,
+        "pucsv_filecheck": true,
+        "pudat_filecheck": false,
+        "pushp_filecheck": false
     },
     "spec_dat": "{\"columns\":[\"id\",\"target\",\"spf\",\"name\"],\"index\":[0,1,2,3,4,5,6,7,8],\"data\":[[\"1\",\"32193.0\",\"1000\",\"in_degree_demo_pu\"],[\"2\",\"0.0\",\"1000\",\"local_retention_demo_pu\"],[\"3\",\"311821.9999999998\",\"1000\",\"between_cent_demo_pu\"],[\"4\",\"0.4999999999999998\",\"1000\",\"google_demo_pu\"],[\"5\",\"2.351372845176926\",\"1000\",\"outflow_demo_pu\"],[\"6\",\"2.3513728451769254\",\"1000\",\"inflow_demo_pu\"],[\"7\",\"0.0\",\"1000\",\"eig_vect_cent_demo_pu\"],[\"8\",\"32193.0\",\"1000\",\"out_degree_demo_pu\"],[\"9\",\"0.0\",\"1000\",\"self_recruit_demo_pu\"]]}"
 }
