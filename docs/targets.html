@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Target Setting</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link rel="shortcut icon" type="image/x-icon" href="images/icon_bundle.ico?">
+<div id="header">
+    <center>
+        <p></p>
+    </center>
+</div>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="template.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><div><img src="images/icon_small.png" height="63"" width="58" style="position:relative;left:0px; top:-10px;"/></div></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Marxan Connect
+  </a>
+</li>
+<li>
+  <a href="tutorial.html">
+    <span class="fa fa-graduation-cap"></span>
+     
+    Tutorial
+  </a>
+</li>
+<li>
+  <a href="glossary.html">
+    <span class="fa fa-book"></span>
+     
+    Glossary
+  </a>
+</li>
+<li>
+  <a href="CONTRIBUTING.html">
+    <span class="fa fa-wrench"></span>
+     
+    Contributing
+  </a>
+</li>
+<li>
+  <a href="CODE_OF_CONDUCT.html">
+    <span class="fa fa-balance-scale"></span>
+     
+    Code of Conduct
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/remi-daigle/MarxanConnect">
+    <span class="fa fa-github"></span>
+     
+    Github
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Target Setting</h1>
+
+</div>
+
+
+<div id="overview" class="section level1">
+<h1><span class="header-section-number">1</span> Overview</h1>
+<p>This page provides guidance on setting conservation targets and some examples of post-hoc evaluation of network design</p>
+<p>The plots shown in this tutorial were created in R using output generated by Marxan Connect. In this example, we automate the iterative runs of Marxan using R to facilitate the process.</p>
+<pre class="r"><code>require(tidyverse)
+require(sf)</code></pre>
+</div>
+<div id="creating-an-example-connectivity-matrix" class="section level1">
+<h1><span class="header-section-number">2</span> Creating an example connectivity Matrix</h1>
+<p>Here we create a connectivity matrix which contains flow data. This step is not necessary if you have your own data.</p>
+<pre class="r"><code># load the reefs shapefile and calculate area
+reefs &lt;- st_read(&quot;tutorial_data/targets/reefs.shp&quot;) %&gt;%
+    mutate(area = st_area(.))</code></pre>
+<pre><code>## Reading layer `reefs&#39; from data source `C:\Users\Remi-Work\Desktop\MarxanConnect\docs\tutorial_data\targets\reefs.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 321 features and 15 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: -548876.9 ymin: -2104102 xmax: -215060 ymax: -1547444
+## epsg (SRID):    NA
+## proj4string:    +proj=eqdc +lat_0=0 +lon_0=149.572265625 +lat_1=-28.60943649559152 +lat_2=-14.9403573046131 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs</code></pre>
+<pre class="r"><code># generate a distance matrix
+distanceMatrix &lt;- round(st_distance(reefs))
+
+# calculate isolation by distance
+isolationMatrix &lt;- 1/distanceMatrix^2 %&gt;% matrix(nrow(reefs),nrow(reefs))
+
+# assume dispersal limit is 200km, remove links &gt;200km
+isolationMatrix[isolationMatrix&lt;1/200000^2]=0
+
+# create rudimentary probability matrix
+probabilityMatrix &lt;- isolationMatrix
+
+# add local recruitment
+probabilityMatrix[is.infinite(probabilityMatrix)] &lt;- max(probabilityMatrix[is.finite(probabilityMatrix)],na.rm = TRUE)/10^5
+diag(probabilityMatrix) &lt;- diag(probabilityMatrix)*sqrt(reefs$area)/mean(sqrt(reefs$area))
+
+# row normalize to make it a probability matrix
+probabilityMatrix &lt;- probabilityMatrix/rowSums(probabilityMatrix)
+
+# create flow matrix that includes fecundity and survival
+fecundity &lt;- as.numeric(reefs$area)
+survival &lt;- as.numeric(reefs$area/max(reefs$area))*0.0000001
+flowMatrix &lt;- t(t(probabilityMatrix)*survival)*fecundity
+
+# write to file
+write.csv(flowMatrix,&quot;tutorial_data/targets/reefFlow.csv&quot;)</code></pre>
+</div>
+<div id="using-marxan-connect" class="section level1">
+<h1><span class="header-section-number">3</span> Using Marxan Connect</h1>
+<p>In this example we used the above flow matrix to generate conservation features in Marxan Connect. We appended those conservation features to the existing Marxan files. To replicate this process either follow the “Demographic Data using CF” tutorial or load and modify the <code>targettradeoff.MarCon</code> project file.</p>
+</div>
+<div id="iterating-marxan-from-r" class="section level1">
+<h1><span class="header-section-number">4</span> Iterating Marxan from R</h1>
+<p>Using R to run Marxan allows us to run Marxan including 1 connectivity related conservation feature at a time, and with varying values of the Connectivity target multiplier (C). C is a tunable ‘contraint’ which scales the targets for connectivity based conservaton features relative to that of normal conservation features.</p>
+<p>First let’s prepare all the parameters.</p>
+<pre class="r"><code># set targets for non-connectivity related targets
+regulartarget &lt;- 0.1
+
+# number of replicates in a Marxan run
+reps &lt;- 20
+
+# metrics over which to iterate
+metrics &lt;- c(&quot;in_degree_demo_pu&quot;,
+             &quot;out_degree_demo_pu&quot;,
+             &quot;between_cent_demo_pu&quot;,
+             &quot;eig_vect_cent_demo_pu&quot;,
+             &quot;google_demo_pu&quot;,
+             &quot;self_recruit_demo_pu&quot;,
+             &quot;local_retention_demo_pu&quot;,
+             &quot;inflow_demo_pu&quot;,
+             &quot;outflow_demo_pu&quot;,
+             &quot;fa_recipients_demo_pu&quot;,
+             &quot;fa_donors_demo_pu&quot;,
+             &quot;aa_donors_demo_pu&quot;,
+             &quot;aa_recipients_demo_pu&quot;)
+
+# values of the connectivity multiplier over which to iterate
+steps &lt;- 1                           # connectivity multiplier step size
+cmax &lt;- 1/regulartarget              # maximum connectivity multiplier 
+
+
+# get 100% target values
+# load puvspr
+puvspr &lt;- read.csv(&quot;tutorial_data/targets/input/puvspr2_appended.dat&quot;,stringsAsFactors=FALSE) %&gt;% 
+    group_by(species) %&gt;% 
+    summarize(target=sum(amount)) %&gt;% 
+    ungroup() %&gt;% 
+    data.frame()</code></pre>
+<p>Now we can iterate Marxan. If you’re using the the RMarkdown <code>.Rmd</code> version of this tutorial, you may want to remove the <code>eval=FALSE</code> in the R chunk options since this chunk of code won’t run if it’s still there. It’s there to prevent the lengthy iterations of Marxan when building the website!</p>
+<pre class="r"><code># delete previous ouputs
+unlink(x=list.files(path=&quot;tutorial_data/targets/output/&quot;,pattern=&quot;*&quot;,full.names = TRUE))
+
+#iterate over metrics and connectivity multiplier 
+for(m in metrics){
+    for (c in seq(0,cmax,steps))
+    {
+        # load specdat
+        specdat &lt;- read.csv(&quot;tutorial_data/targets/input/spec_appended.dat&quot;,stringsAsFactors=FALSE)
+        # load old specdat to get names of non-connectivity features
+        oldspecdat &lt;- read.csv(&quot;tutorial_data/targets/input/spec.dat&quot;,stringsAsFactors=FALSE)
+        # target for all features
+        # replace 100% targets
+        if(all(specdat$id==puvspr$species)){
+            specdat$target &lt;- puvspr$target
+        } else {
+            print(&quot;things are not lined up properly!&quot;)
+        }
+        specdat$target &lt;- specdat$target*regulartarget
+        specdat$target[specdat$name==m] &lt;- specdat$target[specdat$name==m]*c
+        specdat$target[!(specdat$name %in% oldspecdat$name) &amp; specdat$name!=m] &lt;- 0
+
+        # save spec file
+        write.csv(specdat,paste0(&quot;tutorial_data/targets/input/c_testingTargetScenario_&quot;,m,&quot;_&quot;,c,&quot;.dat&quot;),quote=FALSE,row.names=FALSE)
+
+        # load input.dat
+        input.dat &lt;- readLines(&quot;tutorial_data/targets/input.dat&quot;)
+
+        # set parameter
+        iBLMParam &lt;- which(regexpr(&quot;BLM&quot;,input.dat)==1)
+        iNUMREPSParam &lt;- which(regexpr(&quot;NUMREPS&quot;,input.dat)==1)
+        iSPECNAMEParam &lt;- which(regexpr(&quot;SPECNAME&quot;,input.dat)==1)
+        iPUNAMEParam &lt;- which(regexpr(&quot;PUNAME&quot;,input.dat)==1)
+        iSCENNAMEParam &lt;- which(regexpr(&quot;SCENNAME&quot;,input.dat)==1)
+        iOUTPUTDIRParam &lt;- which(regexpr(&quot;OUTPUTDIR&quot;,input.dat)==1)
+        iINPUTDIRParam &lt;- which(regexpr(&quot;INPUTDIR&quot;,input.dat)==1)
+
+        input.dat[iBLMParam] &lt;- paste0(&quot;BLM &quot;,1)
+        input.dat[iNUMREPSParam] &lt;- paste0(&quot;NUMREPS &quot;,reps)
+        input.dat[iSPECNAMEParam] &lt;- paste0(&quot;SPECNAME c_testingTargetScenario_&quot;,m,&quot;_&quot;,c,&quot;.dat&quot;)
+        input.dat[iPUNAMEParam] &lt;- paste0(&quot;PUNAME pu.dat&quot;)
+        input.dat[iSCENNAMEParam] &lt;- paste0(&quot;SCENNAME c_testingTargetScenario_&quot;,m,&quot;_&quot;,c)
+        input.dat[iOUTPUTDIRParam] &lt;- gsub(&quot;/&quot;,&quot;\\\\&quot;,paste0(&quot;OUTPUTDIR &quot;,getwd(),&quot;/tutorial_data/targets/output&quot;))
+        input.dat[iINPUTDIRParam] &lt;- gsub(&quot;/&quot;,&quot;\\\\&quot;,paste0(&quot;INPUTDIR &quot;,getwd(),&quot;/tutorial_data/targets/input&quot;))
+        input.dat[length(input.dat)+1] &lt;- &quot;&quot;
+
+        # save input.dat
+        writeLines(input.dat,con=file(paste0(&quot;tutorial_data/targets/input&quot;,c,&quot;.dat&quot;)),sep=&quot;\n&quot;)
+
+        # run Marxan 
+        # TODO: you will need to change to the appropriate Marxan filepath here
+        system(paste0(&quot;../Marxan243/Marxan_x64.exe input&quot;,c,&quot;.dat&quot;))
+    }
+}</code></pre>
+</div>
+<div id="processing-output-and-plotting" class="section level1">
+<h1><span class="header-section-number">5</span> Processing output and plotting</h1>
+<p>The hundreds of Marxan output files must now be loaded, processed and plotted. Here we calculate the ecologically relevant</p>
+<pre class="r"><code># create table 
+bestfiles &lt;- list.files(path=&quot;tutorial_data/targets/output&quot;,pattern=&quot;*mvbest*&quot;)
+sumfiles &lt;- list.files(path=&quot;tutorial_data/targets/output&quot;,pattern=&quot;*sum*&quot;)
+
+#We want all the cost of every best solution for each scenario
+#We want the metric value for every best solution for each scenario
+
+# create a table to fill in below
+mastertable &lt;- expand.grid(metric=metrics,c=seq(0,cmax,steps),replicate=sprintf(&quot;%05d&quot;, 1:reps),Cost=0,Metric=0,&quot;Metapopulation Growth&quot;=0)
+
+# load specdat 
+specdat &lt;- read.csv(&quot;tutorial_data/targets/input/spec_appended.dat&quot;,stringsAsFactors=FALSE)
+
+# iterate over rows in mastertable
+for(i in 1:nrow(mastertable)){
+    # extract the amount of the metric held in the network
+    mastertable$Metric[i] &lt;- read.csv(file = paste0(&quot;tutorial_data/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_mv&quot;,mastertable$replicate[i],&quot;.txt&quot;), header = T) %&gt;% 
+        filter(Conservation.Feature==specdat$id[specdat$name==mastertable$metric[i]]) %&gt;% 
+        select(Amount.Held) %&gt;% 
+        unlist() %&gt;% 
+        as.numeric()
+    
+    # extract the cost of the network
+    mastertable$Cost[i] &lt;- read.csv(file = paste0(&quot;tutorial_data/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_sum.txt&quot;), header = T) %&gt;% 
+        filter(Run_Number==as.numeric(mastertable$replicate[i])) %&gt;% 
+        select(Cost) %&gt;% 
+        unlist()
+    
+    # Calculate an ecologically relevant conservation objective
+    # we calculate the metapopulation growth (first real eigenvalue of a connectivity matrix that includes survival and mortality)
+    # more details on this step in the text below
+    inreserve &lt;- read.csv(file = paste0(&quot;tutorial_data/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_r&quot;,mastertable$replicate[i],&quot;.txt&quot;), header = T)$solution==1
+    networkmatrix &lt;- (flowMatrix)[inreserve,inreserve]
+    mastertable$&quot;Metapopulation Growth&quot;[i] &lt;- Re(eigen(networkmatrix)$values[1])
+    
+}</code></pre>
+<p>That ecologically relevant conservation objective step is <strong>very important</strong>. Here we calculated the metapopulation growth of a flow matrix that includes survival and mortality using the first eigenvalue of the matrix. Our conservation objective in this case is to have a self-sustaining metapopulation inside the reserve network (i.e. in-reserve network metapopulation growth rate &gt; 1). Please note that this is not the only possible conservation objective, or even the only way to calculate metapopulation growth. This example is for demonstration purposes only. Please see <span class="citation">Shima, Noonburg, and Phillips (2010)</span>,<span class="citation">M. Drechsler (2009)</span>,<span class="citation">Kininmonth et al. (2010)</span>,<span class="citation">Day and Possingham (1995)</span>,<span class="citation">Figueira and Crowder (2006)</span>,<span class="citation">Hanski and Ovaskainen (2000)</span>,<span class="citation">Etienne (2004)</span> for more information on ecologically relevant conservation objectives.</p>
+<pre class="r"><code># make it nice! Give the metrics &quot;real&quot; names for plotting
+mastertable$metric &lt;- recode(mastertable$metric,
+                             &quot;in_degree_demo_pu&quot; = &quot;In Degree&quot;,
+                             &quot;out_degree_demo_pu&quot; = &quot;Out Degree&quot;,
+                             &quot;between_cent_demo_pu&quot; = &quot;Betweenness Centrality&quot;,
+                             &quot;eig_vect_cent_demo_pu&quot; = &quot;Eigenvector Centrality&quot;,
+                             &quot;google_demo_pu&quot; = &quot;Google PageRank&quot;,
+                             &quot;self_recruit_demo_pu&quot; = &quot;Self Recruitment&quot;,
+                             &quot;local_retention_demo_pu&quot; = &quot;Local Rentention&quot;,
+                             &quot;inflow_demo_pu&quot; = &quot;In-flow&quot;,
+                             &quot;outflow_demo_pu&quot; = &quot;Out-flow&quot;,
+                             &quot;fa_recipients_demo_pu&quot; = &quot;Focus Area Recipient&quot;,
+                             &quot;fa_donors_demo_pu&quot; = &quot;Focus Area Donor&quot;,
+                             &quot;aa_recipients_demo_pu&quot; = &quot;Avoidance Area Recipient&quot;,
+                             &quot;aa_donors_demo_pu&quot; = &quot;Avoidance Area Donor&quot;)
+
+# calculate the mean and SE, and convert all the values to a relative scale 
+# (100 = maximum value, 0 = value for network without connectivity based conservation feature)
+mastertableMeans &lt;- mastertable %&gt;% 
+    gather(key = &quot;Type&quot;, value = &quot;value&quot;,-metric,-c,-replicate)%&gt;% 
+    group_by(metric,c,Type) %&gt;% 
+    summarize(means=mean(value),
+              se=sd(value)/sqrt(n())) %&gt;%
+    ungroup() %&gt;% 
+    group_by(metric,Type) %&gt;% 
+    mutate(relativeSE = se/(max(means)-means[c==0]*100),
+           relativeMean = (means-means[c==0])/(max(means)-means[c==0])*100) %&gt;% 
+    ungroup() %&gt;% 
+    dplyr::filter(metric == &quot;In Degree&quot; |
+               metric == &quot;Betweenness Centrality&quot;|
+               metric == &quot;Google PageRank&quot;|
+               metric == &quot;Avoidance Area Recipient&quot;
+    )
+
+# back-calculate what a metapopulation growth of 1 would be on the plot&#39;s relative scale
+lamdbaM1 &lt;- mean((1-mastertableMeans$means[mastertableMeans$c==0&amp;mastertableMeans$Type==&quot;Metapopulation Growth&quot;])/
+    (max(mastertableMeans$means[mastertableMeans$Type==&quot;Metapopulation Growth&quot;])-mastertableMeans$means[mastertableMeans$c==0&amp;mastertableMeans$Type==&quot;Metapopulation Growth&quot;]))*100</code></pre>
+<p>And finally, let’s see the results!</p>
+<pre class="r"><code>p &lt;- ggplot(mastertableMeans[mastertableMeans$c!=0,],aes(colour=Type,fill=Type,shape=Type,linetype=Type,x=c,y=relativeMean))+
+    geom_point(size=2)+
+    geom_line(size=1)+
+    geom_ribbon(aes(ymin=relativeMean-relativeSE,ymax=relativeMean+relativeSE),alpha=0.3,colour=&quot;transparent&quot;)+
+    geom_hline(yintercept=0,linetype=&quot;dashed&quot;,size=0.75) +
+    geom_hline(yintercept=lamdbaM1,linetype=&quot;dashed&quot;,size=0.75,colour=&quot;#d95f02&quot;) +
+    scale_linetype_manual(values=c(&quot;solid&quot;,&quot;solid&quot;,&quot;solid&quot;))+
+    scale_color_manual(values=c(&quot;#1b9e77&quot;,&quot;#d95f02&quot;,&quot;#7570b3&quot;))+
+    scale_fill_manual(values=c(&quot;#1b9e77&quot;,&quot;#d95f02&quot;,&quot;#7570b3&quot;))+
+    labs(x=&quot;Connectivity Target Multiplier (C)&quot;, y = &quot;Relative Value (%)&quot;)+
+    scale_x_continuous(breaks = seq(1,cmax,2))+
+    facet_wrap(~metric) +
+    theme_classic() +
+    theme(strip.background = element_blank(), axis.line = element_line(),legend.position=&quot;top&quot;)
+p</code></pre>
+<p><img src="targets_files/figure-html/unnamed-chunk-3-1.png" width="816" /></p>
+<p>Optional figure saving:</p>
+<pre class="r"><code>ggsave(&quot;tutorial_data/targets/C_Multiplier.eps&quot;,width = 180, height = 180, units = c(&quot;mm&quot;))
+ggsave(&quot;tutorial_data/targets/C_Multiplier.png&quot;,width = 180, height = 180, units = c(&quot;mm&quot;))</code></pre>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-Day1995-og">
+<p>Day, J R, and H P Possingham. 1995. “A Stochastic Metapopulation Model with Variability in Patch Size and Position.” <em>Theor. Popul. Biol.</em> 48 (3): 333–60.</p>
+</div>
+<div id="ref-Drechsler2009-wz">
+<p>Drechsler, Martin. 2009. “Predicting Metapopulation Lifetime from Macroscopic Network Properties.” <em>Math. Biosci.</em> 218 (1): 59–71.</p>
+</div>
+<div id="ref-Etienne2004-gc">
+<p>Etienne, Rampal S. 2004. “On Optimal Choices in Increase of Patch Area and Reduction of Interpatch Distance for Metapopulation Persistence.” <em>Ecol. Modell.</em> 179 (1): 77–90.</p>
+</div>
+<div id="ref-Figueira2006-qd">
+<p>Figueira, Will F, and Larry B Crowder. 2006. “Defining Patch Contribution in Source-Sink Metapopulations: The Importance of Including Dispersal and Its Relevance to Marine Systems.” <em>Popul. Ecol.</em> 48 (3). Springer: 215–24.</p>
+</div>
+<div id="ref-Hanski2000-hl">
+<p>Hanski, I, and O Ovaskainen. 2000. “The Metapopulation Capacity of a Fragmented Landscape.” <em>Nature</em> 404 (6779): 755–58.</p>
+</div>
+<div id="ref-Kininmonth2010-kt">
+<p>Kininmonth, S, M Drechsler, K Johst, and H P Possingham. 2010. “Metapopulation Mean Life Time Within Complex Networks.” <em>Mar. Ecol. Prog. Ser.</em> 417. Inter-Research Science Center: 139–49.</p>
+</div>
+<div id="ref-Shima2010-jq">
+<p>Shima, Jeffrey S, Erik G Noonburg, and Nicole E Phillips. 2010. “Life History and Matrix Heterogeneity Interact to Shape Metapopulation Connectivity in Spatially Structured Environments.” <em>Ecology</em> 91 (4). Wiley Online Library: 1215–24.</p>
+</div>
+</div>
+</div>
+
+<div id="footer">
+    <center>
+        <img src="images/icon_small.png" alt="Marxan Connect">
+        <p>Copyright &copy; 2017,  Remi Daigle,  All rights reserved.</p>
+    </center>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
