@@ -449,7 +449,7 @@ Finally, running Marxan with the connectivity strength modifier and boundary def
 # planning units with output
 output <- read.csv("tutorial_data/CSM_demographic/output/pu_connect.csv") %>%
     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution),
+           # best_solution = as.logical(best_solution),
            fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
            aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>%
     st_as_sf()
