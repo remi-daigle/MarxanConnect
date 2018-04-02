@@ -10,6 +10,19 @@ navbar:
   - text: Tutorial
     icon: fa-graduation-cap
     href: tutorial.html
+    menu:
+        - text: "Getting Started"
+          href: tutorial.html
+        - text: "CF + demographic data"
+          href: CF_demographic.html
+        - text: "CF + landscape data"
+          href: CF_landscape.html
+        - text: "CSM + demographic data"
+          href: CSM_demographic.html
+        - text: "CSM + landscape data"
+          href: CSM_landscape.html
+        - text: "Setting Targets"
+          href: targets.html
   - text: Glossary
     icon: fa-book
     href: glossary.html

@@ -1,0 +1,28 @@
+---
+title: "Tutorial"
+output:
+  html_document: 
+    number_sections: yes
+    code_folding: hide
+    toc: yes
+    toc_float: yes
+bibliography: references.bib
+---
+
+
+# Overview
+
+The following section provides an example of possible workflow. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid.
+
+```{r load packages,message=FALSE, warning=FALSE}
+library(sf)
+library(leaflet)
+library(tmap)
+library(tidyverse)
+library(DT)
+
+
+# set default projection for leaflet
+proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
+```
+

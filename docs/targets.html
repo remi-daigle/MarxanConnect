@@ -300,12 +300,34 @@ div.tocify {
     Marxan Connect
   </a>
 </li>
-<li>
-  <a href="tutorial.html">
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-graduation-cap"></span>
      
     Tutorial
+     
+    <span class="caret"></span>
   </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="tutorial.html">Getting Started</a>
+    </li>
+    <li>
+      <a href="CF_demographic.html">CF + demographic data</a>
+    </li>
+    <li>
+      <a href="CF_landscape.html">CF + landscape data</a>
+    </li>
+    <li>
+      <a href="CSM_demographic.html">CSM + demographic data</a>
+    </li>
+    <li>
+      <a href="CSM_landscape.html">CSM + landscape data</a>
+    </li>
+    <li>
+      <a href="targets.html">Setting Targets</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="glossary.html">
@@ -362,9 +384,9 @@ require(sf)</code></pre>
 <h1>Creating an example connectivity Matrix</h1>
 <p>Here we create a connectivity matrix which contains flow data. This step is not necessary if you have your own data.</p>
 <pre class="r"><code># load the reefs shapefile and calculate area
-reefs &lt;- st_read(&quot;tutorial_data/targets/reefs.shp&quot;) %&gt;%
+reefs &lt;- st_read(&quot;tutorial/targets/reefs.shp&quot;) %&gt;%
     mutate(area = st_area(.))</code></pre>
-<pre><code>## Reading layer `reefs&#39; from data source `C:\Users\Remi-Work\Desktop\MarxanConnect\docs\tutorial_data\targets\reefs.shp&#39; using driver `ESRI Shapefile&#39;
+<pre><code>## Reading layer `reefs&#39; from data source `C:\Users\Remi-Work\Desktop\MarxanConnect\docs\tutorial\targets\reefs.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 321 features and 15 fields
 ## geometry type:  POLYGON
 ## dimension:      XY
@@ -396,7 +418,7 @@ survival &lt;- as.numeric(reefs$area/max(reefs$area))*0.0000001
 flowMatrix &lt;- t(t(probabilityMatrix)*survival)*fecundity
 
 # write to file
-write.csv(flowMatrix,&quot;tutorial_data/targets/reefFlow.csv&quot;)</code></pre>
+write.csv(flowMatrix,&quot;tutorial/targets/reefFlow.csv&quot;)</code></pre>
 </div>
 <div id="using-marxan-connect" class="section level1">
 <h1>Using Marxan Connect</h1>
@@ -434,23 +456,23 @@ cmax &lt;- 1/regulartarget              # maximum connectivity multiplier
 
 # get 100% target values
 # load puvspr
-puvspr &lt;- read.csv(&quot;tutorial_data/targets/input/puvspr2_appended.dat&quot;,stringsAsFactors=FALSE) %&gt;% 
+puvspr &lt;- read.csv(&quot;tutorial/targets/input/puvspr2_appended.dat&quot;,stringsAsFactors=FALSE) %&gt;% 
     group_by(species) %&gt;% 
     summarize(target=sum(amount)) %&gt;% 
     ungroup() %&gt;% 
     data.frame()</code></pre>
 <p>Now we can iterate Marxan. If you’re using the the RMarkdown <code>.Rmd</code> version of this tutorial, you may want to remove the <code>eval=FALSE</code> in the R chunk options since this chunk of code won’t run if it’s still there. It’s there to prevent the lengthy iterations of Marxan when building the website!</p>
 <pre class="r"><code># delete previous ouputs
-unlink(x=list.files(path=&quot;tutorial_data/targets/output/&quot;,pattern=&quot;*&quot;,full.names = TRUE))
+unlink(x=list.files(path=&quot;tutorial/targets/output/&quot;,pattern=&quot;*&quot;,full.names = TRUE))
 
 #iterate over metrics and connectivity multiplier 
 for(m in metrics){
     for (c in seq(0,cmax,steps))
     {
         # load specdat
-        specdat &lt;- read.csv(&quot;tutorial_data/targets/input/spec_appended.dat&quot;,stringsAsFactors=FALSE)
+        specdat &lt;- read.csv(&quot;tutorial/targets/input/spec_appended.dat&quot;,stringsAsFactors=FALSE)
         # load old specdat to get names of non-connectivity features
-        oldspecdat &lt;- read.csv(&quot;tutorial_data/targets/input/spec.dat&quot;,stringsAsFactors=FALSE)
+        oldspecdat &lt;- read.csv(&quot;tutorial/targets/input/spec.dat&quot;,stringsAsFactors=FALSE)
         # target for all features
         # replace 100% targets
         if(all(specdat$id==puvspr$species)){
@@ -463,10 +485,10 @@ for(m in metrics){
         specdat$target[!(specdat$name %in% oldspecdat$name) &amp; specdat$name!=m] &lt;- 0
 
         # save spec file
-        write.csv(specdat,paste0(&quot;tutorial_data/targets/input/c_testingTargetScenario_&quot;,m,&quot;_&quot;,c,&quot;.dat&quot;),quote=FALSE,row.names=FALSE)
+        write.csv(specdat,paste0(&quot;tutorial/targets/input/c_testingTargetScenario_&quot;,m,&quot;_&quot;,c,&quot;.dat&quot;),quote=FALSE,row.names=FALSE)
 
         # load input.dat
-        input.dat &lt;- readLines(&quot;tutorial_data/targets/input.dat&quot;)
+        input.dat &lt;- readLines(&quot;tutorial/targets/input.dat&quot;)
 
         # set parameter
         iBLMParam &lt;- which(regexpr(&quot;BLM&quot;,input.dat)==1)
@@ -482,12 +504,12 @@ for(m in metrics){
         input.dat[iSPECNAMEParam] &lt;- paste0(&quot;SPECNAME c_testingTargetScenario_&quot;,m,&quot;_&quot;,c,&quot;.dat&quot;)
         input.dat[iPUNAMEParam] &lt;- paste0(&quot;PUNAME pu.dat&quot;)
         input.dat[iSCENNAMEParam] &lt;- paste0(&quot;SCENNAME c_testingTargetScenario_&quot;,m,&quot;_&quot;,c)
-        input.dat[iOUTPUTDIRParam] &lt;- gsub(&quot;/&quot;,&quot;\\\\&quot;,paste0(&quot;OUTPUTDIR &quot;,getwd(),&quot;/tutorial_data/targets/output&quot;))
-        input.dat[iINPUTDIRParam] &lt;- gsub(&quot;/&quot;,&quot;\\\\&quot;,paste0(&quot;INPUTDIR &quot;,getwd(),&quot;/tutorial_data/targets/input&quot;))
+        input.dat[iOUTPUTDIRParam] &lt;- gsub(&quot;/&quot;,&quot;\\\\&quot;,paste0(&quot;OUTPUTDIR &quot;,getwd(),&quot;/tutorial/targets/output&quot;))
+        input.dat[iINPUTDIRParam] &lt;- gsub(&quot;/&quot;,&quot;\\\\&quot;,paste0(&quot;INPUTDIR &quot;,getwd(),&quot;/tutorial/targets/input&quot;))
         input.dat[length(input.dat)+1] &lt;- &quot;&quot;
 
         # save input.dat
-        writeLines(input.dat,con=file(paste0(&quot;tutorial_data/targets/input&quot;,c,&quot;.dat&quot;)),sep=&quot;\n&quot;)
+        writeLines(input.dat,con=file(paste0(&quot;tutorial/targets/input&quot;,c,&quot;.dat&quot;)),sep=&quot;\n&quot;)
 
         # run Marxan 
         # TODO: you will need to change to the appropriate Marxan filepath here
@@ -499,8 +521,8 @@ for(m in metrics){
 <h1>Processing output and plotting</h1>
 <p>The hundreds of Marxan output files must now be loaded, processed and plotted. Here we calculate the ecologically relevant</p>
 <pre class="r"><code># create table 
-bestfiles &lt;- list.files(path=&quot;tutorial_data/targets/output&quot;,pattern=&quot;*mvbest*&quot;)
-sumfiles &lt;- list.files(path=&quot;tutorial_data/targets/output&quot;,pattern=&quot;*sum*&quot;)
+bestfiles &lt;- list.files(path=&quot;tutorial/targets/output&quot;,pattern=&quot;*mvbest*&quot;)
+sumfiles &lt;- list.files(path=&quot;tutorial/targets/output&quot;,pattern=&quot;*sum*&quot;)
 
 #We want all the cost of every best solution for each scenario
 #We want the metric value for every best solution for each scenario
@@ -509,19 +531,19 @@ sumfiles &lt;- list.files(path=&quot;tutorial_data/targets/output&quot;,pattern=
 mastertable &lt;- expand.grid(metric=metrics,c=seq(0,cmax,steps),replicate=sprintf(&quot;%05d&quot;, 1:reps),Cost=0,Metric=0,&quot;Metapopulation Growth&quot;=0)
 
 # load specdat 
-specdat &lt;- read.csv(&quot;tutorial_data/targets/input/spec_appended.dat&quot;,stringsAsFactors=FALSE)
+specdat &lt;- read.csv(&quot;tutorial/targets/input/spec_appended.dat&quot;,stringsAsFactors=FALSE)
 
 # iterate over rows in mastertable
 for(i in 1:nrow(mastertable)){
     # extract the amount of the metric held in the network
-    mastertable$Metric[i] &lt;- read.csv(file = paste0(&quot;tutorial_data/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_mv&quot;,mastertable$replicate[i],&quot;.txt&quot;), header = T) %&gt;% 
+    mastertable$Metric[i] &lt;- read.csv(file = paste0(&quot;tutorial/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_mv&quot;,mastertable$replicate[i],&quot;.txt&quot;), header = T) %&gt;% 
         filter(Conservation.Feature==specdat$id[specdat$name==mastertable$metric[i]]) %&gt;% 
         select(Amount.Held) %&gt;% 
         unlist() %&gt;% 
         as.numeric()
     
     # extract the cost of the network
-    mastertable$Cost[i] &lt;- read.csv(file = paste0(&quot;tutorial_data/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_sum.txt&quot;), header = T) %&gt;% 
+    mastertable$Cost[i] &lt;- read.csv(file = paste0(&quot;tutorial/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_sum.txt&quot;), header = T) %&gt;% 
         filter(Run_Number==as.numeric(mastertable$replicate[i])) %&gt;% 
         select(Cost) %&gt;% 
         unlist()
@@ -529,7 +551,7 @@ for(i in 1:nrow(mastertable)){
     # Calculate an ecologically relevant conservation objective
     # we calculate the metapopulation growth (first real eigenvalue of a connectivity matrix that includes survival and mortality)
     # more details on this step in the text below
-    inreserve &lt;- read.csv(file = paste0(&quot;tutorial_data/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_r&quot;,mastertable$replicate[i],&quot;.txt&quot;), header = T)$solution==1
+    inreserve &lt;- read.csv(file = paste0(&quot;tutorial/targets/output/c_testingTargetScenario_&quot;,mastertable$metric[i],&quot;_&quot;,mastertable$c[i],&quot;_r&quot;,mastertable$replicate[i],&quot;.txt&quot;), header = T)$solution==1
     networkmatrix &lt;- (flowMatrix)[inreserve,inreserve]
     mastertable$&quot;Metapopulation Growth&quot;[i] &lt;- Re(eigen(networkmatrix)$values[1])
     
@@ -590,8 +612,8 @@ lamdbaM1 &lt;- mean((1-mastertableMeans$means[mastertableMeans$c==0&amp;masterta
 p</code></pre>
 <p><img src="targets_files/figure-html/unnamed-chunk-3-1.png" width="816" /></p>
 <p>Optional figure saving:</p>
-<pre class="r"><code>ggsave(&quot;tutorial_data/targets/C_Multiplier.eps&quot;,width = 180, height = 180, units = c(&quot;mm&quot;))
-ggsave(&quot;tutorial_data/targets/C_Multiplier.png&quot;,width = 180, height = 180, units = c(&quot;mm&quot;))</code></pre>
+<pre class="r"><code>ggsave(&quot;tutorial/targets/C_Multiplier.eps&quot;,width = 180, height = 180, units = c(&quot;mm&quot;))
+ggsave(&quot;tutorial/targets/C_Multiplier.png&quot;,width = 180, height = 180, units = c(&quot;mm&quot;))</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -623,7 +645,6 @@ ggsave(&quot;tutorial_data/targets/C_Multiplier.png&quot;,width = 180, height = 
 <div id="footer">
     <center>
         <img src="images/icon_small.png" alt="Marxan Connect">
-        <p>Copyright &copy; 2017,  Remi Daigle,  All rights reserved.</p>
     </center>
 </div>
 

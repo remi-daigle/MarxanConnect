@@ -1,0 +1,268 @@
+---
+title: "Tutorial"
+output:
+  html_document: 
+    number_sections: yes
+    code_folding: hide
+    toc: yes
+    toc_float: yes
+bibliography: references.bib
+---
+
+
+# Overview
+
+The following section provides an example of possible workflow. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid.
+
+```{r load packages,message=FALSE, warning=FALSE}
+library(sf)
+library(leaflet)
+library(tmap)
+library(tidyverse)
+library(DT)
+
+
+# set default projection for leaflet
+proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
+```
+
+## Demographic Data using CSM
+
+Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../docs/tutorial/CSM_demographic). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`.
+
+Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files. The files include reef planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
+
+### `spec.dat`
+
+```{r}
+spec <- read.csv("tutorial/CSM_demographic/input/spec.dat")
+datatable(spec,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### `puvspr.dat`
+
+```{r}
+puvspr <- read.csv("tutorial/CSM_demographic/input/puvspr2.dat")
+datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### `pu.dat`
+
+```{r}
+pu <- read.csv("tutorial/CSM_demographic/input/pu.dat")
+datatable(pu,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### Inital Conservation Features
+
+```{r}
+puvspr_wide <- puvspr %>%
+    left_join(select(spec,"id","name"),
+              by=c("species"="id")) %>%
+    select(-species) %>%
+    spread(key="name",value="amount")
+
+# planning units with output
+output <- read.csv("tutorial/CSM_demographic/output/pu_no_connect.csv") %>%
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           best_solution = as.logical(best_solution)) %>%
+    st_as_sf() %>%
+    left_join(puvspr_wide,by=c("pu_id"="pu"))
+
+```
+
+```{r,warning=FALSE,message=FALSE}
+map <- leaflet(output) %>%
+    addTiles()
+
+groups <- names(select(output,-best_solution,-select_freq))[c(-1,-2,-length(names(output)))]
+
+for(i in groups){
+    z <- unlist(data.frame(output)[i])
+    if(is.numeric(z)){
+        pal <- colorBin("YlOrRd", domain = z)
+    }else{
+        pal <- colorFactor("YlOrRd", domain = z)
+    }
+
+    map = map %>%
+        addPolygons(fillColor = ~pal(z),
+                    fillOpacity = 0.6,
+                    weight=0.5,
+                    color="white",
+                    group=i,
+                    label = as.character(z)) %>%
+            addLegend(pal = pal,
+                      values = z,
+                      title = i,
+                      group = i,
+                      position="bottomleft")
+
+
+}
+map <- map %>%
+    addLayersControl(overlayGroups  = groups,
+                     options = layersControlOptions(collapsed = FALSE))
+
+for(i in groups){
+    map <- map %>% hideGroup(i)
+}
+map %>%
+    showGroup("BIORE_102")
+```
+
+### Adding Connectivity
+
+Let's begin by examining the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas).
+
+```{r load all layers for CSM_demographic,results='hide'}
+# planning units
+pu <- st_read("tutorial/CSM_demographic/reefs.shp") %>%
+    st_transform(proj)
+
+#focus areas (IUCN level I or II protected areas)
+fa <- st_read("tutorial/CSM_demographic/IUCN_IorII.shp") %>%
+    st_transform(proj)
+
+# avoidance areas (ports)
+aa <- st_read("tutorial/CSM_demographic/ports.shp") %>%
+    st_transform(proj)
+```
+
+```{r}
+p <- qtm(pu,fill = '#7570b3') +
+    qtm(fa,fill = '#1b9e77') +
+    qtm(aa,fill = '#d95f02')
+tmap_leaflet(p) %>%
+    addLegend(position = "topright",
+              labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"),
+              colors = c("#7570b3","#1b9e77","#d95f02"),
+              title = "Layers")
+```
+
+### `connectivity_matrix.csv`
+
+The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics as well as the definition of new boundaries based on the strength of the connection (i.e. the number of exchanged individuals) as opposed to the physical length of a shared boundary.
+
+For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653
+
+```{r}
+conmat <- read.csv("tutorial/CSM_demographic/reefFlow.csv")[1:7,1:7]
+datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
+```
+
+### `boundary.dat`
+
+```{r}
+puvspr <- read.csv("tutorial/CSM_demographic/input/boundary.dat")
+datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+```
+
+Finally, running Marxan with the connectivity strength modifier and boundary definitions results in a different solution.
+
+```{r}
+# planning units with output
+output <- read.csv("tutorial/CSM_demographic/output/pu_connect.csv") %>%
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           # best_solution = as.logical(best_solution),
+           fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
+           aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>%
+    st_as_sf()
+
+```
+
+
+```{r,warning=FALSE,message=FALSE}
+# map <- leaflet(output) %>%
+#     addTiles()
+# 
+# groups <- names(output)[c(-1,-2,-length(names(output)))]
+# 
+# for(i in groups){
+#     z <- unlist(data.frame(output)[i])
+#     if(is.numeric(z)){
+#         pal <- colorBin("YlOrRd", domain = z)
+#     }else{
+#         pal <- colorFactor("YlOrRd", domain = z)
+#     }
+# 
+#     map = map %>%
+#         addPolygons(fillColor = ~pal(z),
+#                     fillOpacity = 0.6,
+#                     weight=0.5,
+#                     color="white",
+#                     group=i,
+#                     label = as.character(z)) %>%
+#             addLegend(pal = pal,
+#                       values = z,
+#                       title = i,
+#                       group = i,
+#                       position="bottomleft")
+# 
+# 
+# }
+# map <- map %>%
+#     addLayersControl(overlayGroups  = groups,
+#                      options = layersControlOptions(collapsed = FALSE))
+# 
+# for(i in groups){
+#     map <- map %>% hideGroup(i)
+# }
+# map %>%
+#     showGroup("select_freq")
+```
+
+Here is the output of our example with no connectivity
+
+```{r}
+# # planning units with output
+# output <- read.csv("tutorial/CSM_demographic/output/pu_no_connect.csv") %>%
+#     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+#            best_solution = as.logical(best_solution),
+#            fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
+#            aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>%
+#     st_as_sf()
+
+```
+
+
+```{r,warning=FALSE,message=FALSE}
+# map <- leaflet(output) %>%
+#     addTiles()
+# 
+# groups <- names(output)[c(-1,-2,-length(names(output)))]
+# 
+# for(i in groups){
+#     z <- unlist(data.frame(output)[i])
+#     if(is.numeric(z)){
+#         pal <- colorBin("YlOrRd", domain = z)
+#     }else{
+#         pal <- colorFactor("YlOrRd", domain = z)
+#     }
+# 
+#     map = map %>%
+#         addPolygons(fillColor = ~pal(z),
+#                     fillOpacity = 0.6,
+#                     weight=0.5,
+#                     color="white",
+#                     group=i,
+#                     label = as.character(z)) %>%
+#             addLegend(pal = pal,
+#                       values = z,
+#                       title = i,
+#                       group = i,
+#                       position="bottomleft")
+# 
+# 
+# }
+# map <- map %>%
+#     addLayersControl(overlayGroups  = groups,
+#                      options = layersControlOptions(collapsed = FALSE))
+# 
+# for(i in groups){
+#     map <- map %>% hideGroup(i)
+# }
+# map %>%
+#     showGroup("select_freq")
+```
+

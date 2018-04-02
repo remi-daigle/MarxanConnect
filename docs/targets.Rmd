@@ -27,7 +27,7 @@ Here we create a connectivity matrix which contains flow data. This step is not 
 ```{r matrix creation,message=FALSE, warning=FALSE}
 
 # load the reefs shapefile and calculate area
-reefs <- st_read("tutorial_data/targets/reefs.shp") %>%
+reefs <- st_read("tutorial/targets/reefs.shp") %>%
     mutate(area = st_area(.))
 
 # generate a distance matrix
@@ -55,7 +55,7 @@ survival <- as.numeric(reefs$area/max(reefs$area))*0.0000001
 flowMatrix <- t(t(probabilityMatrix)*survival)*fecundity
 
 # write to file
-write.csv(flowMatrix,"tutorial_data/targets/reefFlow.csv")
+write.csv(flowMatrix,"tutorial/targets/reefFlow.csv")
 ```
 
 # Using Marxan Connect
@@ -97,7 +97,7 @@ cmax <- 1/regulartarget              # maximum connectivity multiplier
 
 # get 100% target values
 # load puvspr
-puvspr <- read.csv("tutorial_data/targets/input/puvspr2_appended.dat",stringsAsFactors=FALSE) %>% 
+puvspr <- read.csv("tutorial/targets/input/puvspr2_appended.dat",stringsAsFactors=FALSE) %>% 
     group_by(species) %>% 
     summarize(target=sum(amount)) %>% 
     ungroup() %>% 
@@ -110,16 +110,16 @@ Now we can iterate Marxan. If you're using the the RMarkdown `.Rmd` version of t
 ```{r iteration, eval=FALSE}
 
 # delete previous ouputs
-unlink(x=list.files(path="tutorial_data/targets/output/",pattern="*",full.names = TRUE))
+unlink(x=list.files(path="tutorial/targets/output/",pattern="*",full.names = TRUE))
 
 #iterate over metrics and connectivity multiplier 
 for(m in metrics){
     for (c in seq(0,cmax,steps))
     {
         # load specdat
-        specdat <- read.csv("tutorial_data/targets/input/spec_appended.dat",stringsAsFactors=FALSE)
+        specdat <- read.csv("tutorial/targets/input/spec_appended.dat",stringsAsFactors=FALSE)
         # load old specdat to get names of non-connectivity features
-        oldspecdat <- read.csv("tutorial_data/targets/input/spec.dat",stringsAsFactors=FALSE)
+        oldspecdat <- read.csv("tutorial/targets/input/spec.dat",stringsAsFactors=FALSE)
         # target for all features
         # replace 100% targets
         if(all(specdat$id==puvspr$species)){
@@ -132,10 +132,10 @@ for(m in metrics){
         specdat$target[!(specdat$name %in% oldspecdat$name) & specdat$name!=m] <- 0
 
         # save spec file
-        write.csv(specdat,paste0("tutorial_data/targets/input/c_testingTargetScenario_",m,"_",c,".dat"),quote=FALSE,row.names=FALSE)
+        write.csv(specdat,paste0("tutorial/targets/input/c_testingTargetScenario_",m,"_",c,".dat"),quote=FALSE,row.names=FALSE)
 
         # load input.dat
-        input.dat <- readLines("tutorial_data/targets/input.dat")
+        input.dat <- readLines("tutorial/targets/input.dat")
 
         # set parameter
         iBLMParam <- which(regexpr("BLM",input.dat)==1)
@@ -151,12 +151,12 @@ for(m in metrics){
         input.dat[iSPECNAMEParam] <- paste0("SPECNAME c_testingTargetScenario_",m,"_",c,".dat")
         input.dat[iPUNAMEParam] <- paste0("PUNAME pu.dat")
         input.dat[iSCENNAMEParam] <- paste0("SCENNAME c_testingTargetScenario_",m,"_",c)
-        input.dat[iOUTPUTDIRParam] <- gsub("/","\\\\",paste0("OUTPUTDIR ",getwd(),"/tutorial_data/targets/output"))
-        input.dat[iINPUTDIRParam] <- gsub("/","\\\\",paste0("INPUTDIR ",getwd(),"/tutorial_data/targets/input"))
+        input.dat[iOUTPUTDIRParam] <- gsub("/","\\\\",paste0("OUTPUTDIR ",getwd(),"/tutorial/targets/output"))
+        input.dat[iINPUTDIRParam] <- gsub("/","\\\\",paste0("INPUTDIR ",getwd(),"/tutorial/targets/input"))
         input.dat[length(input.dat)+1] <- ""
 
         # save input.dat
-        writeLines(input.dat,con=file(paste0("tutorial_data/targets/input",c,".dat")),sep="\n")
+        writeLines(input.dat,con=file(paste0("tutorial/targets/input",c,".dat")),sep="\n")
 
         # run Marxan 
         # TODO: you will need to change to the appropriate Marxan filepath here
@@ -171,8 +171,8 @@ The hundreds of Marxan output files must now be loaded, processed and plotted. H
 
 ```{r}
 # create table 
-bestfiles <- list.files(path="tutorial_data/targets/output",pattern="*mvbest*")
-sumfiles <- list.files(path="tutorial_data/targets/output",pattern="*sum*")
+bestfiles <- list.files(path="tutorial/targets/output",pattern="*mvbest*")
+sumfiles <- list.files(path="tutorial/targets/output",pattern="*sum*")
 
 #We want all the cost of every best solution for each scenario
 #We want the metric value for every best solution for each scenario
@@ -181,19 +181,19 @@ sumfiles <- list.files(path="tutorial_data/targets/output",pattern="*sum*")
 mastertable <- expand.grid(metric=metrics,c=seq(0,cmax,steps),replicate=sprintf("%05d", 1:reps),Cost=0,Metric=0,"Metapopulation Growth"=0)
 
 # load specdat 
-specdat <- read.csv("tutorial_data/targets/input/spec_appended.dat",stringsAsFactors=FALSE)
+specdat <- read.csv("tutorial/targets/input/spec_appended.dat",stringsAsFactors=FALSE)
 
 # iterate over rows in mastertable
 for(i in 1:nrow(mastertable)){
     # extract the amount of the metric held in the network
-    mastertable$Metric[i] <- read.csv(file = paste0("tutorial_data/targets/output/c_testingTargetScenario_",mastertable$metric[i],"_",mastertable$c[i],"_mv",mastertable$replicate[i],".txt"), header = T) %>% 
+    mastertable$Metric[i] <- read.csv(file = paste0("tutorial/targets/output/c_testingTargetScenario_",mastertable$metric[i],"_",mastertable$c[i],"_mv",mastertable$replicate[i],".txt"), header = T) %>% 
         filter(Conservation.Feature==specdat$id[specdat$name==mastertable$metric[i]]) %>% 
         select(Amount.Held) %>% 
         unlist() %>% 
         as.numeric()
     
     # extract the cost of the network
-    mastertable$Cost[i] <- read.csv(file = paste0("tutorial_data/targets/output/c_testingTargetScenario_",mastertable$metric[i],"_",mastertable$c[i],"_sum.txt"), header = T) %>% 
+    mastertable$Cost[i] <- read.csv(file = paste0("tutorial/targets/output/c_testingTargetScenario_",mastertable$metric[i],"_",mastertable$c[i],"_sum.txt"), header = T) %>% 
         filter(Run_Number==as.numeric(mastertable$replicate[i])) %>% 
         select(Cost) %>% 
         unlist()
@@ -201,7 +201,7 @@ for(i in 1:nrow(mastertable)){
     # Calculate an ecologically relevant conservation objective
     # we calculate the metapopulation growth (first real eigenvalue of a connectivity matrix that includes survival and mortality)
     # more details on this step in the text below
-    inreserve <- read.csv(file = paste0("tutorial_data/targets/output/c_testingTargetScenario_",mastertable$metric[i],"_",mastertable$c[i],"_r",mastertable$replicate[i],".txt"), header = T)$solution==1
+    inreserve <- read.csv(file = paste0("tutorial/targets/output/c_testingTargetScenario_",mastertable$metric[i],"_",mastertable$c[i],"_r",mastertable$replicate[i],".txt"), header = T)$solution==1
     networkmatrix <- (flowMatrix)[inreserve,inreserve]
     mastertable$"Metapopulation Growth"[i] <- Re(eigen(networkmatrix)$values[1])
     
@@ -274,8 +274,8 @@ p
 Optional figure saving:
 
 ```{r optional figure saving, eval=FALSE}
-ggsave("tutorial_data/targets/C_Multiplier.eps",width = 180, height = 180, units = c("mm"))
-ggsave("tutorial_data/targets/C_Multiplier.png",width = 180, height = 180, units = c("mm"))
+ggsave("tutorial/targets/C_Multiplier.eps",width = 180, height = 180, units = c("mm"))
+ggsave("tutorial/targets/C_Multiplier.png",width = 180, height = 180, units = c("mm"))
 ```
 
 
