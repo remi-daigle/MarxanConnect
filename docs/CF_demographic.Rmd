@@ -41,19 +41,25 @@ datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 
 ### `puvspr.dat`
 
+The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr.dat file. The original dataset has 974 entries.
+
 ```{r}
 puvspr <- read.csv("tutorial/CF_demographic/input/puvspr.dat")
-datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### `pu.dat`
 
+The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the pu.dat file. The original dataset has 653 entries.
+
 ```{r}
 pu <- read.csv("tutorial/CF_demographic/input/pu.dat")
-datatable(pu,rownames = FALSE, options = list(searching = FALSE))
+datatable(pu[1:30,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
-### Inital Conservation Features
+### Inital Conservation Feature
+
+This map shows the bioregions, which serve as conservation features in the Marxan analysis with no connectivity.
 
 ```{r}
 puvspr_wide <- puvspr %>%
@@ -75,7 +81,8 @@ output <- read.csv("tutorial/CF_demographic/output/pu_no_connect.csv") %>%
 map <- leaflet(output) %>%
     addTiles()
 
-groups <- names(select(output,-best_solution,-select_freq))[c(-1,-2,-length(names(output)))]
+groups <- names(select(output,-best_solution,-select_freq, -fa_included, -aa_included, -google_demo_pu))[c(-1,-2)]
+groups <- groups[groups!="geometry"]
 
 for(i in groups){
     z <- unlist(data.frame(output)[i])
@@ -113,7 +120,7 @@ map %>%
 
 ### Adding Connectivity
 
-Let's begin by examining the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas).
+Let's begin by examining the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas).These spatial layers are shown in the map below.
 
 ```{r load all layers for CF_demographic,results='hide'}
 # planning units
@@ -144,14 +151,14 @@ tmap_leaflet(p) %>%
 
 The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics.
 
-For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653
+For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653.
 
 ```{r}
 conmat <- read.csv("tutorial/CF_demographic/hexFlow.csv")[1:7,1:7]
 datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
 ```
 
-In this example we've chosen to append the new connectivity based conservation metrics to the existing Marxan files.
+In this example, we've chosen to append the new connectivity based conservation metrics to the existing Marxan files. We have chosen to use the google page rank metric. Selecting the third page of the appended file, you will find an additional row (21 in this example) with the target for this new connectivity based conservation feature.
 
 ### `spec_appended.dat`
 
@@ -162,12 +169,16 @@ datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 
 ### `puvspr_appended.dat`
 
+The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr_appended.dat file. The original dataset has 1627 entries.
+
+Selecting the third page of the appended file, you will find additional rows (corresponding to our new conservation feature, which is 'species 21' in this example) with the amount of this feature in each planning unit. 
+
 ```{r}
 puvspr <- read.csv("tutorial/CF_demographic/input/puvspr_appended.dat")
-datatable(puvspr,rownames = FALSE, options = list(searching = FALSE))
+datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
-Finally, running Marxan with the connectivity conservation features and boundary definitions results in a different solution.
+Finally, running Marxan with the connectivity conservation features results in a different solution.
 
 ```{r}
 # planning units with output
