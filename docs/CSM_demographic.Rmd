@@ -151,7 +151,7 @@ tmap_leaflet(p) %>%
 
 The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the definition of new boundaries based on the strength of the connection (i.e. the number of exchanged individuals) as opposed to the physical length of a shared boundary.
 
-For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 321 X 321
+Below is the connectivity matrix of our example conservation priority. For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 321 X 321.
 
 ```{r}
 conmat <- read.csv("tutorial/CSM_demographic/reefFlow.csv", check.names = FALSE)
@@ -159,6 +159,8 @@ datatable(conmat[1:7,1:7],rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### `boundary.dat`
+
+To use this connectivity matrix in Marxan, we need to convert the data to the format of a boundary.dat file. This is an edge list of the connectivity matrix above.
 
 The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the boundary.dat file. The original dataset has 57753 entries.
 
