@@ -154,17 +154,17 @@ The connectivity data is at the 'heart' of Marxan Connect's functionality. It al
 For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 321 X 321
 
 ```{r}
-conmat <- read.csv("tutorial/CSM_demographic/reefFlow.csv")
+conmat <- read.csv("tutorial/CSM_demographic/reefFlow.csv", check.names = FALSE)
 datatable(conmat[1:7,1:7],rownames = FALSE, options = list(searching = FALSE))
 ```
 
 ### `boundary.dat`
 
-The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr_appended.dat file. The original dataset has 57753 entries.
+The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the boundary.dat file. The original dataset has 57753 entries.
 
 ```{r}
-puvspr <- read.csv("tutorial/CSM_demographic/input/boundary.dat")
-datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
+boundary <- read.csv("tutorial/CSM_demographic/input/boundary.dat")
+datatable(boundary[1:30,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
 Finally, running Marxan with the connectivity strength modifier and boundary definitions results in a different solution.
