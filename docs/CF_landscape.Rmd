@@ -10,278 +10,278 @@ bibliography: references.bib
 ---
 
 
-# Overview
+<!-- # Overview -->
 
-The following section provides an example of possible workflow. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid.
+<!-- The following section provides an example of possible workflow. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid. -->
 
-```{r load packages,message=FALSE, warning=FALSE}
-library(sf)
-library(leaflet)
-library(tmap)
-library(tidyverse)
-library(DT)
+<!-- ```{r load packages,message=FALSE, warning=FALSE} -->
+<!-- library(sf) -->
+<!-- library(leaflet) -->
+<!-- library(tmap) -->
+<!-- library(tidyverse) -->
+<!-- library(DT) -->
 
 
-# set default projection for leaflet
-proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
-```
+<!-- # set default projection for leaflet -->
+<!-- proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs" -->
+<!-- ``` -->
 
-## Demographic Data using CF
+<!-- ## Demographic Data using CF -->
 
-Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../docs/tutorial/CF_landscape). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`.
+<!-- Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../docs/tutorial/CF_landscape). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`. -->
 
-Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files. The files include reef planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
+<!-- Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files. The files include reef planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets. -->
 
-### `spec.dat`
+<!-- ### `spec.dat` -->
 
-```{r}
-spec <- read.csv("tutorial/CF_landscape/input/spec.dat")
-datatable(spec,rownames = FALSE, options = list(searching = FALSE))
-```
+<!-- ```{r} -->
+<!-- spec <- read.csv("tutorial/CF_landscape/input/spec.dat") -->
+<!-- datatable(spec,rownames = FALSE, options = list(searching = FALSE)) -->
+<!-- ``` -->
 
-### `puvspr.dat`
+<!-- ### `puvspr.dat` -->
 
-The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr.dat file. The original dataset has 974 entries.
+<!-- The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr.dat file. The original dataset has 974 entries. -->
 
-```{r}
-puvspr <- read.csv("tutorial/CF_landscape/input/puvspr.dat")
-datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
-```
-
-### `pu.dat`
+<!-- ```{r} -->
+<!-- puvspr <- read.csv("tutorial/CF_landscape/input/puvspr2.dat") -->
+<!-- datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE)) -->
+<!-- ``` -->
+
+<!-- ### `pu.dat` -->
 
-The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the pu.dat file. The original dataset has 653 entries.
+<!-- The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the pu.dat file. The original dataset has 653 entries. -->
 
-```{r}
-pu <- read.csv("tutorial/CF_landscape/input/pu.dat")
-datatable(pu[1:30,],rownames = FALSE, options = list(searching = FALSE))
-```
+<!-- ```{r} -->
+<!-- pu <- read.csv("tutorial/CF_landscape/input/pu.dat") -->
+<!-- datatable(pu[1:30,],rownames = FALSE, options = list(searching = FALSE)) -->
+<!-- ``` -->
 
-### Inital Conservation Feature
+<!-- ### Inital Conservation Feature -->
 
-This map shows the bioregions, which serve as conservation features in the Marxan analysis with no connectivity.
+<!-- This map shows the bioregions, which serve as conservation features in the Marxan analysis with no connectivity. -->
 
-```{r}
-puvspr_wide <- puvspr %>%
-    left_join(select(spec,"id","name"),
-              by=c("species"="id")) %>%
-    select(-species) %>%
-    spread(key="name",value="amount")
+<!-- ```{r} -->
+<!-- puvspr_wide <- puvspr %>% -->
+<!--     left_join(select(spec,"id","name"), -->
+<!--               by=c("species"="id")) %>% -->
+<!--     select(-species) %>% -->
+<!--     spread(key="name",value="amount") -->
 
-# planning units with output
-output <- read.csv("tutorial/CF_landscape/output/pu_no_connect.csv") %>%
-    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution)) %>%
-    st_as_sf() %>%
-    left_join(puvspr_wide,by=c("FID"="pu"))
+<!-- # planning units with output -->
+<!-- output <- read.csv("tutorial/CF_landscape/output/pu_no_connect.csv") %>% -->
+<!--     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"), -->
+<!--            best_solution = as.logical(best_solution)) %>% -->
+<!--     st_as_sf() %>% -->
+<!--     left_join(puvspr_wide,by=c("FID"="pu")) -->
 
-```
+<!-- ``` -->
 
-```{r,warning=FALSE,message=FALSE}
-map <- leaflet(output) %>%
-    addTiles()
+<!-- ```{r,warning=FALSE,message=FALSE} -->
+<!-- map <- leaflet(output) %>% -->
+<!--     addTiles() -->
 
-groups <- names(select(output,-best_solution,-select_freq, -fa_included, -aa_included, -google_demo_pu))[c(-1,-2)]
-groups <- groups[groups!="geometry"]
+<!-- groups <- names(select(output,-best_solution,-select_freq, -fa_included, -aa_included, -google_demo_pu))[c(-1,-2)] -->
+<!-- groups <- groups[groups!="geometry"] -->
 
-for(i in groups){
-    z <- unlist(data.frame(output)[i])
-    if(is.numeric(z)){
-        pal <- colorBin("YlOrRd", domain = z)
-    }else{
-        pal <- colorFactor("YlOrRd", domain = z)
-    }
+<!-- for(i in groups){ -->
+<!--     z <- unlist(data.frame(output)[i]) -->
+<!--     if(is.numeric(z)){ -->
+<!--         pal <- colorBin("YlOrRd", domain = z) -->
+<!--     }else{ -->
+<!--         pal <- colorFactor("YlOrRd", domain = z) -->
+<!--     } -->
 
-    map = map %>%
-        addPolygons(fillColor = ~pal(z),
-                    fillOpacity = 0.6,
-                    weight=0.5,
-                    color="white",
-                    group=i,
-                    label = as.character(z)) %>%
-            addLegend(pal = pal,
-                      values = z,
-                      title = i,
-                      group = i,
-                      position="bottomleft")
+<!--     map = map %>% -->
+<!--         addPolygons(fillColor = ~pal(z), -->
+<!--                     fillOpacity = 0.6, -->
+<!--                     weight=0.5, -->
+<!--                     color="white", -->
+<!--                     group=i, -->
+<!--                     label = as.character(z)) %>% -->
+<!--             addLegend(pal = pal, -->
+<!--                       values = z, -->
+<!--                       title = i, -->
+<!--                       group = i, -->
+<!--                       position="bottomleft") -->
 
 
-}
-map <- map %>%
-    addLayersControl(overlayGroups  = groups,
-                     options = layersControlOptions(collapsed = FALSE))
+<!-- } -->
+<!-- map <- map %>% -->
+<!--     addLayersControl(overlayGroups  = groups, -->
+<!--                      options = layersControlOptions(collapsed = FALSE)) -->
 
-for(i in groups){
-    map <- map %>% hideGroup(i)
-}
-map %>%
-    showGroup("BIORE_102")
-```
-
-### Adding Connectivity
-
-Let's begin by examining the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas).These spatial layers are shown in the map below.
+<!-- for(i in groups){ -->
+<!--     map <- map %>% hideGroup(i) -->
+<!-- } -->
+<!-- map %>% -->
+<!--     showGroup("BIORE_102") -->
+<!-- ``` -->
+
+<!-- ### Adding Connectivity -->
+
+<!-- Let's begin by examining the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas).These spatial layers are shown in the map below. -->
 
-```{r load all layers for CF_landscape,results='hide'}
-# planning units
-pu <- st_read("tutorial/CF_landscape/hex_planning_units.shp") %>% 
-    st_transform(proj)
+<!-- ```{r load all layers for CF_landscape,results='hide'} -->
+<!-- # planning units -->
+<!-- pu <- st_read("tutorial/CF_landscape/hex_planning_units.shp") %>%  -->
+<!--     st_transform(proj) -->
 
-#focus areas (IUCN level I or II protected areas)
-fa <- st_read("tutorial/CF_landscape/IUCN_IorII.shp") %>%
-    st_transform(proj)
-
-# avoidance areas (ports)
-aa <- st_read("tutorial/CF_landscape/ports.shp") %>%
-    st_transform(proj)
-```
-
-```{r}
-p <- qtm(pu,fill = '#7570b3') +
-    qtm(fa,fill = '#1b9e77') +
-    qtm(aa,fill = '#d95f02')
-tmap_leaflet(p) %>%
-    addLegend(position = "topright",
-              labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"),
-              colors = c("#7570b3","#1b9e77","#d95f02"),
-              title = "Layers")
-```
+<!-- #focus areas (IUCN level I or II protected areas) -->
+<!-- fa <- st_read("tutorial/CF_landscape/IUCN_IorII.shp") %>% -->
+<!--     st_transform(proj) -->
+
+<!-- # avoidance areas (ports) -->
+<!-- aa <- st_read("tutorial/CF_landscape/ports.shp") %>% -->
+<!--     st_transform(proj) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- p <- qtm(pu,fill = '#7570b3') + -->
+<!--     qtm(fa,fill = '#1b9e77') + -->
+<!--     qtm(aa,fill = '#d95f02') -->
+<!-- tmap_leaflet(p) %>% -->
+<!--     addLegend(position = "topright", -->
+<!--               labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"), -->
+<!--               colors = c("#7570b3","#1b9e77","#d95f02"), -->
+<!--               title = "Layers") -->
+<!-- ``` -->
 
-### `connectivity_matrix.csv`
-
-The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics.
+<!-- ### `connectivity_matrix.csv` -->
+
+<!-- The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics. -->
 
-For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653.
+<!-- For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 653 X 653. -->
 
-```{r}
-conmat <- read.csv("tutorial/CF_landscape/hexFlow.csv")[1:7,1:7]
-datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
-```
-
-In this example, we've chosen to append the new connectivity based conservation metrics to the existing Marxan files. We have chosen to use the google page rank metric. Selecting the third page of the appended file, you will find an additional row (21 in this example) with the target for this new connectivity based conservation feature.
-
-### `spec_appended.dat`
-
-```{r}
-spec <- read.csv("tutorial/CF_landscape/input/spec_appended.dat")
-datatable(spec,rownames = FALSE, options = list(searching = FALSE))
-```
-
-### `puvspr_appended.dat`
-
-The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr_appended.dat file. The original dataset has 1627 entries.
-
-Selecting the third page of the appended file, you will find additional rows (corresponding to our new conservation feature, which is 'species 21' in this example) with the amount of this feature in each planning unit. 
-
-```{r}
-puvspr <- read.csv("tutorial/CF_landscape/input/puvspr_appended.dat")
-datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
-```
-
-Finally, running Marxan with the connectivity conservation features results in a different solution.
-
-```{r}
-# planning units with output
-output <- read.csv("tutorial/CF_landscape/output/pu_connect.csv") %>%
-    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution),
-           fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
-           aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>%
-    st_as_sf()
-
-```
-
-
-```{r,warning=FALSE,message=FALSE}
-map <- leaflet(output) %>%
-    addTiles()
-
-groups <- names(output)[c(-1,-2,-length(names(output)))]
-
-for(i in groups){
-    z <- unlist(data.frame(output)[i])
-    if(is.numeric(z)){
-        pal <- colorBin("YlOrRd", domain = z)
-    }else{
-        pal <- colorFactor("YlOrRd", domain = z)
-    }
-
-    map = map %>%
-        addPolygons(fillColor = ~pal(z),
-                    fillOpacity = 0.6,
-                    weight=0.5,
-                    color="white",
-                    group=i,
-                    label = as.character(z)) %>%
-            addLegend(pal = pal,
-                      values = z,
-                      title = i,
-                      group = i,
-                      position="bottomleft")
-
-
-}
-map <- map %>%
-    addLayersControl(overlayGroups  = groups,
-                     options = layersControlOptions(collapsed = FALSE))
-
-for(i in groups){
-    map <- map %>% hideGroup(i)
-}
-map %>%
-    showGroup("select_freq")
-```
-
-Here is the output of our example with no connectivity for comparison.
-
-```{r}
-# planning units with output
-output <- read.csv("tutorial/CF_landscape/output/pu_no_connect.csv") %>%
-    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution),
-           fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
-           aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>%
-    st_as_sf()
-
-```
-
-
-```{r,warning=FALSE,message=FALSE}
-map <- leaflet(output) %>%
-    addTiles()
-
-groups <- names(output)[c(-1,-2,-length(names(output)))]
-
-for(i in groups){
-    z <- unlist(data.frame(output)[i])
-    if(is.numeric(z)){
-        pal <- colorBin("YlOrRd", domain = z)
-    }else{
-        pal <- colorFactor("YlOrRd", domain = z)
-    }
-
-    map = map %>%
-        addPolygons(fillColor = ~pal(z),
-                    fillOpacity = 0.6,
-                    weight=0.5,
-                    color="white",
-                    group=i,
-                    label = as.character(z)) %>%
-            addLegend(pal = pal,
-                      values = z,
-                      title = i,
-                      group = i,
-                      position="bottomleft")
-
-
-}
-map <- map %>%
-    addLayersControl(overlayGroups  = groups,
-                     options = layersControlOptions(collapsed = FALSE))
-
-for(i in groups){
-    map <- map %>% hideGroup(i)
-}
-map %>%
-    showGroup("select_freq")
-```
+<!-- ```{r} -->
+<!-- conmat <- read.csv("tutorial/CF_landscape/hexFlow.csv")[1:7,1:7] -->
+<!-- datatable(conmat,rownames = FALSE, options = list(searching = FALSE)) -->
+<!-- ``` -->
+
+<!-- In this example, we've chosen to append the new connectivity based conservation metrics to the existing Marxan files. We have chosen to use the google page rank metric. Selecting the third page of the appended file, you will find an additional row (21 in this example) with the target for this new connectivity based conservation feature. -->
+
+<!-- ### `spec_appended.dat` -->
+
+<!-- ```{r} -->
+<!-- spec <- read.csv("tutorial/CF_landscape/input/spec_appended.dat") -->
+<!-- datatable(spec,rownames = FALSE, options = list(searching = FALSE)) -->
+<!-- ``` -->
+
+<!-- ### `puvspr_appended.dat` -->
+
+<!-- The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr_appended.dat file. The original dataset has 1627 entries. -->
+
+<!-- Selecting the third page of the appended file, you will find additional rows (corresponding to our new conservation feature, which is 'species 21' in this example) with the amount of this feature in each planning unit.  -->
+
+<!-- ```{r} -->
+<!-- puvspr <- read.csv("tutorial/CF_landscape/input/puvspr_appended.dat") -->
+<!-- datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE)) -->
+<!-- ``` -->
+
+<!-- Finally, running Marxan with the connectivity conservation features results in a different solution. -->
+
+<!-- ```{r} -->
+<!-- # planning units with output -->
+<!-- output <- read.csv("tutorial/CF_landscape/output/pu_connect.csv") %>% -->
+<!--     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"), -->
+<!--            best_solution = as.logical(best_solution), -->
+<!--            fa_included = as.logical(gsub("True",TRUE,.$fa_included)), -->
+<!--            aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>% -->
+<!--     st_as_sf() -->
+
+<!-- ``` -->
+
+
+<!-- ```{r,warning=FALSE,message=FALSE} -->
+<!-- map <- leaflet(output) %>% -->
+<!--     addTiles() -->
+
+<!-- groups <- names(output)[c(-1,-2,-length(names(output)))] -->
+
+<!-- for(i in groups){ -->
+<!--     z <- unlist(data.frame(output)[i]) -->
+<!--     if(is.numeric(z)){ -->
+<!--         pal <- colorBin("YlOrRd", domain = z) -->
+<!--     }else{ -->
+<!--         pal <- colorFactor("YlOrRd", domain = z) -->
+<!--     } -->
+
+<!--     map = map %>% -->
+<!--         addPolygons(fillColor = ~pal(z), -->
+<!--                     fillOpacity = 0.6, -->
+<!--                     weight=0.5, -->
+<!--                     color="white", -->
+<!--                     group=i, -->
+<!--                     label = as.character(z)) %>% -->
+<!--             addLegend(pal = pal, -->
+<!--                       values = z, -->
+<!--                       title = i, -->
+<!--                       group = i, -->
+<!--                       position="bottomleft") -->
+
+
+<!-- } -->
+<!-- map <- map %>% -->
+<!--     addLayersControl(overlayGroups  = groups, -->
+<!--                      options = layersControlOptions(collapsed = FALSE)) -->
+
+<!-- for(i in groups){ -->
+<!--     map <- map %>% hideGroup(i) -->
+<!-- } -->
+<!-- map %>% -->
+<!--     showGroup("select_freq") -->
+<!-- ``` -->
+
+<!-- Here is the output of our example with no connectivity for comparison. -->
+
+<!-- ```{r} -->
+<!-- # planning units with output -->
+<!-- output <- read.csv("tutorial/CF_landscape/output/pu_no_connect.csv") %>% -->
+<!--     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"), -->
+<!--            best_solution = as.logical(best_solution), -->
+<!--            fa_included = as.logical(gsub("True",TRUE,.$fa_included)), -->
+<!--            aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>% -->
+<!--     st_as_sf() -->
+
+<!-- ``` -->
+
+
+<!-- ```{r,warning=FALSE,message=FALSE} -->
+<!-- map <- leaflet(output) %>% -->
+<!--     addTiles() -->
+
+<!-- groups <- names(output)[c(-1,-2,-length(names(output)))] -->
+
+<!-- for(i in groups){ -->
+<!--     z <- unlist(data.frame(output)[i]) -->
+<!--     if(is.numeric(z)){ -->
+<!--         pal <- colorBin("YlOrRd", domain = z) -->
+<!--     }else{ -->
+<!--         pal <- colorFactor("YlOrRd", domain = z) -->
+<!--     } -->
+
+<!--     map = map %>% -->
+<!--         addPolygons(fillColor = ~pal(z), -->
+<!--                     fillOpacity = 0.6, -->
+<!--                     weight=0.5, -->
+<!--                     color="white", -->
+<!--                     group=i, -->
+<!--                     label = as.character(z)) %>% -->
+<!--             addLegend(pal = pal, -->
+<!--                       values = z, -->
+<!--                       title = i, -->
+<!--                       group = i, -->
+<!--                       position="bottomleft") -->
+
+
+<!-- } -->
+<!-- map <- map %>% -->
+<!--     addLayersControl(overlayGroups  = groups, -->
+<!--                      options = layersControlOptions(collapsed = FALSE)) -->
+
+<!-- for(i in groups){ -->
+<!--     map <- map %>% hideGroup(i) -->
+<!-- } -->
+<!-- map %>% -->
+<!--     showGroup("select_freq") -->
+<!-- ``` -->
