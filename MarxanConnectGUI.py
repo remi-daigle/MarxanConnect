@@ -136,7 +136,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['metricsCalculated'] = False
         self.set_metric_options()
         self.project['options']['cf_export'] = self.cf_export_radioBox.GetStringSelection()
+
+        self.project['options']['bd_filecheck'] = self.BD_filecheck.GetValue()
+        self.project['options']['pudat_filecheck'] = self.PUDAT_filecheck.GetValue()
+
+        self.project['options']['marxan_bit'] = self.marxanBit_Radio.GetStringSelection()
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
+
+        self.project['options']['pushp_filecheck'] = self.PUSHP_filecheck.GetValue()
+        self.project['options']['pucsv_filecheck'] = self.PUCSV_filecheck.GetValue()
+        self.project['options']['map_filecheck'] = self.MAP_filecheck.GetValue()
 
         # set default file paths
         # spatial input

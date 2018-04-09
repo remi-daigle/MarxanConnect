@@ -321,7 +321,10 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
 
     # habitat resistance
     if res_type == "Least-Cost Path":
-        habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0).sort_index())
+        if os.path.isfile(res_mat_filepath):
+            habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0).sort_index())
+        else:
+            print("Resistance file not found")
     else:
         habres = numpy.ones([len(habtypes),len(habtypes)])
 
@@ -375,12 +378,15 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
             count += int(pu.shape[0]/len(habtypes))
             dlg.Update(count)
 
-        conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h, mode='OUT'))
-        conmat_temp = (1/(conmat_temp * conmat_temp)).replace(numpy.inf,0)
-        conmat_temp = conmat_temp.divide(conmat_temp.sum(axis=1).max())
-        conmat_temp = conmat_temp.multiply(area[h], axis=0)
-        conmat_temp = conmat_temp.multiply(area[h], axis=1)
-        if conmat_temp.values.sum() > 0:
+        if G.ecount() > 0:
+            conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h, mode='OUT'))
+            conmat_temp = (1 / (conmat_temp * conmat_temp)).replace(numpy.inf, 0)
+            conmat_temp = conmat_temp.divide(conmat_temp.sum(axis=1).max())
+            print(conmat_temp)
+            conmat_temp = conmat_temp.multiply(area[h].tolist(), axis=0)
+            print(conmat_temp)
+            conmat_temp = conmat_temp.multiply(area[h].tolist(), axis=1)
+            print(conmat_temp)
             conmat_temp.columns = G.vs['name']
             conmat_temp['id1'] = G.vs['name']
             conmat_temp['habitat'] = h
