@@ -46,93 +46,102 @@ def rescale_matrix(pu_filepath,pu_id,cu_filepath,cu_id,cm_filepath,matrixformat,
                                 "Please wait while the rescaled connectivity matrix is being generated.",
                                 maximum = max,
                                 parent=None,
-                                style = wx.PD_AUTO_HIDE
-                                | wx.PD_ELAPSED_TIME
-                                | wx.PD_ESTIMATED_TIME
-                                | wx.PD_REMAINING_TIME
+                                style = wx.PD_APP_MODAL
+                                        | wx.PD_CAN_ABORT
+                                        | wx.PD_AUTO_HIDE
+                                        | wx.PD_ELAPSED_TIME
+                                        | wx.PD_ESTIMATED_TIME
+                                        | wx.PD_REMAINING_TIME
                                 )
         count = 0
 
-    con_mat_pu = []
-    for index, puID in pu.iterrows():
-        if progressbar:
-            count += 1
-            dlg.Update(count)
-        for index2, connID in cu.iterrows():
-           if puID.geometry.intersects(connID.geometry):
-               con_mat_pu.append({'geometry': puID.geometry.intersection(connID.geometry), 'puID':puID[pu_id], 'connID': connID[cu_id], 'puIndex': index, 'connIndex': index2,'int_area': puID.geometry.intersection(connID.geometry).area, 'conn_area': connID.geometry.area, 'pu_area': puID.geometry.area})
+    keepGoing = True
+    while keepGoing:
+        con_mat_pu = []
+        for index, puID in pu.iterrows():
+            if progressbar:
+                count += 1
+                (keepGoing, skip) = dlg.Update(count)
+            for index2, connID in cu.iterrows():
+                if not keepGoing: break
+                if puID.geometry.intersects(connID.geometry):
+                   con_mat_pu.append({'geometry': puID.geometry.intersection(connID.geometry), 'puID':puID[pu_id], 'connID': connID[cu_id], 'puIndex': index, 'connIndex': index2,'int_area': puID.geometry.intersection(connID.geometry).area, 'conn_area': connID.geometry.area, 'pu_area': puID.geometry.area})
 
 
-    # make intersection GeoDataFrame
-    df = gpd.GeoDataFrame(con_mat_pu,columns=['geometry', 'puID', 'connID', 'puIndex', 'connIndex', 'int_area', 'conn_area', 'pu_area'])
+        # make intersection GeoDataFrame
+        df = gpd.GeoDataFrame(con_mat_pu,columns=['geometry', 'puID', 'connID', 'puIndex', 'connIndex', 'int_area', 'conn_area', 'pu_area'])
 
 
-    # populate rescaled pu connectivity matrix
-    pu_conmat = numpy.zeros((len(pu),len(pu)))
-    for source in pu[pu_id]:
-        if progressbar:
-            count += 9
-            dlg.Update(count)
-        for sink in pu[pu_id]:
-            sources=df.puID==source
-            sinks=df.puID==sink
-            if any(sinks) and any(sources):
-                if edge == "Proportional to overlap":
-                    temp_conn=grid_conmat[df.connIndex[sources],:][:,df.connIndex[sinks]]
-                    cov_source=df.int_area[sources]/sum(df.int_area[sources])
-                    cov_sink=df.int_area[sinks]/sum(df.int_area[sinks])
-                    pu_conmat[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
-                        sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
-                else:
-                    temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
-                    cov_source = df.int_area[sources] / df.pu_area[sources]
-                    cov_sink = df.int_area[sinks] / df.pu_area[sinks]
-                    pu_conmat[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
-                        sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
-            else:
-                pu_conmat[numpy.array(pu[pu_id]==source),numpy.array(pu[pu_id]==sink)]=0
-    pu_conmat = pandas.DataFrame(pu_conmat, index=pu[pu_id], columns=pu[pu_id])
-    pu_conmat.index.name = "puID"
-
-    if time:
         # populate rescaled pu connectivity matrix
-        for t in grid_conmat_time['time'].unique():
-            pu_conmat_t = numpy.zeros((len(pu), len(pu)))
-            for source in pu[pu_id]:
-                if progressbar:
-                    count += 9
-                    dlg.Update(count)
-                for sink in pu[pu_id]:
-                    sources = df.puID == source
-                    sinks = df.puID == sink
-                    if any(sinks) and any(source):
-                        if edge == "Proportional to overlap":
-                            temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
-                            cov_source = df.int_area[sources] / sum(df.int_area[sources])
-                            cov_sink = df.int_area[sinks] / sum(df.int_area[sinks])
-                            pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
-                                sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
-                        else:
-                            temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
-                            cov_source = df.int_area[sources] / df.pu_area[sources]
-                            cov_sink = df.int_area[sinks] / df.pu_area[sinks]
-                            pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
-                                sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+        pu_conmat = numpy.zeros((len(pu),len(pu)))
+        for source in pu[pu_id]:
+            if progressbar:
+                count += 9
+                (keepGoing, skip) = dlg.Update(count)
+            for sink in pu[pu_id]:
+                if not keepGoing: break
+                sources=df.puID==source
+                sinks=df.puID==sink
+                if any(sinks) and any(sources):
+                    if edge == "Proportional to overlap":
+                        temp_conn=grid_conmat[df.connIndex[sources],:][:,df.connIndex[sinks]]
+                        cov_source=df.int_area[sources]/sum(df.int_area[sources])
+                        cov_sink=df.int_area[sinks]/sum(df.int_area[sinks])
+                        pu_conmat[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                            sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
                     else:
-                        pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = 0
+                        temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
+                        cov_source = df.int_area[sources] / df.pu_area[sources]
+                        cov_sink = df.int_area[sinks] / df.pu_area[sinks]
+                        pu_conmat[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                            sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+                else:
+                    pu_conmat[numpy.array(pu[pu_id]==source),numpy.array(pu[pu_id]==sink)]=0
+        pu_conmat = pandas.DataFrame(pu_conmat, index=pu[pu_id], columns=pu[pu_id])
+        pu_conmat.index.name = "puID"
 
-            pu_conmat_t = pandas.DataFrame(pu_conmat_t, index=pu[pu_id], columns=pu[pu_id])
-            pu_conmat_t['id1'] = pu_conmat_t.index
-            pu_conmat_t['time'] = t
-            if t==grid_conmat_time['time'].unique()[0]:
-                pu_conmat['id1'] = pu_conmat.index
-                pu_conmat['time'] = 'mean'
-            pu_conmat = pu_conmat.append(pu_conmat_t)
-        # pu_conmat_time = pu_conmat.melt(id_vars=['time','id1'], var_name='id2', value_name='value')
+        if time:
+            # populate rescaled pu connectivity matrix
+            for t in grid_conmat_time['time'].unique():
+                if not keepGoing: break
+                pu_conmat_t = numpy.zeros((len(pu), len(pu)))
+                for source in pu[pu_id]:
+                    if progressbar:
+                        count += 9
+                        (keepGoing, skip) = dlg.Update(count)
+                    for sink in pu[pu_id]:
+                        if not keepGoing: break
+                        sources = df.puID == source
+                        sinks = df.puID == sink
+                        if any(sinks) and any(source):
+                            if edge == "Proportional to overlap":
+                                temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
+                                cov_source = df.int_area[sources] / sum(df.int_area[sources])
+                                cov_sink = df.int_area[sinks] / sum(df.int_area[sinks])
+                                pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                                    sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+                            else:
+                                temp_conn = grid_conmat[df.connIndex[sources], :][:, df.connIndex[sinks]]
+                                cov_source = df.int_area[sources] / df.pu_area[sources]
+                                cov_sink = df.int_area[sinks] / df.pu_area[sinks]
+                                pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = sum(
+                                    sum(((temp_conn * numpy.array(cov_sink)).T * numpy.array(cov_source))))
+                        else:
+                            pu_conmat_t[numpy.array(pu[pu_id] == source), numpy.array(pu[pu_id] == sink)] = 0
 
-    if progressbar:
-        dlg.Destroy()
-    return pu_conmat
+                pu_conmat_t = pandas.DataFrame(pu_conmat_t, index=pu[pu_id], columns=pu[pu_id])
+                pu_conmat_t['id1'] = pu_conmat_t.index
+                pu_conmat_t['time'] = t
+                if t==grid_conmat_time['time'].unique()[0]:
+                    pu_conmat['id1'] = pu_conmat.index
+                    pu_conmat['time'] = 'mean'
+                pu_conmat = pu_conmat.append(pu_conmat_t)
+            # pu_conmat_time = pu_conmat.melt(id_vars=['time','id1'], var_name='id2', value_name='value')
+
+        if progressbar:
+            dlg.Destroy()
+        return pu_conmat
+        keepgoing = False
 
 
 
@@ -299,38 +308,6 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
     pu = pu.sort_values(pu_id)
     pu = pu.reset_index(drop=True)
 
-    area_proj = get_appropriate_projection(pu, 'area')
-    dist_proj = get_appropriate_projection(pu, 'distance')
-
-    pu_area = pu.to_crs(area_proj)
-    pu_dist = pu.to_crs(dist_proj)
-    pu_dist['buff'] = pu_dist.geometry.buffer(buff)
-
-    hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
-    hab['diss'] = hab[hab_id]
-    hab = hab.dissolve(by='diss')
-    hab = hab.reset_index(drop=True)
-    hab.crs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
-    hab = hab.sort_values(hab_id)
-
-    hab_area = hab.to_crs(area_proj)
-    hab_dist = hab.to_crs(dist_proj)
-
-
-    habtypes = hab_dist[hab_id].values
-
-    # habitat resistance
-    if res_type == "Least-Cost Path":
-        if os.path.isfile(res_mat_filepath):
-            habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0).sort_index())
-        else:
-            print("Resistance file not found")
-    else:
-        habres = numpy.ones([len(habtypes),len(habtypes)])
-
-    G = igraph.Graph()
-    G.add_vertices([str(i) for i in pu[pu_id]])
-
     # progressbar
     if progressbar:
         max = pu.shape[0] * 12
@@ -338,65 +315,104 @@ def habitatresistance2conmats(buff, hab_filepath, hab_id, res_mat_filepath, pu_f
                                 "Please wait while the least-cost path based connectivity matrices are being generated.",
                                 maximum=max,
                                 parent=None,
-                                style=wx.PD_AUTO_HIDE
+                                style=wx.PD_APP_MODAL
+                                      | wx.PD_CAN_ABORT
+                                      |wx.PD_AUTO_HIDE
                                       | wx.PD_ELAPSED_TIME
                                       | wx.PD_ESTIMATED_TIME
                                       | wx.PD_REMAINING_TIME
                                 )
         count = 0
 
-    area = pandas.DataFrame(numpy.zeros((len(pu), len(habtypes))),index=pu_area[pu_id], columns=habtypes)
-    for index1, pu1row in pu_area.iterrows():
-        if progressbar:
-            count += 1
-            dlg.Update(count)
-        for indexhab, habrow in hab_area.iterrows():
-            area.iloc[index1,indexhab] = pu1row.geometry.intersection(habrow.geometry).area
-    for index1, pu1row in pu_dist.iterrows():
-        if progressbar:
-            count += 10
-            dlg.Update(count)
-        for index2, pu2row in pu_dist.iterrows():
-            if index1 != index2:
-                if pu1row.buff.intersects(pu2row.buff):
-                    line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.y),
-                                                        (pu2row.geometry.centroid.x, pu2row.geometry.centroid.y)])
-                    lineinter = numpy.array(hab_dist.intersection(line).length)
-                    if sum(lineinter)>(line.length*0.5):
-                        lineinter = lineinter/sum(lineinter)*line.length
-                        weights = dict(zip(habtypes, numpy.multiply(lineinter, habres).sum(1)))
-                        dist = pu1row.geometry.centroid.distance(pu2row.geometry.centroid)
-                        G.add_edge(str(pu1row[pu_id]), str(pu2row[pu_id]), **weights, distance=dist)
+    keepGoing = True
+    while keepGoing:
+
+        area_proj = get_appropriate_projection(pu, 'area')
+        dist_proj = get_appropriate_projection(pu, 'distance')
+
+        pu_area = pu.to_crs(area_proj)
+        pu_dist = pu.to_crs(dist_proj)
+        pu_dist['buff'] = pu_dist.geometry.buffer(buff)
+
+        hab = gpd.GeoDataFrame.from_file(hab_filepath).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+        hab['diss'] = hab[hab_id]
+        hab = hab.dissolve(by='diss')
+        hab = hab.reset_index(drop=True)
+        hab.crs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+        hab = hab.sort_values(hab_id)
+
+        hab_area = hab.to_crs(area_proj)
+        hab_dist = hab.to_crs(dist_proj)
 
 
-    conmat = pandas.DataFrame({'habitat': [], 'id1': [], 'id2': [], 'value': []})
-    area = area.T.divide(area.values.sum(1)).T
-    area.fillna(0,inplace=True) # remove nan's
-    area[area<0.00001]=0
-    for h in habtypes:
-        if progressbar:
-            count += int(pu.shape[0]/len(habtypes))
-            dlg.Update(count)
+        habtypes = hab_dist[hab_id].values
 
-        if G.ecount() > 0:
-            conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h, mode='OUT'))
-            conmat_temp = (1 / (conmat_temp * conmat_temp)).replace(numpy.inf, 0)
-            conmat_temp = conmat_temp.divide(conmat_temp.sum(axis=1).max())
-            print(conmat_temp)
-            conmat_temp = conmat_temp.multiply(area[h].tolist(), axis=0)
-            print(conmat_temp)
-            conmat_temp = conmat_temp.multiply(area[h].tolist(), axis=1)
-            print(conmat_temp)
-            conmat_temp.columns = G.vs['name']
-            conmat_temp['id1'] = G.vs['name']
-            conmat_temp['habitat'] = h
-            conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))
+        # habitat resistance
+        if res_type == "Least-Cost Path":
+            if os.path.isfile(res_mat_filepath):
+                habres = numpy.array(pandas.read_csv(res_mat_filepath, index_col=0).sort_index())
+            else:
+                print("Resistance file not found")
         else:
-            print("Warning: Habitat '"+str(h)+"' has no connectivity between planning units, excluding from further analyses")
-    if progressbar:
-        count = max
-        dlg.Update(count)
-    return conmat.to_json(orient='split')
+            habres = numpy.ones([len(habtypes),len(habtypes)])
+
+        G = igraph.Graph()
+        G.add_vertices([str(i) for i in pu[pu_id]])
+
+        area = pandas.DataFrame(numpy.zeros((len(pu), len(habtypes))),index=pu_area[pu_id], columns=habtypes)
+        for index1, pu1row in pu_area.iterrows():
+            if progressbar:
+                count += 1
+                (keepGoing, skip) = dlg.Update(count)
+            for indexhab, habrow in hab_area.iterrows():
+                if not keepGoing: break
+                area.iloc[index1,indexhab] = pu1row.geometry.intersection(habrow.geometry).area
+        for index1, pu1row in pu_dist.iterrows():
+            if not keepGoing: break
+            if progressbar:
+                count += 10
+                (keepGoing, skip) = dlg.Update(count)
+            for index2, pu2row in pu_dist.iterrows():
+                if not keepGoing: break
+                if index1 != index2:
+                    if pu1row.buff.intersects(pu2row.buff):
+                        line = shapely.geometry.LineString([(pu1row.geometry.centroid.x, pu1row.geometry.centroid.y),
+                                                            (pu2row.geometry.centroid.x, pu2row.geometry.centroid.y)])
+                        lineinter = numpy.array(hab_dist.intersection(line).length)
+                        if sum(lineinter)>(line.length*0.5):
+                            lineinter = lineinter/sum(lineinter)*line.length
+                            weights = dict(zip(habtypes, numpy.multiply(lineinter, habres).sum(1)))
+                            dist = pu1row.geometry.centroid.distance(pu2row.geometry.centroid)
+                            G.add_edge(str(pu1row[pu_id]), str(pu2row[pu_id]), **weights, distance=dist)
+
+
+        conmat = pandas.DataFrame({'habitat': [], 'id1': [], 'id2': [], 'value': []})
+        area = area.T.divide(area.values.sum(1)).T
+        area.fillna(0,inplace=True) # remove nan's
+        area[area<0.00001]=0
+        for h in habtypes:
+            if progressbar:
+                count += int(pu.shape[0]/len(habtypes))
+                (keepGoing, skip) = dlg.Update(count)
+
+            if not keepGoing: break
+            if G.ecount() > 0:
+                conmat_temp = pandas.DataFrame(G.shortest_paths_dijkstra(weights=h, mode='OUT'))
+                conmat_temp = (1 / (conmat_temp * conmat_temp)).replace(numpy.inf, 0)
+                conmat_temp = conmat_temp.divide(conmat_temp.sum(axis=1).max())
+                conmat_temp = conmat_temp.multiply(area[h].tolist(), axis=0)
+                conmat_temp = conmat_temp.multiply(area[h].tolist(), axis=1)
+                conmat_temp.columns = G.vs['name']
+                conmat_temp['id1'] = G.vs['name']
+                conmat_temp['habitat'] = h
+                conmat = conmat.append(conmat_temp.melt(id_vars=('habitat', 'id1'), var_name='id2', value_name='value'))
+            else:
+                print("Warning: Habitat '"+str(h)+"' has no connectivity between planning units, excluding from further analyses")
+        if progressbar:
+            count = max
+            (keepGoing, skip) = dlg.Update(count)
+        return conmat.to_json(orient='split')
+        keepGoing = False
 
 def convert_matrix_type(current,desired,matrix,localProd):
     print("converting ",current," to ",desired)
