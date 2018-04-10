@@ -63,7 +63,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         self.demo_matrixTypeRadioBox.SetItemToolTip(0, "In a probability matrix, each cell represents the probability of movement from site A (row) to site B (column). May or may not account for mortality. If there is no mortality, rows sum to 1")
         self.demo_matrixTypeRadioBox.SetItemToolTip(1, "In a migration matrix, each cell represents the probability of a successful migrant in site B (column) originated in site A (row). Columns sum to 1.")
-        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flow matrix, each cell represents the number of elements/individuals moving from site A (row) to site B (column) per unit time.")
+        self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flow matrix (often mislabeled as a flux matrix), each cell represents the number of elements/individuals moving from site A (row) to site B (column) per unit time.")
 
         self.demo_matrixFormatRadioBox.SetItemToolTip(0,"Matrix format data has the connectivity values arranged is a square format (i.e.the same number of rows and columns). The row names are the donor sites and the column names are the recipient sites ")
         self.demo_matrixFormatRadioBox.SetItemToolTip(1,"Edge Edge Listwith habi has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
@@ -495,7 +495,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         GettingStartedframe.Show()
 
     def on_metric_definition_choice(self,event):
-        soup = bs4.BeautifulSoup(open(os.path.join("docs" , "glossary_webtex.html")),"html.parser")
+        soup = bs4.BeautifulSoup(open(os.path.join("docs" , "glossary_webtex.html"), encoding="utf8"),"html.parser")
 
         # find the node with id of "Plot"
         div = soup.find(id=self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))

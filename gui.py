@@ -95,7 +95,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		pu_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.PU_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"The planning unit is the fundamental spatial polygon on which Marxan analyses are based. The units can be any shape. Often square or hexagonal regular grids, or based on habitat features (e.g. reefs). All futher analyses will be based on whether a feature is present or absent in the planning unit.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.PU_def = wx.StaticText( self.spatialInput, wx.ID_ANY, u"The planning unit is the fundamental spatial polygon on which Marxan analyses are based. The units can be any shape. Often square or hexagonal regular grids, or based on habitat features (e.g. reefs, kelp beds, rivers, forests). All futher analyses will be based on whether a feature is present or absent in the planning unit.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.PU_def.Wrap( -1 )
 		pu_def_sizer.Add( self.PU_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -225,7 +225,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -235,7 +235,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		con_input_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.con_input_def_txt = wx.StaticText( self.connectivityInput, wx.ID_ANY, u"Connectivity data come from many sources and to simplify the input procedure has been divided into two main categories: demographic connectivity and landscape connectivity.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.con_input_def_txt = wx.StaticText( self.connectivityInput, wx.ID_ANY, u"Connectivity data originate from many sources and to simplify the input procedure has been divided into two main categories: demographic connectivity and landscape connectivity.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.con_input_def_txt.Wrap( -1 )
 		con_input_def_sizer.Add( self.con_input_def_txt, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
 		
@@ -274,7 +274,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		demo_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.demo_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"The connectivity matrix (or list) is the fundamental input format for demographic data. It describes the movement from donor sites to recipient sites. It can be obtained by directly quantifying the movement of individual organisms (e.g. tagging) or  by modelling the dispersal of individual organisms (e.g. biophysical modelling of larval dispersal). Please indicate your connectivity data units, type, and format in the boxes below, and if necessary use the rescaling tools if the data was not gathered at the same spatial scale as the planning units. The demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below. If the connectivity data was collected at a scale different than that of the planning units, you will need to supply a Connectivity Matrix Shapefile which describes the spatial polygons for which the data was gathered.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_CM_def = wx.StaticText( self.demographic, wx.ID_ANY, u"The connectivity matrix (or list) is the fundamental input format for demographic data. It describes the movement from donor sites to recipient sites. It can be obtained by directly quantifying the movement of individual organisms (e.g. tagging) or  by modelling the dispersal of individual organisms (e.g. biophysical modelling of larval dispersal). Please indicate your connectivity data units, type, and format in the boxes below, and if necessary use the rescaling tools if the data were not gathered at the same spatial scale as the planning units. The demographic connectivity data does not need to be at the same spatial scale as the Marxan planning units. If there is a mismatch, rescale the connectivity data below. If the connectivity data were collected at a scale different than that of the planning units, you will need to supply a Connectivity Matrix Shapefile which describes the spatial polygons for which the data were gathered.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_CM_def.Wrap( -1 )
 		demo_cm_def_sizer.Add( self.demo_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -869,7 +869,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metrics_seperator = wx.StaticLine( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		metric_sizer.Add( self.metrics_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 		
-		self.bd_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Ecological Distance as Boundary Definition", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bd_txt = wx.StaticText( self.connectivityMetrics, wx.ID_ANY, u"Planning Unit Dependency as Boundary Definition", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.bd_txt.Wrap( -1 )
 		self.bd_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		
@@ -932,7 +932,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		metric_help_sizer.SetFlexibleDirection( wx.BOTH )
 		metric_help_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Out-Flow", u"In-Flow", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as boundary", u"Minimum Planar Graph" ]
+		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Out-Flow", u"In-Flow", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as boundary" ]
 		self.metric_definition_choice = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_definition_choiceChoices, 0 )
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
@@ -984,13 +984,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEvalMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		preEvalMainSizer.AddGrowableCol( 0 )
 		preEvalMainSizer.AddGrowableRow( 0 )
-		preEvalMainSizer.AddGrowableRow( 2 )
 		preEvalMainSizer.SetFlexibleDirection( wx.BOTH )
 		preEvalMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
 		preEval_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.preEval_def_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"This tab will allow you to evaluate the metrics created on the previous tab. They can be removed if they are not appropriate for the Marxan analysis, transformed into discrete features which can be locked in or out. Most importantly, everything can be exported as Marxan formatted files.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_def_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"This tab will allow you to evaluate the metrics created on the previous tab. They can be removed if they are not appropriate for the Marxan analysis, transformed into discrete features which can be locked in or out. Most importantly, everything can be exported as properly formatted Marxan files.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_def_txt.Wrap( -1 )
 		preEval_def_sizer.Add( self.preEval_def_txt, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
 		
@@ -1243,18 +1242,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEvalMainSizer.Add( preEval_table_discrete_sizer, 1, wx.EXPAND, 5 )
 		
-		preEval_metrics_buttons_sizer = wx.FlexGridSizer( 0, 6, 0, 0 )
-		preEval_metrics_buttons_sizer.AddGrowableCol( 0 )
-		preEval_metrics_buttons_sizer.SetFlexibleDirection( wx.BOTH )
-		preEval_metrics_buttons_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		self.spacertext11 = wx.StaticText( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.spacertext11.Wrap( -1 )
-		preEval_metrics_buttons_sizer.Add( self.spacertext11, 0, wx.ALL, 5 )
-		
-		
-		preEvalMainSizer.Add( preEval_metrics_buttons_sizer, 1, wx.EXPAND, 5 )
-		
 		self.m_staticline8 = wx.StaticLine( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		preEvalMainSizer.Add( self.m_staticline8, 0, wx.EXPAND |wx.ALL, 5 )
 		
@@ -1386,7 +1373,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		marxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		marxanMainSizer.AddGrowableCol( 0 )
@@ -1406,7 +1393,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		marxan_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.marxan_def = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Marxan with Connectivity needs a separate Marxan installation to run the analyses. Please download, unzip, and indicate the directory that contains Marxan below. If properly configured, a command terminal will open to display progress when the \"Run Marxan\" button is pressed", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.marxan_def = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Marxan Connect needs a separate Marxan installation to run the analyses. Please download, unzip, and indicate the directory that contains Marxan below. If properly configured, a command terminal will open to display progress when the \"Run Marxan\" button is pressed", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.marxan_def.Wrap( -1 )
 		marxan_def_sizer.Add( self.marxan_def, 0, wx.ALL|wx.EXPAND, 5 )
 		
@@ -2338,7 +2325,7 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer51 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_staticText100 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"Marxan Connect (henceforth the \"app\") is a Graphical User Interface (GUI) to help conservationists include \"connectivity\" in their protected area network planning. The term \"connectivity\" has a variety of definitions (i.e. larval connectivity, genetic connectivity,  landscape connectivity, etc) and protected area networks can be optimized for various connectivity objectives. The app is intended to guide conservationists through the process of identifying important aspects of connectivity for their conservation scenarios as well as highlighting the necessary data.\n\nTo use this software, please visit the Tutorial and the Glossary which can be accessed under the help menu, or the links below (in progress). Otherwise, if you would just like to get started, please proceed through all the tabs from left to right starting the \"Spatial Input\". After calculating the \"Connectivity Metrics\", you can choose to conduct a Marxan analysis in the app, export the connectivity metrics for use in a standalone custom Marxan analysis, or you can visualize the Connectivity Metrics using the \"Plotting Options\" tab. The app also includes be a fully functional python module (in progress) that is operated via command line that can be used to reproduce an analysis using the project file generated by the GUI. If you would like to report any bugs or request a missing feature, please post an issue on the GitHub repository which is available in the help menu, or the link below.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText100 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"Marxan Connect (henceforth the \"app\") is a Graphical User Interface (GUI) to help conservationists include \"connectivity\" in their protected area network planning. The term \"connectivity\" has a various definitions (i.e. larval connectivity, genetic connectivity,  landscape connectivity, etc) and protected area networks can be optimized for various connectivity objectives. The app is intended to guide conservationists through the process of identifying important aspects of connectivity for their conservation scenarios, as well as highlighting the necessary data.\n\nTo use this software, please visit the Tutorial and the Glossary which can be accessed under the help menu, or the links below. Otherwise, if you would just like to get started, please proceed through all the tabs from left to right starting the \"Spatial Input\". After calculating the \"Connectivity Metrics\", you can choose to conduct a Marxan analysis in the app, export the connectivity metrics for use in a standalone custom Marxan analysis, or you can visualize the Connectivity Metrics using the \"Plotting Options\" tab. The app also includes a fully functional python module (in progress) that is operated via command line that can be used to reproduce an analysis using the project file generated by the GUI. If you would like to report any bugs or request a missing feature, please post an issue on the GitHub repository which is available in the help menu, or the link below.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText100.Wrap( -1 )
 		bSizer51.Add( self.m_staticText100, 0, wx.ALL|wx.EXPAND, 5 )
 		
