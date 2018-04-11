@@ -19,6 +19,7 @@ exe: gui.py MarxanConnectGUI.py setup.py
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
 	mv build/exe.win-amd64-3.5/ build/MarxanConnect/; \
+	mv build/exe.win-amd64-3.6/ build/MarxanConnect/; \
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" WindowsSetupBuilder.iss
 
 zip: exe

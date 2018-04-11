@@ -22,10 +22,10 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\MarxanConnect
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\Remi-Work\Desktop\MarxanConnect\LICENSE
-OutputDir=C:\Users\Remi-Work\Desktop\MarxanConnect
+LicenseFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\LICENSE
+OutputDir=C:\Users\daigl\Documents\GitHub\MarxanConnect
 OutputBaseFilename=MarxanConnect-v0-1-1-windows-setup
-SetupIconFile=C:\Users\Remi-Work\Desktop\MarxanConnect\docs\images\icon_bundle.ico
+SetupIconFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\images\icon_bundle.ico
 Compression=lzma
 SolidCompression=yes
 AlwaysRestart=True
@@ -38,8 +38,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\Remi-Work\Desktop\MarxanConnect\build\MarxanConnect\MarxanConnectGUI.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Remi-Work\Desktop\MarxanConnect\build\MarxanConnect\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\daigl\Documents\GitHub\MarxanConnect\build\MarxanConnect\MarxanConnectGUI.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\daigl\Documents\GitHub\MarxanConnect\build\MarxanConnect\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

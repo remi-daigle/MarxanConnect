@@ -35,18 +35,20 @@ if os.name=='nt':
     # editing out deprecated functions in gui.py
 
     # prep for cx_Freeze
-    os.environ['TCL_LIBRARY'] = os.path.join(os.environ['LOCALAPPDATA'],'Programs','Python','Python35','tcl','tcl8.6')
-    os.environ['TK_LIBRARY'] = os.path.join(os.environ['LOCALAPPDATA'],'Programs','Python','Python35','tcl','tk8.6')
+    # os.environ['TCL_LIBRARY'] = os.path.join(os.environ['LOCALAPPDATA'],'Programs','Python','Python35','tcl','tcl8.6')
+    # os.environ['TK_LIBRARY'] = os.path.join(os.environ['LOCALAPPDATA'],'Programs','Python','Python35','tcl','tk8.6')
+    os.environ['TCL_LIBRARY'] = os.path.join(os.environ['ALLUSERSPROFILE'],'Anaconda3','tcl','tcl8.6')
+    os.environ['TK_LIBRARY'] = os.path.join(os.environ['ALLUSERSPROFILE'],'Anaconda3','tcl','tk8.6')
 
     # define additional modules (those not automatically found)
     build_exe_options = {'includes': ['numpy.core._methods', 'numpy.lib.format','matplotlib.backends.backend_qt5agg',
                                       'matplotlib.backends.backend_tkagg','tkinter','tkinter.filedialog','igraph',
                                       'igraph.vendor.texttable'],
                          'include_files': ['data/','gui.py', 'docs/',
-                                           os.path.join(os.environ['LOCALAPPDATA'],
-                                                        'Programs','Python','Python35','DLLs','tcl86t.dll'),
-                                           os.path.join(os.environ['LOCALAPPDATA'],
-                                                        'Programs','Python','Python35','DLLs','tk86t.dll'),
+                                           # os.path.join(os.environ['LOCALAPPDATA'],
+                                           #              'Programs','Python','Python35','DLLs','tcl86t.dll'),
+                                           # os.path.join(os.environ['LOCALAPPDATA'],
+                                           #              'Programs','Python','Python35','DLLs','tk86t.dll'),
                                            os.path.join(sys.path[0],'docs','images','icon_bundle.ico')],
                          'namespace_packages': ['mpl_toolkits'] }
 
@@ -55,7 +57,7 @@ if os.name=='nt':
         base = 'Win32GUI'
 
     setup(name = 'MarxanConnectGUI',
-          version = MarxanConnectVersion,
+          version = MarxanConnectVersion.replace("v",""),
           description = '' ,
           options = {'build_exe': build_exe_options},
           executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'docs','images','icon_bundle.ico'))])
