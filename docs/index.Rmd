@@ -26,7 +26,6 @@ If you would like to report any bugs or request a missing feature, please post a
 * **Eric Anton Treml** - *App improvements, input to connectivity definitions and metrics*
 * **Caitie Kuempel** - *App improvements* - [cdkuempel](https://github.com/cdkuempel)
 * **Hugh Possingham** - *App improvements*
-* **Jo Clarke** - *App improvements*
 * **Maria Beger** - *Initial conception, Acquisition of funding, App improvements and development*
 
 See also the list of [contributors](https://github.com/remi-daigle/MarxanConnect/contributors) who participated in this project on Github and the [Acknowledgments](#acknowledgments) section.
@@ -49,8 +48,6 @@ If you cannot use the installer because you do not have administrative privilege
 
 Not for the typical user. Building from source is only necessary if you plan to contribute to the project (see [Contributing](#contributing) section below) or if you want to use the bleeding edge version of the app.
 
-Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (*Please note, I could not build the app using Anaconda*). 
-
 * Download this repository
 * If necessary, edit the hard coded file paths in [setup.py](https://github.com/remi-daigle/MarxanConnect/blob/master/setup.py) and [WindowsSetupBuilder.iss](https://github.com/remi-daigle/MarxanConnect/blob/master/WindowsSetupBuilder.iss)
 * open a terminal or `cmd` window (or git bash) in the project directory and type:
@@ -59,14 +56,16 @@ Building this repository has only been tested on Python 3.5.2 64-bit on a machin
 make
 ```
 
+Alternatively, you can compile the website with `make web`, the Marxan Connect executable with `make exe`, the windows installer `make win`, and the zip with `make zip`
+
 ## Prerequisites (for building from source)
 
-* [Python 3.5.2 64-bit](https://www.python.org/downloads/release/python-352/)
+* [Python 3 64-bit](https://www.python.org/downloads) or [Anaconda](https://www.anaconda.com/distribution/)
 * [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder)
 * [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 * [R](https://www.r-project.org/) and the [`rmarkdown`](http://rmarkdown.rstudio.com/) package
 
-It also assumes you have all the pre-requisite python modules installed, i.e.:
+It also assumes you have all the pre-requisite python modules installed, *i.e.*:
 
 ```
 #!/bin/bash
@@ -114,4 +113,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 * This project builds on the existing [Marxan](http://marxan.net/) (Ball et al. 2009) software and would not be possible without the hard work of Ian Ball, Hugh Possingham, and Matt Watts.
 
 # References
+
 Ball, I.R., H.P. Possingham, and M. Watts. 2009. Marxan and relatives: Software for spatial conservation prioritisation. Chapter 14: Pages 185-195 in Spatial conservation prioritisation: Quantitative methods and computational tools. Eds Moilanen, A., K.A. Wilson, and H.P. Possingham. Oxford University Press, Oxford, UK.

@@ -313,19 +313,19 @@ div.tocify {
       <a href="tutorial.html">Getting Started</a>
     </li>
     <li>
-      <a href="CF_demographic.html">CF + demographic data</a>
+      <a href="CF_demographic.html">Conservation Features + demographic data</a>
     </li>
     <li>
-      <a href="CF_landscape.html">CF + landscape data</a>
+      <a href="CF_landscape.html">Conservation Features + landscape data</a>
     </li>
     <li>
-      <a href="CSM_demographic.html">CSM + demographic data</a>
+      <a href="CSD_demographic.html">Connectivity as Spatial Dependency + demographic data</a>
     </li>
     <li>
-      <a href="CSM_landscape.html">CSM + landscape data</a>
+      <a href="CSD_landscape.html">Connectivity as Spatial Dependency + landscape data</a>
     </li>
     <li>
-      <a href="targets.html">Setting Targets</a>
+      <a href="targets.html">Setting Targets and Post-hoc Evaluation</a>
     </li>
   </ul>
 </li>
@@ -386,7 +386,7 @@ require(sf)</code></pre>
 <pre class="r"><code># load the reefs shapefile and calculate area
 reefs &lt;- st_read(&quot;tutorial/targets/reefs.shp&quot;) %&gt;%
     mutate(area = st_area(.))</code></pre>
-<pre><code>## Reading layer `reefs&#39; from data source `C:\Users\Remi-Work\Desktop\MarxanConnect\docs\tutorial\targets\reefs.shp&#39; using driver `ESRI Shapefile&#39;
+<pre><code>## Reading layer `reefs&#39; from data source `C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\tutorial\targets\reefs.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 321 features and 15 fields
 ## geometry type:  POLYGON
 ## dimension:      XY

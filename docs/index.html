@@ -313,19 +313,19 @@ div.tocify {
       <a href="tutorial.html">Getting Started</a>
     </li>
     <li>
-      <a href="CF_demographic.html">CF + demographic data</a>
+      <a href="CF_demographic.html">Conservation Features + demographic data</a>
     </li>
     <li>
-      <a href="CF_landscape.html">CF + landscape data</a>
+      <a href="CF_landscape.html">Conservation Features + landscape data</a>
     </li>
     <li>
-      <a href="CSM_demographic.html">CSM + demographic data</a>
+      <a href="CSD_demographic.html">Connectivity as Spatial Dependency + demographic data</a>
     </li>
     <li>
-      <a href="CSM_landscape.html">CSM + landscape data</a>
+      <a href="CSD_landscape.html">Connectivity as Spatial Dependency + landscape data</a>
     </li>
     <li>
-      <a href="targets.html">Setting Targets</a>
+      <a href="targets.html">Setting Targets and Post-hoc Evaluation</a>
     </li>
   </ul>
 </li>
@@ -388,7 +388,6 @@ div.tocify {
 <li><strong>Eric Anton Treml</strong> - <em>App improvements, input to connectivity definitions and metrics</em></li>
 <li><strong>Caitie Kuempel</strong> - <em>App improvements</em> - <a href="https://github.com/cdkuempel">cdkuempel</a></li>
 <li><strong>Hugh Possingham</strong> - <em>App improvements</em></li>
-<li><strong>Jo Clarke</strong> - <em>App improvements</em></li>
 <li><strong>Maria Beger</strong> - <em>Initial conception, Acquisition of funding, App improvements and development</em></li>
 </ul>
 <p>See also the list of <a href="https://github.com/remi-daigle/MarxanConnect/contributors">contributors</a> who participated in this project on Github and the <a href="#acknowledgments">Acknowledgments</a> section.</p>
@@ -409,22 +408,22 @@ div.tocify {
 <div id="building-from-source" class="section level1">
 <h1>Building from source</h1>
 <p>Not for the typical user. Building from source is only necessary if you plan to contribute to the project (see <a href="#contributing">Contributing</a> section below) or if you want to use the bleeding edge version of the app.</p>
-<p>Building this repository has only been tested on Python 3.5.2 64-bit on a machine running Windows 10, your mileage may vary! (<em>Please note, I could not build the app using Anaconda</em>).</p>
 <ul>
 <li>Download this repository</li>
 <li>If necessary, edit the hard coded file paths in <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/setup.py">setup.py</a> and <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/WindowsSetupBuilder.iss">WindowsSetupBuilder.iss</a></li>
 <li>open a terminal or <code>cmd</code> window (or git bash) in the project directory and type:</li>
 </ul>
 <pre><code>make</code></pre>
+<p>Alternatively, you can compile the website with <code>make web</code>, the Marxan Connect executable with <code>make exe</code>, the windows installer <code>make win</code>, and the zip with <code>make zip</code></p>
 <div id="prerequisites-for-building-from-source" class="section level2">
 <h2>Prerequisites (for building from source)</h2>
 <ul>
-<li><a href="https://www.python.org/downloads/release/python-352/">Python 3.5.2 64-bit</a></li>
+<li><a href="https://www.python.org/downloads">Python 3 64-bit</a> or <a href="https://www.anaconda.com/distribution/">Anaconda</a></li>
 <li><a href="https://github.com/wxFormBuilder/wxFormBuilder">wxFormBuilder</a></li>
 <li><a href="http://www.jrsoftware.org/isinfo.php">Inno Setup</a></li>
 <li><a href="https://www.r-project.org/">R</a> and the <a href="http://rmarkdown.rstudio.com/"><code>rmarkdown</code></a> package</li>
 </ul>
-<p>It also assumes you have all the pre-requisite python modules installed, i.e.:</p>
+<p>It also assumes you have all the pre-requisite python modules installed, <em>i.e.</em>:</p>
 <pre><code>#!/bin/bash
 # for basic GUI
 pip install wxpython
