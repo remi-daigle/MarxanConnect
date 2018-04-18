@@ -26,11 +26,11 @@ library(DT)
 proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
 ```
 
-## Landscape Data using CF
+## Landscape Data using Conservation Features
 
 Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../docs/tutorial/CF_landscape). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`.
 
-Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files. The files include reef planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
+Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files which contain only representation targets. The files include reef planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
 
 ### `spec.dat`
 
@@ -197,8 +197,7 @@ output <- read.csv("tutorial/CF_landscape/output/pu_connect.csv") %>%
 map <- leaflet(output) %>%
     addTiles()
 
-groups <- names(select(output,-id, -pu_id, -Y_COORD, -X_COORD, -TARGET_FID, -GAZ_LOC_CO, -GBR_NAME, -Join_Count, -PERIMETER, -QLD_NAME, -REEFS_, -REEFS_ID, -REEF_ID, -SUB_ID, -status, -google_land_pu_R))[c(-1,-2)]
-groups <- groups[groups!="geometry"]
+groups <- c("best_solution","select_freq")
 
 for(i in groups){
     z <- unlist(data.frame(output)[i])
@@ -253,8 +252,7 @@ output <- read.csv("tutorial/CF_landscape/output/pu_no_connect.csv") %>%
 map <- leaflet(output) %>%
     addTiles()
 
-groups <- names(select(output,-id, -pu_id, -Y_COORD, -X_COORD, -TARGET_FID, -GAZ_LOC_CO, -GBR_NAME, -Join_Count, -PERIMETER, -QLD_NAME, -REEFS_, -REEFS_ID, -REEF_ID, -SUB_ID, -status, -google_land_pu_R))[c(-1,-2)]
-groups <- groups[groups!="geometry"]
+groups <- c("best_solution","select_freq")
 
 for(i in groups){
     z <- unlist(data.frame(output)[i])

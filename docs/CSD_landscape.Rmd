@@ -26,16 +26,16 @@ library(DT)
 proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
 ```
 
-## Landscape Data using CSM
+## Landscape Data using Spatial Dependencies
 
-Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../docs/tutorial/CSM_landscape). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`.
+Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../docs/tutorial/CSD_landscape). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`.
 
-Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files. The files include hexagonal planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
+Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files which contain only representation targets. The files include hexagonal planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
 
 ### `spec.dat`
 
 ```{r}
-spec <- read.csv("tutorial/CSM_landscape/input/spec.dat")
+spec <- read.csv("tutorial/CSD_landscape/input/spec.dat")
 datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 ```
 
@@ -44,7 +44,7 @@ datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr.dat file. The original dataset has 974 entries.
 
 ```{r}
-puvspr <- read.csv("tutorial/CSM_landscape/input/puvspr.dat")
+puvspr <- read.csv("tutorial/CSD_landscape/input/puvspr.dat")
 datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
@@ -53,7 +53,7 @@ datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
 The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr.dat file. The original dataset has 653 entries.
 
 ```{r}
-pu <- read.csv("tutorial/CSM_landscape/input/pu.dat")
+pu <- read.csv("tutorial/CSD_landscape/input/pu.dat")
 datatable(pu[1:30,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
@@ -69,7 +69,7 @@ puvspr_wide <- puvspr %>%
     spread(key="name",value="amount")
 
 # planning units with output
-output <- read.csv("tutorial/CSM_landscape/output/pu_no_connect.csv") %>%
+output <- read.csv("tutorial/CSD_landscape/output/pu_no_connect.csv") %>%
     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
            best_solution = as.logical(best_solution)) %>%
     st_as_sf() %>%
@@ -122,17 +122,17 @@ map %>%
 
 Let's begin by examining the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas). These spatial layers are shown in the map below.
 
-```{r load all layers for CSM_landscape,results='hide'}
+```{r load all layers for CSD_landscape,results='hide'}
 # planning units
-pu <- st_read("tutorial/CSM_landscape/hex_planning_units.shp") %>% 
+pu <- st_read("tutorial/CSD_landscape/hex_planning_units.shp") %>% 
     st_transform(proj)
 
 #focus areas (IUCN level I or II protected areas)
-fa <- st_read("tutorial/CSM_landscape/IUCN_IorII.shp") %>%
+fa <- st_read("tutorial/CSD_landscape/IUCN_IorII.shp") %>%
     st_transform(proj)
 
 # avoidance areas (ports)
-aa <- st_read("tutorial/CSM_landscape/ports.shp") %>%
+aa <- st_read("tutorial/CSD_landscape/ports.shp") %>%
     st_transform(proj)
 ```
 
@@ -154,7 +154,7 @@ The connectivity data is at the 'heart' of Marxan Connect's functionality. It al
 Below is the connectivity matrix of our example conservation priority. For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 1279227 entries.
 
 ```{r}
-conmat <- read.csv("tutorial/CSM_landscape/IsolationByDistance.csv")
+conmat <- read.csv("tutorial/CSD_landscape/IsolationByDistance.csv")
 datatable(conmat[1:7,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
@@ -165,7 +165,7 @@ This table represents the boundaries between planning units as the values in the
 The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the boundary.dat file. The original dataset has 38648 entries.
 
 ```{r}
-boundary <- read.csv("tutorial/CSM_landscape/input/boundary.dat")
+boundary <- read.csv("tutorial/CSD_landscape/input/boundary.dat")
 datatable(boundary[1:30,],rownames = FALSE, options = list(searching = FALSE))
 ```
 
@@ -173,7 +173,7 @@ Finally, running Marxan with the connectivity conservation features and boundary
 
 ```{r}
 # planning units with output
-output <- read.csv("tutorial/CSM_landscape/output/pu_connect.csv") %>%
+output <- read.csv("tutorial/CSD_landscape/output/pu_connect.csv") %>%
     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
            best_solution = as.logical(best_solution),
            # fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
@@ -188,7 +188,7 @@ output <- read.csv("tutorial/CSM_landscape/output/pu_connect.csv") %>%
 map <- leaflet(output) %>%
     addTiles()
 
-groups <- names(output)[c(-1,-2,-length(names(output)))]
+groups <- c("best_solution","select_freq")
 
 for(i in groups){
     z <- unlist(data.frame(output)[i])
@@ -228,7 +228,7 @@ Here is the output of our example with no connectivity for comparison.
 
 ```{r}
 # planning units with output
-output <- read.csv("tutorial/CSM_landscape/output/pu_no_connect.csv") %>%
+output <- read.csv("tutorial/CSD_landscape/output/pu_no_connect.csv") %>%
     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
            best_solution = as.logical(best_solution),
            # fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
@@ -243,7 +243,7 @@ output <- read.csv("tutorial/CSM_landscape/output/pu_no_connect.csv") %>%
 map <- leaflet(output) %>%
     addTiles()
 
-groups <- names(output)[c(-1,-2,-length(names(output)))]
+groups <- c("best_solution","select_freq")
 
 for(i in groups){
     z <- unlist(data.frame(output)[i])
@@ -278,17 +278,3 @@ for(i in groups){
 map %>%
     showGroup("select_freq")
 ```
-
-
-```{r plot shape,results='hide'}
-# habitats <- st_read('../data/shapefiles/habitat.shp') %>%
-#     st_transform(proj)
-```
-
-
-```{r}
-# p <- tm_shape(habitats) +
-#     tm_fill("habitat",title="Habitat Type")
-# tmap_leaflet(p)
-```
-
