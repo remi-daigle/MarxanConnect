@@ -1125,6 +1125,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines the directory that contains the Marxan application
         """
         self.project['filepaths']['marxan_dir'] = self.marxan_dir.GetPath()
+        if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
+                not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
+            self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
 
     def on_inputdat_file(self, event):
         """
@@ -2320,6 +2323,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Starts Marxan
         """
+        if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
+                not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
+            self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics'] = {}
         self.temp = {}
@@ -2328,6 +2335,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Read in the file
         with open(self.project['filepaths']['marxan_input'], 'r', encoding="utf8") as file:
             filedata = file.readlines()
+
+        for index, line in enumerate(filedata):
+            if line.startswith("INPUTDIR"):
+                if not os.path.isdir(line.replace("INPUTDIR ", "").strip('\n')):
+                    self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
+            if line.startswith("OUTPUTDIR"):
+                if not os.path.isdir(line.replace("OUTPUTDIR ", "").strip('\n')):
+                    self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
 
         if self.project['options']['inputdat_boundary'] == 'Asymmetric':
             if not 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
