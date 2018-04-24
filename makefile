@@ -14,15 +14,16 @@ web: docs/index.Rmd docs/glossary.Rmd docs/tutorial.Rmd docs/CONTRIBUTING.Rmd
 exe: gui.py MarxanConnectGUI.py setup.py
     # builds the executable
 	rm -rf build; \
-	python setup.py build
+	python setup.py build; \
+	mv build/exe.win-amd64-3.5/ build/MarxanConnect/; \
+	mv build/exe.win-amd64-3.6/ build/MarxanConnect/;
 
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
-	mv build/exe.win-amd64-3.5/ build/MarxanConnect/; \
-	mv build/exe.win-amd64-3.6/ build/MarxanConnect/; \
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" WindowsSetupBuilder.iss
 
 zip: exe
+	rm -rf MarxanConnect.zip; \
     # creates the .zip folder
 	cd build/; \
 	zip -r ../MarxanConnect.zip MarxanConnect/* ../data/*
