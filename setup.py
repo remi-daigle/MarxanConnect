@@ -44,7 +44,7 @@ if os.name=='nt':
     build_exe_options = {'includes': ['numpy.core._methods', 'numpy.lib.format','matplotlib.backends.backend_qt5agg',
                                       'matplotlib.backends.backend_tkagg','tkinter','tkinter.filedialog','igraph',
                                       'igraph.vendor.texttable'],
-                         'include_files': ['data/','gui.py', 'docs/',
+                         'include_files': ['gui.py', 'docs/',
                                            # os.path.join(os.environ['LOCALAPPDATA'],
                                            #              'Programs','Python','Python35','DLLs','tcl86t.dll'),
                                            # os.path.join(os.environ['LOCALAPPDATA'],
@@ -65,7 +65,7 @@ else:
     # define additional modules (those not automatically found)
     build_exe_options = {'includes': ['numpy.core._methods','packaging.version','packaging.specifiers',
                                       'packaging.requirements','igraph.vendor.texttable'],
-                         'include_files': ['data/', 'gui.py', 'docs/',
+                         'include_files': ['gui.py', 'docs/',
                                            os.path.join(sys.path[0], 'icon_mac.icns')],
                          }
 
