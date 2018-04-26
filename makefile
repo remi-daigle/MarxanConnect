@@ -13,10 +13,8 @@ web: docs/index.Rmd docs/glossary.Rmd docs/tutorial.Rmd docs/CONTRIBUTING.Rmd
 
 exe: gui.py MarxanConnectGUI.py setup.py
     # builds the executable
-	rm -rf build; \
-	python setup.py build; \
-	mv build/exe.win-amd64-3.5/ build/MarxanConnect/; \
-	mv build/exe.win-amd64-3.6/ build/MarxanConnect/;
+	rm -rf MarxanConnect/; \
+	python setup.py build; 
 
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
@@ -25,5 +23,6 @@ win: exe WindowsSetupBuilder.iss
 zip: exe
 	rm -rf MarxanConnect.zip; \
     # creates the .zip folder
-	cd build/; \
-	zip -r ../MarxanConnect.zip MarxanConnect/* ../data/*
+	cd MarxanConnect/; \
+	zip -r ../MarxanConnect.zip *; \
+	cd ..

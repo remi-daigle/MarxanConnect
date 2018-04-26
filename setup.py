@@ -50,7 +50,8 @@ if os.name=='nt':
                                            # os.path.join(os.environ['LOCALAPPDATA'],
                                            #              'Programs','Python','Python35','DLLs','tk86t.dll'),
                                            os.path.join(sys.path[0],'docs','images','icon_bundle.ico')],
-                         'namespace_packages': ['mpl_toolkits'] }
+                         'namespace_packages': ['mpl_toolkits'],
+                         'build_exe': 'MarxanConnect\\' }
 
     base = None
     if sys.platform == 'win32':

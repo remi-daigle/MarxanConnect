@@ -107,6 +107,6 @@ toymap.py
 *.Rhistory
 MarOptTotalAreas.csv
 DebugTraceFile_MarOpt.txt
-data/GBR/output/*
 Marxan243/*
 MarxanConnect.zip
+MarxanConnect/*
