@@ -25402,7 +25402,7 @@
                                             <property name="gripper">0</property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">How to cite (will have DOI, etc later):&#x0A;&#x0A;Daigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Clarke, J; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect</property>
+                                            <property name="label">How to cite (will have DOI, etc later):&#x0A;&#x0A;Daigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect</property>
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
