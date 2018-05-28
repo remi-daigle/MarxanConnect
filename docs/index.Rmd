@@ -7,6 +7,8 @@ output:
     toc_float: yes
 ---
 
+**NEW** The Marxan Connect [bioRxiv preprint](https://www.biorxiv.org/content/early/2018/05/07/315424) is now available!
+
 Marxan Connect (henceforth the "app") is a Graphical User Interface (GUI) to help conservationists include "connectivity" in their protected area network planning.
 
 The term "connectivity" has a variety of definitions (i.e. larval connectivity, genetic connectivity, landscape connectivity, etc) and protected area networks can be optimized for various connectivity objectives. The app is intended to guide conservationists through the process of identifying important aspects of connectivity for their conservation scenarios as well as highlighting the necessary data.
