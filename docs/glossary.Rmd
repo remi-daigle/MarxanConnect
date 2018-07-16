@@ -68,7 +68,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 **Definition**: Out degree indicates the number of connections originating from each planning unit [@Minor2007-fb]. This metric ignores edge weights or strengths, and can be calculated from [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), and [${P}$](glossary.html#probability).  
 
-**Possible Objectives**: Prioritize for planning units which have a high number of connections going out to other planning units. Out-degree is often seen as a proxy for ‘influence’, where a high out-degree signifies a larger influence on many other units. Units with an extremely high out-degree are considered hubs and may have a influence on local and network-wide dynamics.
+**Possible Objectives**: Prioritize for planning units which have a high number of connections going out to other planning units. Out-degree is often seen as a proxy for 'influence', where a high out-degree signifies a larger influence on many other units. Units with an extremely high out-degree are considered hubs and may have a influence on local and network-wide dynamics.
 
 **Equation**: The in degree of a planning unit ${v}$ (${OD(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections).
 
@@ -284,7 +284,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## In-flow
 
-**Definition**: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, ${F}$(glossary.html#flow), after the diagonal is removed. 
+**Definition**: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, [${F}$](glossary.html#flow), after the diagonal is removed. 
 
 **Possible Objectives**: Prioritize planning units which receives larger amounts of individuals from other planning units.
 
@@ -322,7 +322,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Out-flow
 
-**Definition**: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, ${F}$(glossary.html#flow), after the diagonal is removed. 
+**Definition**: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, [${F}$](glossary.html#flow), after the diagonal is removed. 
 
 **Possible Objectives**: Prioritize planning units which subsidize other planning units (e.g. maximize spillover).
 
@@ -426,14 +426,14 @@ p <- ggraph(graph,layout="fr") +
     scale_shape(name="")+
     scale_colour_gradientn(name="Avoidance Area Donors", colours = brewer.pal(5,"YlGnBu"),guide = guide_colorbar(barwidth=10)) +
     theme_void() + theme(legend.position="top",legend.box="vertical")
-gganimate(p,"images/temporalconnectivity.gif")
+# gganimate(p,"images/temporalconnectivity.gif") #TODO gganimate is broken
 ```
 
 ![](images/temporalconnectivity.gif)
 
 ## Focus Area Recipients
 
-**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix ${F}$(glossary.html#flow) or migration matrix ${M}$(glossary.html#migration).
+**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [${F}$](glossary.html#flow) or migration matrix [${M}$](glossary.html#migration).
 
 **Possible Objectives**: Prioritize planning units which are subsidized by the focus area (*e.g.* fully protected reserves).
 
@@ -473,7 +473,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Focus Area Donors
 
-**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas – these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix ${F}$(glossary.html#flow). 
+**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas – these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix [${F}$](glossary.html#flow). 
 
 **Possible Objectives**: Prioritize planning units which subsidize the focus area (e.g. protect demographic sources to existing protected areas).
 
@@ -513,7 +513,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Avoidance Area Recipients
 
-**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that receive *fewer* individuals from these avoidance areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix ${F}$(glossary.html#flow) or migration matrix ${M}$(glossary.html#migration). **Warning**: This metric should be discretized since scoring low on this metric is desired. 
+**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that receive *fewer* individuals from these avoidance areas – these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [${F}$](glossary.html#flow) or migration matrix [${M}$](glossary.html#migration). **Warning**: This metric should be discretized since scoring low on this metric is desired. 
 
 **Possible Objectives**: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots).
 
@@ -553,7 +553,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Avoidance Area Donors
 
-**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas  – these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix ${F}$(glossary.html#flow).
+**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas  – these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix [${F}$](glossary.html#flow).
 
 **Possible Objectives**: Prioritize planning units which subsidize the avoidance area (e.g. increase resilience for impacted zones).
 

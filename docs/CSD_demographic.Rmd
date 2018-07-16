@@ -28,7 +28,7 @@ proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0
 
 ## Demographic Data using Spatial Dependencies
 
-Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/../docs/tutorial/CSD_demographic). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`.
+Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/docs/tutorial/CSD_demographic). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. Feel free to follow along using Marxan Connect by loading `tutorial.MarCon`.
 
 Before adding connectivity to the mix, let's have a look at the 'traditional' Marxan files which contain only representation targets. The files include reef planning units that cover the Great Barrier Reef and we've identified a few bioregion types for which we've set conservation targets.
 

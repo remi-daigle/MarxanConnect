@@ -25,7 +25,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-50638009-7"></script>
 <script>
@@ -110,6 +112,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -394,7 +399,7 @@ div.tocify {
 <div id="out-degree" class="section level2">
 <h2>Out-Degree</h2>
 <p><strong>Definition</strong>: Out degree indicates the number of connections originating from each planning unit <span class="citation">(Minor and Urban 2007)</span>. This metric ignores edge weights or strengths, and can be calculated from <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>, and <a href="glossary.html#probability"><span class="math inline">\({P}\)</span></a>.</p>
-<p><strong>Possible Objectives</strong>: Prioritize for planning units which have a high number of connections going out to other planning units. Out-degree is often seen as a proxy for â€˜influenceâ€™, where a high out-degree signifies a larger influence on many other units. Units with an extremely high out-degree are considered hubs and may have a influence on local and network-wide dynamics.</p>
+<p><strong>Possible Objectives</strong>: Prioritize for planning units which have a high number of connections going out to other planning units. Out-degree is often seen as a proxy for ‘influence’, where a high out-degree signifies a larger influence on many other units. Units with an extremely high out-degree are considered hubs and may have a influence on local and network-wide dynamics.</p>
 <p><strong>Equation</strong>: The in degree of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({OD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections).</p>
 <p><span class="math display">\[{\displaystyle OD(v) = deg^{+}(v)}\]</span></p>
 <p>where <span class="math inline">\({deg^{+}(v)}\)</span> is the number of outward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
@@ -452,7 +457,7 @@ div.tocify {
 </div>
 <div id="in-flow" class="section level2">
 <h2>In-flow</h2>
-<p><strong>Definition</strong>: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, <span class="math inline">\({F}\)</span>(glossary.html#flow), after the diagonal is removed.</p>
+<p><strong>Definition</strong>: In-flow (often mislabeled as in-flux) is the cumulative incoming individuals to a destination planning unit, without including those that originated from the unit. In-flow is the sum across all rows (sources) for each destination (column) of the Flow matrix, <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, after the diagonal is removed.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which receives larger amounts of individuals from other planning units.</p>
 <p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({IF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle IF(v) = \sum_{t \ne v \in V}c_{t,v}N_t}\]</span></p>
@@ -462,7 +467,7 @@ div.tocify {
 </div>
 <div id="out-flow" class="section level2">
 <h2>Out-flow</h2>
-<p><strong>Definition</strong>: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, <span class="math inline">\({F}\)</span>(glossary.html#flow), after the diagonal is removed.</p>
+<p><strong>Definition</strong>: Out-flow (often mislabeled as out-flux) is the cumulative amount of outgoing individuals from a source planning unit that arrive at some destination. Out-flux is the sum across all columns (destinations) for each source (row) of the Flow matrix, <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, after the diagonal is removed.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize other planning units (e.g. maximize spillover).</p>
 <p><strong>Equation</strong>: The inflow of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({OF(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle OF(v) = \sum_{t \ne v \in V}c_{v,t}N_v}\]</span></p>
@@ -487,7 +492,7 @@ div.tocify {
 </div>
 <div id="focus-area-recipients" class="section level2">
 <h2>Focus Area Recipients</h2>
-<p><strong>Definition</strong>: A “focus area” may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow) or migration matrix <span class="math inline">\({M}\)</span>(glossary.html#migration).</p>
+<p><strong>Definition</strong>: A “focus area” may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a> or migration matrix <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which are subsidized by the focus area (<em>e.g.</em> fully protected reserves).</p>
 <p><strong>Equation</strong>: The focus area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle FAR(v) = \sum_{t \ne v \in V(FA)}c_{t,v}N_t}\]</span></p>
@@ -497,7 +502,7 @@ div.tocify {
 </div>
 <div id="focus-area-donors" class="section level2">
 <h2>Focus Area Donors</h2>
-<p><strong>Definition</strong>: A “focus area” may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas â€“ these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow).</p>
+<p><strong>Definition</strong>: A “focus area” may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas â€“ these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize the focus area (e.g. protect demographic sources to existing protected areas).</p>
 <p><strong>Equation</strong>: The focus area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle FAD(v) = \sum_{t \ne v \in V(FA)}c_{v,t}N_v}\]</span></p>
@@ -507,7 +512,7 @@ div.tocify {
 </div>
 <div id="avoidance-area-recipients" class="section level2">
 <h2>Avoidance Area Recipients</h2>
-<p><strong>Definition</strong>: An “avoidance area” may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that receive <em>fewer</em> individuals from these avoidance areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow) or migration matrix <span class="math inline">\({M}\)</span>(glossary.html#migration). <strong>Warning</strong>: This metric should be discretized since scoring low on this metric is desired.</p>
+<p><strong>Definition</strong>: An “avoidance area” may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that receive <em>fewer</em> individuals from these avoidance areas â€“ these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column) of an appropriate flow matrix <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a> or migration matrix <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>. <strong>Warning</strong>: This metric should be discretized since scoring low on this metric is desired.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots).</p>
 <p><strong>Equation</strong>: The avoidance area recipients of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({AAR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle AAR(v) = \sum_{t \ne v \in V(AA)}c_{t,v}N_t}\]</span></p>
@@ -517,7 +522,7 @@ div.tocify {
 </div>
 <div id="avoidance-area-donors" class="section level2">
 <h2>Avoidance Area Donors</h2>
-<p><strong>Definition</strong>: An “avoidance area” may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas â€“ these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix <span class="math inline">\({F}\)</span>(glossary.html#flow).</p>
+<p><strong>Definition</strong>: An “avoidance area” may represent an area heavily infested or more likely to be invaded by invasive species (<em>e.g.</em> international shipping ports), or areas that are potential sources of pollutants (<em>e.g.</em> oil extraction, river outflows). In these cases, one might wish to target planning units that significantly contribute individuals to these avoidance areas â€“ these planning units are considered significant donors. The avoidance area donors metric is the sum of all individuals originating from a planning unit that is received by an avoidance area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row) of an appropriate flow matrix <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which subsidize the avoidance area (e.g. increase resilience for impacted zones).</p>
 <p><strong>Equation</strong>: The avoidance area donors of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({FAD(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle AAD(v) = \sum_{t \ne v \in V(AA)}c_{v,t}N_v}\]</span></p>
