@@ -709,15 +709,15 @@ Example Probability Matrix:
 Note, these data could be represented as an Edge List as well.
 
 
-# Ecological Distance
+# Spatial Dependency
 
-In Marxan, the boundary definitions (*i.e.* `boundary.dat`), quantifying the shared boundary length among adjacent planning units, in conjunction with the Boundary Length Modifier (BLM), a weighting parameter to 'tune' the influence of the boundaries, can help achieve a solution with a reasonable edge to area ratio (*i.e.* minimize edge while still achieving representation targets). Typically boundaries are quantified as the length of the shared boundary between planning units. Marxan Connect allows users to use alternative boundary definitions, "Ecological Distance", to incorporate connectivity data (see @Beger2010-ir) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective "edge" of the entire system based on the supplied connectivity data.
+In Marxan, the boundary definitions (*i.e.* `boundary.dat`), quantifying the shared boundary length among adjacent planning units, in conjunction with the Boundary Length Modifier (BLM), a weighting parameter to 'tune' the influence of the boundaries, can help achieve a solution with a reasonable edge to area ratio (*i.e.* minimize edge while still achieving representation targets). Typically boundaries are quantified as the length of the shared boundary between planning units. Marxan Connect allows users to use alternative boundary definitions, "Spatial Dependencies", to incorporate connectivity data (see @Beger2010-ir) and the BLM is then used as a Connectivity Strength Modifier. This encourages the selection of connected networks of protected areas and minimizes the effective "edge" of the entire system based on the supplied connectivity data.
 
 Alternatively (or in conjunction), connectivity may be incorporated into the Marxan analysis by using [Conservation Features](glossary.html#conservation_feature), where important sites for connectivity can be targeted directly.
 
-## Connectivity as Ecological Distance
+## Connectivity as boundary
 
-Directly substitutes the supplied connectivity data for the boundary lengths in the boundary definitions (*i.e.* ecological distance) file (*i.e.* `boundary.dat`; see @Beger2010-ir). This approach assumes the user has provided appropriate connectivity data (*e.g.* appropriate scale, units, and rank-order).
+Directly substitutes the supplied connectivity data (*i.e.* Spatial Dependencies) for the boundary lengths in the boundary definitions file (*i.e.* `boundary.dat`; see @Beger2010-ir). This approach assumes the user has provided appropriate connectivity data (*e.g.* appropriate scale, units, and rank-order).
 
 <!--
 Removing MPG for now, the app was not calculating correctly!
@@ -737,7 +737,7 @@ The amount of <a href="" title="Genes, Organisms, Nutrients, Energy">GONE</a> pr
 
 # Planning area 
 
-The entire spatial domain over which the planning process is occuring. This is synonymous with terms “model domain” or “study area” in other fields. This area is typically subdivided into smaller “Planning Units”
+The entire spatial domain over which the planning process is occuring. This is synonymous with terms "model domain" or "study area" in other fields. This area is typically subdivided into smaller "Planning Units"
 
 # Planning Units
 
