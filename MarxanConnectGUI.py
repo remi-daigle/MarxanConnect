@@ -1666,7 +1666,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                                               columns='id2')
                             if not self.temp[self.type + '_conmat'][h].values.sum()>0:
                                 del self.temp[self.type + '_conmat'][h]
-                                self.warn_dialog("All connectivity values for habitat '"+str(h)+"' are below the Habitat Connectivity Lower Threshold, excluding from further analyses")
+                                self.warn_dialog("All connectivity values for type '" + str(
+                                    t) + "' are below or equal to zero, excluding from further analyses")
 
                 else:
                     self.warn_dialog(message="File not found: " + self.project['filepaths'][self.type + '_cm_filepath'])
