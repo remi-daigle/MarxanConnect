@@ -1,3 +1,8 @@
+library(sf)
+library(raster)
+library(gridExtra)
+library(tidyverse)
+
 BIORE <- read.csv("maps_for_pubs/input/spec.dat") %>% 
     select(name) %>% 
     filter(grepl("BIORE_",name)) %>% 
@@ -22,52 +27,48 @@ pu <- read.csv("maps_for_pubs/output/pu_no_connect.csv") %>%
 
 # st_write(bioregions,"maps_for_pubs/bioregion_filtered.shp")
 
-intersection <- st_intersection(pu,bioregions)
-intersection$row <- 1:nrow(intersection)
-distances <- st_distance(intersection) %>% 
-    data.frame(check.names = FALSE) %>% 
-    mutate(row=row.names(.)) %>% 
-    gather(key="column",value="value",-row)
-
-distances$row <- as.numeric(distances$row)
-distances$column <- as.numeric(distances$column)
-# con_list <- distances
-
-con_list <- distances %>%
-    left_join(data.frame(intersection),by=c("row"="row")) %>% 
-    mutate(id1=as.numeric(pu_id),
-           from_BIO=BIOREGI) %>%
-    select(row,column,id1,from_BIO,value) %>% 
-    left_join(data.frame(intersection),by=c("column"="row")) %>% 
-    mutate(id2=as.numeric(pu_id),
-           to_BIO=BIOREGI) %>%
-    select(id1,from_BIO,id2,to_BIO,value) %>% 
-    filter(from_BIO==to_BIO,
-           as.numeric(value)>0) %>% 
-    mutate(habitat=to_BIO) %>% 
-    group_by(habitat,id1,id2) %>% 
-    summarize(value=1/mean(as.numeric(value))^2) %>% 
-    group_by(habitat,id1) %>% 
-    mutate(value=as.numeric(value)/sum(as.numeric(value)))
-
-write.csv(con_list,"maps_for_pubs/IsolationByDistance.csv",quote=FALSE,row.names = FALSE)
-
-con_list_mean <- con_list %>% 
-    group_by(id1,id2) %>% 
-    summarize(value=mean(value)) %>% 
-    mutate(habitat="mean") %>% 
-    as.data.frame() %>% 
-    complete(habitat,id1,id2,fill=list(value = 0)) %>% 
-    as.data.frame()
-
-write.csv(con_list_mean,"maps_for_pubs/IsolationByDistance_mean.csv",quote=FALSE,row.names = FALSE)
+# intersection <- st_intersection(pu,bioregions)
+# intersection$row <- 1:nrow(intersection)
+# distances <- st_distance(intersection) %>% 
+#     data.frame(check.names = FALSE) %>% 
+#     mutate(row=row.names(.)) %>% 
+#     gather(key="column",value="value",-row)
+# 
+# distances$row <- as.numeric(distances$row)
+# distances$column <- as.numeric(distances$column)
+# # con_list <- distances
+# 
+# con_list <- distances %>%
+#     left_join(data.frame(intersection),by=c("row"="row")) %>% 
+#     mutate(id1=as.numeric(pu_id),
+#            from_BIO=BIOREGI) %>%
+#     select(row,column,id1,from_BIO,value) %>% 
+#     left_join(data.frame(intersection),by=c("column"="row")) %>% 
+#     mutate(id2=as.numeric(pu_id),
+#            to_BIO=BIOREGI) %>%
+#     select(id1,from_BIO,id2,to_BIO,value) %>% 
+#     filter(from_BIO==to_BIO,
+#            as.numeric(value)>0) %>% 
+#     mutate(habitat=to_BIO) %>% 
+#     group_by(habitat,id1,id2) %>% 
+#     summarize(value=1/mean(as.numeric(value))^2) %>% 
+#     group_by(habitat,id1) %>% 
+#     mutate(value=as.numeric(value)/sum(as.numeric(value)))
+# 
+# write.csv(con_list,"maps_for_pubs/IsolationByDistance.csv",quote=FALSE,row.names = FALSE)
+# 
+# con_list_mean <- con_list %>% 
+#     group_by(id1,id2) %>% 
+#     summarize(value=mean(value)) %>% 
+#     mutate(habitat="mean") %>% 
+#     as.data.frame() %>% 
+#     complete(habitat,id1,id2,fill=list(value = 0)) %>% 
+#     as.data.frame()
+# 
+# write.csv(con_list_mean,"maps_for_pubs/IsolationByDistance_mean.csv",quote=FALSE,row.names = FALSE)
 
 
 # CF_landscape maps for publication
-library(sf)
-library(raster)
-library(gridExtra)
-library(tidyverse)
 
 
 # set default projection for leaflet
@@ -87,7 +88,8 @@ puvspr_wide <- puvspr %>%
 # planning units with output
 output <- read.csv("maps_for_pubs/output/pu_no_connect.csv") %>%
     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution)) %>%
+           best_solution = as.logical(best_solution),
+           select_prob=select_freq/20) %>%
     st_as_sf() %>%
     left_join(puvspr_wide,by=c("pu_id"="pu"))%>% 
     st_transform(proj)
@@ -97,7 +99,8 @@ output_rotated <- st_transform(output,proj_rotated)
 
 output_connect <- read.csv("maps_for_pubs/output/pu_connect.csv") %>%
     mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-           best_solution = as.logical(best_solution)) %>%
+           best_solution = as.logical(best_solution),
+           select_prob=select_freq/20) %>%
     st_as_sf() %>%
     left_join(puvspr_wide,by=c("pu_id"="pu"))%>% 
     st_transform(proj) 
@@ -106,12 +109,17 @@ bioregions <- st_read("maps_for_pubs/bioregion_short.shp",stringsAsFactors = FAL
     st_transform(proj) %>% 
     mutate(BIOREGI=paste0("BIORE_",BIOREGI)) %>% 
     filter(BIOREGI %in% spec$name) %>% 
-    group_by(BIOREGI) %>% 
+    group_by(BIOREGI,SHORT_D,ALT_LAB) %>% 
     summarize() %>% 
-    mutate(BIOREGI=as.character(BIOREGI))
+    data.frame() %>% 
+    mutate(BIOREGI=as.character(BIOREGI),
+           SHORT_D=unlist(lapply(lapply(strsplit(SHORT_D," "),tail,-1),paste,collapse=" "))) %>% 
+    st_as_sf(crs=proj)
 
-bioregions[nrow(bioregions)+1,] <- st_as_sf(data.frame(BIOREGI="Planning Units",geometry=st_combine(output)))
-bioregions$BIOREGI[nrow(bioregions)]="Planning Units"
+# bioregions[nrow(bioregions)+1,] <- st_as_sf(data.frame(BIOREGI="Planning Units",
+                                                       # SHORT_D="Planning Units",
+                                                       # geometry=st_combine(output)))
+# bioregions$BIOREGI[nrow(bioregions)]="Planning Units"
 
 # get basemap outline of AUS
 bb <- output %>% 
@@ -129,23 +137,7 @@ plot_lyrs <- c("Planning Units","BIORE_27","BIORE_3","BIORE_26")
 plot_brg <- bioregions %>% 
     filter(BIOREGI %in% plot_lyrs)
 
-p1 <- ggplot(plot_brg)+
-    geom_sf(data=AUS,fill="grey",colour="transparent")+
-    geom_sf(aes(fill=BIOREGI,colour=BIOREGI),size=0.25)+
-    scale_fill_manual("Type\n",values=c("#a6cee3","#1f78b4","#b2df8a","transparent"))+
-    scale_colour_manual("Type\n",values=c("transparent","transparent","transparent","black"))+
-    coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
-             ylim=st_bbox(output_rotated)[c(2,4)],
-             crs=proj_rotated,
-             expand = FALSE)+
-    theme(legend.position = "bottom",
-          legend.direction = "vertical",
-          legend.margin = margin(14 , 6, 14 , 6),
-          legend.background = element_rect(fill="transparent"),
-          plot.title = element_text(size=10))+
-    ggtitle("A) Representation Data")
-
-p2 <- ggplot(output_connect)+
+p1 <- ggplot(output_connect)+
     geom_sf(data=AUS,fill="grey",colour="transparent")+
     geom_sf(aes(fill=between_cent_land_pu_mean),colour="black",size=0.25)+
     scale_fill_distiller("Betweeness\nCentrality",palette="OrRd",direction = 1)+
@@ -157,12 +149,12 @@ p2 <- ggplot(output_connect)+
           legend.direction = "vertical",
           legend.background = element_rect(fill="transparent"),
           plot.title = element_text(size=10))+
-    ggtitle("B) Connect. Feature")
+    ggtitle("A) Connect. Feature")
 
-p3 <- ggplot(output)+
+p2 <- ggplot(output)+
     geom_sf(data=AUS,fill="grey",colour="transparent")+
-    geom_sf(aes(fill=select_freq),colour="black",size=0.25)+
-    scale_fill_distiller("Selection\nFrequency",palette="BuGn",direction = 1,limits=c(0,20))+
+    geom_sf(aes(fill=select_freq/20*100),colour="black",size=0.25)+
+    scale_fill_distiller("Selection\nFrequency (%)",palette="BuGn",direction = 1,limits=c(0,100))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
@@ -171,13 +163,13 @@ p3 <- ggplot(output)+
           legend.direction = "vertical",
           legend.background = element_rect(fill="transparent"),
           plot.title = element_text(size=10))+
-    ggtitle("C) Without Connectivity")
+    ggtitle("B) Without Connectivity")
           
 
-p4 <- ggplot(output_connect)+
+p3 <- ggplot(output_connect)+
     geom_sf(data=AUS,fill="grey",colour="transparent")+
-    geom_sf(aes(fill=select_freq),colour="black",size=0.25)+
-    scale_fill_distiller("Selection\nFrequency",palette="BuGn",direction = 1,limits=c(0,20))+
+    geom_sf(aes(fill=select_freq/20*100),colour="black",size=0.25)+
+    scale_fill_distiller("Selection\nFrequency (%)",palette="BuGn",direction = 1,limits=c(0,100))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
@@ -186,9 +178,42 @@ p4 <- ggplot(output_connect)+
           legend.direction = "vertical",
           legend.background = element_rect(fill="transparent"),
           plot.title = element_text(size=10))+
-    ggtitle("D) With Connectivity")
+    ggtitle("C) With Connectivity")
 
+output_connect$diff <- output_connect$select_freq-output$select_freq
+
+
+p4 <-
+ggplot(output_connect)+
+    geom_sf(data=AUS,fill="grey",colour="transparent")+
+    geom_sf(aes(fill=diff/20*100),colour="black",size=0.25)+
+    scale_fill_distiller("Connectivity\nDifference",palette="BrBG",direction = 1,limits=c(-100,100))+
+    coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
+             ylim=st_bbox(output_rotated)[c(2,4)],
+             crs=proj_rotated,
+             expand = FALSE)+
+    theme(legend.position = "bottom",
+          legend.direction = "vertical",
+          legend.background = element_rect(fill="transparent"),
+          plot.title = element_text(size=10))+
+    ggtitle("D) Difference")
 
 ggsave("maps_for_pubs/maps.png", grid.arrange(p1, p2, p3, p4, ncol=4),width=7.5,height=7.5,dpi=600)
 
 
+
+
+bio <- ggplot()+
+    geom_sf(data=AUS,fill="grey",colour="transparent")+
+    geom_sf(data=bioregions,aes(fill="A",colour="A"))+
+    geom_sf(data=output_rotated,size=0.25,aes(fill="red",colour="red"))+
+    facet_wrap(~ALT_LAB,nrow=2)+
+    scale_fill_manual("",values=c("#1f78b4","transparent"),labels=c("Bioregion","Planning Units"))+
+    scale_colour_manual("",values=c("transparent","black"),labels=c("Bioregion","Planning Units"))+
+    coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
+             ylim=st_bbox(output_rotated)[c(2,4)],
+             crs=proj_rotated,
+             expand = FALSE)+
+    theme(legend.position = "bottom",
+          legend.direction = "horizontal")
+ggsave("maps_for_pubs/bio_maps.png", bio,width=8.25,height=7.5,dpi=600)
