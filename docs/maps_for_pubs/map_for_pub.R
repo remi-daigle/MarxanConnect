@@ -168,7 +168,7 @@ p2 <- ggplot(output)+
 p3 <- ggplot(output_connect)+
     geom_sf(data=AUS,fill="grey",colour="darkgrey")+
     geom_sf(aes(fill=select_freq),colour="transparent",size=0.25)+
-    scale_fill_distiller("Selection\nFrequency",palette="Oranges",direction = 1,limits=c(0,100))+
+    scale_fill_distiller("Selection\nFrequency",palette="Purples",direction = 1,limits=c(0,100))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
@@ -201,13 +201,14 @@ oc_sfrep <- output_connect %>%
 base <- ggplot(oc_sfrep)+
     geom_sf(data=AUS,fill="grey",colour="darkgrey")+
     geom_sf(aes(fill=diff),colour="transparent")+
-    scale_fill_distiller("Decreases with\nConnectivity",palette=c("Purples"),limits=c(-100,-5))+
+    scale_fill_distiller("Selection frequency\nhigher without\nconnectivity",palette=c("Purples"),limits=c(-100,-5),
+                         labels=c("100","75","50", "25", "5"))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
              expand = FALSE)+
     theme_dark()+
-    theme(legend.position = c(1.625,0.2),
+    theme(legend.position = c(1.64,0.2),
           legend.direction = "vertical",
           plot.margin = margin(t=5.5,b=5.5,l=0,r=140,unit = "pt"),
           legend.title = element_text(size=10))+
@@ -219,13 +220,13 @@ ggsave("maps_for_pubs/base.png",base,height=6,width=4,dpi=600)
 
 connect <- ggplot(oc_sfcon)+
     geom_sf(aes(fill=diff),colour="transparent")+
-    scale_fill_distiller("Increases with\nConnectivity",palette=c("Oranges"),direction=1,limits=c(5,100))+
+    scale_fill_distiller("Selection frequency\nhigher with\nconnectivity",palette=c("Oranges"),direction=1,limits=c(5,100))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
              expand = FALSE)+
     theme_dark()+
-    theme(legend.position = c(1.59,0.8),
+    theme(legend.position = c(1.64,0.8),
           legend.direction = "vertical",
           plot.margin = margin(t=5.5,b=5.5,l=0,r=140,unit = "pt"),
           legend.title = element_text(size=10),
@@ -243,16 +244,16 @@ ggsave("maps_for_pubs/connect.png",connect,bg="transparent",height=6,width=4,dpi
 
 
 categorical <- ggplot()+
-    geom_sf(data=oc_greater90, aes(fill="A",colour="A"))+
-    geom_sf(data=oc_bottom5, aes(fill="B",colour="B"))+
+    geom_sf(data=oc_greater90, aes(fill="A",colour="A"),size=0.3)+
+    geom_sf(data=oc_bottom5, aes(fill="B",colour="B"),size=0.3)+
     scale_fill_manual("",values=c("#549b16","white"),labels=c("Always Irreplaceable","Rarely selected"))+
-    scale_colour_manual("",values=c("transparent","black"),labels=c("Always Irreplaceable","Rarely selected"))+
+    scale_colour_manual("",values=c("#549b16","black"),labels=c("Always Irreplaceable","Rarely selected"))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
              expand = FALSE)+
     theme_dark()+
-    theme(legend.position = c(1.65,0.5),
+    theme(legend.position = c(1.6,0.5),
           legend.direction = "vertical",
           plot.margin = margin(t=5.5,b=5.5,l=0,r=140,unit = "pt"),
           legend.text = element_text(size=10),
@@ -273,6 +274,7 @@ categorical <- image_read("maps_for_pubs/categorical.png")
 con <- image_read("maps_for_pubs/connect.png")
 base <- image_read("maps_for_pubs/base.png")
 composite <- image_composite(image_composite(base,con),categorical)
+composite
 image_write(composite,"maps_for_pubs/diff.png")
 
 #### bioregions ####
@@ -280,10 +282,10 @@ image_write(composite,"maps_for_pubs/diff.png")
 bio <- ggplot()+
     geom_sf(data=AUS,fill="grey",colour="transparent")+
     geom_sf(data=bioregions,aes(fill="A",colour="A"))+
-    geom_sf(data=output_rotated,size=0.25,aes(fill="red",colour="red"))+
+    geom_sf(data=output_rotated,size=0.05,aes(fill="red",colour="red"))+
     facet_wrap(~ALT_LAB,nrow=2)+
     scale_fill_manual("",values=c("#1f78b4","transparent"),labels=c("Bioregion","Planning Units"))+
-    scale_colour_manual("",values=c("transparent","lightgrey"),labels=c("Bioregion","Planning Units"))+
+    scale_colour_manual("",values=c("transparent","black"),labels=c("Bioregion","Planning Units"))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
