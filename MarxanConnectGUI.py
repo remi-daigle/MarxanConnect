@@ -1643,7 +1643,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                             self.project['filepaths'][self.type + '_cm_filepath'])
                         self.temp[self.type + '_conmat']['default_type_replace'] = self.temp[self.type + '_conmat']['default_type_replace'].pivot_table(values='value',
                                                                                                         index='id1',
-                                                                                                        columns='id2')
+                                                                                                        columns='id2',
+                                                                                                                                                        fill_value=0)
                     elif self.temp['format'] == "Edge List with Time":
                         self.temp[self.type + '_conmat_time'] = pandas.read_csv(
                             self.project['filepaths'][self.type + '_cm_filepath'])
@@ -1653,7 +1654,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                             ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
                         self.temp[self.type + '_conmat']['default_type_replace'] = self.temp[self.type + '_conmat']['default_type_replace'].pivot_table(values='value',
                                                                                                         index='id1',
-                                                                                                        columns='id2')
+                                                                                                        columns='id2',
+                                                                                                                                                        fill_value=0)
 
                         self.warn_dialog(
                             message="A connectivity 'Edge List with Time' was provided; however, all metrics except "
@@ -1668,7 +1670,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                             self.temp[self.type + '_conmat'][t] = self.temp[self.type + '_conmat_many'][
                                 self.temp[self.type + '_conmat_many']['type'] == t].pivot_table(values='value',
                                                                                                   index='id1',
-                                                                                                  columns='id2')
+                                                                                                  columns='id2',
+                                                                                                fill_value=0)
                             if not self.temp[self.type + '_conmat'][t].values.sum() > 0:
                                 del self.temp[self.type + '_conmat'][t]
                                 self.warn_dialog("All connectivity values for type '" + str(
@@ -1684,7 +1687,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         for h in self.temp[self.type + '_conmat_many']['habitat'].unique():
                             self.temp[self.type + '_conmat'][h] = self.temp[self.type + '_conmat_many'][
                                 self.temp[self.type + '_conmat_many']['habitat'] == h].pivot_table(values='value', index='id1',
-                                                                                              columns='id2')
+                                                                                              columns='id2',
+                                                                                                   fill_value=0)
                             if not self.temp[self.type + '_conmat'][h].values.sum()>0:
                                 del self.temp[self.type + '_conmat'][h]
                                 self.warn_dialog("All connectivity values for type '" + str(
@@ -1884,7 +1888,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                     self.temp[self.type + '_conmat_mean'] = self.temp[self.type + '_conmat_mean'].pivot_table(
                                         values='value',
                                         index='id1',
-                                        columns='id2')
+                                        columns='id2',
+                                        fill_value=0)
                                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
                                         marxanconpy.metrics.conmat2connboundary(self.temp[self.type + '_conmat'][t])
 
@@ -1993,7 +1998,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                         self.type + '_conmat_mean'].pivot_table(
                                         values='value',
                                         index='id1',
-                                        columns='id2')
+                                        columns='id2',
+                                        fill_value=0)
                                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
                                         marxanconpy.metrics.conmat2connboundary(self.temp[self.type + '_conmat'][h])
 
