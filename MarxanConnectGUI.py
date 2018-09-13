@@ -1127,7 +1127,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines the directory that contains the Marxan application
         """
         self.project['filepaths']['marxan_dir'] = self.marxan_dir.GetPath()
-        if self.project['options']['marxan_bit'] == "Marxan":
+        if self.project['options']['marxan'] == "Marxan":
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
                 self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
@@ -1426,6 +1426,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Option for Marxan version
         """
         self.project['options']['marxan'] = self.marxan_Radio.GetStringSelection()
+        if self.project['options']['marxan'] == "Marxan":
+            if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
+                    not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
+                self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+        else:
+            if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone.exe")) or \
+                    not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone_x64.exe")):
+                self.warn_dialog("Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
     def on_inputdat_symmRadio(self, event):
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
@@ -2341,7 +2349,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Starts Marxan
         """
-        if self.project['options']['marxan_bit'] == "Marxan":
+        if self.project['options']['marxan'] == "Marxan":
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
                 self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
@@ -2361,10 +2369,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         for index, line in enumerate(filedata):
             if line.startswith("INPUTDIR"):
-                if not os.path.isdir(line.replace("INPUTDIR ", "").strip('\n')):
+                inputdir = line.replace("INPUTDIR ", "").strip('\n')
+                inputdatdir = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), inputdir)
+                if not os.path.isdir(inputdir) and not os.path.isdir(inputdatdir):
                     self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
             if line.startswith("OUTPUTDIR"):
-                if not os.path.isdir(line.replace("OUTPUTDIR ", "").strip('\n')):
+                inputdir = line.replace("OUTPUTDIR ", "").strip('\n')
+                inputdatdir = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), inputdir)
+                if not os.path.isdir(inputdir) and not os.path.isdir(inputdatdir):
                     self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
 
         if self.project['options']['inputdat_boundary'] == 'Asymmetric':
@@ -2382,23 +2394,27 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 
         if self.project['options']['marxan_bit']=="64-bit":
-            if self.project['options']['marxan_bit'] == "Marxan":
-                os.system("start /wait cmd /c " +
-                      os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan_x64.exe') + ' ' +
-                          self.project['filepaths']['marxan_input'])
+            if self.project['options']['marxan'] == "Marxan":
+                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                          '&' +
+                          os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan_x64.exe') + ' ' +
+                          self.project['filepaths']['marxan_input'] + '"')
             else:
-                os.system("start /wait cmd /c " +
+                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                          '&' +
                           os.path.join(self.project['filepaths']['marxan_dir'], 'MarZone_x64.exe') + ' ' +
-                          self.project['filepaths']['marxan_input'])
+                          self.project['filepaths']['marxan_input'] + '"')
         else:
-            if self.project['options']['marxan_bit'] == "Marxan":
-                os.system("start /wait cmd /c " +
+            if self.project['options']['marxan'] == "Marxan":
+                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                          '&' +
                           os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' +
                           self.project['filepaths']['marxan_input'])
             else:
-                os.system("start /wait cmd /c " +
+                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                          '&' +
                           os.path.join(self.project['filepaths']['marxan_dir'], 'MarZone.exe') + ' ' +
-                          self.project['filepaths']['marxan_input'])
+                          self.project['filepaths']['marxan_input'] + '"')
 
         # calculate selection frequency
         for line in open(self.project['filepaths']['marxan_input']):
