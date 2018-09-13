@@ -611,7 +611,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.warn_dialog(message="No data layers were selected")
             lonmin, lonmax, latmin, latmax = -180, 180, -90, -90
 
-        lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
+        lonmin, lonmax, latmin, latmax = marxanconpy.spatial.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
 
 
         self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
@@ -915,7 +915,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
         if os.path.isfile(self.project['filepaths']['pu_filepath']):
             self.spatial['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
-            self.spatial['pu_proj'] = marxanconpy.get_appropriate_projection(self.spatial['pu_shp'], 'area')
+            self.spatial['pu_proj'] = marxanconpy.spatial.get_appropriate_projection(self.spatial['pu_shp'], 'area')
             self.spatial['pu_shp'] = self.spatial['pu_shp'].to_crs(self.spatial['pu_proj'])
             self.temp['items'] = list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']))
             self.PU_file_pu_id.SetItems(self.temp['items'])
@@ -1457,7 +1457,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             self.project['connectivityMetrics'] = {}
 
-        self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
+        self.temp['demo_pu_conmat'] = marxanconpy.spatial.rescale_matrix(
             self.project['filepaths']['pu_filepath'],
             self.project['filepaths']['pu_file_pu_id'],
             self.project['filepaths']['demo_cu_filepath'],
@@ -1493,7 +1493,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_land_generate_button(self, event):
         self.temp = {}
-        self.temp['land_pu_conmat'] = marxanconpy.habitatresistance2conmats(
+        self.temp['land_pu_conmat'] = marxanconpy.spatial.habitatresistance2conmats(
             buff=float(self.project['options']['land_hab_buff']),
             hab_filepath=self.project['filepaths']['land_cu_filepath'],
             hab_id=self.project['filepaths']['land_cu_file_hab_id'],
@@ -1716,26 +1716,26 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_in_degree.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['in_degree_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'][t],mode='IN')
+                                marxanconpy.metrics.conmat2vertexdegree(self.temp[self.type + '_conmat'][t],mode='IN')
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_demo_out_degree.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['out_degree_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'][t],mode='OUT')
+                                marxanconpy.metrics.conmat2vertexdegree(self.temp[self.type + '_conmat'][t],mode='OUT')
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_demo_between_cent.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2betweencent(self.temp[self.type + '_conmat'][t])
+                                marxanconpy.metrics.conmat2betweencent(self.temp[self.type + '_conmat'][t])
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_demo_eig_vect_cent.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2eigvectcent(
-                                    marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2eigvectcent(
+                                    marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Migration',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']))
@@ -1744,13 +1744,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_google.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['google_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2google(self.temp[self.type + '_conmat'][t])
+                                marxanconpy.metrics.conmat2google(self.temp[self.type + '_conmat'][t])
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_demo_self_recruit.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['self_recruit_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2selfrecruit(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2selfrecruit(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Migration',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']))
@@ -1759,7 +1759,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_local_retention.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['local_retention_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2selfrecruit(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2selfrecruit(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Probability',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']))
@@ -1768,7 +1768,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_outflow.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['outflow_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2outflow(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2outflow(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Flow',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']))
@@ -1777,7 +1777,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_inflow.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['inflow_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2inflow(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2inflow(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Flow',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']))
@@ -1786,7 +1786,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_fa_recipients.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2recipients(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2recipients(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Flow',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']),
@@ -1799,7 +1799,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_fa_donors.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2donors(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.conmat2donors(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Flow',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']),
@@ -1812,7 +1812,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_aa_recipients.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2recipients(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2recipients(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Flow',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']),
@@ -1826,7 +1826,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_demo_aa_donors.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2donors(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
+                                marxanconpy.metrics.conmat2donors(marxanconpy.manipulation.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
                                                                     'Flow',
                                                                     self.temp[self.type + '_conmat'][t],
                                                                     self.temp['localProd']),
@@ -1841,7 +1841,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         if self.cf_demo_stochasticity.GetValue() and keepGoing:
                             if 'fa_filepath' in self.project['filepaths']:
                                 self.project['connectivityMetrics']['spec_' + self.type]['temp_conn_cov_' + self.type + typesuffix] = \
-                                    marxanconpy.conmattime2temp_conn_cov(self.temp[self.type + '_conmat_time'],
+                                    marxanconpy.metrics.conmattime2temp_conn_cov(self.temp[self.type + '_conmat_time'],
                                                                            self.project['filepaths']['fa_filepath'],
                                                                            self.temp['shp_filepath']
                                                                            )
@@ -1856,7 +1856,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                             if bd_demo_conn_boundary_done == False:
                                 if t == 'default_type_replace':
                                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][t])
+                                        marxanconpy.metrics.conmat2connboundary(self.temp[self.type + '_conmat'][t])
                                 else:
                                     self.temp[self.type + '_conmat_mean'] = self.temp[self.type + '_conmat_many'][
                                         ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
@@ -1865,7 +1865,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                         index='id1',
                                         columns='id2')
                                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][t])
+                                        marxanconpy.metrics.conmat2connboundary(self.temp[self.type + '_conmat'][t])
 
                                     self.warn_dialog(
                                         message="A connectivity " + self.temp['format'] + " was provided. The Ecological "
@@ -1877,7 +1877,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         # if self.bd_demo_min_plan_graph.GetValue():
                         #     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
-                        #         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
+                        #         marxanconpy.metrics.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
                         # count += self.temp['n']
                         # (keepGoing, skip) = dlg.Update(count)
 
@@ -1888,37 +1888,37 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         self.temp['n'] = 100 / 10 / len(self.temp[self.type + '_conmat'].keys())
                         if self.cf_land_in_degree.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type][
-                                'in_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
+                                'in_degree_' + self.type + "_" + str(h)] = marxanconpy.metrics.conmat2vertexdegree(
                                 self.temp[self.type + '_conmat'][h], mode='IN')
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_land_out_degree.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type][
-                                'out_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
+                                'out_degree_' + self.type + "_" + str(h)] = marxanconpy.metrics.conmat2vertexdegree(
                                 self.temp[self.type + '_conmat'][h], mode='OUT')
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_land_between_cent.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2betweencent(self.temp[self.type + '_conmat'][h])
+                                marxanconpy.metrics.conmat2betweencent(self.temp[self.type + '_conmat'][h])
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_land_eig_vect_cent.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2eigvectcent(self.temp[self.type + '_conmat'][h])
+                                marxanconpy.metrics.conmat2eigvectcent(self.temp[self.type + '_conmat'][h])
 
                         if self.cf_land_google.GetValue():
                             self.project['connectivityMetrics']['spec_' + self.type]['google_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2google(self.temp[self.type + '_conmat'][h])
+                                marxanconpy.metrics.conmat2google(self.temp[self.type + '_conmat'][h])
                         count += self.temp['n']
                         (keepGoing, skip) = dlg.Update(count)
 
                         if self.cf_land_fa_recipients.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'][h],
+                                marxanconpy.metrics.conmat2recipients(self.temp[self.type + '_conmat'][h],
                                                         self.project['filepaths']['fa_filepath'],
                                                         self.temp['shp_filepath'],
                                                         self.temp['shp_file_pu_id']
@@ -1928,7 +1928,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         if self.cf_land_fa_donors.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2donors(self.temp[self.type + '_conmat'][h],
+                                marxanconpy.metrics.conmat2donors(self.temp[self.type + '_conmat'][h],
                                                           self.project['filepaths']['fa_filepath'],
                                                           self.temp['shp_filepath'],
                                                           self.temp['shp_file_pu_id']
@@ -1939,7 +1939,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         if self.cf_land_aa_recipients.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type][
                                 'aa_recipients_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'][h],
+                                marxanconpy.metrics.conmat2recipients(self.temp[self.type + '_conmat'][h],
                                                               self.project['filepaths']['aa_filepath'],
                                                               self.temp['shp_filepath'],
                                                               self.temp['shp_file_pu_id'],
@@ -1951,7 +1951,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                         if self.cf_land_aa_donors.GetValue() and keepGoing:
                             self.project['connectivityMetrics']['spec_' + self.type][
                                 'aa_donors_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2donors(self.temp[self.type + '_conmat'][h],
+                                marxanconpy.metrics.conmat2donors(self.temp[self.type + '_conmat'][h],
                                                           self.project['filepaths']['aa_filepath'],
                                                           self.temp['shp_filepath'],
                                                           self.temp['shp_file_pu_id'],
@@ -1964,7 +1964,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                             if bd_land_conn_boundary_done == False:
                                 if h == 'default_type_replace':
                                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
+                                        marxanconpy.metrics.conmat2connboundary(self.temp[self.type + '_conmat'][h])
                                 else:
                                     self.temp[self.type + '_conmat_mean'] = self.temp[self.type + '_conmat_many'][
                                         ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
@@ -1974,7 +1974,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                         index='id1',
                                         columns='id2')
                                     self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
+                                        marxanconpy.metrics.conmat2connboundary(self.temp[self.type + '_conmat'][h])
 
                                     self.warn_dialog(
                                         message="A connectivity " + self.temp['format'] + " was provided. The Ecological "
@@ -1986,7 +1986,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
                         # if self.bd_land_min_plan_graph.GetValue():
                         #     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type + "_" + str(h)] = \
-                        #         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'][h])
+                        #         marxanconpy.metrics.conmat2minplanarboundary(self.temp[self.type + '_conmat'][h])
                         # count += self.temp['n']
                         # (keepGoing, skip) = dlg.Update(count)
 
