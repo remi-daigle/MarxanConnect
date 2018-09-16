@@ -1,5 +1,5 @@
 import os
-
+import json
 MarxanConnectVersion = "v0.1.1"
 
 def new_project():
@@ -149,8 +149,6 @@ def save_project(project,projfile=False):
     :return:
     """
     if projfile==False:
-        with open(project['filepaths']['projfile'], 'w') as fp:
-            json.dump(project, fp, indent=4, sort_keys=True)
-    else:
-        with open(projfile, 'w') as fp:
-            json.dump(project, fp, indent=4, sort_keys=True)
+        projfile = project['filepaths']['projfile']
+    with open(projfile, 'w') as fp:
+        json.dump(project, fp, indent=4, sort_keys=True)

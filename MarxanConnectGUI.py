@@ -129,6 +129,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # set default file paths in GUI
         self.project = marxanconpy.marcon.edit_working_directory(self.project,self.workingdirectory,'absolute')
+        self.set_GUI_options()
         self.set_GUI_filepaths()
 
         # trigger functions which enable/disable options
@@ -159,19 +160,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.workingdirectory = dlg.GetDirectory()
         dlg.Destroy()
-
         self.load_project_function()
 
     def load_project_function(self):
         self.spatial = {}
-
         self.project = marxanconpy.marcon.load_project(self.project['filepaths']['projfile'])
-        self.project = marxanconpy.marcon.edit_working_directory(self.project['filepaths']['projfile'],
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,
                                                                  self.workingdirectory,
                                                                  "relative")
 
+        self.set_GUI_options()
 
-        self.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+        # set default file paths in GUI
+        self.set_GUI_filepaths()
+
+        # trigger functions which enable/disable options
+        self.on_PU_file(event=None)
+        self.on_FA_file(event=None)
+        self.on_AA_file(event=None)
+        self.on_demo_matrixFormatRadioBox(event=None)
+        self.on_demo_matrixFormatRadioBox(event=None)
+        self.on_demo_matrixFormatRadioBox(event=None)
+        self.on_demo_rescaleRadioBox(event=None)
+        if self.project['options']['metricsCalculated']:
+            self.customize_spec.Enable(enable=True)
+            self.CFT_percent_slider.Enable(enable=True)
+            self.export_metrics.Enable(enable=True)
+            self.custom_spec_panel.SetToolTip(None)
+        self.enable_metrics()
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
+        self.colormap_metric_choices(1)
+        self.colormap_metric_choices(2)
+        self.colormap_metric_choices("pre-eval")
+
+    def set_GUI_options(self):
+        # self.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
         # set default options
         self.fa_status_radioBox.SetStringSelection(self.project['options']['fa_status'])
@@ -207,7 +231,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_aa_donors.SetValue(self.project['options']['demo_metrics']['aa_donors'])
 
         self.bd_demo_conn_boundary.SetValue(self.project['options']['demo_metrics']['conn_boundary'])
-        self.bd_demo_min_plan_graph.SetValue(self.project['options']['demo_metrics']['min_plan_graph'])
 
         self.cf_land_in_degree.SetValue(self.project['options']['land_metrics']['in_degree'])
         self.cf_land_out_degree.SetValue(self.project['options']['land_metrics']['out_degree'])
@@ -220,7 +243,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_land_aa_donors.SetValue(self.project['options']['land_metrics']['aa_donors'])
 
         self.bd_land_conn_boundary.SetValue(self.project['options']['land_metrics']['conn_boundary'])
-        self.bd_land_min_plan_graph.SetValue(self.project['options']['land_metrics']['min_plan_graph'])
 
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
@@ -235,31 +257,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.PUSHP_filecheck.SetValue(self.project['options']['pushp_filecheck'])
         self.PUCSV_filecheck.SetValue(self.project['options']['pucsv_filecheck'])
         self.MAP_filecheck.SetValue(self.project['options']['map_filecheck'])
-
-
-
-        # set default file paths in GUI
-        self.set_GUI_filepaths()
-
-        # trigger functions which enable/disable options
-        self.on_PU_file(event=None)
-        self.on_FA_file(event=None)
-        self.on_AA_file(event=None)
-        self.on_demo_matrixFormatRadioBox(event=None)
-        self.on_demo_matrixFormatRadioBox(event=None)
-        self.on_demo_matrixFormatRadioBox(event=None)
-        self.on_demo_rescaleRadioBox(event=None)
-        if self.project['options']['metricsCalculated']:
-            self.customize_spec.Enable(enable=True)
-            self.CFT_percent_slider.Enable(enable=True)
-            self.export_metrics.Enable(enable=True)
-            self.custom_spec_panel.SetToolTip(None)
-        self.enable_metrics()
-        self.outline_shapefile_choices()
-        self.colormap_shapefile_choices()
-        self.colormap_metric_choices(1)
-        self.colormap_metric_choices(2)
-        self.colormap_metric_choices("pre-eval")
 
     def set_GUI_filepaths(self):
         # set default file paths
@@ -348,7 +345,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         if 'projfile' in self.project['filepaths']:
             self.set_metric_options()
-            self.save_project_gui(self)
+            self.save_project_gui()
         else:
             self.on_save_project_as(event=None)
 
@@ -366,16 +363,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths']['projfilename'] = dlg.GetFilename()
             self.workingdirectory = dlg.GetDirectory()
             self.set_metric_options()
-            self.save_project_gui(self)
+            self.save_project_gui()
         dlg.Destroy()
         frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
     def save_project_gui(self):
-        self.project['filepaths'] = marxanconpy.marcon.edit_working_directory(self.project['filepaths']['projfile'],
+        projfile = self.project['filepaths']['projfile']
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,
                                                                               self.workingdirectory,
                                                                               "relative")
-        marxanconpy.marcon.save_project(self)
-        self.project['filepaths'] = marxanconpy.marcon.edit_working_directory(self.project['filepaths']['projfile'],
+        marxanconpy.marcon.save_project(project=self.project,projfile=projfile)
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,
                                                                               self.workingdirectory,
                                                                               "absolute")
 
