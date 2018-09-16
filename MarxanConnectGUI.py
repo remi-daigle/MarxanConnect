@@ -112,76 +112,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         # create project list to store project specific data
         self.spatial = {}
-        self.project = {}
-        self.project['version'] = marxanconpy.MarxanConnectVersion
-        self.project['filepaths'] = {}
-        self.workingdirectory = sys.path[0] #os.path.expanduser(os.path.join("~", "Documents"))
-        self.project['options'] = {}
-
-        # set default options
-        self.project['options']['fa_status'] = self.fa_status_radioBox.GetStringSelection()
-        self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
-        self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
-        self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
-        self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
-        self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
-        self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
-        self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
-        self.project['options']['land_hab_thresh'] = self.land_HAB_thresh.GetValue()
-        self.project['options']['land_pu_cm_progress'] = self.land_PU_CM_progress.GetValue()
-        self.project['options']['land_conmat_type'] = self.land_type_choice.GetPageText(self.land_type_choice.GetSelection())
-        self.project['options']['land_res_matrixType'] = self.land_res_matrixTypeRadioBox.GetStringSelection()
-        self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
-        self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
-        self.project['options']['metricsCalculated'] = False
-        self.set_metric_options()
-        self.project['options']['cf_export'] = self.cf_export_radioBox.GetStringSelection()
-
-        self.project['options']['bd_filecheck'] = self.BD_filecheck.GetValue()
-        self.project['options']['pudat_filecheck'] = self.PUDAT_filecheck.GetValue()
-
-        self.project['options']['marxan_bit'] = self.marxanBit_Radio.GetStringSelection()
-        self.project['options']['marxan'] = self.marxan_Radio.GetStringSelection()
-        self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
-
-        self.project['options']['pushp_filecheck'] = self.PUSHP_filecheck.GetValue()
-        self.project['options']['pucsv_filecheck'] = self.PUCSV_filecheck.GetValue()
-        self.project['options']['map_filecheck'] = self.MAP_filecheck.GetValue()
-
-        # set default file paths
-        # spatial input
-        self.project['filepaths']['pu_filepath'] = ""
-        self.project['filepaths']['pu_file_pu_id'] = ""
-        self.project['filepaths']['fa_filepath'] = ""
-        self.project['filepaths']['aa_filepath'] = ""
-
-        # connectivity input
-        self.project['filepaths']['demo_cu_filepath'] = ""
-        self.project['filepaths']['demo_cu_file_pu_id'] = ""
-        self.project['filepaths']['demo_cu_cm_filepath'] = ""
-        self.project['filepaths']['demo_pu_cm_filepath'] = ""
-        self.project['filepaths']['land_cu_filepath'] = ""
-        self.project['filepaths']['land_cu_file_hab_id'] = ""
-        self.project['filepaths']['land_res_mat_filepath'] = ""
-        self.project['filepaths']['land_res_filepath'] = ""
-        self.project['filepaths']['land_res_file_hab_id'] = ""
-        self.project['filepaths']['land_pu_cm_filepath'] = ""
-        self.project['filepaths']['lp_filepath'] = ""
-
-        # Marxan metrics files
-        self.project['filepaths']['cf_filepath'] = os.path.join("~", "input", "puvspr2.dat")
-        self.project['filepaths']['spec_filepath'] = os.path.join("~", "input", "spec.dat")
-        self.project['filepaths']['bd_filepath'] = os.path.join("~", "input", "boundary.dat")
-        self.project['filepaths']['pudat_filepath'] = os.path.join("~", "input", "pu.dat")
-
-        # Marxan analysis
-        self.project['filepaths']['marxan_input'] = os.path.join("~", "input.dat")
-        self.project['filepaths']['marxan_dir'] = os.path.join("~", "Marxan243")
-
-        # Export plot data
-        self.project['filepaths']['pushp'] = os.path.join("~", "pu.shp")
-        self.project['filepaths']['pucsv'] = os.path.join("~", "pu.csv")
-        self.project['filepaths']['map'] = os.path.join("~", "map.png")
+        self.project = marxanconpy.marcon.new_project()
+        self.workingdirectory = sys.path[0]
 
         # if called at launch time, no need to ask users to create a new project file right away
         if not launch:
@@ -196,9 +128,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             dlg.Destroy()
 
         # set default file paths in GUI
-        for p in self.project['filepaths']:
-            self.project['filepaths'][p] = self.project['filepaths'][p].replace("~\\",
-                                                                                self.workingdirectory + "\\")
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,self.workingdirectory,'absolute')
         self.set_GUI_filepaths()
 
         # trigger functions which enable/disable options
@@ -234,13 +164,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def load_project_function(self):
         self.spatial = {}
-        with open(self.project['filepaths']['projfile'], 'r') as fp:
-            self.project = json.loads(fp.read())
 
-        for p in self.project['filepaths']:
-            if p != "working_directory":
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    "~\\",self.workingdirectory + "\\")
+        self.project = marxanconpy.marcon.load_project(self.project['filepaths']['projfile'])
+        self.project = marxanconpy.marcon.edit_working_directory(self.project['filepaths']['projfile'],
+                                                                 self.workingdirectory,
+                                                                 "relative")
+
 
         self.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
@@ -419,15 +348,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         if 'projfile' in self.project['filepaths']:
             self.set_metric_options()
-            self.projfile = self.project['filepaths']['projfile']
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    self.workingdirectory + "\\", "~\\")
-            with open(self.projfile, 'w') as fp:
-                json.dump(self.project, fp, indent=4, sort_keys=True)
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    "~\\",self.workingdirectory + "\\")
+            self.save_project_gui(self)
         else:
             self.on_save_project_as(event=None)
 
@@ -445,17 +366,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths']['projfilename'] = dlg.GetFilename()
             self.workingdirectory = dlg.GetDirectory()
             self.set_metric_options()
-            self.projfile = self.project['filepaths']['projfile']
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    self.workingdirectory + "\\", "~\\")
-            with open(self.projfile, 'w') as fp:
-                json.dump(self.project, fp, indent=4, sort_keys=True)
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    "~\\", self.workingdirectory + "\\")
+            self.save_project_gui(self)
         dlg.Destroy()
         frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+
+    def save_project_gui(self):
+        self.project['filepaths'] = marxanconpy.marcon.edit_working_directory(self.project['filepaths']['projfile'],
+                                                                              self.workingdirectory,
+                                                                              "relative")
+        marxanconpy.marcon.save_project(self)
+        self.project['filepaths'] = marxanconpy.marcon.edit_working_directory(self.project['filepaths']['projfile'],
+                                                                              self.workingdirectory,
+                                                                              "absolute")
 
 # ########################## html pop-up functions #####################################################################
 

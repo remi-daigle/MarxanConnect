@@ -3,7 +3,7 @@ import sys
 import os
 from cx_Freeze import setup, Executable
 import re
-from marxanconpy import MarxanConnectVersion
+import marxanconpy
 
 # Read in the gui.py file to remove deprecated functions
 with open('gui.py', 'r', encoding="utf8") as file :
@@ -59,7 +59,7 @@ if os.name=='nt':
         base = 'Win32GUI'
 
     setup(name = 'MarxanConnectGUI',
-          version = MarxanConnectVersion.replace("v",""),
+          version = marxanconpy.marcon.MarxanConnectVersion.replace("v",""),
           description = '' ,
           options = {'build_exe': build_exe_options},
           executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'docs','images','icon_bundle.ico'))])
@@ -74,7 +74,7 @@ else:
     mac_options = {'iconfile': os.path.join(sys.path[0],'docs','images', 'icon_mac.icns')}
 
     setup(name='MarxanConnectGUI',
-          version = MarxanConnectVersion,
+          version = marxanconpy.marcon.MarxanConnectVersion,
           description='',
           options={'build_exe': build_exe_options,
                    'bdist_mac': mac_options},
