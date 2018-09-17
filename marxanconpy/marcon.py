@@ -1,6 +1,6 @@
 import os
 import json
-MarxanConnectVersion = "v0.1.1"
+import marxanconpy
 
 def new_project():
     """
@@ -9,7 +9,7 @@ def new_project():
     """
     # create project list to store project specific data
     project = {}
-    project['version'] = MarxanConnectVersion
+    project['version'] = marxanconpy.MarxanConnectVersion
     project['filepaths'] = {}
     project['options'] = {}
 
@@ -161,10 +161,10 @@ def validate_project(project):
     :param project: the project dictionary
     :return: dict
     """
-    if project['version']!=MarxanConnectVersion:
+    if project['version']!=marxanconpy.MarxanConnectVersion:
         print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
               "update for compatibility")
-        project['version'] = MarxanConnectVersion
+        project['version'] = marxanconpy.MarxanConnectVersion
 
     np = new_project()
 
@@ -173,11 +173,13 @@ def validate_project(project):
             print('Warning: This project file does not contain all the required fields (' + k +
                   '). Attempting to update for compatibility')
             project[k] = np[k]
+        if type(np[k])==dict:
             for k2 in np[k].keys():
                 if k2 not in project[k]:
                     print('Warning: This project file does not contain all the required fields (' + k2 +
                           '). Attempting to update for compatibility')
                     project[k][k2] = np[k][k2]
+                if type(np[k][k2]) == dict:
                     for k3 in np[k][k2].keys():
                         if k3 not in project[k][k2]:
                             print('Warning: This project file does not contain all the required fields (' + k3 +
