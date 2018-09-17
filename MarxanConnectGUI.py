@@ -165,7 +165,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def load_project_function(self):
         self.spatial = {}
         self.project = marxanconpy.marcon.load_project(self.project['filepaths']['projfile'])
-        self.project = marxanconpy.marcon.validate_project(project)
+        self.project = marxanconpy.marcon.validate_project(self.project)
         self.project = marxanconpy.marcon.edit_working_directory(self.project,
                                                                  self.workingdirectory,
                                                                  "relative")
