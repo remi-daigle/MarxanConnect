@@ -119,6 +119,7 @@ def load_project(filename):
     """
     with open(filename, 'r') as fp:
         project = json.loads(fp.read())
+    validate_project(project)
     return project
 
 def edit_working_directory(project,wd,type="relative"):
@@ -152,3 +153,33 @@ def save_project(project,projfile=False):
         projfile = project['filepaths']['projfile']
     with open(projfile, 'w') as fp:
         json.dump(project, fp, indent=4, sort_keys=True)
+
+def validate_project(project):
+    """
+    A function to validate project dictionaries to ensure that they contains all necessary fields (i.e. keys).
+    Different versions of marxanconpy may require slightly different fields.
+    :param project: the project dictionary
+    :return: dict
+    """
+    if project['version']!=MarxanConnectVersion:
+        print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
+              "update for compatibility")
+        project['version'] = MarxanConnectVersion
+
+    np = new_project()
+
+    for k in np.keys():
+        if k not in project:
+            print('Warning: This project file does not contain all the required fields (' + k +
+                  '). Attempting to update for compatibility')
+            project[k] = np[k]
+            for k2 in np[k].keys():
+                if k2 not in project[k]:
+                    print('Warning: This project file does not contain all the required fields (' + k2 +
+                          '). Attempting to update for compatibility')
+                    project[k][k2] = np[k][k2]
+                    for k3 in np[k][k2].keys():
+                        if k3 not in project[k][k2]:
+                            print('Warning: This project file does not contain all the required fields (' + k3 +
+                                  '). Attempting to update for compatibility')
+                            project[k][k2][k3] = np[k][k2][k3]
