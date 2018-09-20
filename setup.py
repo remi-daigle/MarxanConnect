@@ -12,7 +12,7 @@ with open('gui.py', 'r', encoding="utf8") as file :
 # Replace the target string
 filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
 filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
-filedata = re.sub('Marxan Connect v.....', 'Marxan Connect ' + MarxanConnectVersion, filedata)
+filedata = re.sub('Marxan Connect v.....', 'Marxan Connect ' + marxanconpy.MarxanConnectVersion, filedata)
 
 # Write the file out again
 with open('gui.py', 'w', encoding="utf8") as file:
@@ -23,8 +23,8 @@ with open('WindowsSetupBuilder.iss', 'r', encoding="utf8") as file :
   filedata = file.read()
 
 # Replace the target string
-filedata = re.sub('#define MyAppVersion "v....."', '#define MyAppVersion "' + MarxanConnectVersion + '"',filedata)
-filedata = re.sub('OutputBaseFilename=MarxanConnect-v.....-windows-setup', 'OutputBaseFilename=MarxanConnect-' + MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
+filedata = re.sub('#define MyAppVersion "v....."', '#define MyAppVersion "' + marxanconpy.MarxanConnectVersion + '"',filedata)
+filedata = re.sub('OutputBaseFilename=MarxanConnect-v.....-windows-setup', 'OutputBaseFilename=MarxanConnect-' + marxanconpy.MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
 
 # Write the file out again
 with open('WindowsSetupBuilder.iss', 'w', encoding="utf8") as file:
@@ -59,7 +59,7 @@ if os.name=='nt':
         base = 'Win32GUI'
 
     setup(name = 'MarxanConnectGUI',
-          version = marxanconpy.marcon.MarxanConnectVersion.replace("v",""),
+          version = marxanconpy.MarxanConnectVersion.replace("v",""),
           description = '' ,
           options = {'build_exe': build_exe_options},
           executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'docs','images','icon_bundle.ico'))])
@@ -74,7 +74,7 @@ else:
     mac_options = {'iconfile': os.path.join(sys.path[0],'docs','images', 'icon_mac.icns')}
 
     setup(name='MarxanConnectGUI',
-          version = marxanconpy.marcon.MarxanConnectVersion,
+          version = marxanconpy.MarxanConnectVersion,
           description='',
           options={'build_exe': build_exe_options,
                    'bdist_mac': mac_options},
