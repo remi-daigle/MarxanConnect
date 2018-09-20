@@ -1546,8 +1546,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             elif self.cf_export_radioBox.GetSelection() == 1:
                 # append
-                old_spec = pandas.read_csv(self.project['filepaths']['spec_filepath'])
-                old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
+                old_spec = marxanconpy.read_csv_tsv(self.project['filepaths']['spec_filepath'])
+                old_cf = marxanconpy.read_csv_tsv(self.project['filepaths']['cf_filepath'])
 
                 # append spec
                 new_spec = spec.copy()
@@ -1602,7 +1602,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def lock_pudat(self, pudat_filepath):
         if os.path.isfile(self.project['filepaths']['pudat_filepath']):
             self.temp = {}
-            self.temp['pudat'] = pandas.read_csv(pudat_filepath)
+            self.temp['pudat'] = marxanconpy.read_csv_tsv(pudat_filepath)
             if os.path.isfile(self.project['filepaths']['fa_filepath']):
                 if self.fa_status_radioBox.GetStringSelection() == "Locked out":
                     self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 3
@@ -1917,16 +1917,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'],
                                            self.temp['SCENNAME'] + "_r" + "%05d" % (self.temp['file'] + 1) + ".txt")
             if self.temp['file'] == 0:
-                self.temp['select_freq'] = pandas.read_csv(self.temp['fn'])
+                self.temp['select_freq'] = marxanconpy.read_csv_tsv(self.temp['fn'])
             else:
                 self.temp['select_freq']['solution'] = self.temp['select_freq']['solution'] + \
-                                                       pandas.read_csv(self.temp['fn'])['solution']
+                                                       marxanconpy.read_csv_tsv(self.temp['fn'])['solution']
 
         self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq']['solution'].tolist()
 
         # load best solution
         self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + "_best.txt")
-        self.project['connectivityMetrics']['best_solution'] = pandas.read_csv(self.temp['fn'])['solution'].tolist()
+        self.project['connectivityMetrics']['best_solution'] = marxanconpy.read_csv_tsv(self.temp['fn'])['solution'].tolist()
 
         # update plotting options
         self.colormap_shapefile_choices()
@@ -2053,7 +2053,7 @@ class file_viewer(wx.Dialog):
         self.file_grid = wx.grid.Grid(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
 
         # Load file
-        df = pandas.read_csv(file)
+        df = marxanconpy.read_csv_tsv(file)
 
         # Grid
         self.file_grid.CreateGrid(df.shape[0], df.shape[1])
