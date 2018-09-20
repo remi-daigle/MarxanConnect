@@ -22,7 +22,11 @@ win: exe WindowsSetupBuilder.iss
 
 zip: exe
 	rm -rf MarxanConnect.zip; \
-    # creates the .zip folder
+    # creates the Marxan Connect .zip folder
 	cd MarxanConnect/; \
 	zip -r ../MarxanConnect.zip *; \
+	cd ..
+	# creates the Marxan Connect .zip folder
+	cd marxanconpy/; \
+	zip -r ../marxanconpy.zip *; \
 	cd ..
