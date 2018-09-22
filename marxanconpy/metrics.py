@@ -56,7 +56,7 @@ def get_intersect_id(area_filepath, pu_filepath,pu_id='ID'):
 
 def graph2recipients(graph, area_filepath, pu_filepath, pu_id='ID',inverse=False):
     area_id = get_intersect_id(area_filepath, pu_filepath, pu_id)
-    recipients = graph.strength(area_id,mode="IN", loops=False, weights=graph.es["weight"])
+    recipients = numpy.array(graph.strength(area_id,mode="IN", loops=False, weights=graph.es["weight"]))
     if inverse:
         return max(recipients)-recipients
     else:
@@ -64,7 +64,7 @@ def graph2recipients(graph, area_filepath, pu_filepath, pu_id='ID',inverse=False
 
 def graph2donors(graph, area_filepath, pu_filepath, pu_id='ID',inverse=False):
     area_id = get_intersect_id(area_filepath, pu_filepath, pu_id)
-    donors = graph.strength(area_id, mode="OUT", loops=False, weights=graph.es["weight"])
+    donors = numpy.array(graph.strength(area_id, mode="OUT", loops=False, weights=graph.es["weight"]))
     if inverse:
         return max(donors)-donors
     else:
