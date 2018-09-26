@@ -147,7 +147,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                         temp[type + '_connectivity']['default_type_replace'] = temp[type + '_conmat_time'][
                             ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
 
-                        warn_dialog(
+                        marxanconpy.warn_dialog(
                             message="A connectivity 'Edge List with Time' was provided; however, all metrics except "
                                     "'Temporal Connectivity Correlation' will be calculated from the temporal"
                                     "mean of connectivity")
@@ -161,7 +161,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                                 temp[type + '_conmat_many']['type'] == t]
                             if not temp[type + '_connectivity'][t].value.sum() > 0:
                                 del temp[type + '_connectivity'][t]
-                                warn_dialog("All connectivity values for type '" + str(
+                                marxanconpy.warn_dialog("All connectivity values for type '" + str(
                                     t) + "' are below or equal to zero, excluding from further analyses")
 
                     elif temp['format'] == "Edge List with Habitat":
@@ -176,7 +176,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                                 temp[type + '_conmat_many']['habitat'] == h]
                             if not temp[type + '_connectivity'][h].value.sum() > 0:
                                 del temp[type + '_connectivity'][h]
-                                warn_dialog("All connectivity values for type '" + str(
+                                marxanconpy.warn_dialog("All connectivity values for type '" + str(
                                     t) + "' are below or equal to zero, excluding from further analyses")
 
                 else:
@@ -504,8 +504,6 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
         dlg.Destroy()
         raise
 
-
-
 def check_matrix_list_format(format, filepath):
     # warn if matrix is wrong format
     warn = False
@@ -547,7 +545,6 @@ def check_matrix_list_format(format, filepath):
     else:
         return
 
-
 def connectivity2graph(connectivity,format,IDs):
     if format == "Matrix":
         g = igraph.Graph.Weighted_Adjacency(connectivity.as_matrix().tolist())
@@ -558,3 +555,75 @@ def connectivity2graph(connectivity,format,IDs):
         for i, row in connectivity.sort_values(by=['id1','id2']).astype(str).iterrows():
             g.add_edge(row.id1, row.id2, weight=float(row.value))
     return g
+
+
+def calc_postHoc(filename,format,IDs,selectionIDs):
+    if os.path.isfile(filename):
+        if format == "Matrix":
+            connectivity = pandas.read_csv(filename, index_col=0)
+        elif format == "Edge List with Time":
+            connectivity = pandas.read_csv(filename)[['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
+        else:
+            connectivity = pandas.read_csv(filename)
+
+        if connectivity.shape[1]==3 or format == "Matrix":
+            all_type=['default_type_replace']
+        else:
+            all_type=numpy.unique(connectivity.drop(['id1', 'id2', 'value'], axis=1))
+
+        postHoc = pandas.DataFrame()
+        for type in all_type:
+            if type=="default_type_replace":
+                graph = connectivity2graph(connectivity,format,IDs)
+            else:
+                graph = connectivity2graph(connectivity[(connectivity.drop(['id1', 'id2', 'value'], axis=1)==type).values], format, IDs)
+
+            sub = graph.subgraph(selectionIDs)
+
+            postHoc = postHoc.append(pandas.DataFrame({"Metric":("Planning Units",
+                                                                 "Connections",
+                                                                 "Graph Density",
+                                                                 "Eigenvalue"),
+                                                       "Type":(type,type,type,type),
+                                                       "Planning Area":(graph.vcount(),
+                                                             graph.ecount(),
+                                                             graph.density(),
+                                                             graph.evcent(weights=graph.es["weight"],
+                                                                          return_eigenvalue=True)[1]),
+                                                       "Solution":(
+                                                           sub.vcount(),
+                                                           sub.ecount(),
+                                                           sub.density(),
+                                                           sub.evcent(weights=sub.es["weight"],
+                                                                      return_eigenvalue=True)[1])}))
+
+        postHoc["Percent"] = postHoc["Solution"]/postHoc["Planning Area"]*100
+        postHoc = postHoc[['Metric','Type','Planning Area','Solution','Percent']]
+        if postHoc["Type"].unique() == "default_type_replace":
+            del(postHoc["Type"])
+        return postHoc
+
+def get_marxan_output(input_file,type='best'):
+    for line in open(input_file):
+        if line.startswith('SCENNAME'):
+            SCENNAME = line.replace('SCENNAME ', '').replace('\n', '')
+        elif line.startswith('NUMREPS'):
+            NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
+        elif line.startswith('OUTPUTDIR'):
+            OUTPUTDIR = line.replace('OUTPUTDIR ', '').replace('\n', '')
+
+    if type == 'Best Solution':
+        fn = os.path.join(OUTPUTDIR, SCENNAME + "_best")
+    elif type == 'Selection Frequency':
+        fn = os.path.join(OUTPUTDIR, SCENNAME + "_ssoln")
+    else:
+        fn = os.path.join(OUTPUTDIR, SCENNAME + "_" + type)
+
+    if os.path.isfile(fn + '.csv'):
+        file = marxanconpy.read_csv_tsv(fn + '.csv')
+    elif os.path.isfile(fn + '.txt'):
+        file = marxanconpy.read_csv_tsv(fn + '.txt')
+    else:
+        print('WARNING: ' + fn + ' not found')
+
+    return file

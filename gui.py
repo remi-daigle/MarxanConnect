@@ -1585,6 +1585,136 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
 		self.auinotebook.AddPage( self.marxanAnalysis, u"5) Marxan Analysis", False, wx.NullBitmap )
+		self.postHocEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		postHocMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
+		postHocMainSizer.AddGrowableCol( 0 )
+		postHocMainSizer.AddGrowableRow( 2 )
+		postHocMainSizer.SetFlexibleDirection( wx.BOTH )
+		postHocMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		postHoc_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.postHoc_def_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"This tab will allow you to evaluate the Marxan output", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_def_txt.Wrap( -1 )
+		
+		postHoc_def_sizer.Add( self.postHoc_def_txt, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
+		
+		
+		postHocMainSizer.Add( postHoc_def_sizer, 1, wx.EXPAND, 5 )
+		
+		postHoc_choice_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.postHoc_choice_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Choose Available Marxan output to evaluate.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_choice_txt.Wrap( -1 )
+		
+		self.postHoc_choice_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
+		
+		postHoc_choice_sizer.Add( self.postHoc_choice_txt, 0, wx.ALL, 5 )
+		
+		postHoc_choice_opt_sizer = wx.FlexGridSizer( 2, 2, 0, 0 )
+		postHoc_choice_opt_sizer.AddGrowableCol( 1 )
+		postHoc_choice_opt_sizer.SetFlexibleDirection( wx.BOTH )
+		postHoc_choice_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.postHoc_category_choice_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Connectivity", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_category_choice_txt.Wrap( -1 )
+		
+		postHoc_choice_opt_sizer.Add( self.postHoc_category_choice_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
+		
+		self.postHoc_output_choice_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Output", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_output_choice_txt.Wrap( -1 )
+		
+		postHoc_choice_opt_sizer.Add( self.postHoc_output_choice_txt, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		
+		postHoc_category_choiceChoices = [ u"Demographic Data", u"Landscape Data" ]
+		self.postHoc_category_choice = wx.Choice( self.postHocEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, postHoc_category_choiceChoices, 0 )
+		self.postHoc_category_choice.SetSelection( 0 )
+		postHoc_choice_opt_sizer.Add( self.postHoc_category_choice, 0, wx.ALL, 5 )
+		
+		postHoc_output_choiceChoices = []
+		self.postHoc_output_choice = wx.Choice( self.postHocEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, postHoc_output_choiceChoices, 0 )
+		self.postHoc_output_choice.SetSelection( 0 )
+		postHoc_choice_opt_sizer.Add( self.postHoc_output_choice, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		postHoc_choice_sizer.Add( postHoc_choice_opt_sizer, 1, wx.EXPAND, 5 )
+		
+		
+		postHocMainSizer.Add( postHoc_choice_sizer, 1, wx.EXPAND, 5 )
+		
+		postHoc_grid_sizer = wx.BoxSizer( wx.VERTICAL )
+		
+		self.postHoc_grid = wx.grid.Grid( self.postHocEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		
+		# Grid
+		self.postHoc_grid.CreateGrid( 0, 0 )
+		self.postHoc_grid.EnableEditing( True )
+		self.postHoc_grid.EnableGridLines( True )
+		self.postHoc_grid.EnableDragGridSize( True )
+		self.postHoc_grid.SetMargins( 0, 0 )
+		
+		# Columns
+		self.postHoc_grid.AutoSizeColumns()
+		self.postHoc_grid.EnableDragColMove( False )
+		self.postHoc_grid.EnableDragColSize( True )
+		self.postHoc_grid.SetColLabelSize( 30 )
+		self.postHoc_grid.SetColLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Rows
+		self.postHoc_grid.AutoSizeRows()
+		self.postHoc_grid.EnableDragRowSize( False )
+		self.postHoc_grid.SetRowLabelSize( 80 )
+		self.postHoc_grid.SetRowLabelAlignment( wx.ALIGN_CENTRE, wx.ALIGN_CENTRE )
+		
+		# Label Appearance
+		
+		# Cell Defaults
+		self.postHoc_grid.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
+		postHoc_grid_sizer.Add( self.postHoc_grid, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		postHocMainSizer.Add( postHoc_grid_sizer, 1, wx.EXPAND, 5 )
+		
+		pudat_file_sizer1 = wx.FlexGridSizer( 0, 2, 0, 0 )
+		pudat_file_sizer1.AddGrowableCol( 1 )
+		pudat_file_sizer1.SetFlexibleDirection( wx.BOTH )
+		pudat_file_sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.postHoc_export_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_export_txt.Wrap( -1 )
+		
+		pudat_file_sizer1.Add( self.postHoc_export_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
+		
+		self.postHoc_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.csv", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		pudat_file_sizer1.Add( self.postHoc_file, 0, wx.ALL|wx.EXPAND, 5 )
+		
+		
+		postHocMainSizer.Add( pudat_file_sizer1, 1, wx.EXPAND, 5 )
+		
+		metrics_buttons_sizer2 = wx.FlexGridSizer( 0, 6, 0, 0 )
+		metrics_buttons_sizer2.AddGrowableCol( 0 )
+		metrics_buttons_sizer2.SetFlexibleDirection( wx.BOTH )
+		metrics_buttons_sizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.spacertext2 = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spacertext2.Wrap( -1 )
+		
+		metrics_buttons_sizer2.Add( self.spacertext2, 0, wx.ALL, 5 )
+		
+		self.export_postHoc = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Export File", wx.DefaultPosition, wx.DefaultSize, 0 )
+		metrics_buttons_sizer2.Add( self.export_postHoc, 0, wx.ALL, 5 )
+		
+		self.calc_postHoc = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Calculate Post-Hoc", wx.DefaultPosition, wx.DefaultSize, 0 )
+		metrics_buttons_sizer2.Add( self.calc_postHoc, 0, wx.ALL, 5 )
+		
+		
+		postHocMainSizer.Add( metrics_buttons_sizer2, 1, wx.EXPAND, 5 )
+		
+		
+		self.postHocEvaluation.SetSizer( postHocMainSizer )
+		self.postHocEvaluation.Layout()
+		postHocMainSizer.Fit( self.postHocEvaluation )
+		self.auinotebook.AddPage( self.postHocEvaluation, u"6) Post-Hoc Evaluation", True, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -1972,7 +2102,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plottingOptions.SetSizer( plottingMainSizer )
 		self.plottingOptions.Layout()
 		plottingMainSizer.Fit( self.plottingOptions )
-		self.auinotebook.AddPage( self.plottingOptions, u"6) Plotting Options", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.plottingOptions, u"7) Plotting Options", False, wx.NullBitmap )
 		
 		aui_sizer.Add( self.auinotebook, 1, wx.EXPAND, 5 )
 		
@@ -2056,6 +2186,11 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.run_marxan_button.Bind( wx.EVT_BUTTON, self.on_run_marxan )
 		self.view_sum.Bind( wx.EVT_BUTTON, self.on_view_sum )
 		self.view_mvbest.Bind( wx.EVT_BUTTON, self.on_view_mvbest )
+		self.postHoc_category_choice.Bind( wx.EVT_CHOICE, self.on_postHoc_category_choice )
+		self.postHoc_output_choice.Bind( wx.EVT_CHOICE, self.on_postHoc_output_choice )
+		self.postHoc_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_postHoc_file )
+		self.export_postHoc.Bind( wx.EVT_BUTTON, self.on_export_postHoc )
+		self.calc_postHoc.Bind( wx.EVT_BUTTON, self.on_calc_postHoc )
 		self.metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice )
 		self.metric_shp_choice1.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice1 )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
@@ -2289,6 +2424,21 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_view_mvbest( self, event ):
+		event.Skip()
+	
+	def on_postHoc_category_choice( self, event ):
+		event.Skip()
+	
+	def on_postHoc_output_choice( self, event ):
+		event.Skip()
+	
+	def on_postHoc_file( self, event ):
+		event.Skip()
+	
+	def on_export_postHoc( self, event ):
+		event.Skip()
+	
+	def on_calc_postHoc( self, event ):
 		event.Skip()
 	
 	def on_metric_shp_choice( self, event ):

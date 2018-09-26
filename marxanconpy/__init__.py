@@ -14,7 +14,7 @@ def progress_bar_update(count, dlg, keepGoing, n, progressbar=True):
     count += n
     (keepGoing, skip) = dlg.Update(count)
 
-def warn_dialog(self, message, caption="Warning!"):
+def warn_dialog(message, caption="Warning!"):
     """
     Warning
     """

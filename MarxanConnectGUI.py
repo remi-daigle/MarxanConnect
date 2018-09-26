@@ -53,7 +53,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -137,6 +137,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_demo_rescaleRadioBox(event=None)
         self.on_land_type_choice(event=None)
         self.enable_metrics()
+        self.enable_postHoc()
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
@@ -187,6 +188,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.export_metrics.Enable(enable=True)
             self.custom_spec_panel.SetToolTip(None)
         self.enable_metrics()
+        self.enable_postHoc()
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
@@ -430,7 +432,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         # warn if no connectivity metrics
         if not 'connectivityMetrics' in self.project:
-            self.warn_dialog(
+            marxanconpy.warn_dialog(
                 message="No connectivity metrics have been calculated yet, please return to the 'Connectivity "
                         "Metrics' tab to calculate metrics before attempting to plot.")
             return  # end plotting
@@ -475,7 +477,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # warn and break if shapefile not the same size as metrics
             if self.lyr1_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
                 if not sf1.shape[0] == len(metric1):
-                    self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
+                    marxanconpy.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
                                              "are " + str(len(metric1)) + " rows in the selected metric and " + str(
                         sf1.shape[0]) +
                                              " rows in the shapefile")
@@ -509,7 +511,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # warn and break if shapefile not the same size as metrics
             if self.lyr2_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
                 if not sf2.shape[0] == len(metric2):
-                    self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
+                    marxanconpy.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
                                              "are " + str(len(metric2)) + " rows in the selected metric and " + str(
                         sf2.shape[0]) +
                                              " rows in the shapefile")
@@ -522,7 +524,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         elif self.lyr2_plot_check.GetValue():
             gdf_list = [sf2]
         else:
-            self.warn_dialog(message="No data layers were selected")
+            marxanconpy.warn_dialog(message="No data layers were selected")
             lonmin, lonmax, latmin, latmax = -180, 180, -90, -90
 
         lonmin, lonmax, latmin, latmax = marxanconpy.spatial.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
@@ -927,6 +929,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_PU_CM_file.GetPath()
         # enable metrics
         self.enable_metrics()
+        self.enable_postHoc()
 
     def on_land_HAB_file(self, event):
         """
@@ -1002,6 +1005,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['land_pu_cm_filepath'] = self.land_PU_CM_file.GetPath()
         # enable metrics
         self.enable_metrics()
+        self.enable_postHoc()
 
     def on_LP_file(self, event):
         self.project['filepaths']['lp_filepath'] = self.LP_file.GetPath()
@@ -1042,11 +1046,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.project['options']['marxan'] == "Marxan":
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
-                self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
         else:
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone.exe")) or \
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone_x64.exe")):
-                self.warn_dialog("Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
+                marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
     def on_inputdat_file(self, event):
         """
@@ -1140,7 +1144,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.project['options']['land_conmat_type'] == "Resistance Surface":
             enable_hab = False
             enable_surface = True
-            self.warn_dialog("This feature is not yet operational, please check back in the next version!")
+            marxanconpy.warn_dialog(message="This feature is not yet operational, please check back in the next version!")
         elif self.project['options']['land_conmat_type'] == "Connectivity Matrix":
             enable_hab = False
             enable_surface = False
@@ -1341,11 +1345,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.project['options']['marxan'] == "Marxan":
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
-                self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
         else:
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone.exe")) or \
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone_x64.exe")):
-                self.warn_dialog("Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
+                marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
     def on_inputdat_symmRadio(self, event):
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
@@ -1377,7 +1381,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Rescales the connectivity matrix to match the scale of the planning units
         """
-        self.warn_dialog("Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
+        marxanconpy.warn_dialog(message="Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
                          " if the rescaling is ecologically valid. We recommend acquiring connectivity data at the same"
                          " scale as the planning unit")
 
@@ -1472,7 +1476,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                "' which may be missing in the file."
                 self.warn = True
             if self.warn:
-                self.warn_dialog(message=self.message)
+                marxanconpy.warn_dialog(message=self.message)
         return
 
 
@@ -1488,7 +1492,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.set_metric_options()
 
             if not self.calc_metrics_pu.GetValue() and not self.calc_metrics_cu.GetValue():
-                self.warn_dialog(message="No 'Units' selected for metric calculations.")
+                marxanconpy.warn_dialog(message="No 'Units' selected for metric calculations.")
 
             marxanconpy.manipulation.calc_metrics(project=self.project,
                                                   progressbar=True,
@@ -1528,7 +1532,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         spec = pandas.read_json(self.project['spec_dat'], orient='split')
         if len(cf) == 0:
-            self.warn_dialog(message="No conservation features associated with planning units were calculated.")
+            marxanconpy.warn_dialog(message="No conservation features associated with planning units were calculated.")
         else:
             # Export or append feature files
             if self.cf_export_radioBox.GetSelection() == 0:
@@ -1578,7 +1582,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if 'spec_'+type in self.project['connectivityMetrics']:
                 self.all_types += [type]
         if len(self.all_types)==0:
-            self.warn_dialog(message="Boundary files can only be exported for planning units.")
+            marxanconpy.warn_dialog(message="Boundary files can only be exported for planning units.")
             return
         multiple = len(self.project['connectivityMetrics']['boundary'].keys()) > 1
 
@@ -1596,7 +1600,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # warn when multiple boundary definitions
         if multiple:
-            self.warn_dialog(message="Multiple Boundary Definitions were selected. Boundary file names have been"
+            marxanconpy.warn_dialog(message="Multiple Boundary Definitions were selected. Boundary file names have been"
                                      " edited to include type.", caption="Warning!")
 
     def lock_pudat(self, pudat_filepath):
@@ -1824,13 +1828,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         if os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe')):
             if os.path.basename(self.project['filepaths']['marxan_input']) != "input.dat":
-                self.warn_dialog("Marxan Inedit will attempt to load 'input.dat' from " + os.path.dirname(
+                marxanconpy.warn_dialog(message="Marxan Inedit will attempt to load 'input.dat' from " + os.path.dirname(
                     self.project['filepaths'][
                         'marxan_input']) + "by default. You will have to manually load your file in Inedit")
             subprocess.call(os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe'),
                             cwd=os.path.dirname(self.project['filepaths']['marxan_input']))
         else:
-            self.warn_dialog("Inedit.exe not found in Marxan Directory. This file is bundled with Marxan (not 'with "
+            marxanconpy.warn_dialog(message="Inedit.exe not found in Marxan Directory. This file is bundled with Marxan (not 'with "
                              "zones'), please download Inedit.exe or edit input files manually")
 
     def on_run_marxan(self, event):
@@ -1840,11 +1844,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.project['options']['marxan'] == "Marxan":
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
-                self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
         else:
             if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone.exe")) or \
                     not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone_x64.exe")):
-                self.warn_dialog("Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
+                marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics'] = {}
@@ -1860,12 +1864,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 inputdir = line.replace("INPUTDIR ", "").strip('\n')
                 inputdatdir = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), inputdir)
                 if not os.path.isdir(inputdir) and not os.path.isdir(inputdatdir):
-                    self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
+                    marxanconpy.warn_dialog(message="Warning: Marxan Input File has an invalid input directory " + line)
             if line.startswith("OUTPUTDIR"):
                 inputdir = line.replace("OUTPUTDIR ", "").strip('\n')
                 inputdatdir = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), inputdir)
                 if not os.path.isdir(inputdir) and not os.path.isdir(inputdatdir):
-                    self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
+                    marxanconpy.warn_dialog(message="Warning: Marxan Input File has an invalid input directory " + line)
 
         if self.project['options']['inputdat_boundary'] == 'Asymmetric':
             if not 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
@@ -1919,19 +1923,20 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.temp['file'] == 0:
                 self.temp['select_freq'] = marxanconpy.read_csv_tsv(self.temp['fn'])
             else:
-                self.temp['select_freq']['solution'] = self.temp['select_freq']['solution'] + \
-                                                       marxanconpy.read_csv_tsv(self.temp['fn'])['solution']
+                self.temp['select_freq'].iloc[:,1] = self.temp['select_freq'].iloc[:,1] + \
+                                                       marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1]
 
-        self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq']['solution'].tolist()
+        self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq'].iloc[:,1].tolist()
 
         # load best solution
         self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + "_best.txt")
-        self.project['connectivityMetrics']['best_solution'] = marxanconpy.read_csv_tsv(self.temp['fn'])['solution'].tolist()
+        self.project['connectivityMetrics']['best_solution'] = marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1].tolist()
 
         # update plotting options
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
+        self.enable_postHoc()
 
     def on_view_mvbest(self,event):
         self.temp = {}
@@ -1953,6 +1958,104 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         file_viewer(parent=self, file=os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_sum.txt'),
                     title='sum')
 
+# ########################## postHoc functions ##########################################################################
+
+    def enable_postHoc(self):
+        self.set_postHoc_category_choice()
+        if 'connectivityMetrics' in self.project:
+            if 'best_solution' in self.project['connectivityMetrics']:
+                self.calc_postHoc.Enable(True)
+            else:
+                self.calc_postHoc.Enable(False)
+        else:
+            self.calc_postHoc.Enable(False)
+        if 'postHoc' in self.project:
+            self.export_postHoc.Enable(True)
+        else:
+            self.export_postHoc.Enable(False)
+
+    def set_postHoc_category_choice(self):
+        choices = []
+        if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
+            choices.append("Landscape Data")
+        if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+            choices.append("Demographic Data")
+        self.postHoc_category_choice.SetItems(choices)
+        self.postHoc_category_choice.SetSelection(0)
+        self.set_postHoc_output_choice()
+
+    def on_postHoc_category_choice(self, event):
+        Cols = self.postHoc_grid.GetNumberCols()
+        Rows = self.postHoc_grid.GetNumberRows()
+        if Cols > 0 or Rows > 0:
+            self.postHoc_grid.DeleteCols(0, Cols, True)
+            self.postHoc_grid.DeleteRows(0, Rows, True)
+
+    def on_postHoc_output_choice(self, event):
+        Cols = self.postHoc_grid.GetNumberCols()
+        Rows = self.postHoc_grid.GetNumberRows()
+        if Cols > 0 or Rows > 0:
+            self.postHoc_grid.DeleteCols(0, Cols, True)
+            self.postHoc_grid.DeleteRows(0, Rows, True)
+
+    def on_calc_postHoc(self, event):
+        if self.postHoc_category_choice.GetStringSelection() == "Landscape Data":
+            format = "Edge List with Habitat"
+            filename = self.project['filepaths']['land_pu_cm_filepath']
+        elif self.postHoc_category_choice.GetStringSelection() == "Demographic Data":
+            format = self.demo_matrixFormatRadioBox.GetStringSelection()
+            filename = self.project['filepaths']['demo_pu_cm_filepath']
+
+        # solution = pandas.read_csv("C://Users//daigl//Documents//GitHub//MarxanConnect//docs//tutorial//CF_demographic//output//connect_best.txt")
+        solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+                                                              self.postHoc_output_choice.GetStringSelection())
+        postHoc = marxanconpy.manipulation.calc_postHoc(filename,
+                                                        format,
+                                                        IDs=solution.iloc[:,0].values,
+                                                        selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
+
+        for col, label in enumerate(postHoc.columns):
+            if not col == 0:
+                self.postHoc_grid.AppendCols()
+                self.postHoc_grid.SetColLabelValue(col-1, label)
+            for index in postHoc.index:
+                if col == 0:
+                    self.postHoc_grid.AppendRows()
+                    self.postHoc_grid.SetRowLabelValue(index, str(postHoc.iloc[index, col]))
+                elif label == "Percent":
+                    self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
+                else:
+                    if postHoc["Metric"][index] == "Planning Units" or postHoc["Metric"][index] == "Connections":
+                        self.postHoc_grid.SetCellValue(index, col-1, str(int(postHoc.iloc[index, col])))
+                    else:
+                        self.postHoc_grid.SetCellValue(index, col-1, str(round(postHoc.iloc[index, col], 2)))
+
+        self.postHoc_grid.SetRowLabelSize(125)
+        self.postHoc_grid.AutoSizeColumns()
+        self.postHoc_grid.AutoSizeRows()
+        self.postHoc_grid.SetColLabelAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
+        self.postHoc_grid.AutoSize()
+        self.Layout()
+        self.project["postHoc"] = postHoc.to_json(orient='split')
+        self.enable_postHoc()
+
+    def on_export_postHoc( self, event ):
+        pandas.read_json(self.project["postHoc"], orient='split').to_csv(self.postHoc_file.GetPath(), index=0)
+
+    def set_postHoc_output_choice(self):
+        if os.path.isfile(self.project['filepaths']['marxan_input']):
+            for line in open(self.project['filepaths']['marxan_input']):
+                if line.startswith('SCENNAME'):
+                    SCENNAME = line.replace('SCENNAME ', '').replace('\n', '')
+                if line.startswith('NUMREPS'):
+                    NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
+
+            self.postHoc_output_choice.SetItems(['Best Solution','Selection Frequency'] +
+                                                      ["r" + "%05d" % t for t in range(1, NUMREPS)])
+            self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
+            self.postHoc_output_choice.SetSelection(0)
+
+
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):
         if self.calc_metrics_pu.GetValue() & self.project['options']['metricsCalculated']:
@@ -1962,7 +2065,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.on_new_spec()
                 self.spec_frame.Show()
         else:
-            self.warn_dialog(message="'Planning Units' not selected for metric calculations.")
+            marxanconpy.warn_dialog(message="'Planning Units' not selected for metric calculations.")
 
     def on_new_spec(self):
         self.spec_frame = spec_customizer(parent=self)
@@ -1973,7 +2076,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
                 self.all_types += ['land_pu']
         else:
-            self.warn_dialog(message="'Planning Units' not selected for metric calculations.")
+            marxanconpy.warn_dialog(message="'Planning Units' not selected for metric calculations.")
             return
 
         for self.type in self.all_types:
