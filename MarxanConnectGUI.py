@@ -53,7 +53,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -440,7 +440,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # prepare plotting window
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-            self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
+            self.auinotebook.AddPage(self.plot, u"8) Plot", False, wx.NullBitmap)
         self.plot.figure = plt.figure(figsize=self.plot.GetClientSize()/wx.ScreenDC().GetPPI()[0])
         self.plot.axes = self.plot.figure.gca()
         self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
@@ -2014,18 +2014,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                         IDs=solution.iloc[:,0].values,
                                                         selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
 
+        print(postHoc)
+
         for col, label in enumerate(postHoc.columns):
             if not col == 0:
                 self.postHoc_grid.AppendCols()
                 self.postHoc_grid.SetColLabelValue(col-1, label)
             for index in postHoc.index:
+                print(postHoc["Metric"][index])
                 if col == 0:
                     self.postHoc_grid.AppendRows()
                     self.postHoc_grid.SetRowLabelValue(index, str(postHoc.iloc[index, col]))
+                elif label == "Type":
+                    self.postHoc_grid.SetCellValue(index, col - 1, str(postHoc.iloc[index, col]))
                 elif label == "Percent":
                     self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
                 else:
-                    if postHoc["Metric"][index] == "Planning Units" or postHoc["Metric"][index] == "Connections":
+                    if postHoc["Metric"][index] in ("Planning Units","Connections"):
                         self.postHoc_grid.SetCellValue(index, col-1, str(int(postHoc.iloc[index, col])))
                     else:
                         self.postHoc_grid.SetCellValue(index, col-1, str(round(postHoc.iloc[index, col], 2)))

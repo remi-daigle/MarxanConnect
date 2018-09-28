@@ -152,35 +152,35 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                                     "'Temporal Connectivity Correlation' will be calculated from the temporal"
                                     "mean of connectivity")
                     elif temp['format'] == "Edge List with Type":
-                        temp[type + '_conmat_many'] = pandas.read_csv(
+                        temp[type + '_conmat'] = pandas.read_csv(
                             project['filepaths'][type + '_cm_filepath'])
 
                         temp[type + '_connectivity'] = {}
-                        for t in temp[type + '_conmat_many']['type'].unique():
-                            temp[type + '_connectivity'][t] = temp[type + '_conmat_many'][
-                                temp[type + '_conmat_many']['type'] == t]
+                        for t in temp[type + '_conmat']['type'].unique():
+                            temp[type + '_connectivity'][t] = temp[type + '_conmat'][
+                                temp[type + '_conmat']['type'] == t]
                             if not temp[type + '_connectivity'][t].value.sum() > 0:
                                 del temp[type + '_connectivity'][t]
                                 marxanconpy.warn_dialog("All connectivity values for type '" + str(
                                     t) + "' are below or equal to zero, excluding from further analyses")
 
                     elif temp['format'] == "Edge List with Habitat":
-                        temp[type + '_conmat_many'] = pandas.read_csv(
+                        temp[type + '_conmat'] = pandas.read_csv(
                             project['filepaths'][type + '_cm_filepath'])
-                        temp[type + '_conmat_many'].loc[temp[type + '_conmat_many']['value'] < float(
+                        temp[type + '_conmat'].loc[temp[type + '_conmat']['value'] < float(
                             project['options']['land_hab_thresh']), 'value'] = 0
 
                         temp[type + '_connectivity'] = {}
-                        for h in temp[type + '_conmat_many']['habitat'].unique():
-                            temp[type + '_connectivity'][h] = temp[type + '_conmat_many'][
-                                temp[type + '_conmat_many']['habitat'] == h]
+                        for h in temp[type + '_conmat']['habitat'].unique():
+                            temp[type + '_connectivity'][h] = temp[type + '_conmat'][
+                                temp[type + '_conmat']['habitat'] == h]
                             if not temp[type + '_connectivity'][h].value.sum() > 0:
                                 del temp[type + '_connectivity'][h]
                                 marxanconpy.warn_dialog("All connectivity values for type '" + str(
                                     t) + "' are below or equal to zero, excluding from further analyses")
 
                 else:
-                    warn_dialog(message="File not found: " + project['filepaths'][type + '_cm_filepath'])
+                    marxanconpy.warn_dialog(message="File not found: " + project['filepaths'][type + '_cm_filepath'])
 
                 # load correct shapefile path
                 if type[-2:] == 'pu':
@@ -370,7 +370,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                                                                                  temp['shp_filepath']
                                                                                  )
                             else:
-                                warn_dialog(
+                                marxanconpy.warn_dialog(
                                     message="No 'Focus Area' has been specified. Please load a focus area file in "
                                             "the Spatial Input tab")
                                 return
@@ -382,7 +382,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                                     project['connectivityMetrics']['boundary']['conn_boundary_' + type] = \
                                         marxanconpy.metrics.graph2connboundary(graph)
                                 else:
-                                    temp[type + '_conmat_mean'] = temp[type + '_conmat_many'][
+                                    temp[type + '_conmat_mean'] = temp[type + '_conmat'][
                                         ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
                                     temp[type + '_conmat_mean'] = temp[
                                         type + '_conmat_mean'].pivot_table(
@@ -393,7 +393,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                                     project['connectivityMetrics']['boundary']['conn_boundary_' + type] = \
                                         marxanconpy.metrics.graph2connboundary(graph)
 
-                                    warn_dialog(
+                                    marxanconpy.warn_dialog(
                                         message="A connectivity " + temp['format'] + " was provided. The Ecological "
                                                                                           "Distance to be used as the Boundary Definitions will be calculated from the "
                                                                                           "mean of connectivity matrices supplied")
@@ -402,42 +402,47 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
 
                 # calculate landscape metrics ############################################################################
                 if type[-7:] == 'land_pu':
-                    for h in temp[type + '_conmat'].keys():
+                    for h in temp[type + '_connectivity'].keys():
+
+                        graph = connectivity2graph(connectivity=temp[type + '_connectivity'][h],
+                                                   format=temp['format'],
+                                                   IDs=temp['shp'][temp['shp_file_pu_id']].values)
+
                         if not keepGoing: break
-                        temp['n'] = 100 / 10 / len(temp[type + '_conmat'].keys())
+                        n = 100 / 10 / len(temp[type + '_conmat'].keys())
                         if project["options"]["land_metrics"]["in_degree"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'in_degree_' + type + "_" + str(h)] = marxanconpy.metrics.graph2vertexdegree(
-                                temp[type + '_conmat'][h], mode='IN')
+                                graph, mode='IN')
                         marxanconpy.progress_bar_update(count, dlg, keepGoing, n, progressbar)
 
 
                         if project["options"]["land_metrics"]["out_degree"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'out_degree_' + type + "_" + str(h)] = marxanconpy.metrics.graph2vertexdegree(
-                                temp[type + '_conmat'][h], mode='OUT')
+                                graph, mode='OUT')
                         marxanconpy.progress_bar_update(count, dlg, keepGoing, n, progressbar)
 
                         if project["options"]["land_metrics"]["between_cent"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'between_cent_' + type + "_" + str(h)] = \
-                                marxanconpy.metrics.graph2betweencent(temp[type + '_conmat'][h])
+                                marxanconpy.metrics.graph2betweencent(graph)
                         marxanconpy.progress_bar_update(count, dlg, keepGoing, n, progressbar)
 
                         if project["options"]["land_metrics"]["eig_vect_cent"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'eig_vect_cent_' + type + "_" + str(h)] = \
-                                marxanconpy.metrics.graph2eigvectcent(temp[type + '_conmat'][h])
+                                marxanconpy.metrics.graph2eigvectcent(graph)
 
                         if project["options"]["land_metrics"]["google"]:
                             project['connectivityMetrics']['spec_' + type]['google_' + type + "_" + str(h)] = \
-                                marxanconpy.metrics.graph2google(temp[type + '_conmat'][h])
+                                marxanconpy.metrics.graph2google(graph)
                         marxanconpy.progress_bar_update(count, dlg, keepGoing, n, progressbar)
 
                         if project["options"]["land_metrics"]["fa_recipients"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'fa_recipients_' + type + "_" + str(h)] = \
-                                marxanconpy.metrics.graph2recipients(temp[type + '_conmat'][h],
+                                marxanconpy.metrics.graph2recipients(graph,
                                                                       project['filepaths']['fa_filepath'],
                                                                       temp['shp_filepath'],
                                                                       temp['shp_file_pu_id']
@@ -447,7 +452,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                         if project["options"]["land_metrics"]["fa_donors"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'fa_donors_' + type + "_" + str(h)] = \
-                                marxanconpy.metrics.graph2donors(temp[type + '_conmat'][h],
+                                marxanconpy.metrics.graph2donors(graph,
                                                                   project['filepaths']['fa_filepath'],
                                                                   temp['shp_filepath'],
                                                                   temp['shp_file_pu_id']
@@ -457,7 +462,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                         if project["options"]["land_metrics"]["aa_recipients"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'aa_recipients_' + type + "_" + str(h)] = \
-                                marxanconpy.metrics.graph2recipients(temp[type + '_conmat'][h],
+                                marxanconpy.metrics.graph2recipients(graph,
                                                                       project['filepaths']['aa_filepath'],
                                                                       temp['shp_filepath'],
                                                                       temp['shp_file_pu_id'],
@@ -468,7 +473,7 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                         if project["options"]["land_metrics"]["aa_donors"] and keepGoing:
                             project['connectivityMetrics']['spec_' + type][
                                 'aa_donors_' + type + "_" + str(h)] = \
-                                marxanconpy.metrics.graph2donors(temp[type + '_conmat'][h],
+                                marxanconpy.metrics.graph2donors(graph,
                                                                   project['filepaths']['aa_filepath'],
                                                                   temp['shp_filepath'],
                                                                   temp['shp_file_pu_id'],
@@ -480,9 +485,9 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                             if bd_land_conn_boundary_done == False:
                                 if h == 'default_type_replace':
                                     project['connectivityMetrics']['boundary']['conn_boundary_' + type] = \
-                                        marxanconpy.metrics.graph2connboundary(temp[type + '_conmat'][h])
+                                        marxanconpy.metrics.graph2connboundary(graph)
                                 else:
-                                    temp[type + '_conmat_mean'] = temp[type + '_conmat_many'][
+                                    temp[type + '_conmat_mean'] = temp[type + '_conmat'][
                                         ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
                                     temp[type + '_conmat_mean'] = temp[
                                         type + '_conmat_mean'].pivot_table(
@@ -491,9 +496,9 @@ def calc_metrics(project,progressbar,calc_metrics_pu=True,calc_metrics_cu=False)
                                         columns='id2',
                                         fill_value=0)
                                     project['connectivityMetrics']['boundary']['conn_boundary_' + type] = \
-                                        marxanconpy.metrics.graph2connboundary(temp[type + '_conmat'][h])
+                                        marxanconpy.metrics.graph2connboundary(graph)
 
-                                    warn_dialog(
+                                    marxanconpy.warn_dialog(
                                         message="A connectivity " + temp['format'] + " was provided. The Ecological "
                                                                                           "Distance to be used as the Boundary Definitions will be calculated from the "
                                                                                           "mean of connectivity matrices supplied")
@@ -595,11 +600,11 @@ def calc_postHoc(filename,format,IDs,selectionIDs):
                                                            sub.ecount(),
                                                            sub.density(),
                                                            sub.evcent(weights=sub.es["weight"],
-                                                                      return_eigenvalue=True)[1])}))
+                                                                      return_eigenvalue=True)[1])}), ignore_index=True)
 
         postHoc["Percent"] = postHoc["Solution"]/postHoc["Planning Area"]*100
         postHoc = postHoc[['Metric','Type','Planning Area','Solution','Percent']]
-        if postHoc["Type"].unique() == "default_type_replace":
+        if "default_type_replace" in postHoc["Type"].unique():
             del(postHoc["Type"])
         return postHoc
 
