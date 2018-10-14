@@ -2594,10 +2594,10 @@ class GettingStarted ( wx.Frame ):
 		fgSizer62.SetFlexibleDirection( wx.BOTH )
 		fgSizer62.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_hyperlink2 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Tutorial", u"tutorial.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		self.m_hyperlink2 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Tutorial", u"docs\\tutorial.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
 		fgSizer62.Add( self.m_hyperlink2, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
-		self.m_hyperlink3 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Glossary", u"glossary.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		self.m_hyperlink3 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Glossary", u"docs\\glossary.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
 		fgSizer62.Add( self.m_hyperlink3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_hyperlink4 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Report Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )

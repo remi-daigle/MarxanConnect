@@ -28198,7 +28198,7 @@
                                             <property name="subclass">; forward_declare</property>
                                             <property name="toolbar_pane">0</property>
                                             <property name="tooltip"></property>
-                                            <property name="url">tutorial.html</property>
+                                            <property name="url">docs\tutorial.html</property>
                                             <property name="visited_color"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
@@ -28292,7 +28292,7 @@
                                             <property name="subclass">; forward_declare</property>
                                             <property name="toolbar_pane">0</property>
                                             <property name="tooltip"></property>
-                                            <property name="url">glossary.html</property>
+                                            <property name="url">docs\glossary.html</property>
                                             <property name="visited_color"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
