@@ -12,6 +12,8 @@ with open('gui.py', 'r', encoding="utf8") as file :
 # Replace the target string
 filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
 filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
+filedata = filedata.replace('wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )',
+'wx.html2.WebView.New( self.connectivityMetrics)')
 filedata = re.sub('Marxan Connect v.....', 'Marxan Connect ' + marxanconpy.MarxanConnectVersion, filedata)
 
 # Write the file out again

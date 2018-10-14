@@ -84,7 +84,6 @@ pip install python-igraph
 pip install shapely
 pip install pandas
 pip install numpy
-pip install bs4
 
 # for compiling executable
 pip install cx_Freeze

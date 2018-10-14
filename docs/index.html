@@ -429,13 +429,14 @@ div.tocify {
 <li><a href="https://github.com/wxFormBuilder/wxFormBuilder">wxFormBuilder</a></li>
 <li><a href="http://www.jrsoftware.org/isinfo.php">Inno Setup</a></li>
 <li><a href="https://www.r-project.org/">R</a> and the <a href="http://rmarkdown.rstudio.com/"><code>rmarkdown</code></a> package</li>
+<li><a href="https://pandoc.org/installing.html">Pandoc</a> and pandoc-citeproc</li>
 </ul>
-<p>It also assumes you have all the pre-requisite python modules/packages installed, <em>i.e.</em>:</p>
-<pre><code>#!/bin/bash
+<p>It also assumes you have all the pre-requisite python modules installed to build the app itself, <em>i.e.</em>:</p>
+<pre class="bash"><code>#!/bin/bash
 # for basic GUI
 pip install wxpython
 pip install matplotlib
-pip install matplotlib.basemap
+# matplotlib.basemap see https://matplotlib.org/basemap/users/installing.html
 pip install geopandas
 pip install descartes
 pip install python-igraph
@@ -444,9 +445,19 @@ pip install pandas
 pip install numpy
 pip install bs4
 
-
 # for compiling executable
 pip install cx_Freeze</code></pre>
+<p>As well as pre-requesite R packages to build the website, <em>i.e.</em>:</p>
+<pre class="r"><code>if(!require(&quot;sf&quot;)) install.packages(&quot;sf&quot;)
+if(!require(&quot;leaflet&quot;)) install.packages(&quot;leaflet&quot;)
+if(!require(&quot;tmap&quot;)) install.packages(&quot;tmap&quot;)
+if(!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
+if(!require(&quot;DT&quot;)) install.packages(&quot;DT&quot;)
+if(!require(&quot;igraph&quot;)) install.packages(&quot;igraph&quot;)
+if(!require(&quot;ggraph&quot;)) install.packages(&quot;ggraph&quot;)
+if(!require(&quot;gganimate&quot;)) devtools::install_github(&#39;thomasp85/gganimate&#39;)
+if(!require(&quot;tidygraph&quot;)) install.packages(&quot;tidygraph&quot;)
+if(!require(&quot;RColorBrewer&quot;)) install.packages(&quot;RColorBrewer&quot;)</code></pre>
 </div>
 </div>
 <div id="built-with" class="section level1">

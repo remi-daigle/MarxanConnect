@@ -2,9 +2,8 @@
 import wx
 import wx.lib.agw.aui as aui
 import wx.adv
+import wx.html2
 
-# import gui
-import gui
 
 # import matplotlib
 import matplotlib
@@ -27,8 +26,9 @@ import pandas
 import numpy
 import subprocess
 import json
-import bs4
 
+# import gui template made by wxformbuilder
+import gui
 
 # import MarxanConnect python module
 import marxanconpy
@@ -418,11 +418,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         GettingStartedframe.Show()
 
     def on_metric_definition_choice(self,event):
-        soup = bs4.BeautifulSoup(open(os.path.join("docs" , "glossary_webtex.html"), encoding="utf8"),"html.parser")
-
-        # find the node with id of "Plot"
-        div = soup.find(id=self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))
-        self.metric_definition_html.SetPage(str(div).replace("glossary_files","docs/glossary_files"))
+        self.metric_definition_html.LoadURL(os.path.join(os.path.dirname(sys.argv[0]),'docs','glossary_webtex.html#'+
+                           self.metric_definition_choice.GetStringSelection().lower().replace(" ", "-")))
 
 # ##########################  map plotting functions ###################################################################
     def on_plot_map_button(self, event):
@@ -2266,3 +2263,4 @@ app.MainLoop()
 
 # stop the app
 app.Destroy()
+

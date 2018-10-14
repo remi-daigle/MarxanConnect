@@ -8,7 +8,8 @@ web: docs/index.Rmd docs/glossary.Rmd docs/tutorial.Rmd docs/CONTRIBUTING.Rmd
 	mv docs/index.md README.md; \
 	mv docs/CODE_OF_CONDUCT.md CODE_OF_CONDUCT.md; \
 	mv docs/CONTRIBUTING.md CONTRIBUTING.md; \
-	pandoc --standalone docs/glossary.md -o docs/glossary_webtex.html --webtex --section-divs
+	sed -i -e 's/](glossary.html/](glossary_webtex.html/g' docs/glossary.md; \
+	pandoc docs/glossary.md -o docs/glossary_webtex.html --section-divs --standalone --bibliography='docs/references.bib' --webtex; \
 	rm docs/glossary.md
 
 exe: gui.py MarxanConnectGUI.py setup.py

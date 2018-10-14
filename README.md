@@ -68,15 +68,17 @@ Alternatively, you can compile the website with `make web`, the Marxan Connect e
 * [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder)
 * [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 * [R](https://www.r-project.org/) and the [`rmarkdown`](http://rmarkdown.rstudio.com/) package
+* [Pandoc](https://pandoc.org/installing.html) and pandoc-citeproc
 
-It also assumes you have all the pre-requisite python modules/packages installed, *i.e.*:
+It also assumes you have all the pre-requisite python modules installed to build the app itself, *i.e.*:
 
-```
+
+```bash
 #!/bin/bash
 # for basic GUI
 pip install wxpython
 pip install matplotlib
-pip install matplotlib.basemap
+# matplotlib.basemap see https://matplotlib.org/basemap/users/installing.html
 pip install geopandas
 pip install descartes
 pip install python-igraph
@@ -85,9 +87,24 @@ pip install pandas
 pip install numpy
 pip install bs4
 
-
 # for compiling executable
 pip install cx_Freeze
+```
+
+As well as pre-requesite R packages to build the website, *i.e.*:
+
+
+```r
+if(!require("sf")) install.packages("sf")
+if(!require("leaflet")) install.packages("leaflet")
+if(!require("tmap")) install.packages("tmap")
+if(!require("tidyverse")) install.packages("tidyverse")
+if(!require("DT")) install.packages("DT")
+if(!require("igraph")) install.packages("igraph")
+if(!require("ggraph")) install.packages("ggraph")
+if(!require("gganimate")) devtools::install_github('thomasp85/gganimate')
+if(!require("tidygraph")) install.packages("tidygraph")
+if(!require("RColorBrewer")) install.packages("RColorBrewer")
 ```
 
 # Built With
