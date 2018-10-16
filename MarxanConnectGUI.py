@@ -73,7 +73,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if len(sys.argv) > 1:
             self.spatial = {}
             self.project = {}
-            self.project['version'] = marxanconpy.MarxanConnectVersion
+            self.project['version'] = marxanconpy.__version__
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = str(sys.argv[1])
             self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
@@ -156,7 +156,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.project = {}
-            self.project['version'] = marxanconpy.MarxanConnectVersion
+            self.project['version'] = marxanconpy.__version__
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.workingdirectory = dlg.GetDirectory()
@@ -407,7 +407,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
 
     def on_about(self, event):
-        dlg = wx.MessageBox(message="Version: " + marxanconpy.MarxanConnectVersion + "\n(C) 2017 Remi Daigle\n",
+        dlg = wx.MessageBox(message="Version: " + marxanconpy.__version__ + "\n(C) 2017 Remi Daigle\n",
                             caption="About Marxan with Connectivity",
                             style=wx.OK)
         dlg.Destroy()
