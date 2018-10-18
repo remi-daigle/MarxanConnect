@@ -33,6 +33,8 @@ import gui
 # import MarxanConnect python module
 import marxanconpy
 
+MarxanConnectVersion = 'v0.1.2'
+
 os.environ["UBUNTU_MENUPROXY"]="0"
 
 # define wildcards
@@ -73,7 +75,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if len(sys.argv) > 1:
             self.spatial = {}
             self.project = {}
-            self.project['version'] = marxanconpy.__version__
+            self.project['version'] = {}
+            self.project['version']['marxanconpy'] = marxanconpy.__version__
+            self.project['version']['MarxanConnect'] = MarxanConnectVersion
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = str(sys.argv[1])
             self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
@@ -113,6 +117,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # create project list to store project specific data
         self.spatial = {}
         self.project = marxanconpy.marcon.new_project()
+        self.project['version']['MarxanConnect'] = MarxanConnectVersion
         self.workingdirectory = sys.path[0]
 
         # if called at launch time, no need to ask users to create a new project file right away
@@ -156,7 +161,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.project = {}
-            self.project['version'] = marxanconpy.__version__
+            self.project['version'] = {}
+            self.project['version']['marxanconpy'] = marxanconpy.__version__
+            self.project['version']['MarxanConnect'] = MarxanConnectVersion
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.workingdirectory = dlg.GetDirectory()
@@ -167,6 +174,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.spatial = {}
         self.project = marxanconpy.marcon.load_project(self.project['filepaths']['projfile'])
         marxanconpy.marcon.validate_project(self.project)
+        if 'MarxanConnect' in self.project['version']:
+            if self.project['version']['MarxanConnect'] != MarxanConnectVersion:
+                print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
+                      "update for compatibility")
+                self.project['version']['MarxanConnect'] = MarxanConnectVersion
+        else:
+            print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
+                  "update for compatibility")
+            self.project['version'] = {}
+            self.project['version']['marxanconpy'] = marxanconpy.__version__
+            self.project['version']['MarxanConnect'] = MarxanConnectVersion
+
         self.project = marxanconpy.marcon.edit_working_directory(self.project,
                                                                  self.workingdirectory,
                                                                  "absolute")
@@ -407,7 +426,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
 
     def on_about(self, event):
-        dlg = wx.MessageBox(message="Version: " + marxanconpy.__version__ + "\n(C) 2017 Remi Daigle\n",
+        dlg = wx.MessageBox(message="Marxan Connect: " +
+                                    MarxanConnectVersion +
+                                    "\n Running marxanconpy: " +
+                                    marxanconpy.__version__ +
+                                    "\n(C) 2017 Remi Daigle\n",
                             caption="About Marxan with Connectivity",
                             style=wx.OK)
         dlg.Destroy()
