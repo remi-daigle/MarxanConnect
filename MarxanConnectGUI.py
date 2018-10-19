@@ -60,6 +60,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
 
+        # set posthoc page off by default
+        self.posthocdefault = False
+        self.on_posthoc(event = None)
+
+        # set MwZ option off by default
+        self.mwzdefault = False
+        self.on_mwz(event=None)
+
         # set help page
         # self.on_metric_definition_choice(event=None) #currently disabled so that help appears blank/less intimidating
 
@@ -108,6 +116,35 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 pass
                 frame.SetIcons(icons)
 
+    def on_posthoc(self, event):
+        for i in range(self.auinotebook.GetPageCount()):
+            if self.auinotebook.GetPageText(i) == "6) Post-Hoc Evaluation":
+                posthocpage = i
+            if self.auinotebook.GetPageText(i) == "7) Plotting Options":
+                plottingpage = i
+            if self.auinotebook.GetPageText(i) == "6) Plotting Options":
+                plottingpage = i
+
+        if not self.posthocdefault:
+            self.auinotebook.SetPageText(plottingpage, u"6) Plotting Options")
+            self.auinotebook.RemovePage(posthocpage)
+            self.posthocdefault = True
+        else:
+            self.auinotebook.RemovePage(plottingpage)
+            self.auinotebook.AddPage(self.postHocEvaluation, u"6) Post-Hoc Evaluation", False, wx.NullBitmap)
+            self.auinotebook.AddPage(self.plottingOptions, u"7) Plotting Options", False, wx.NullBitmap)
+            self.posthocdefault = False
+
+    def on_mwz( self, event ):
+        if not self.mwzdefault:
+            self.marxan_Radio.Hide()
+            self.marxanAnalysis.Layout()
+            self.mwzdefault = True
+        else:
+            self.marxan_Radio.Show()
+            self.marxanAnalysis.Layout()
+            self.mwzdefault = False
+            
 # ##########################  project managment functions ##############################################################
 
     def on_new_project(self, event, launch=False):
