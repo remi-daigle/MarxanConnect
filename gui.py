@@ -1076,7 +1076,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 		
-		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Continuous Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_metric_txt.Wrap( -1 )
 		
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
@@ -1109,7 +1109,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"New Metric Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
-		self.preEval_status_radio.SetSelection( 0 )
+		self.preEval_status_radio.SetSelection( 2 )
 		bSizer56.Add( self.preEval_status_radio, 0, 0, 5 )
 		
 		
@@ -1204,7 +1204,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		preEval_discrete_from_quartile_radioChoices = [ u"Minimum", u"Lower Quartile", u"Median", u"Upper Quartile", u"Maximum" ]
 		self.preEval_discrete_from_quartile_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, preEval_discrete_from_quartile_radioChoices, 1, wx.RA_SPECIFY_COLS )
-		self.preEval_discrete_from_quartile_radio.SetSelection( 3 )
+		self.preEval_discrete_from_quartile_radio.SetSelection( 2 )
 		preEval_discrete_from_quartile_sizer.Add( self.preEval_discrete_from_quartile_radio, 0, wx.ALL, 5 )
 		
 		
@@ -1440,7 +1440,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		marxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		marxanMainSizer.AddGrowableCol( 0 )
@@ -1723,7 +1723,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.postHocEvaluation.SetSizer( postHocMainSizer )
 		self.postHocEvaluation.Layout()
 		postHocMainSizer.Fit( self.postHocEvaluation )
-		self.auinotebook.AddPage( self.postHocEvaluation, u"6) Post-Hoc Evaluation", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.postHocEvaluation, u"6) Post-Hoc Evaluation", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -2178,6 +2178,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.plot_freq_metric.Bind( wx.EVT_BUTTON, self.on_plot_freq_metric )
 		self.remove_metric.Bind( wx.EVT_BUTTON, self.on_remove_metric )
 		self.preEval_create_new.Bind( wx.EVT_BUTTON, self.on_preEval_create_new )
+		self.preEval_discrete_from_quartile.Bind( wx.EVT_CHECKBOX, self.on_from_check )
+		self.preEval_discrete_from_percentile.Bind( wx.EVT_CHECKBOX, self.on_from_check )
+		self.preEval_discrete_from_value.Bind( wx.EVT_CHECKBOX, self.on_from_check )
+		self.preEval_discrete_to_quartile.Bind( wx.EVT_CHECKBOX, self.on_to_check )
+		self.preEval_discrete_to_percentile.Bind( wx.EVT_CHECKBOX, self.on_to_check )
+		self.preEval_discrete_to_value.Bind( wx.EVT_CHECKBOX, self.on_to_check )
 		self.cf_export_radioBox.Bind( wx.EVT_RADIOBOX, self.on_cf_export_radioBox )
 		self.CF_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_CF_file )
 		self.CFT_percent_slider.Bind( wx.EVT_SCROLL, self.on_CFT_percent_slider )
@@ -2385,6 +2391,16 @@ class MarxanConnectGUI ( wx.Frame ):
 	
 	def on_preEval_create_new( self, event ):
 		event.Skip()
+	
+	def on_from_check( self, event ):
+		event.Skip()
+	
+	
+	
+	def on_to_check( self, event ):
+		event.Skip()
+	
+	
 	
 	def on_cf_export_radioBox( self, event ):
 		event.Skip()

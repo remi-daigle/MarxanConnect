@@ -144,7 +144,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.marxan_Radio.Show()
             self.marxanAnalysis.Layout()
             self.mwzdefault = False
-            
+
 # ##########################  project managment functions ##############################################################
 
     def on_new_project(self, event, launch=False):
@@ -1878,6 +1878,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_preEval_metric_choice(event=None)
         self.on_new_spec()
 
+    def on_from_check( self, event ):
+        self.preEval_discrete_from_quartile.SetValue(False)
+        self.preEval_discrete_from_percentile.SetValue(False)
+        self.preEval_discrete_from_value.SetValue(False)
+        event.GetEventObject().SetValue(True)
+
+    def on_to_check(self, event):
+        self.preEval_discrete_to_quartile.SetValue(False)
+        self.preEval_discrete_to_percentile.SetValue(False)
+        self.preEval_discrete_to_value.SetValue(False)
+        event.GetEventObject().SetValue(True)
+
 # ########################## marxan functions ##########################################################################
     def on_inedit(self, event):
         """
@@ -2141,8 +2153,31 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             marxanconpy.warn_dialog(message="'Planning Units' not selected for metric calculations.")
             return
 
+        excluded = ('aa_recipients',
+                    'between_cent',
+                    'conn_boundary',
+                    'eig_vect_cent',
+                    'fa_donors',
+                    'fa_recipients',
+                    'google',
+                    'in_degree',
+                    'inflow',
+                    'local_retention',
+                    'min_plan_graph',
+                    'out_degree',
+                    'outflow',
+                    'self_recruit',
+                    'stochasticity')
+
+
         for self.type in self.all_types:
-            self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_' + self.type])
+            metrics=list(self.project['connectivityMetrics']['spec_' + self.type])
+            for continuous in excluded:
+                if continuous+"_"+self.type in metrics:
+                    metrics.remove(continuous+"_"+self.type)
+
+            self.spec_frame.keys = metrics
+
 
             for j in range(len(self.spec_frame.keys)):
                 if j != self.spec_frame.spec_grid.GetNumberRows():
@@ -2155,11 +2190,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.spec_frame.spec_grid.SetCellValue(i, 1, str(sum_metric * self.CFT_percent_slider.GetValue() / 100))
                 self.spec_frame.spec_grid.SetCellValue(i, 2, str(1000))
                 self.spec_frame.spec_grid.SetCellValue(i, 3, self.spec_frame.keys[j])
-                w, h = self.spec_frame.GetClientSize()
 
-                self.spec_frame.SetSize((w + 16, h + 39 + 20))
-                self.spec_frame.Layout()
-                self.spec_frame.spec_grid.AutoSize()
+        self.spec_frame.spec_grid.AutoSize()
+        w, h = self.spec_frame.spec_grid.GetClientSize()
+        self.spec_frame.SetSize((w + 16, h + 39 + 20 +16))
         self.project['spec_dat'] = pandas.DataFrame(
             numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
         self.project['spec_dat'].columns = ["id", "target", "spf", "name"]
