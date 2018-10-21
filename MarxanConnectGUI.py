@@ -33,8 +33,6 @@ import gui
 # import MarxanConnect python module
 import marxanconpy
 
-MarxanConnectVersion = 'v0.1.2'
-
 os.environ["UBUNTU_MENUPROXY"]="0"
 
 # define wildcards
@@ -44,6 +42,9 @@ wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
 
 if len(sys.argv) > 1:
     os.chdir(os.path.dirname(sys.argv[0]))
+
+with open('VERSION') as version_file:
+    MarxanConnectVersion = version_file.read().strip()
 
 class MarxanConnectGUI(gui.MarxanConnectGUI):
     def __init__(self, parent):

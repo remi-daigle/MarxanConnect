@@ -27,7 +27,3 @@ zip: exe
 	cd MarxanConnect/; \
 	zip -r ../MarxanConnect.zip *; \
 	cd ..
-	# creates the Marxan Connect .zip folder
-	cd marxanconpy/; \
-	zip -r ../marxanconpy.zip *; \
-	cd ..

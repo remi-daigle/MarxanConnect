@@ -3,7 +3,9 @@ import sys
 import os
 from cx_Freeze import setup, Executable
 import re
-import MarxanConnectGUI
+
+with open('VERSION') as version_file:
+    MarxanConnectVersion = version_file.read().strip()
 
 # Read in the gui.py file to remove deprecated functions
 with open('gui.py', 'r', encoding="utf8") as file :
@@ -14,7 +16,7 @@ filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
 filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
 filedata = filedata.replace('wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )',
 'wx.html2.WebView.New( self.connectivityMetrics)')
-filedata = re.sub('Marxan Connect v.....', 'Marxan Connect ' + MarxanConnectGUI.MarxanConnectVersion, filedata)
+filedata = re.sub('Marxan Connect v.....', 'Marxan Connect ' + MarxanConnectVersion, filedata)
 
 # Write the file out again
 with open('gui.py', 'w', encoding="utf8") as file:
@@ -25,8 +27,8 @@ with open('WindowsSetupBuilder.iss', 'r', encoding="utf8") as file :
   filedata = file.read()
 
 # Replace the target string
-filedata = re.sub('#define MyAppVersion "v....."', '#define MyAppVersion "' + MarxanConnectGUI.MarxanConnectVersion + '"',filedata)
-filedata = re.sub('OutputBaseFilename=MarxanConnect-v.....-windows-setup', 'OutputBaseFilename=MarxanConnect-' + MarxanConnectGUI.MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
+filedata = re.sub('#define MyAppVersion "v....."', '#define MyAppVersion "' + MarxanConnectVersion + '"',filedata)
+filedata = re.sub('OutputBaseFilename=MarxanConnect-v.....-windows-setup', 'OutputBaseFilename=MarxanConnect-' + MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
 
 # Write the file out again
 with open('WindowsSetupBuilder.iss', 'w', encoding="utf8") as file:
@@ -61,7 +63,7 @@ if os.name=='nt':
         base = 'Win32GUI'
 
     setup(name = 'MarxanConnectGUI',
-          version = MarxanConnectGUI.MarxanConnectVersion.replace("v",""),
+          version = MarxanConnectVersion.replace("v",""),
           description = '' ,
           options = {'build_exe': build_exe_options},
           executables = [Executable('MarxanConnectGUI.py', base=base, icon=os.path.join(sys.path[0],'docs','images','icon_bundle.ico'))])
@@ -76,7 +78,7 @@ else:
     mac_options = {'iconfile': os.path.join(sys.path[0],'docs','images', 'icon_mac.icns')}
 
     setup(name='MarxanConnectGUI',
-          version = MarxanConnectGUI.MarxanConnectVersion,
+          version = MarxanConnectVersion,
           description='',
           options={'build_exe': build_exe_options,
                    'bdist_mac': mac_options},
