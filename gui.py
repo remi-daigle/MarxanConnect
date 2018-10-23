@@ -245,7 +245,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -325,7 +325,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_rescaleRadioBox.SetSelection( 0 )
 		demo_radio_sizer.Add( self.demo_rescaleRadioBox, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 		
-		demo_rescale_edgeRadioBoxChoices = [ u"Proportional to overlap", u"Assume homogenous connectivity" ]
+		demo_rescale_edgeRadioBoxChoices = [ u"Proportional to overlap", u"Assume homogeneous connectivity" ]
 		self.demo_rescale_edgeRadioBox = wx.RadioBox( self.demographic, wx.ID_ANY, u"Rescaling edge handling", wx.DefaultPosition, wx.DefaultSize, demo_rescale_edgeRadioBoxChoices, 1, wx.RA_SPECIFY_COLS )
 		self.demo_rescale_edgeRadioBox.SetSelection( 0 )
 		demo_radio_sizer.Add( self.demo_rescale_edgeRadioBox, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
@@ -989,7 +989,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
 		
-		self.metric_definition_html = wx.html2.WebView.New( self.connectivityMetrics)
+		self.metric_definition_html = wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )
 		metric_help_sizer.Add( self.metric_definition_html, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
@@ -1440,7 +1440,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
 		self.marxanAnalysis = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		marxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		marxanMainSizer.AddGrowableCol( 0 )
@@ -1561,7 +1561,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		inputdat_symmRadioChoices = [ u"Asymmetric", u"Symmetric" ]
 		self.inputdat_symmRadio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Linkage Definition Type", wx.DefaultPosition, wx.DefaultSize, inputdat_symmRadioChoices, 2, wx.RA_SPECIFY_COLS )
-		self.inputdat_symmRadio.SetSelection( 0 )
+		self.inputdat_symmRadio.SetSelection( 1 )
 		inputdat_symmRadio_sizer.Add( self.inputdat_symmRadio, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 		
 		
@@ -2692,7 +2692,7 @@ class GettingStarted ( wx.Frame ):
 		
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Beger, M. 2018. Marxan Connect v0.1.2. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, A; McGowan, J; Treml, EA; Kuempel, C; Possingham, H; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 		
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
