@@ -78,8 +78,13 @@ It also assumes you have all the pre-requisite python modules installed to build
 
 ```{bash, eval=FALSE}
 #!/bin/bash
-conda create --name marcon -cconda-forge wxpython matplotlib geopandas descartes shapely pandas numpy basemap
+
+conda create --name marcon -c conda-forge wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
+# line 155 of basemap's __init__ file may need to change to "pyproj_datadir = pyproj.pyproj_datadir"
+# without quotes if you get the dreaded "PROJ_LIB" error
+
 source activate marcon
+
 pip install python-igraph # on windows you may need to install via wheel https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
 pip install cx_Freeze marxanconpy
 ```
