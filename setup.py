@@ -48,7 +48,7 @@ if os.name=='nt':
     build_exe_options = {'includes': ['numpy.core._methods', 'numpy.lib.format','matplotlib.backends.backend_qt5agg',
                                       'matplotlib.backends.backend_tkagg','tkinter','tkinter.filedialog','igraph',
                                       'igraph.vendor.texttable'],
-                         'include_files': ['gui.py', 'docs/',
+                         'include_files': ['gui.py', 'VERSION', 'docs/',
                                            # os.path.join(os.environ['LOCALAPPDATA'],
                                            #              'Programs','Python','Python35','DLLs','tcl86t.dll'),
                                            # os.path.join(os.environ['LOCALAPPDATA'],
@@ -61,6 +61,12 @@ if os.name=='nt':
     base = None
     if sys.platform == 'win32':
         base = 'Win32GUI'
+        print('PYTHON_INSTALL_DIR')
+        DLLS_FOLDER = os.path.join(os.environ['ALLUSERSPROFILE'],'Anaconda3', 'Library', 'bin')
+        
+        dependencies = ['libiomp5md.dll', 'mkl_core.dll', 'mkl_def.dll', 'mkl_intel_thread.dll']
+        for dependency in dependencies:
+            build_exe_options['include_files'].append(os.path.join(DLLS_FOLDER, dependency))
 
     setup(name = 'MarxanConnectGUI',
           version = MarxanConnectVersion.replace("v",""),

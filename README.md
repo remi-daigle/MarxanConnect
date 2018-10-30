@@ -79,24 +79,22 @@ It also assumes you have all the pre-requisite python modules installed to build
 
 ```bash
 #!/bin/bash
-# for basic GUI
-pip install marxanconpy
-pip install wxpython
-pip install matplotlib
-# matplotlib.basemap see https://matplotlib.org/basemap/users/installing.html
-pip install geopandas
-pip install descartes
-pip install python-igraph
-pip install shapely
-pip install pandas
-pip install numpy
-
-# for compiling executable
-pip install cx_Freeze
+conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy basemap
+source activate marcon
+pip install python-igraph # on windows you may need to install via wheel https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
+pip install cx_Freeze marxanconpy
 ```
 
 As well as pre-requesite R packages to build the website, *i.e.*:
 
+
+```r
+if(!require("rmarkdown")) install.packages("rmarkdown")
+```
+
+```
+## Loading required package: rmarkdown
+```
 
 ```r
 if(!require("sf")) install.packages("sf")
