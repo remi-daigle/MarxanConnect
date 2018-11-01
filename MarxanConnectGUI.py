@@ -56,7 +56,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        self.log = LogForm(parent=self)
+        # self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -106,9 +106,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
     def set_icon(self, frame):
         # set the icon
         icons = wx.IconBundle()
+        print(os.path.dirname(sys.path[0]))
         for sz in [16, 32, 48, 96, 256]:
             try:
-                icon = wx.Icon(os.path.join(sys.path[0], 'docs' , 'images' , 'icon_bundle.ico'),
+                icon = wx.Icon(os.path.join(os.path.dirname(sys.path[0]), 'docs' , 'images' , 'icon_bundle.ico'),
                                wx.BITMAP_TYPE_ICO,
                                desiredWidth=sz,
                                desiredHeight=sz)
@@ -2235,7 +2236,7 @@ class GettingStarted (wx.Frame):
         gui.GettingStarted.__init__(self, parent)
         # set the icon
         parent.set_icon(frame=self)
-        self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL|wx.STAY_ON_TOP)
+        self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL)
 
 # ########################### file popup viewer #####################################################################
 

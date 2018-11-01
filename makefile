@@ -12,10 +12,12 @@ web: docs/index.Rmd docs/glossary.Rmd docs/tutorial.Rmd docs/CONTRIBUTING.Rmd
 	pandoc docs/glossary.md -o docs/glossary_webtex.html --section-divs --standalone --bibliography='docs/references.bib' --webtex; \
 	rm docs/glossary.md
 
-exe: gui.py MarxanConnectGUI.py setup.py
+exe: gui.py MarxanConnectGUI.py
     # builds the executable
-	rm -rf MarxanConnect/; \
-	python setup.py build; 
+	# rm -rf MarxanConnect/; \
+	# python setup.py build;
+	pyinstaller MarxanConnectGUI.spec -y --clean --windowed;\
+	./dist/MarxanConnectGUI/MarxanConnectGUI.exe
 
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
