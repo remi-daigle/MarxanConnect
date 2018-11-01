@@ -56,7 +56,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -104,12 +104,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # self.load_project_function()
 
     def set_icon(self, frame):
+        if sys.path[0].endswith('.zip'):
+            rootpath = os.path.dirname(sys.path[0])
+        else:
+            rootpath = sys.path[0]
+
         # set the icon
         icons = wx.IconBundle()
-        print(os.path.dirname(sys.path[0]))
         for sz in [16, 32, 48, 96, 256]:
             try:
-                icon = wx.Icon(os.path.join(os.path.dirname(sys.path[0]), 'docs' , 'images' , 'icon_bundle.ico'),
+                icon = wx.Icon(os.path.join(rootpath, 'docs' , 'images' , 'icon_bundle.ico'),
                                wx.BITMAP_TYPE_ICO,
                                desiredWidth=sz,
                                desiredHeight=sz)

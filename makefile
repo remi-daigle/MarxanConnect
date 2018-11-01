@@ -16,8 +16,10 @@ exe: gui.py MarxanConnectGUI.py
     # builds the executable
 	# rm -rf MarxanConnect/; \
 	# python setup.py build;
-	pyinstaller MarxanConnectGUI.spec -y --clean --windowed;\
-	./dist/MarxanConnectGUI/MarxanConnectGUI.exe
+	rm -rf build
+	rm -rf dist
+	pyinstaller setup.spec -y --clean --windowed --icon=docs/images/icon_bundle.ico;\
+	./dist/MarxanConnect/MarxanConnectGUI.exe
 
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
@@ -26,6 +28,6 @@ win: exe WindowsSetupBuilder.iss
 zip: exe
 	rm -rf MarxanConnect.zip; \
     # creates the Marxan Connect .zip folder
-	cd MarxanConnect/; \
-	zip -r ../MarxanConnect.zip *; \
-	cd ..
+	cd dist/MarxanConnect/; \
+	zip -r ../../MarxanConnect.zip *; \
+	cd ../..
