@@ -19,7 +19,6 @@ exe: gui.py MarxanConnectGUI.py
 	rm -rf build
 	rm -rf dist
 	pyinstaller setup.spec -y --clean --windowed --icon=docs/images/icon_bundle.ico;\
-	./dist/MarxanConnect/MarxanConnectGUI.exe
 
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
