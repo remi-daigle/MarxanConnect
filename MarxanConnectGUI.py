@@ -1444,67 +1444,75 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Rescales the connectivity matrix to match the scale of the planning units
         """
-        marxanconpy.warn_dialog(message="Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
-                         " if the rescaling is ecologically valid. We recommend acquiring connectivity data at the same"
-                         " scale as the planning unit")
+        try:
+            marxanconpy.warn_dialog(message="Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
+                             " if the rescaling is ecologically valid. We recommend acquiring connectivity data at the same"
+                             " scale as the planning unit")
 
-        self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
-                                      filepath=self.project['filepaths']['demo_cu_cm_filepath'])
-        self.temp = {}
-        # create dict entry for connectivityMetrics
+            self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+                                          filepath=self.project['filepaths']['demo_cu_cm_filepath'])
+            self.temp = {}
+            # create dict entry for connectivityMetrics
 
-        if 'connectivityMetrics' not in self.project:
+            if 'connectivityMetrics' not in self.project:
 
-            self.project['connectivityMetrics'] = {}
+                self.project['connectivityMetrics'] = {}
 
-        self.temp['demo_pu_conmat'] = marxanconpy.spatial.rescale_matrix(
-            self.project['filepaths']['pu_filepath'],
-            self.project['filepaths']['pu_file_pu_id'],
-            self.project['filepaths']['demo_cu_filepath'],
-            self.project['filepaths']['demo_cu_file_pu_id'],
-            self.project['filepaths']['demo_cu_cm_filepath'],
-            matrixformat=self.project['options']['demo_conmat_format'],
-            edge=self.project['options']['demo_conmat_rescale_edge'],
-            progressbar=self.project['options']['demo_pu_cm_progress'])
+            self.temp['demo_pu_conmat'] = marxanconpy.spatial.rescale_matrix(
+                self.project['filepaths']['pu_filepath'],
+                self.project['filepaths']['pu_file_pu_id'],
+                self.project['filepaths']['demo_cu_filepath'],
+                self.project['filepaths']['demo_cu_file_pu_id'],
+                self.project['filepaths']['demo_cu_cm_filepath'],
+                matrixformat=self.project['options']['demo_conmat_format'],
+                edge=self.project['options']['demo_conmat_rescale_edge'],
+                progressbar=self.project['options']['demo_pu_cm_progress'])
 
-        if self.demo_matrixFormatRadioBox.GetStringSelection() == "Edge List with Time":
-            self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
-                self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
-                                                                           var_name='id2',
-                                                                           value_name='value').to_json(
-                orient='split')
-            self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
-                self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(
-                orient='split')
-            pandas.read_json(self.temp['demo_pu_conmat_time'],
-                             orient='split').to_csv(
-                self.project['filepaths']['demo_pu_cm_filepath'],
-                index=False, header=True, sep=",")
-            pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
-                str.replace(self.project['filepaths']['demo_pu_cm_filepath'], '.csv',
-                            '_mean_of_times.csv'),
-                index=True, header=True, sep=",")
+            if self.demo_matrixFormatRadioBox.GetStringSelection() == "Edge List with Time":
+                self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
+                    self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
+                                                                               var_name='id2',
+                                                                               value_name='value').to_json(
+                    orient='split')
+                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
+                    self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(
+                    orient='split')
+                pandas.read_json(self.temp['demo_pu_conmat_time'],
+                                 orient='split').to_csv(
+                    self.project['filepaths']['demo_pu_cm_filepath'],
+                    index=False, header=True, sep=",")
+                pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
+                    str.replace(self.project['filepaths']['demo_pu_cm_filepath'], '.csv',
+                                '_mean_of_times.csv'),
+                    index=True, header=True, sep=",")
 
-        else:
-            self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
-            pandas.read_json(self.temp['demo_pu_conmat'],
-                             orient='split').to_csv(
-                self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+            else:
+                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
+                pandas.read_json(self.temp['demo_pu_conmat'],
+                                 orient='split').to_csv(
+                    self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+        except:
+            self.log.Show()
+            raise
 
     def on_land_generate_button(self, event):
-        self.temp = {}
-        self.temp['land_pu_conmat'] = marxanconpy.spatial.habitatresistance2conmats(
-            buff=float(self.project['options']['land_hab_buff']),
-            hab_filepath=self.project['filepaths']['land_cu_filepath'],
-            hab_id=self.project['filepaths']['land_cu_file_hab_id'],
-            res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
-            pu_filepath=self.project['filepaths']['pu_filepath'],
-            pu_id=self.project['filepaths']['pu_file_pu_id'],
-            res_type=self.project['options']['land_res_matrixType'],
-            progressbar=self.land_PU_CM_progress.GetValue())
+        try:
+            self.temp = {}
+            self.temp['land_pu_conmat'] = marxanconpy.spatial.habitatresistance2conmats(
+                buff=float(self.project['options']['land_hab_buff']),
+                hab_filepath=self.project['filepaths']['land_cu_filepath'],
+                hab_id=self.project['filepaths']['land_cu_file_hab_id'],
+                res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
+                pu_filepath=self.project['filepaths']['pu_filepath'],
+                pu_id=self.project['filepaths']['pu_file_pu_id'],
+                res_type=self.project['options']['land_res_matrixType'],
+                progressbar=self.land_PU_CM_progress.GetValue())
 
-        pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
-            self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")
+            pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
+                self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")
+        except:
+            self.log.Show()
+            raise
 
     def on_resistance_mat_customize(self, event):
         file_viewer(parent=self, file=self.project['filepaths']['land_res_mat_filepath'],
