@@ -217,6 +217,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.spatial = {}
         self.project = marxanconpy.marcon.load_project(self.project['filepaths']['projfile'])
         marxanconpy.marcon.validate_project(self.project)
+        frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
         if 'MarxanConnect' in self.project['version']:
             if self.project['version']['MarxanConnect'] != MarxanConnectVersion:
                 print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
