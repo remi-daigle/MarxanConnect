@@ -358,6 +358,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
         self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
 
+        # Post-Hoc
+        self.postHoc_file.SetPath(self.project['filepaths']['posthoc'])
+
         # Export plot data
         self.PUSHP_file.SetPath(self.project['filepaths']['pushp'])
         self.PUCSV_file.SetPath(self.project['filepaths']['pucsv'])
@@ -2000,6 +2003,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
 
+        if not os.path.isdir(self.temp['OUTPUTDIR']):
+            self.temp['OUTPUTDIR'] = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),
+                                                  self.temp['OUTPUTDIR'])
+
         for self.temp['file'] in range(self.temp['NUMREPS']):
             self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'],
                                            self.temp['SCENNAME'] + "_r" + "%05d" % (self.temp['file'] + 1) + ".txt")
@@ -2092,7 +2099,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # solution = pandas.read_csv("C://Users//daigl//Documents//GitHub//MarxanConnect//docs//tutorial//CF_demographic//output//connect_best.txt")
         solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
                                                               self.postHoc_output_choice.GetStringSelection())
-        postHoc = marxanconpy.manipulation.calc_postHoc(filename,
+        postHoc = marxanconpy.posthoc.calc_postHoc(filename,
                                                         format,
                                                         IDs=solution.iloc[:,0].values,
                                                         selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
@@ -2142,6 +2149,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                       ["r" + "%05d" % t for t in range(1, NUMREPS)])
             self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
             self.postHoc_output_choice.SetSelection(0)
+
+    def on_postHoc_file(self,event):
+        self.project['filepaths']['posthoc'] = self.postHoc_file.GetPath()
 
 
 # ###########################  spec grid popup functions ###############################################################

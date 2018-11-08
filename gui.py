@@ -1694,7 +1694,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		
 		pudat_file_sizer1.Add( self.postHoc_export_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 		
-		self.postHoc_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.csv", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.postHoc_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		pudat_file_sizer1.Add( self.postHoc_file, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		
