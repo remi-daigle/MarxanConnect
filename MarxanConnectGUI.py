@@ -1625,6 +1625,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
                 # export conservation features
                 cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
+                try:
+                    cf['pu'] = cf['pu'].astype('int').astype('str')
+                except:
+                    cf['pu'] = cf['pu'].astype('str')
                 cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
                 cf = pandas.merge(cf, spec, how='outer', on='name')
                 cf = cf.rename(columns={'id': 'species'}).sort_values(['pu', 'species'])
@@ -1636,6 +1640,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 # append
                 old_spec = marxanconpy.read_csv_tsv(self.project['filepaths']['spec_filepath'])
                 old_cf = marxanconpy.read_csv_tsv(self.project['filepaths']['cf_filepath'])
+                try:
+                    old_cf['pu'] = old_cf['pu'].astype('int').astype('str')
+                    print("try")
+                except:
+                    print("except")
+                    old_cf['pu'] = old_cf['pu'].astype('str')
 
                 # append spec
                 new_spec = spec.copy()
@@ -1648,6 +1658,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 # append conservation features
                 new_cf = cf.copy()
                 new_cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
+                try:
+                    new_cf['pu'] = new_cf['pu'].astype('int').astype('str')
+                except:
+                    new_cf['pu'] = new_cf['pu'].astype('str')
+
                 new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
                 new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
                 new_cf = new_cf.rename(columns={'id': 'species'})
