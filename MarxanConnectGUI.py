@@ -40,10 +40,14 @@ wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
             "All files (*.*)|*.*"
 
 
-if len(sys.argv) > 1:
-    os.chdir(os.path.dirname(sys.argv[0]))
+if getattr(sys, 'frozen', False):
+    MCPATH = os.path.dirname(sys.executable)
+elif __file__:
+    MCPATH = os.path.dirname(__file__)
 
-with open('VERSION') as version_file:
+os.chdir(MCPATH)
+
+with open(os.path.join(MCPATH, 'VERSION')) as version_file:
     MarxanConnectVersion = version_file.read().strip()
 
 class MarxanConnectGUI(gui.MarxanConnectGUI):
@@ -63,7 +67,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # set posthoc page off by default
         self.posthocdefault = False
-        self.on_posthoc(event = None)
+        self.on_posthoc(event=None)
 
         # set MwZ option off by default
         self.mwzdefault = False
@@ -90,7 +94,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = str(sys.argv[1])
             self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
-            self.load_project_function()
+            self.load_project_function(launch=True)
         else:
             # launch a blank new project
             self.on_new_project(event=None, launch=True)
@@ -172,7 +176,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.workingdirectory = dlg.GetDirectory()
                 with open(self.project['filepaths']['projfile'], 'w') as fp:
                     json.dump(self.project, fp, indent=4, sort_keys=True)
-                frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+                frame.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
             dlg.Destroy()
 
         # set default file paths in GUI
@@ -213,11 +217,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg.Destroy()
         self.load_project_function()
 
-    def load_project_function(self):
+    def load_project_function(self,launch=False):
         self.spatial = {}
         self.project = marxanconpy.marcon.load_project(self.project['filepaths']['projfile'])
         marxanconpy.marcon.validate_project(self.project)
-        frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+        if not launch:
+            frame.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
+        else:
+            self.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
+
         if 'MarxanConnect' in self.project['version']:
             if self.project['version']['MarxanConnect'] != MarxanConnectVersion:
                 print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
@@ -259,8 +267,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices("pre-eval")
 
     def set_GUI_options(self):
-        # self.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
-
         # set default options
         self.fa_status_radioBox.SetStringSelection(self.project['options']['fa_status'])
         self.aa_status_radioBox.SetStringSelection(self.project['options']['aa_status'])
@@ -432,7 +438,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.set_metric_options()
             self.save_project_gui()
         dlg.Destroy()
-        frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+        frame.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
     def save_project_gui(self):
         projfile = self.project['filepaths']['projfile']
@@ -468,7 +474,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         with open('LICENSE', 'r', encoding="utf8") as file:
             filedata = file.read()
         dlg = wx.MessageBox(message=filedata,
-                            caption="Marxan with Connectivity License",
+                            caption="Marxan Connect License",
                             style=wx.OK)
         dlg.Destroy()
 
@@ -478,7 +484,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                     "\n Running marxanconpy: " +
                                     marxanconpy.__version__ +
                                     "\n(C) 2017 Remi Daigle\n",
-                            caption="About Marxan with Connectivity",
+                            caption="About Marxan Connect",
                             style=wx.OK)
         dlg.Destroy()
 
@@ -1602,7 +1608,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         spec = {}
         for type in ['spec_demo_pu','spec_land_pu']:
             if type in self.project['connectivityMetrics']:
-                for k in self.project['connectivityMetrics'][type].keys():
+                metrics = list(self.project['connectivityMetrics'][type])
+                approved = ['discrete']
+                metrics[:] = [m for m in metrics if any(a in m for a in approved)]
+                for k in metrics:
                     cf[k] = self.project['connectivityMetrics'][type].copy().pop(k)
 
         spec = pandas.read_json(self.project['spec_dat'], orient='split')
@@ -1815,7 +1824,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
                                            type=self.get_plot_type(
                                                selection=self.preEval_metric_shp_choice.GetStringSelection()))
-        
+
         # get the 'from' for discretization
         if 'spec_' + type in self.project['connectivityMetrics']:
             self.temp['metric'] = numpy.array(self.project['connectivityMetrics']['spec_' + type][metric_type])
@@ -1873,22 +1882,22 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.temp['to'] = float(self.preEval_discrete_to_value_txtctrl.GetValue())
             self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
 
-        
+
         # create new metric
         self.temp['new_metric'] = (self.temp['metric']>=self.temp['from']) & (self.temp['metric']<=self.temp['to']).astype(int)
         if self.preEval_status_radio.GetStringSelection() == "Status-quo":
             self.project['connectivityMetrics']['spec_' + type][
-            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type']] = self.temp[
+            metric_type + '_discrete_' + self.temp['from_type'] + '_to_' + self.temp['to_type']] = self.temp[
             'new_metric'].tolist()
         if self.preEval_status_radio.GetStringSelection() == "Locked out":
             self.project['connectivityMetrics']['spec_' + type][
-            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockout'] = self.temp[
+            metric_type + '_discrete_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockout'] = self.temp[
             'new_metric'].tolist()
         if self.preEval_status_radio.GetStringSelection() == "Locked in":
             self.project['connectivityMetrics']['spec_' + type][
-            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockin'] = self.temp[
+            metric_type + '_discrete_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockin'] = self.temp[
             'new_metric'].tolist()
-        
+
         # reset choices
         self.lock_pudat(self.project['filepaths']['pudat_filepath'])
         self.colormap_shapefile_choices()
@@ -2106,7 +2115,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                         selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
 
         print(postHoc)
-
+        Cols = self.postHoc_grid.GetNumberCols()
+        Rows = self.postHoc_grid.GetNumberRows()
+        if Cols > 0 or Rows > 0:
+            self.postHoc_grid.DeleteCols(0, Cols, True)
+            self.postHoc_grid.DeleteRows(0, Rows, True)
         for col, label in enumerate(postHoc.columns):
             if not col == 0:
                 self.postHoc_grid.AppendCols()
@@ -2178,28 +2191,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             marxanconpy.warn_dialog(message="'Planning Units' not selected for metric calculations.")
             return
 
-        excluded = ('aa_recipients',
-                    'between_cent',
-                    'conn_boundary',
-                    'eig_vect_cent',
-                    'fa_donors',
-                    'fa_recipients',
-                    'google',
-                    'in_degree',
-                    'inflow',
-                    'local_retention',
-                    'min_plan_graph',
-                    'out_degree',
-                    'outflow',
-                    'self_recruit',
-                    'stochasticity')
-
-
         for self.type in self.all_types:
             metrics=list(self.project['connectivityMetrics']['spec_' + self.type])
-            for continuous in excluded:
-                if continuous+"_"+self.type in metrics:
-                    metrics.remove(continuous+"_"+self.type)
+            approved = ['discrete']
+            metrics[:] = [m for m in metrics if any(a in m for a in approved)]
 
             self.spec_frame.keys = metrics
 
