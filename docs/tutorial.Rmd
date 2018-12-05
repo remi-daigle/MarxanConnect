@@ -97,11 +97,11 @@ We've provided a limited set of workflow examples designed to demonstrate some o
 
 - [Using the conservation features approach using demographic-based data](./CF_demographic.html)
 
-- [Using the conservation features approach using landscape-based data](./CF_landscape.html)
-
-- [Using the spatial dependencies approach using demographic-based data](./CSD_demographic.html)
-
 - [Using the spatial dependencies approach using landscape-based data](./CSD_landscape.html)
+
+- [Using the spatial dependencies approach using demographic-based data](./CSD_demographic.html) (in-development)
+
+- [Using the conservation features approach using landscape-based data](./CF_landscape.html) (in-development)
 
 - [Setting targets and post-hoc evaluation](./targets.html)
 

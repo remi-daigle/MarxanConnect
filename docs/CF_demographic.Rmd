@@ -2,7 +2,6 @@
 title: "Tutorial"
 output:
   html_document: 
-    number_sections: yes
     code_folding: hide
     toc: yes
     toc_float: yes
