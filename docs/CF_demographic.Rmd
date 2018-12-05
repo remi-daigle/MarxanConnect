@@ -14,6 +14,7 @@ bibliography: references.bib
 The following section provides an example of a possible workflow using **demographic** connectivity data used as a **conservation feature**. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid.
 
 ```{r load packages,message=FALSE, warning=FALSE}
+# The maps and plots shown in this tutorial were created in R using the shapefile exported from the "Plotting Options" tab of Marxan Connect. The R code used to make the plots can be revealed by clicking on the `Code` button below
 
 library(sf)
 
@@ -31,7 +32,7 @@ proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0
 
 ```
 
-# Demographic data using Conservation Features
+# Input Data
 
 Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/docs/tutorial/CF_demographic). This folder contains the Marxan Connect Project file, the input data, and the output data from this example.
 
@@ -258,7 +259,7 @@ Now we are ready to proceed to the **Connectivity Input** tab.
 
 Since we are working with demographic data, we choose the **Demographic Input** option from the **Choose Connectivity Input Category** dropdown menu. Alternatively, **Landscape Input** could be chosen (see landscape connectivity tutorial (./CSD_landscape.html)). 
 
-On this tab, ensure that the **Connectivity Matrix** refers to the correct file. For this example, this should read **hexFlow.csv**. Since this data the _amount_ of movement between planning units (*i.e.* number of larvae) in a matrix format (*i.e.* a [flow](glossary.html#flow) matrix), we have selected the **Flow** Connectivity Matrix Type and the **Matrix** Format. 
+On this tab, ensure that the **Connectivity Matrix** refers to the correct file. For this example, this should read **hexFlow.csv**. Since this data represents the _amount_ of movement between planning units (*i.e.* number of larvae) in a matrix format (*i.e.* a [flow](glossary.html#flow) matrix), we have selected the **Flow** Connectivity Matrix Type and the **Matrix** Format. 
 
 Additionally, we have chosen the **Identical Grids** option from the **Rescale Connectivity Matrix** menu. This signifies that our connectivity data is on an identical grid as our planning units. If our connectivity data was not on the same grid as our planning units, we could chose to rescale the connectivity matrix, which essentially does a spatial averaging routine to calculate connectivity on the planning unit grid. If rescaling is chosen, the user needs to decide whether to rescale the connectivity data proportional to the overlap or to assume homogeneous connectivity. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, does the user want the connectivity value to be taken from a spatial average across that planning unit (i.e. the connectivity value of that planning unit would then be 5) or be considered homogenous across the planning unit (i.e. a connectivity value of 10).
 
@@ -278,7 +279,7 @@ Once you have selected a demographic conservation feature press **Calculate Metr
 
 ## Pre-Evaluation
 
-This page allows you to evaluate the metrics created on the **Connectivity Metrics** tab in more detail. It also allows you to choose how you would like to create the connectivity metrics file for further analysis. In this example, we've chosen to append the new connectivity based conservation metrics to the existing Marxan files by selecting **Append**  under the Metrics option box.
+This page allows you to evaluate the metrics created on the **Connectivity Metrics** tab in more detail. It also allows you to choose how you would like to transform the continuous connectivity metrics into conservation features for further analysis. To discretize the continuous metric, we've chosen the median of the continuous metric Google PageRank as lower threshold and the maximum value as the upper threshold. We are setting a target of 50% for this new discrete conservation feature, which means we are aiming to protect half of the planning units which had a Google PageRank score above the median.  In this example, we append the new connectivity based conservation metrics to the existing Marxan files by selecting **Append**  under the Metrics option box.
 
  ![**Figure 6:** *Pre-Evaluation tab .*\label{workflow}](images/Pre_Eval_tab_demographic.png)
 
@@ -491,3 +492,5 @@ showGroup("select_freq")
 ```
 
 ## Plotting Options
+
+Here the users can plot up to two layers of input or output data on a built in basemap (provided by the [basemap](https://matplotlib.org/basemap/) package). The tab allows users to choose a few basic color, transparency, and legend positioning options, but this tab also allows users to export the output data in various formats to provide further plotting or analysis options.
