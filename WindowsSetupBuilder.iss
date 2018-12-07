@@ -4,7 +4,7 @@
 #define MyAppName "Marxan Connect"
 #define MyAppVersion "v0.1.2"
 #define MyAppPublisher "Canadian Healthy Oceans Network"
-#define MyAppURL "https://github.com/remi-daigle/MarxanConnect"
+#define MyAppURL "http://marxanconnect.ca/"
 #define MyAppExeName "MarxanConnectGUI.exe"
 
 [Setup]
@@ -24,11 +24,13 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\LICENSE
 OutputDir=C:\Users\daigl\Documents\GitHub\MarxanConnect
-OutputBaseFilename=MarxanConnect-v0-1-2-windows-setup
+OutputBaseFilename=MarxanConnect-v0-1-2-rc2018-12-06-20-rc2018-12-06-20-windows-setup
 SetupIconFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\images\icon_bundle.ico
 Compression=lzma
 SolidCompression=yes
 AlwaysRestart=True
+UsePreviousAppDir=False
+DisableDirPage=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -58,3 +60,6 @@ Root: HKCR; SubKey: "MarxanConnectProject"; ValueType: string; ValueData: "Marxa
 Root: HKCR; SubKey: "MarxanConnectProject\Shell\Open\Command"; ValueType: string; ValueData: """{app}\MarxanConnectGUI.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; Subkey: "MarxanConnectProject\DefaultIcon"; ValueType: string; ValueData: "{app}\MarxanConnectGUI.exe,0"; Flags: uninsdeletevalue
 
+[Messages]
+DirExists=The folder: %1 already exists. %n%nTo avoid conflicts, it is recommended that you uninstall any previous versions of Marxan Connect before re-installing the program. Alternatively, you may choose a new folder location on the previous page to install in another location. %n%nWould you like to install Marxan Connect to this folder anyway? Proceed at your own risk: answering "yes" below will likely result in errors.
+DirExistsTitle=Warning: Folder Exists
