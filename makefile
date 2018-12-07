@@ -1,6 +1,14 @@
+v=`cat VERSION`
+rc=`date +%Y.%m.%d.%H`
+$(shell cat VERSION | cut -f1 -d"-" > VERSION)
+
 all: web win zip
     # creates the website and builds the executable, creates the Windows installers, and the .zip folder
-
+	
+daily:
+	# verify that "daily build" versioning is removed or included
+	echo ${v}-rc${rc} > VERSION;
+	
 web: docs/index.Rmd docs/glossary.Rmd docs/tutorial.Rmd docs/CONTRIBUTING.Rmd
     # creates the website
 	rm -rf docs/site_libs; \
