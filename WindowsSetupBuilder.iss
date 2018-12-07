@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Marxan Connect"
-#define MyAppVersion "v0.1.2"
+#define MyAppVersion "v0.1.2-rc2018.12.06.20-rc2018.12.06.20"
 #define MyAppPublisher "Canadian Healthy Oceans Network"
 #define MyAppURL "http://marxanconnect.ca/"
 #define MyAppExeName "MarxanConnectGUI.exe"
