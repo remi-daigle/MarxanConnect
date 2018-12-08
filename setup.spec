@@ -18,7 +18,7 @@ filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
 filedata = filedata.replace('wx.HL_DEFAULT_STYLE', 'wx.adv.HL_DEFAULT_STYLE')
 filedata = filedata.replace('wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )',
 'wx.html2.WebView.New( self.connectivityMetrics)')
-filedata = re.sub('Marxan Connect v.....', 'Marxan Connect ' + MarxanConnectVersion, filedata)
+filedata = re.sub(r'Marxan Connect v.*\. https', 'Marxan Connect ' + MarxanConnectVersion +'. https', filedata)
 
 # Write the file out again
 with open('gui.py', 'w', encoding="utf8") as file:
@@ -29,8 +29,8 @@ with open('WindowsSetupBuilder.iss', 'r', encoding="utf8") as file :
   filedata = file.read()
 
 # Replace the target string
-filedata = re.sub('#define MyAppVersion "v....."', '#define MyAppVersion "' + MarxanConnectVersion + '"',filedata)
-filedata = re.sub('OutputBaseFilename=MarxanConnect-v.....-windows-setup', 'OutputBaseFilename=MarxanConnect-' + MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
+filedata = re.sub(r'#define MyAppVersion "v.*"', '#define MyAppVersion "' + MarxanConnectVersion + '"',filedata)
+filedata = re.sub(r'OutputBaseFilename=MarxanConnect-v.*-windows-setup', 'OutputBaseFilename=MarxanConnect-' + MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
 
 # Write the file out again
 with open('WindowsSetupBuilder.iss', 'w', encoding="utf8") as file:
