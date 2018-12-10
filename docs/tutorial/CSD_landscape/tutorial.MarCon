@@ -1334,6 +1334,7 @@
         "map": "C:\\Program Files (x86)\\MarxanConnect\\map.png",
         "marxan_dir": "C:\\Users\\Remi-Work\\Desktop\\MarxanConnect\\Marxan243",
         "marxan_input": "~\\input_connect.dat",
+        "posthoc": "~\\posthoc.csv",
         "projfile": "~\\tutorial.MarCon",
         "projfilename": "tutorial.MarCon",
         "pu_file_pu_id": "FID",
@@ -1393,6 +1394,7 @@
         "land_pu_cm_progress": true,
         "land_res_matrixType": "Euclidean Distance",
         "map_filecheck": false,
+        "marxan": "Marxan",
         "marxan_bit": "64-bit",
         "metricsCalculated": true,
         "pucsv_filecheck": true,
@@ -1400,5 +1402,8 @@
         "pushp_filecheck": false
     },
     "spec_dat": "{\"columns\":[\"id\",\"target\",\"spf\",\"name\"],\"index\":[],\"data\":[]}",
-    "version": "v0.1.1"
+    "version": {
+        "MarxanConnect": "v0.1.2-rc2018.12.08.11",
+        "marxanconpy": "v0.1.2b5"
+    }
 }
