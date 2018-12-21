@@ -100,14 +100,11 @@ ENV/
 # mypy
 .mypy_cache/
 .idea*
-toymap.py
-*.exe
 *.bak
 .Rproj.user
 *.Rhistory
 MarOptTotalAreas.csv
 DebugTraceFile_MarOpt.txt
-Marxan243/*
 MarxanConnect.zip
 MarxanConnect/*
 docs/GADM_2.8_AUS_adm0.rds
