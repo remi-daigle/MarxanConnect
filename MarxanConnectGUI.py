@@ -274,6 +274,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
         self.colormap_metric_choices("pre-eval")
+        self.update_discrete_grid()
 
     def set_GUI_options(self):
         # set default options
@@ -1771,7 +1772,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 # append spec
                 new_spec = spec.copy()
                 new_spec['id'] = new_spec['id'] + max(old_spec['id'])
-                pandas.concat([old_spec, new_spec],sort=True).fillna(0.0).to_csv(
+                pandas.concat([old_spec, new_spec],sort=False).fillna(0.0).to_csv(
                     self.project['filepaths']['spec_filepath']
                     , index=0)
                 # append conservation features
@@ -1786,7 +1787,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
                 new_cf = new_cf.rename(columns={'id': 'species'})
                 new_cf = new_cf[new_cf['amount']>0]
-                pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]],sort=True).sort_values(['pu','species']).to_csv(
+                pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]],sort=False).sort_values(['pu','species']).to_csv(
                     self.project['filepaths']['cf_filepath'], index=0)
 
         if not mute:
@@ -2000,11 +2001,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.preEval_discrete_from_percentile.GetValue():
             self.temp['from'] = numpy.percentile(self.temp['metric'],
                                                  self.preEval_discrete_from_percentile_slider.GetValue())
-            self.temp['from_type'] = str(self.temp['from']) + 'th_percentile'
+            self.temp['from_type'] = str(self.preEval_discrete_from_percentile_slider.GetValue()) + 'th_percentile'
 
         if self.preEval_discrete_from_value.GetValue():
             self.temp['from'] = float(self.preEval_discrete_from_value_txtctrl.GetValue())
-            self.temp['from_type'] = str(self.temp['from']) + 'th_percentile'
+            self.temp['from_type'] = str(self.temp['from'])
 
         # get the 'to' for discretization
         if self.preEval_discrete_to_quartile.GetValue():
@@ -2027,11 +2028,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.preEval_discrete_to_percentile.GetValue():
             self.temp['to'] = numpy.percentile(self.temp['metric'],
                                                  self.preEval_discrete_to_percentile_slider.GetValue())
-            self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
+            self.temp['to_type'] = str(self.preEval_discrete_to_percentile_slider.GetValue()) + 'th_percentile'
 
         if self.preEval_discrete_to_value.GetValue():
             self.temp['to'] = float(self.preEval_discrete_to_value_txtctrl.GetValue())
-            self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
+            self.temp['to_type'] = str(self.temp['to'])
 
 
         # create new metric
@@ -2108,20 +2109,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.spec_frame.SetSize((w + 16, h + 39 + 20 + 16))
 
 # ########################## marxan functions ##########################################################################
-#     def on_inedit(self, event):
-    # #         """
-    # #         Starts Inedit (will fail to load file if it is not named input.dat)
-    # #         """
-    # #         if os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe')):
-    # #             if os.path.basename(self.project['filepaths']['marxan_input']) != "input.dat":
-    # #                 marxanconpy.warn_dialog(message="Marxan Inedit will attempt to load 'input.dat' from " + os.path.dirname(
-    # #                     self.project['filepaths'][
-    # #                         'marxan_input']) + "by default. You will have to manually load your file in Inedit")
-    # #             subprocess.call(os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe'),
-    # #                             cwd=os.path.dirname(self.project['filepaths']['marxan_input']))
-    # #         else:
-    # #             marxanconpy.warn_dialog(message="Inedit.exe not found in Marxan Directory. This file is bundled with Marxan (not 'with "
-    # #                              "zones'), please download Inedit.exe or edit input files manually")
 
     def on_generate_inputdat( self, event ):
         """
@@ -2178,8 +2165,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if line.startswith("BOUNDNAME"):
                 if self.project['options']['marxan_bound'] == 'New':
                     line = 'BOUNDNAME ' + os.path.relpath(self.project['filepaths']['bd_filepath'],inputdir) + '\n'
-                else:
+                elif self.project['options']['marxan_bound'] == 'Original':
                     line = 'BOUNDNAME ' + os.path.relpath(self.project['filepaths']['orig_bd_filepath'],inputdir) + '\n'
+                else:
+                    line = '\n'
+
 
             pudat.append(line)
 

@@ -245,7 +245,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -989,7 +989,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
 
-		self.metric_definition_html = wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )
+		self.metric_definition_html = wx.html2.WebView.New( self.connectivityMetrics)
 		metric_help_sizer.Add( self.metric_definition_html, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -1355,7 +1355,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
 		self.exportMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		exportMarxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		exportMarxanMainSizer.AddGrowableCol( 0 )
@@ -1688,8 +1688,8 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		marxan_input_Radio_Sizer.Add( self.marxan_CF, 0, wx.ALL|wx.EXPAND, 5 )
 
-		marxan_boundChoices = [ u"Original", u"New" ]
-		self.marxan_bound = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Spatial Dependencies", wx.DefaultPosition, wx.DefaultSize, marxan_boundChoices, 2, wx.RA_SPECIFY_COLS )
+		marxan_boundChoices = [ u"Original", u"New", u"None" ]
+		self.marxan_bound = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Spatial Dependencies", wx.DefaultPosition, wx.DefaultSize, marxan_boundChoices, 3, wx.RA_SPECIFY_COLS )
 		self.marxan_bound.SetSelection( 1 )
 		self.marxan_bound.SetToolTip( u"Processing speed is typically higher with the 64-bit version of Marxan, but this is only compatible with 64-bit computers. Asymmetric linkage definitions may not be compatible with 32-bit Marxan." )
 
@@ -2960,7 +2960,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2018.12.22.21. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
