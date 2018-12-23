@@ -60,7 +60,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.set_icon(frame=self)
 
         # start up log
-        # self.log = LogForm(parent=self)
+        self.log = LogForm(parent=self)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -274,6 +274,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
         self.colormap_metric_choices("pre-eval")
+        self.on_new_spec()
         self.update_discrete_grid()
 
     def set_GUI_options(self):
@@ -2419,6 +2420,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_new_spec(self):
         self.spec_frame = spec_customizer(parent=self)
+        if self.project['options']['spec_set'] == "Proportion":
+            self.spec_frame.spec_grid.SetColLabelValue(1,"prop")
+        elif self.project['options']['spec_set'] == "Target":
+            self.spec_frame.spec_grid.SetColLabelValue(1, "target")
+
         self.all_types = []
         if self.calc_metrics_pu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
