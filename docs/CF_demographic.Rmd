@@ -282,31 +282,31 @@ This page allows you to evaluate the metrics created on the **Connectivity Metri
 
  ![**Figure 6:** *Pre-Evaluation tab .*\label{workflow}](images/Pre_Eval_tab_demographic.png)
 
-Once the desired options have been chosen, press **Export Files** in the bottom right corner of the screen. This will create two new files (or update the files, as they have already been created) called **puvspr_appended.dat** and **spec_appended.dat** in the **input** folder of the **CF_demographic** folder.
+Once the desired options have been chosen, press **Export Files** in the bottom right corner of the screen. This will create two new files (or update the files, as they have already been created) called **puvspr_connect.dat** and **spec_connect.dat** in the **input** folder of the **CF_demographic** folder.
 
 Let's examine the appended files.
 
-### `spec_appended.dat`
+### `spec_connect.dat`
 
 Selecting the third page of the appended spec.dat file, you will find an additional row (21 in this example) with the target for this new connectivity based conservation feature.
 
 ```{r}
 
-spec <- read.csv("tutorial/CF_demographic/input/spec_appended.dat")
+spec <- read.csv("tutorial/CF_demographic/input/spec_connect.dat")
 
 datatable(spec,rownames = FALSE, options = list(searching = FALSE))
 
 ```
 
-### `puvspr_appended.dat`
+### `puvspr_connect.dat`
 
-The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr_appended.dat file. The original dataset has 1627 entries.
+The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr_connect.dat file. The original dataset has 1627 entries.
 
 Selecting the third page of the appended file, you will find additional rows (corresponding to our new conservation feature, which is 'species 21' in this example) with the amount of this feature in each planning unit.
 
 ```{r}
 
-puvspr <- read.csv("tutorial/CF_demographic/input/puvspr_appended.dat")
+puvspr <- read.csv("tutorial/CF_demographic/input/puvspr_connect.dat")
 
 datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
 

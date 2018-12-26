@@ -19,236 +19,1126 @@ Entering in the data files
   653 Planning Unit names read in 
   21 species read in 
   0 connections entered 
-1627 conservation values counted, 13713 big matrix size, 11.8647% density of matrix 
+1301 conservation values counted, 13713 big matrix size, 9.48735% density of matrix 
 Time passed so far is 0 secs 
 
 Pre-processing Section. 
 
-Run 1   Using Calculated Tinit = 1506.9875 Tcool = 0.99893286 
-  Creating the initial reserve 
-
-  Init:Value 2588.1 Cost 325.0 PUs 325 Connection 0.0 Missing 1 Shortfall 0.00 Penalty 2263.1 MPM 1.0
-
-  ThermalAnnealing:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Iterative Improvement:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Best:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-Time passed so far is 0 secs 
-
-Run 2   Using Calculated Tinit = 1219.0564 Tcool = 0.99903749 
-  Creating the initial reserve 
-
-  Init:Value 333.0 Cost 333.0 PUs 333 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  ThermalAnnealing:Value 309.0 Cost 309.0 PUs 309 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Iterative Improvement:Value 309.0 Cost 309.0 PUs 309 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Best:Value 309.0 Cost 309.0 PUs 309 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-Time passed so far is 0 secs 
-
-Run 3   Using Calculated Tinit = 1843.4054 Tcool = 0.99901829 
-  Creating the initial reserve 
-
-  Init:Value 19276.3 Cost 308.0 PUs 308 Connection 0.0 Missing 1 Shortfall 0.03 Penalty 18968.3 MPM 0.9
-
-  ThermalAnnealing:Value 310.0 Cost 310.0 PUs 310 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Iterative Improvement:Value 310.0 Cost 310.0 PUs 310 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-Time passed so far is 0 secs 
-
-Run 4   Using Calculated Tinit = 1843.4054 Tcool = 0.99901655 
-  Creating the initial reserve 
-
-  Init:Value 401.4 Cost 328.0 PUs 328 Connection 0.0 Missing 1 Shortfall 0.00 Penalty 73.4 MPM 1.0
-
-  ThermalAnnealing:Value 310.0 Cost 310.0 PUs 310 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Iterative Improvement:Value 310.0 Cost 310.0 PUs 310 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-Time passed so far is 1 secs 
-
-Run 5   Using Calculated Tinit = 1570.7999 Tcool = 0.99898804 
-  Creating the initial reserve 
-
-  Init:Value 12741.5 Cost 314.0 PUs 314 Connection 0.0 Missing 1 Shortfall 0.02 Penalty 12427.5 MPM 1.0
-
-  ThermalAnnealing:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Iterative Improvement:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-Time passed so far is 1 secs 
-
-Run 6   Using Calculated Tinit = 1884.4530 Tcool = 0.99886876 
+Run 1   Using Calculated Tinit = 1027.0459 Tcool = 0.99894413 
   Creating the initial reserve 
 
   Init:Value 330.0 Cost 330.0 PUs 330 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Best:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
 Time passed so far is 1 secs 
 
-Run 7   Using Calculated Tinit = 1968.2869 Tcool = 0.99901174 
+Run 2   Using Calculated Tinit = 1287.6999 Tcool = 0.99897768 
+  Creating the initial reserve 
+
+  Init:Value 322.0 Cost 322.0 PUs 322 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 2 secs 
+
+Run 3   Using Calculated Tinit = 839.4209 Tcool = 0.99902043 
+  Creating the initial reserve 
+
+  Init:Value 333.0 Cost 333.0 PUs 333 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 3 secs 
+
+Run 4   Using Calculated Tinit = 800.4345 Tcool = 0.99902518 
+  Creating the initial reserve 
+
+  Init:Value 1143.8 Cost 332.0 PUs 332 Connection 0.0 Missing 1 Shortfall 78588676.95 Penalty 811.8 MPM 0.7
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 4 secs 
+
+Run 5   Using Calculated Tinit = 999.0000 Tcool = 0.99900304 
+  Creating the initial reserve 
+
+  Init:Value 339.0 Cost 339.0 PUs 339 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 5 secs 
+
+Run 6   Using Calculated Tinit = 1415.8794 Tcool = 0.99897214 
+  Creating the initial reserve 
+
+  Init:Value 329.0 Cost 329.0 PUs 329 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 6 secs 
+
+Run 7   Using Calculated Tinit = 1461.5994 Tcool = 0.99896503 
   Creating the initial reserve 
 
   Init:Value 345.0 Cost 345.0 PUs 345 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 1 secs 
+Time passed so far is 7 secs 
 
-Run 8   Using Calculated Tinit = 1664.7766 Tcool = 0.99902847 
+Run 8   Using Calculated Tinit = 999.0000 Tcool = 0.99900304 
   Creating the initial reserve 
 
-  Init:Value 12845.8 Cost 313.0 PUs 313 Connection 0.0 Missing 1 Shortfall 0.02 Penalty 12532.8 MPM 1.0
+  Init:Value 330.0 Cost 330.0 PUs 330 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 2 secs 
+Time passed so far is 7 secs 
 
-Run 9   Using Calculated Tinit = 1160.1966 Tcool = 0.99906454 
-  Creating the initial reserve 
-
-  Init:Value 4397.1 Cost 325.0 PUs 325 Connection 0.0 Missing 1 Shortfall 0.01 Penalty 4072.1 MPM 1.0
-
-  ThermalAnnealing:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-  Iterative Improvement:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
-
-Time passed so far is 2 secs 
-
-Run 10   Using Calculated Tinit = 1890.8544 Tcool = 0.99901575 
+Run 9   Using Calculated Tinit = 843.7740 Tcool = 0.99901991 
   Creating the initial reserve 
 
   Init:Value 331.0 Cost 331.0 PUs 331 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 2 secs 
+Time passed so far is 8 secs 
 
-Run 11   Using Calculated Tinit = 1971.7578 Tcool = 0.99901156 
+Run 10   Using Calculated Tinit = 1079.8575 Tcool = 0.99899527 
   Creating the initial reserve 
 
-  Init:Value 8012.0 Cost 318.0 PUs 318 Connection 0.0 Missing 1 Shortfall 0.01 Penalty 7694.0 MPM 1.0
+  Init:Value 1482.6 Cost 322.0 PUs 322 Connection 0.0 Missing 1 Shortfall 10366297.01 Penalty 1160.6 MPM 0.4
 
-  ThermalAnnealing:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 2 secs 
+Time passed so far is 9 secs 
 
-Run 12   Using Calculated Tinit = 1843.4054 Tcool = 0.99889608 
+Run 11   Using Calculated Tinit = 1370.5433 Tcool = 0.99892097 
+  Creating the initial reserve 
+
+  Init:Value 500.4 Cost 324.0 PUs 324 Connection 0.0 Missing 1 Shortfall 1219553.58 Penalty 176.4 MPM 0.8
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 10 secs 
+
+Run 12   Using Calculated Tinit = 726.1631 Tcool = 0.99903491 
+  Creating the initial reserve 
+
+  Init:Value 307.0 Cost 307.0 PUs 307 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 11 secs 
+
+Run 13   Using Calculated Tinit = 1187.5563 Tcool = 0.99898577 
+  Creating the initial reserve 
+
+  Init:Value 475.0 Cost 339.0 PUs 339 Connection 0.0 Missing 1 Shortfall 939935.06 Penalty 136.0 MPM 0.9
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 12 secs 
+
+Run 14   Using Calculated Tinit = 955.3476 Tcool = 0.99900751 
+  Creating the initial reserve 
+
+  Init:Value 323.0 Cost 323.0 PUs 323 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 13 secs 
+
+Run 15   Using Calculated Tinit = 997.5348 Tcool = 0.99900319 
+  Creating the initial reserve 
+
+  Init:Value 993.1 Cost 342.0 PUs 342 Connection 0.0 Missing 1 Shortfall 4500973.57 Penalty 651.1 MPM 0.3
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Best:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 14 secs 
+
+Run 16   Using Calculated Tinit = 1437.1817 Tcool = 0.99896671 
+  Creating the initial reserve 
+
+  Init:Value 344.0 Cost 326.0 PUs 326 Connection 0.0 Missing 1 Shortfall 107741.84 Penalty 18.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 15 secs 
+
+Run 17   Using Calculated Tinit = 1193.3434 Tcool = 0.99903103 
+  Creating the initial reserve 
+
+  Init:Value 318.0 Cost 318.0 PUs 318 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 16 secs 
+
+Run 18   Using Calculated Tinit = 1113.5249 Tcool = 0.99899220 
+  Creating the initial reserve 
+
+  Init:Value 345.0 Cost 345.0 PUs 345 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 17 secs 
+
+Run 19   Using Calculated Tinit = 2278.2387 Tcool = 0.99892069 
+  Creating the initial reserve 
+
+  Init:Value 1272.3 Cost 316.0 PUs 316 Connection 0.0 Missing 1 Shortfall 6610659.65 Penalty 956.3 MPM 0.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 17 secs 
+
+Run 20   Using Calculated Tinit = 956.8128 Tcool = 0.99900735 
+  Creating the initial reserve 
+
+  Init:Value 678.6 Cost 321.0 PUs 321 Connection 0.0 Missing 1 Shortfall 2471935.78 Penalty 357.6 MPM 0.6
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 18 secs 
+
+Run 21   Using Calculated Tinit = 514.4524 Tcool = 0.99911510 
+  Creating the initial reserve 
+
+  Init:Value 334.0 Cost 334.0 PUs 334 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Best:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 19 secs 
+
+Run 22   Using Calculated Tinit = 905.2680 Tcool = 0.99905864 
+  Creating the initial reserve 
+
+  Init:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 20 secs 
+
+Run 23   Using Calculated Tinit = 1584.9327 Tcool = 0.99890079 
+  Creating the initial reserve 
+
+  Init:Value 297.0 Cost 297.0 PUs 297 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 21 secs 
+
+Run 24   Using Calculated Tinit = 1433.4580 Tcool = 0.99890075 
+  Creating the initial reserve 
+
+  Init:Value 320.0 Cost 320.0 PUs 320 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 22 secs 
+
+Run 25   Using Calculated Tinit = 1304.9243 Tcool = 0.99902210 
+  Creating the initial reserve 
+
+  Init:Value 329.0 Cost 329.0 PUs 329 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 23 secs 
+
+Run 26   Using Calculated Tinit = 947.0398 Tcool = 0.99900838 
+  Creating the initial reserve 
+
+  Init:Value 340.0 Cost 340.0 PUs 340 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 24 secs 
+
+Run 27   Using Calculated Tinit = 1584.9327 Tcool = 0.99895694 
+  Creating the initial reserve 
+
+  Init:Value 318.0 Cost 318.0 PUs 318 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 25 secs 
+
+Run 28   Using Calculated Tinit = 805.0577 Tcool = 0.99902461 
+  Creating the initial reserve 
+
+  Init:Value 505.2 Cost 334.0 PUs 334 Connection 0.0 Missing 1 Shortfall 1495609.59 Penalty 171.2 MPM 0.9
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 26 secs 
+
+Run 29   Using Calculated Tinit = 845.5094 Tcool = 0.99901971 
+  Creating the initial reserve 
+
+  Init:Value 343.0 Cost 343.0 PUs 343 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 27 secs 
+
+Run 30   Using Calculated Tinit = 1268.5709 Tcool = 0.99897918 
   Creating the initial reserve 
 
   Init:Value 338.0 Cost 338.0 PUs 338 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 3 secs 
+Time passed so far is 28 secs 
 
-Run 13   Using Calculated Tinit = 1650.2144 Tcool = 0.99902935 
+Run 31   Using Calculated Tinit = 1269.8394 Tcool = 0.99897908 
   Creating the initial reserve 
 
-  Init:Value 6240.2 Cost 321.0 PUs 321 Connection 0.0 Missing 2 Shortfall 499421.18 Penalty 5919.2 MPM 0.9
+  Init:Value 356.0 Cost 356.0 PUs 356 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 3 secs 
+Time passed so far is 29 secs 
 
-Run 14   Using Calculated Tinit = 1575.0865 Tcool = 0.99903400 
+Run 32   Using Calculated Tinit = 802.1699 Tcool = 0.99902497 
   Creating the initial reserve 
 
-  Init:Value 27102.4 Cost 299.0 PUs 299 Connection 0.0 Missing 2 Shortfall 2393344.88 Penalty 26803.4 MPM 0.3
+  Init:Value 1320.3 Cost 322.0 PUs 322 Connection 0.0 Missing 1 Shortfall 6900406.53 Penalty 998.3 MPM 0.0
 
-  ThermalAnnealing:Value 314.0 Cost 314.0 PUs 314 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 314.0 Cost 314.0 PUs 314 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 3 secs 
+Time passed so far is 30 secs 
 
-Run 15   Using Calculated Tinit = 1446.1486 Tcool = 0.99904253 
+Run 33   Using Calculated Tinit = 1302.5818 Tcool = 0.99892039 
   Creating the initial reserve 
 
-  Init:Value 19947.0 Cost 304.0 PUs 304 Connection 0.0 Missing 2 Shortfall 3164586.70 Penalty 19643.0 MPM 0.1
+  Init:Value 316.0 Cost 316.0 PUs 316 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 3 secs 
+Time passed so far is 30 secs 
 
-Run 16   Using Calculated Tinit = 1843.4054 Tcool = 0.99876382 
+Run 34   Using Calculated Tinit = 1153.3156 Tcool = 0.99898869 
   Creating the initial reserve 
 
-  Init:Value 14967.1 Cost 311.0 PUs 311 Connection 0.0 Missing 1 Shortfall 0.03 Penalty 14656.1 MPM 0.9
+  Init:Value 319.0 Cost 319.0 PUs 319 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 4 secs 
+Time passed so far is 31 secs 
 
-Run 17   Using Calculated Tinit = 1566.3805 Tcool = 0.99903456 
+Run 35   Using Calculated Tinit = 1007.3001 Tcool = 0.99900222 
   Creating the initial reserve 
 
-  Init:Value 331.0 Cost 331.0 PUs 331 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Init:Value 858.9 Cost 303.0 PUs 303 Connection 0.0 Missing 1 Shortfall 3842632.95 Penalty 555.9 MPM 0.4
 
-  ThermalAnnealing:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 4 secs 
+Time passed so far is 32 secs 
 
-Run 18   Using Calculated Tinit = 1884.4530 Tcool = 0.99901609 
+Run 36   Using Calculated Tinit = 841.1564 Tcool = 0.99902023 
   Creating the initial reserve 
 
-  Init:Value 19257.7 Cost 306.0 PUs 306 Connection 0.0 Missing 2 Shortfall 2083636.41 Penalty 18951.7 MPM 0.4
+  Init:Value 329.0 Cost 329.0 PUs 329 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 4 secs 
+  Best:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Run 19   Using Calculated Tinit = 1879.1372 Tcool = 0.99901637 
+Time passed so far is 33 secs 
+
+Run 37   Using Calculated Tinit = 995.7993 Tcool = 0.99900336 
   Creating the initial reserve 
 
-  Init:Value 4225.4 Cost 323.0 PUs 323 Connection 0.0 Missing 1 Shortfall 0.01 Penalty 3902.4 MPM 1.0
+  Init:Value 336.0 Cost 336.0 PUs 336 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 5 secs 
+Time passed so far is 34 secs 
 
-Run 20   Using Calculated Tinit = 1971.7578 Tcool = 0.99860424 
+Run 38   Using Calculated Tinit = 1302.5818 Tcool = 0.99897654 
   Creating the initial reserve 
 
-  Init:Value 331.0 Cost 331.0 PUs 331 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Init:Value 328.0 Cost 328.0 PUs 328 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  ThermalAnnealing:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-  Iterative Improvement:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
 
-Time passed so far is 5 secs 
+Time passed so far is 35 secs 
 
-Best solution is run 2
-Time passed so far is 5 secs 
+Run 39   Using Calculated Tinit = 1124.9199 Tcool = 0.99899119 
+  Creating the initial reserve 
+
+  Init:Value 327.0 Cost 327.0 PUs 327 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 36 secs 
+
+Run 40   Using Calculated Tinit = 845.5094 Tcool = 0.99901971 
+  Creating the initial reserve 
+
+  Init:Value 885.4 Cost 331.0 PUs 331 Connection 0.0 Missing 1 Shortfall 3832504.58 Penalty 554.4 MPM 0.4
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 37 secs 
+
+Run 41   Using Calculated Tinit = 975.2948 Tcool = 0.99897790 
+  Creating the initial reserve 
+
+  Init:Value 340.0 Cost 340.0 PUs 340 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 105.0 Cost 105.0 PUs 105 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 105.0 Cost 105.0 PUs 105 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 38 secs 
+
+Run 42   Using Calculated Tinit = 1168.5776 Tcool = 0.99898738 
+  Creating the initial reserve 
+
+  Init:Value 330.0 Cost 330.0 PUs 330 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 39 secs 
+
+Run 43   Using Calculated Tinit = 1103.3781 Tcool = 0.99899312 
+  Creating the initial reserve 
+
+  Init:Value 320.0 Cost 320.0 PUs 320 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Best:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 40 secs 
+
+Run 44   Using Calculated Tinit = 1101.7567 Tcool = 0.99899326 
+  Creating the initial reserve 
+
+  Init:Value 335.0 Cost 335.0 PUs 335 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 41 secs 
+
+Run 45   Using Calculated Tinit = 538.4681 Tcool = 0.99914087 
+  Creating the initial reserve 
+
+  Init:Value 328.0 Cost 328.0 PUs 328 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 41 secs 
+
+Run 46   Using Calculated Tinit = 1114.4371 Tcool = 0.99906857 
+  Creating the initial reserve 
+
+  Init:Value 1043.6 Cost 352.0 PUs 352 Connection 0.0 Missing 1 Shortfall 4780592.09 Penalty 691.6 MPM 0.3
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 42 secs 
+
+Run 47   Using Calculated Tinit = 1370.5433 Tcool = 0.99897146 
+  Creating the initial reserve 
+
+  Init:Value 313.0 Cost 313.0 PUs 313 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 43 secs 
+
+Run 48   Using Calculated Tinit = 1018.0115 Tcool = 0.99902654 
+  Creating the initial reserve 
+
+  Init:Value 328.0 Cost 328.0 PUs 328 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 44 secs 
+
+Run 49   Using Calculated Tinit = 1423.1318 Tcool = 0.99896769 
+  Creating the initial reserve 
+
+  Init:Value 721.5 Cost 322.0 PUs 322 Connection 0.0 Missing 1 Shortfall 2761682.67 Penalty 399.5 MPM 0.6
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 45 secs 
+
+Run 50   Using Calculated Tinit = 1235.5063 Tcool = 0.99898182 
+  Creating the initial reserve 
+
+  Init:Value 345.0 Cost 345.0 PUs 345 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 46 secs 
+
+Run 51   Using Calculated Tinit = 1047.7738 Tcool = 0.99899828 
+  Creating the initial reserve 
+
+  Init:Value 308.0 Cost 308.0 PUs 308 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 47 secs 
+
+Run 52   Using Calculated Tinit = 999.0000 Tcool = 0.99900304 
+  Creating the initial reserve 
+
+  Init:Value 340.0 Cost 340.0 PUs 340 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 48 secs 
+
+Run 53   Using Calculated Tinit = 1084.0152 Tcool = 0.99893874 
+  Creating the initial reserve 
+
+  Init:Value 327.0 Cost 327.0 PUs 327 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 49 secs 
+
+Run 54   Using Calculated Tinit = 999.0000 Tcool = 0.99900304 
+  Creating the initial reserve 
+
+  Init:Value 1306.5 Cost 322.0 PUs 322 Connection 0.0 Missing 2 Shortfall 83079070.79 Penalty 984.5 MPM 0.7
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 50 secs 
+
+Run 55   Using Calculated Tinit = 1285.3342 Tcool = 0.99902361 
+  Creating the initial reserve 
+
+  Init:Value 913.9 Cost 337.0 PUs 337 Connection 0.0 Missing 1 Shortfall 3987580.27 Penalty 576.9 MPM 0.4
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 50 secs 
+
+Run 56   Using Calculated Tinit = 840.8862 Tcool = 0.99902026 
+  Creating the initial reserve 
+
+  Init:Value 503.2 Cost 330.0 PUs 330 Connection 0.0 Missing 1 Shortfall 1197429.03 Penalty 173.2 MPM 0.8
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 51 secs 
+
+Run 57   Using Calculated Tinit = 1324.5810 Tcool = 0.99897486 
+  Creating the initial reserve 
+
+  Init:Value 553.2 Cost 304.0 PUs 304 Connection 0.0 Missing 1 Shortfall 1722818.51 Penalty 249.2 MPM 0.8
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 52 secs 
+
+Run 58   Using Calculated Tinit = 1168.5776 Tcool = 0.99898738 
+  Creating the initial reserve 
+
+  Init:Value 314.0 Cost 314.0 PUs 314 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 53 secs 
+
+Run 59   Using Calculated Tinit = 767.3239 Tcool = 0.99902940 
+  Creating the initial reserve 
+
+  Init:Value 327.0 Cost 327.0 PUs 327 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 54 secs 
+
+Run 60   Using Calculated Tinit = 1287.6999 Tcool = 0.99897768 
+  Creating the initial reserve 
+
+  Init:Value 324.0 Cost 324.0 PUs 324 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 55 secs 
+
+Run 61   Using Calculated Tinit = 955.3476 Tcool = 0.99900751 
+  Creating the initial reserve 
+
+  Init:Value 334.0 Cost 334.0 PUs 334 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Best:Value 97.0 Cost 97.0 PUs 97 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 56 secs 
+
+Run 62   Using Calculated Tinit = 1026.1606 Tcool = 0.99900036 
+  Creating the initial reserve 
+
+  Init:Value 329.0 Cost 329.0 PUs 329 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 57 secs 
+
+Run 63   Using Calculated Tinit = 1042.9968 Tcool = 0.99902412 
+  Creating the initial reserve 
+
+  Init:Value 342.0 Cost 342.0 PUs 342 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 58 secs 
+
+Run 64   Using Calculated Tinit = 687.3956 Tcool = 0.99904039 
+  Creating the initial reserve 
+
+  Init:Value 317.0 Cost 317.0 PUs 317 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is 59 secs 
+
+Run 65   Using Calculated Tinit = 1034.5901 Tcool = 0.99899955 
+  Creating the initial reserve 
+
+  Init:Value 1405.9 Cost 326.0 PUs 326 Connection 0.0 Missing 2 Shortfall 7352372.71 Penalty 1079.9 MPM 0.0
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 0 secs 
+
+Run 66   Using Calculated Tinit = 804.7875 Tcool = 0.99902464 
+  Creating the initial reserve 
+
+  Init:Value 315.0 Cost 315.0 PUs 315 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 0 secs 
+
+Run 67   Using Calculated Tinit = 1023.7852 Tcool = 0.99900060 
+  Creating the initial reserve 
+
+  Init:Value 1145.8 Cost 345.0 PUs 345 Connection 0.0 Missing 1 Shortfall 7152883.45 Penalty 800.8 MPM 0.6
+
+  ThermalAnnealing:Value 96.0 Cost 96.0 PUs 96 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 96.0 Cost 96.0 PUs 96 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Best:Value 96.0 Cost 96.0 PUs 96 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 1 secs 
+
+Run 68   Using Calculated Tinit = 845.2392 Tcool = 0.99896359 
+  Creating the initial reserve 
+
+  Init:Value 927.7 Cost 315.0 PUs 315 Connection 0.0 Missing 1 Shortfall 4235241.04 Penalty 612.7 MPM 0.4
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 2 secs 
+
+Run 69   Using Calculated Tinit = 1098.9572 Tcool = 0.99899352 
+  Creating the initial reserve 
+
+  Init:Value 1341.5 Cost 343.0 PUs 343 Connection 0.0 Missing 1 Shortfall 6902274.34 Penalty 998.5 MPM 0.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 3 secs 
+
+Run 70   Using Calculated Tinit = 997.5348 Tcool = 0.99900319 
+  Creating the initial reserve 
+
+  Init:Value 312.0 Cost 312.0 PUs 312 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 4 secs 
+
+Run 71   Using Calculated Tinit = 1416.1339 Tcool = 0.99896819 
+  Creating the initial reserve 
+
+  Init:Value 329.0 Cost 329.0 PUs 329 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 5 secs 
+
+Run 72   Using Calculated Tinit = 928.9918 Tcool = 0.99901030 
+  Creating the initial reserve 
+
+  Init:Value 1176.2 Cost 330.0 PUs 330 Connection 0.0 Missing 1 Shortfall 5849546.19 Penalty 846.2 MPM 0.2
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 6 secs 
+
+Run 73   Using Calculated Tinit = 1178.5796 Tcool = 0.99898653 
+  Creating the initial reserve 
+
+  Init:Value 320.0 Cost 320.0 PUs 320 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 7 secs 
+
+Run 74   Using Calculated Tinit = 1040.5127 Tcool = 0.99899898 
+  Creating the initial reserve 
+
+  Init:Value 333.0 Cost 333.0 PUs 333 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 8 secs 
+
+Run 75   Using Calculated Tinit = 1567.7892 Tcool = 0.99890188 
+  Creating the initial reserve 
+
+  Init:Value 349.0 Cost 349.0 PUs 349 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 9 secs 
+
+Run 76   Using Calculated Tinit = 1981.5667 Tcool = 0.99893463 
+  Creating the initial reserve 
+
+  Init:Value 946.2 Cost 335.0 PUs 335 Connection 0.0 Missing 1 Shortfall 4225112.67 Penalty 611.2 MPM 0.4
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 10 secs 
+
+Run 77   Using Calculated Tinit = 999.4662 Tcool = 0.99900300 
+  Creating the initial reserve 
+
+  Init:Value 328.0 Cost 328.0 PUs 328 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 10 secs 
+
+Run 78   Using Calculated Tinit = 739.1498 Tcool = 0.99903314 
+  Creating the initial reserve 
+
+  Init:Value 320.0 Cost 320.0 PUs 320 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 11 secs 
+
+Run 79   Using Calculated Tinit = 1505.0681 Tcool = 0.99890595 
+  Creating the initial reserve 
+
+  Init:Value 1167.4 Cost 327.0 PUs 327 Connection 0.0 Missing 1 Shortfall 5809327.88 Penalty 840.4 MPM 0.2
+
+  ThermalAnnealing:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 98.0 Cost 98.0 PUs 98 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 12 secs 
+
+Run 80   Using Calculated Tinit = 956.8128 Tcool = 0.99903274 
+  Creating the initial reserve 
+
+  Init:Value 324.0 Cost 324.0 PUs 324 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 13 secs 
+
+Run 81   Using Calculated Tinit = 1384.4923 Tcool = 0.99895168 
+  Creating the initial reserve 
+
+  Init:Value 324.0 Cost 324.0 PUs 324 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 14 secs 
+
+Run 82   Using Calculated Tinit = 1168.5776 Tcool = 0.99898738 
+  Creating the initial reserve 
+
+  Init:Value 326.0 Cost 326.0 PUs 326 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 15 secs 
+
+Run 83   Using Calculated Tinit = 947.1305 Tcool = 0.99895222 
+  Creating the initial reserve 
+
+  Init:Value 340.0 Cost 340.0 PUs 340 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 16 secs 
+
+Run 84   Using Calculated Tinit = 1615.3665 Tcool = 0.99899765 
+  Creating the initial reserve 
+
+  Init:Value 896.5 Cost 337.0 PUs 337 Connection 0.0 Missing 2 Shortfall 4653445.98 Penalty 559.5 MPM 0.8
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 17 secs 
+
+Run 85   Using Calculated Tinit = 1443.5782 Tcool = 0.99896627 
+  Creating the initial reserve 
+
+  Init:Value 295.0 Cost 295.0 PUs 295 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 18 secs 
+
+Run 86   Using Calculated Tinit = 1719.6705 Tcool = 0.99894879 
+  Creating the initial reserve 
+
+  Init:Value 930.3 Cost 313.0 PUs 313 Connection 0.0 Missing 1 Shortfall 4267198.79 Penalty 617.3 MPM 0.4
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 19 secs 
+
+Run 87   Using Calculated Tinit = 958.5483 Tcool = 0.99900717 
+  Creating the initial reserve 
+
+  Init:Value 1841.9 Cost 347.0 PUs 347 Connection 0.0 Missing 2 Shortfall 9706427.85 Penalty 1494.9 MPM 0.2
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 20 secs 
+
+Run 88   Using Calculated Tinit = 1168.5776 Tcool = 0.99903313 
+  Creating the initial reserve 
+
+  Init:Value 316.0 Cost 316.0 PUs 316 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 20 secs 
+
+Run 89   Using Calculated Tinit = 1284.8219 Tcool = 0.99897791 
+  Creating the initial reserve 
+
+  Init:Value 311.0 Cost 311.0 PUs 311 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 21 secs 
+
+Run 90   Using Calculated Tinit = 841.1564 Tcool = 0.99888681 
+  Creating the initial reserve 
+
+  Init:Value 315.0 Cost 315.0 PUs 315 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 22 secs 
+
+Run 91   Using Calculated Tinit = 1366.6906 Tcool = 0.99897174 
+  Creating the initial reserve 
+
+  Init:Value 338.0 Cost 338.0 PUs 338 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 23 secs 
+
+Run 92   Using Calculated Tinit = 1160.7680 Tcool = 0.99898805 
+  Creating the initial reserve 
+
+  Init:Value 333.0 Cost 333.0 PUs 333 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 101.0 Cost 101.0 PUs 101 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 24 secs 
+
+Run 93   Using Calculated Tinit = 789.0377 Tcool = 0.99905200 
+  Creating the initial reserve 
+
+  Init:Value 338.0 Cost 338.0 PUs 338 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 25 secs 
+
+Run 94   Using Calculated Tinit = 1501.6710 Tcool = 0.99896233 
+  Creating the initial reserve 
+
+  Init:Value 326.0 Cost 326.0 PUs 326 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 26 secs 
+
+Run 95   Using Calculated Tinit = 1453.8422 Tcool = 0.99890941 
+  Creating the initial reserve 
+
+  Init:Value 339.0 Cost 339.0 PUs 339 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 27 secs 
+
+Run 96   Using Calculated Tinit = 1146.3725 Tcool = 0.99898930 
+  Creating the initial reserve 
+
+  Init:Value 319.0 Cost 319.0 PUs 319 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 28 secs 
+
+Run 97   Using Calculated Tinit = 1471.6728 Tcool = 0.99896434 
+  Creating the initial reserve 
+
+  Init:Value 676.3 Cost 317.0 PUs 317 Connection 0.0 Missing 1 Shortfall 2483931.96 Penalty 359.3 MPM 0.6
+
+  ThermalAnnealing:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 102.0 Cost 102.0 PUs 102 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 29 secs 
+
+Run 98   Using Calculated Tinit = 1144.6905 Tcool = 0.99898944 
+  Creating the initial reserve 
+
+  Init:Value 332.0 Cost 332.0 PUs 332 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 30 secs 
+
+Run 99   Using Calculated Tinit = 1711.1920 Tcool = 0.99889313 
+  Creating the initial reserve 
+
+  Init:Value 327.8 Cost 327.0 PUs 327 Connection 0.0 Missing 1 Shortfall 5103.48 Penalty 0.8 MPM 1.0
+
+  ThermalAnnealing:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 99.0 Cost 99.0 PUs 99 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 31 secs 
+
+Run 100   Using Calculated Tinit = 860.1938 Tcool = 0.99901799 
+  Creating the initial reserve 
+
+  Init:Value 315.0 Cost 315.0 PUs 315 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  ThermalAnnealing:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+  Iterative Improvement:Value 100.0 Cost 100.0 PUs 100 Connection 0.0 Missing 0 Shortfall 0.00 Penalty 0.0 MPM 1.0
+
+Time passed so far is  1 min  and 31 secs 
+
+Best solution is run 67
+Time passed so far is  1 min  and 31 secs 
 
               The End 
