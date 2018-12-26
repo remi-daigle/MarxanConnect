@@ -103,9 +103,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             GettingStartedframe = GettingStarted(parent=self)
             GettingStartedframe.Show()
             # self.project['filepaths'] = {}
-            # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Desktop\\begermethod\\tutorial.MarCon"
+            # self.project['filepaths']['projfile'] =r"C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\tutorial\CF_demographic\tutorial.MarCon"
             # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
-            # self.load_project_function()
+            # self.load_project_function(launch=True)
 
     def set_icon(self, frame):
         if sys.path[0].endswith('.zip'):
@@ -514,7 +514,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_getting_started (self, event):
         # insert getting started tab and hyperlinks (wxFormBuilder can't handle hyperlinks)
-        GettingStartedframe = GettingStarted (parent=self)
+        GettingStartedframe = GettingStarted(parent=self)
         GettingStartedframe.Show()
 
     def on_metric_definition_choice(self,event):
@@ -1723,8 +1723,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_export_metrics(self, event):
         self.on_export_CF_files(event=None, mute=True)
-        self.on_export_CF_files(event=None, mute=True)
-        self.on_export_CF_files(event=None, mute=True)
+        self.on_export_BD_file(event=None, mute=True)
+        self.on_export_PUDAT(event=None, mute=True)
         marxanconpy.warn_dialog("All files exported successfully.",
                                 "Export Successful")
 
@@ -1763,12 +1763,25 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             elif self.cf_export_radioBox.GetStringSelection() == "Append":
                 # append
-                old_spec = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_spec_filepath'])
-                old_cf = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_cf_filepath'])
-                try:
-                    old_cf['pu'] = old_cf['pu'].astype('int').astype('str')
-                except:
-                    old_cf['pu'] = old_cf['pu'].astype('str')
+                if os.path.isfile(self.project['filepaths']['orig_spec_filepath']):
+                    old_spec = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_spec_filepath'])
+                else:
+                    marxanconpy.warn_dialog("Warning! File: " +
+                                            self.project['filepaths']['orig_spec_filepath'] +
+                                            " does not exist.")
+
+                if os.path.isfile(self.project['filepaths']['orig_cf_filepath']):
+                    old_cf = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_cf_filepath'])
+                    try:
+                        old_cf['pu'] = old_cf['pu'].astype('int').astype('str')
+                    except:
+                        old_cf['pu'] = old_cf['pu'].astype('str')
+                else:
+                    marxanconpy.warn_dialog("Warning! File: " +
+                                            self.project['filepaths']['orig_cf_filepath'] +
+                                            " does not exist.")
+
+
 
                 # append spec
                 new_spec = spec.copy()
@@ -1804,11 +1817,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_export_PUDAT( self, event, mute=False):
         if self.PUDAT_filecheck.GetValue():
-            self.temp = {}
-            self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
-            self.temp['pudat'] = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_pudat_filepath'])
-            self.temp['pudat']['status'] = self.project['connectivityMetrics']['status']
-            self.temp['pudat'].to_csv(self.project['filepaths']['pudat_filepath'], index=0)
+            if os.path.isfile(self.project['filepaths']['orig_pudat_filepath']):
+                self.temp = {}
+                self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
+                self.temp['pudat'] = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_pudat_filepath'])
+                self.temp['pudat']['status'] = self.project['connectivityMetrics']['status']
+                self.temp['pudat'].to_csv(self.project['filepaths']['pudat_filepath'], index=0)
+            else:
+                marxanconpy.warn_dialog("Warning! File: " +
+                                        self.project['filepaths']['orig_pudat_filepath'] +
+                                        " does not exist.")
+
         if not mute:
             marxanconpy.warn_dialog("Planning Unit (i.e. pu.dat) file exported successfully.",
                                     "Export Successful")
@@ -2072,7 +2091,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         event.GetEventObject().SetValue(True)
 
     def update_discrete_grid(self):
-        # self.spec_frame = spec_customizer(parent=self)
         self.all_types = []
         if self.calc_metrics_pu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
@@ -2106,8 +2124,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.discrete_grid.SetCellValue(i, 1, str("Status Quo"))
 
         self.discrete_grid.AutoSize()
-        w, h = self.discrete_grid.GetClientSize()
-        self.spec_frame.SetSize((w + 16, h + 39 + 20 + 16))
 
 # ########################## marxan functions ##########################################################################
 
@@ -2176,6 +2192,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         with open(self.project['filepaths']['marxan_input'], 'w', encoding="utf8") as file:
             file.writelines(pudat)
+
+        marxanconpy.warn_dialog("The Marxan input file (i.e. input.dat) has been generated successfully.",
+                                "Operation Successful")
 
     def on_customize_inpudat( self, event ):
         """
@@ -2409,8 +2428,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):
         if self.calc_metrics_pu.GetValue() & self.project['options']['metricsCalculated']:
-            if hasattr(self,'spec_frame'):
-                self
+            if hasattr(self,'spec_frame') and bool(self.spec_frame):
                 self.spec_frame.Show()
             else:
                 self.on_new_spec()
@@ -2464,8 +2482,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.spec_frame.spec_grid.SetCellValue(i, 3, self.spec_frame.keys[j])
 
         self.spec_frame.spec_grid.AutoSize()
-        w, h = self.spec_frame.spec_grid.GetClientSize()
-        self.spec_frame.SetSize((w + 16, h + 39 + 20 +16))
+        w, h = self.spec_frame.spec_grid.GetSize()
+        self.spec_frame.SetSize((w+16,h+75))
+
         self.project['spec_dat'] = pandas.DataFrame(
             numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
 
@@ -2485,6 +2504,9 @@ class spec_customizer(gui.spec_customizer):
     def __init__(self, parent):
         gui.spec_customizer.__init__(self, parent)
         self.parent = parent
+        # set the icon
+        parent.set_icon(frame=self)
+        self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
 
     def on_spec_ok(self, event):
         self.parent.project['spec_dat'] = pandas.DataFrame(
@@ -2506,7 +2528,9 @@ class spec_customizer(gui.spec_customizer):
             self.parent.project['options']['targets'] = ','.join(map(str,spec_copy['prop'].values))
         elif self.parent.project['options']['spec_set'] == "Target":
             self.parent.project['options']['targets'] = ','.join(map(str,spec_copy['target'].values))
-        self.parent.targets.SetValue(self.parent.project['options']['targets'])
+
+        if not self.parent.project['options']['targets'] == self.parent.targets.GetValue():
+            self.parent.targets.SetValue(self.parent.project['options']['targets'])
 
         self.Hide()
 

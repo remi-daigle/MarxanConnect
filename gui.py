@@ -2774,93 +2774,6 @@ class MarxanConnectGUI ( wx.Frame ):
 
 
 ###########################################################################
-## Class spec_customizer
-###########################################################################
-
-class spec_customizer ( wx.Dialog ):
-
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
-
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-
-		spec_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
-		spec_mainsizer.SetFlexibleDirection( wx.BOTH )
-		spec_mainsizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-
-		self.spec_grid = wx.grid.Grid( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
-
-		# Grid
-		self.spec_grid.CreateGrid( 0, 4 )
-		self.spec_grid.EnableEditing( True )
-		self.spec_grid.EnableGridLines( True )
-		self.spec_grid.EnableDragGridSize( False )
-		self.spec_grid.SetMargins( 0, 0 )
-
-		# Columns
-		self.spec_grid.EnableDragColMove( False )
-		self.spec_grid.EnableDragColSize( True )
-		self.spec_grid.SetColLabelSize( 30 )
-		self.spec_grid.SetColLabelValue( 0, u"id" )
-		self.spec_grid.SetColLabelValue( 1, u"target" )
-		self.spec_grid.SetColLabelValue( 2, u"spf" )
-		self.spec_grid.SetColLabelValue( 3, u"name" )
-		self.spec_grid.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
-
-		# Rows
-		self.spec_grid.EnableDragRowSize( True )
-		self.spec_grid.SetRowLabelSize( 80 )
-		self.spec_grid.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
-
-		# Label Appearance
-
-		# Cell Defaults
-		self.spec_grid.SetDefaultCellAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
-		spec_mainsizer.Add( self.spec_grid, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
-
-		spec_button_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
-		spec_button_sizer.AddGrowableCol( 0 )
-		spec_button_sizer.SetFlexibleDirection( wx.BOTH )
-		spec_button_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-
-		self.spacer_text = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.spacer_text.Wrap( -1 )
-
-		spec_button_sizer.Add( self.spacer_text, 0, wx.ALL, 5 )
-
-		self.spec_ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
-		spec_button_sizer.Add( self.spec_ok, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
-
-		self.spec_cancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
-		spec_button_sizer.Add( self.spec_cancel, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
-
-
-		spec_mainsizer.Add( spec_button_sizer, 1, wx.EXPAND, 5 )
-
-
-		self.SetSizer( spec_mainsizer )
-		self.Layout()
-		spec_mainsizer.Fit( self )
-
-		self.Centre( wx.BOTH )
-
-		# Connect Events
-		self.spec_ok.Bind( wx.EVT_BUTTON, self.on_spec_ok )
-		self.spec_cancel.Bind( wx.EVT_BUTTON, self.on_spec_cancel )
-
-	def __del__( self ):
-		pass
-
-
-	# Virtual event handlers, overide them in your derived class
-	def on_spec_ok( self, event ):
-		event.Skip()
-
-	def on_spec_cancel( self, event ):
-		event.Skip()
-
-
-###########################################################################
 ## Class GettingStarted
 ###########################################################################
 
@@ -2960,7 +2873,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2018.12.22.21. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2018.12.26.13. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
@@ -3012,5 +2925,106 @@ class GettingStarted ( wx.Frame ):
 
 	def __del__( self ):
 		pass
+
+
+###########################################################################
+## Class spec_customizer
+###########################################################################
+
+class spec_customizer ( wx.Frame ):
+
+	def __init__( self, parent ):
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL )
+
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+		bSizer50 = wx.BoxSizer( wx.VERTICAL )
+
+		self.m_panel27 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		spec_mainsizer = wx.FlexGridSizer( 2, 1, 0, 0 )
+		spec_mainsizer.AddGrowableCol( 0 )
+		spec_mainsizer.AddGrowableRow( 0 )
+		spec_mainsizer.AddGrowableRow( 1 )
+		spec_mainsizer.SetFlexibleDirection( wx.BOTH )
+		spec_mainsizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+		self.spec_grid = wx.grid.Grid( self.m_panel27, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+
+		# Grid
+		self.spec_grid.CreateGrid( 0, 4 )
+		self.spec_grid.EnableEditing( True )
+		self.spec_grid.EnableGridLines( True )
+		self.spec_grid.EnableDragGridSize( False )
+		self.spec_grid.SetMargins( 0, 0 )
+
+		# Columns
+		self.spec_grid.AutoSizeColumns()
+		self.spec_grid.EnableDragColMove( False )
+		self.spec_grid.EnableDragColSize( False )
+		self.spec_grid.SetColLabelSize( 30 )
+		self.spec_grid.SetColLabelValue( 0, u"id" )
+		self.spec_grid.SetColLabelValue( 1, u"target" )
+		self.spec_grid.SetColLabelValue( 2, u"spf" )
+		self.spec_grid.SetColLabelValue( 3, u"name" )
+		self.spec_grid.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+		# Rows
+		self.spec_grid.AutoSizeRows()
+		self.spec_grid.EnableDragRowSize( False )
+		self.spec_grid.SetRowLabelSize( 80 )
+		self.spec_grid.SetRowLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+
+		# Label Appearance
+
+		# Cell Defaults
+		self.spec_grid.SetDefaultCellAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
+		spec_mainsizer.Add( self.spec_grid, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+
+		spec_button_sizer = wx.FlexGridSizer( 0, 3, 0, 0 )
+		spec_button_sizer.AddGrowableCol( 0 )
+		spec_button_sizer.SetFlexibleDirection( wx.BOTH )
+		spec_button_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+		self.spacer_text = wx.StaticText( self.m_panel27, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spacer_text.Wrap( -1 )
+
+		spec_button_sizer.Add( self.spacer_text, 0, wx.ALL, 5 )
+
+		self.spec_ok = wx.Button( self.m_panel27, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
+		spec_button_sizer.Add( self.spec_ok, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+
+		self.spec_cancel = wx.Button( self.m_panel27, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
+		spec_button_sizer.Add( self.spec_cancel, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+
+
+		spec_mainsizer.Add( spec_button_sizer, 1, wx.EXPAND, 5 )
+
+
+		self.m_panel27.SetSizer( spec_mainsizer )
+		self.m_panel27.Layout()
+		spec_mainsizer.Fit( self.m_panel27 )
+		bSizer50.Add( self.m_panel27, 1, wx.EXPAND, 5 )
+
+
+		self.SetSizer( bSizer50 )
+		self.Layout()
+		bSizer50.Fit( self )
+
+		self.Centre( wx.BOTH )
+
+		# Connect Events
+		self.spec_ok.Bind( wx.EVT_BUTTON, self.on_spec_ok )
+		self.spec_cancel.Bind( wx.EVT_BUTTON, self.on_spec_cancel )
+
+	def __del__( self ):
+		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def on_spec_ok( self, event ):
+		event.Skip()
+
+	def on_spec_cancel( self, event ):
+		event.Skip()
 
 
