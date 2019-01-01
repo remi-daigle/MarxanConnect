@@ -24,7 +24,6 @@ import os
 import sys
 import pandas
 import numpy
-import subprocess
 import json
 
 # import gui template made by wxformbuilder
@@ -43,7 +42,7 @@ wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
 if getattr(sys, 'frozen', False):
     MCPATH = os.path.dirname(sys.executable)
 elif __file__:
-    MCPATH = os.path.dirname(__file__)
+    MCPATH = os.path.dirname(os.path.abspath(__file__))
 
 os.chdir(MCPATH)
 
