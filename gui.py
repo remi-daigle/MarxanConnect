@@ -187,6 +187,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		fa_status_radioBoxChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.fa_status_radioBox = wx.RadioBox( self.spatialInput, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, fa_status_radioBoxChoices, 3, wx.RA_SPECIFY_COLS )
 		self.fa_status_radioBox.SetSelection( 2 )
+		self.fa_status_radioBox.SetToolTip( u"For the planning units which overlap with the Focus Area, you can choose to overwrite the status of the original planning unit (i.e. pu.dat) to lock the planning units in out. Alternatively, select 'Status-quo' to keep the status of the original planning unit (i.e. pu.dat)." )
+
 		fa_status_sizer.Add( self.fa_status_radioBox, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 
 
@@ -236,6 +238,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		aa_status_radioBoxChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.aa_status_radioBox = wx.RadioBox( self.spatialInput, wx.ID_ANY, u"Status", wx.DefaultPosition, wx.DefaultSize, aa_status_radioBoxChoices, 3, wx.RA_SPECIFY_COLS )
 		self.aa_status_radioBox.SetSelection( 2 )
+		self.aa_status_radioBox.SetToolTip( u"For the planning units which overlap with the Avoidance Area, you can choose to overwrite the status of the original planning unit (i.e. pu.dat) to lock the planning units in out. Alternatively, select 'Status-quo' to keep the status of the original planning unit (i.e. pu.dat)." )
+
 		aa_status_sizer.Add( self.aa_status_radioBox, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 
 
@@ -245,7 +249,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -1077,7 +1081,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 
-		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Continuous Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_metric_txt.Wrap( -1 )
 
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
@@ -1108,6 +1112,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
 		self.preEval_status_radio = wx.RadioBox( self.preEvaluation, wx.ID_ANY, u"New Metric Status", wx.DefaultPosition, wx.DefaultSize, preEval_status_radioChoices, 3, wx.RA_SPECIFY_COLS )
 		self.preEval_status_radio.SetSelection( 2 )
+		self.preEval_status_radio.SetToolTip( u"For the planning units which contain the discrete metric (to be created), you can choose to overwrite the status of the original planning unit (i.e. pu.dat) to lock the planning units in out. Alternatively, select 'Status-quo' to keep the status of the original planning unit (i.e. pu.dat)." )
+
 		bSizer56.Add( self.preEval_status_radio, 0, 0, 5 )
 
 
@@ -1477,7 +1483,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		target_sizer.Add( self.targets_txt, 0, wx.ALL, 5 )
 
-		self.targets = wx.TextCtrl( self.exportMarxan, wx.ID_ANY, u"10", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.targets = wx.TextCtrl( self.exportMarxan, wx.ID_ANY, u"0.5", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.targets.SetToolTip( u"Target(s) or Proportion(s) for each connectivity based conservation feature. Either a single default value for all features, or a comma seperated string of values of the same length as there are conservation features." )
 
 		target_sizer.Add( self.targets, 0, wx.ALL|wx.EXPAND, 5 )
@@ -1647,6 +1653,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.inputdat_template_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\Marxan243\\input_template.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		inputdat_file_sizer.Add( self.inputdat_template_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
+		self.default_input_template = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Reset to Default", wx.DefaultPosition, wx.DefaultSize, 0 )
+		inputdat_file_sizer.Add( self.default_input_template, 0, wx.ALL, 5 )
+
 
 		marxanMainSizer.Add( inputdat_file_sizer, 1, wx.EXPAND, 5 )
 
@@ -1801,7 +1810,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"6) Run Marxan", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"6) Run Marxan", True, wx.NullBitmap )
 		self.postHocEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		postHocMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		postHocMainSizer.AddGrowableCol( 0 )
@@ -2411,6 +2420,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.export_pudat.Bind( wx.EVT_BUTTON, self.on_export_PUDAT )
 		self.export_metrics.Bind( wx.EVT_BUTTON, self.on_export_metrics )
 		self.inputdat_template_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_inputdat_template_file )
+		self.default_input_template.Bind( wx.EVT_BUTTON, self.on_default_input_template )
 		self.NUMREPS.Bind( wx.EVT_TEXT, self.on_NUMREPS )
 		self.SCENNAME.Bind( wx.EVT_TEXT, self.on_SCENNAME )
 		self.marxan_CF.Bind( wx.EVT_RADIOBOX, self.on_marxan_CF )
@@ -2682,6 +2692,9 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_inputdat_template_file( self, event ):
 		event.Skip()
 
+	def on_default_input_template( self, event ):
+		event.Skip()
+
 	def on_NUMREPS( self, event ):
 		event.Skip()
 
@@ -2873,7 +2886,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2018.12.26.13. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.05.21. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )

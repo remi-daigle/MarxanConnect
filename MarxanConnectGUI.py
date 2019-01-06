@@ -41,7 +41,7 @@ wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
 
 if getattr(sys, 'frozen', False):
     MCPATH = os.path.dirname(sys.executable)
-elif __file__:
+else:
     MCPATH = os.path.dirname(os.path.abspath(__file__))
 
 os.chdir(MCPATH)
@@ -60,6 +60,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # start up log
         self.log = LogForm(parent=self)
+        print(MCPATH)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
@@ -338,6 +339,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.marxan_CF.SetStringSelection(self.project['options']['marxan_CF'])
         self.marxan_bound.SetStringSelection(self.project['options']['marxan_bound'])
         self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
+        self.on_marxan_bound(event=None)
         self.CSM.SetValue(self.project['options']['CSM'])
         self.marxan_PU.SetStringSelection(self.project['options']['marxan_PU'])
         self.marxanBit_Radio.SetStringSelection(self.project['options']['marxan_bit'])
@@ -388,7 +390,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # Marxan analysis
         self.inputdat_template_file.SetPath(self.project['filepaths']['marxan_template_input'])
         self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
-        # self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
 
         # Post-Hoc
         self.postHoc_file.SetPath(self.project['filepaths']['posthoc'])
@@ -1123,6 +1124,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines conservation features (i.e. puvspr2.dat) file path
         """
         self.project['filepaths']['orig_cf_filepath'] = self.orig_CF_file.GetPath()
+        self.verify_marxan_options()
 
     def on_SPEC_file(self, event):
         """
@@ -1161,20 +1163,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['orig_pudat_filepath'] = self.orig_PUDAT_file.GetPath()
         self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
 
-
-    # def on_marxan_dir(self, event):
-    #     """
-    #     Defines the directory that contains the Marxan application
-    #     """
-    #     self.project['filepaths']['marxan_dir'] = self.marxan_dir.GetPath()
-    #     if self.project['options']['marxan'] == "Marxan":
-    #         if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
-    #                 not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
-    #             marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
-    #     else:
-    #         if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone.exe")) or \
-    #                 not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone_x64.exe")):
-    #             marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
     def on_inputdat_file(self, event):
         """
@@ -1461,7 +1449,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.bd_demo_conn_boundary.GetValue():
             self.bd_land_conn_boundary.SetValue(False)
 
-
     def on_NUMREPS( self, event ):
         """
         define NUMREPS
@@ -1485,6 +1472,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         :return:
         """
         self.project['options']['marxan_CF'] = self.marxan_CF.GetStringSelection()
+        self.verify_marxan_options()
 
     def on_marxan_bound( self, event ):
         """
@@ -1493,6 +1481,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         :return:
         """
         self.project['options']['marxan_bound'] = self.marxan_bound.GetStringSelection()
+        if not self.marxan_bound.GetStringSelection() == 'New':
+            self.inputdat_symmRadio.Enable(False)
+        else:
+            self.inputdat_symmRadio.Enable(True)
 
     def on_CSM( self, event ):
         """
@@ -1522,12 +1514,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['options']['marxan'] = self.marxan_Radio.GetStringSelection()
         if self.project['options']['marxan'] == "Marxan":
-            if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
-                    not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan.exe")) or\
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan_x64.exe")):
                 marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
         else:
-            if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone.exe")) or \
-                    not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone_x64.exe")):
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone.exe")) or \
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone_x64.exe")):
                 marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
     def on_inputdat_symmRadio(self, event):
@@ -1713,6 +1705,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.colormap_metric_choices(1)
             self.colormap_metric_choices(2)
             self.colormap_metric_choices("pre-eval")
+            self.update_discrete_grid()
+
         except:
             print("Warning: Error in metrics calculation")
             self.log.Show()
@@ -2132,8 +2126,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         :param event:
         :return:
         """
-        with open(self.project['filepaths']['marxan_template_input'], 'r', encoding="utf8") as file:
-            filedata = file.readlines()
+        if self.project['filepaths']['marxan_template_input'] == 'Default':
+            with open(os.path.join(MCPATH, 'Marxan243','input_template.dat'), 'r', encoding="utf8") as file:
+                filedata = file.readlines()
+        else:
+            with open(self.project['filepaths']['marxan_template_input'], 'r', encoding="utf8") as file:
+                filedata = file.readlines()
 
         if self.project['options']['inputdat_boundary'] == 'Asymmetric':
             if not 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
@@ -2195,6 +2193,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         marxanconpy.warn_dialog("The Marxan input file (i.e. input.dat) has been generated successfully.",
                                 "Operation Successful")
 
+    def on_default_input_template(self, event):
+        self.project['filepaths']['marxan_template_input'] == 'Default'
+        self.inputdat_template_file.SetPath('Default')
+
     def on_customize_inpudat( self, event ):
         """
         Customize the Marxan input file
@@ -2209,12 +2211,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Starts Marxan
         """
         if self.project['options']['marxan'] == "Marxan":
-            if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
-                    not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan.exe")) or\
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan_x64.exe")):
                 marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
         else:
-            if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone.exe")) or \
-                    not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'], "MarZone_x64.exe")):
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone.exe")) or \
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone_x64.exe")):
                 marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
         if not 'connectivityMetrics' in self.project:
@@ -2242,23 +2244,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.project['options']['marxan'] == "Marxan":
                 os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
                           '&' +
-                          os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan_x64.exe') + ' ' +
+                          os.path.join(MCPATH, 'Marxan243', 'Marxan_x64.exe') + ' ' +
                           self.project['filepaths']['marxan_input'] + '"')
             else:
                 os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
                           '&' +
-                          os.path.join(self.project['filepaths']['marxan_dir'], 'MarZone_x64.exe') + ' ' +
+                          os.path.join(MCPATH, 'Marxan243', 'MarZone_x64.exe') + ' ' +
                           self.project['filepaths']['marxan_input'] + '"')
         else:
             if self.project['options']['marxan'] == "Marxan":
                 os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
                           '&' +
-                          os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' +
+                          os.path.join(MCPATH, 'Marxan243', 'Marxan.exe') + ' ' +
                           self.project['filepaths']['marxan_input'])
             else:
                 os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
                           '&' +
-                          os.path.join(self.project['filepaths']['marxan_dir'], 'MarZone.exe') + ' ' +
+                          os.path.join(MCPATH, 'Marxan243', 'MarZone.exe') + ' ' +
                           self.project['filepaths']['marxan_input'] + '"')
 
         # calculate selection frequency
@@ -2415,7 +2417,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 if line.startswith('NUMREPS'):
                     NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
 
-            self.postHoc_output_choice.SetItems(['Best Solution','Selection Frequency'] +
+            self.postHoc_output_choice.SetItems(['Best Solution'] +
                                                       ["r" + "%05d" % t for t in range(1, NUMREPS)])
             self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
             self.postHoc_output_choice.SetSelection(0)

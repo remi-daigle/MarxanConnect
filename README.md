@@ -83,11 +83,13 @@ It also assumes you have all the pre-requisite python modules installed to build
 conda create --name marcon -c conda-forge wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
 # line 155 of basemap's __init__ file may need to change to "pyproj_datadir = pyproj.pyproj_datadir"
 # without quotes if you get the dreaded "PROJ_LIB" error
+# if you get the 'epsg' error you may need to install an older version of pyproj 
+# conda install pyproj=1.9.5.1=py36_0
 
 source activate marcon
 
 pip install python-igraph # on windows you may need to install via wheel https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
-pip install PyInstaller marxanconpy
+pip install PyInstaller marxanconpy bs4
 ```
 
 As well as pre-requesite R packages to build the website, *i.e.*:

@@ -82,7 +82,7 @@ hidden_imports = [
 block_cipher = None
 
 added_files = collect_data_files('geopandas', subdir='datasets')+[('VERSION','.'),
-    ('docs','docs')]
+    ('docs','docs'),('Marxan243','Marxan243')]
 
 a = Analysis(['MarxanConnectGUI.py'],
              pathex=paths,

@@ -13,7 +13,7 @@ all: web win zip
 	
 web: docs/index.Rmd docs/glossary.Rmd docs/tutorial.Rmd docs/CONTRIBUTING.Rmd
     # creates the website
-	rm -rf docs/site_libs; \
+	# rm -rf docs/site_libs; \
 	Rscript -e "rmarkdown::render_site('docs')"; \
 	# move .md to root for github
 	mv docs/index.md README.md; \
