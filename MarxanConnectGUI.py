@@ -508,7 +508,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                     MarxanConnectVersion +
                                     "\n Running marxanconpy: " +
                                     marxanconpy.__version__ +
-                                    "\n(C) 2017 Remi Daigle\n",
+                                    "\n(C) 2019 Remi Daigle\n",
                             caption="About Marxan Connect",
                             style=wx.OK)
 
@@ -2240,27 +2240,33 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 if not os.path.isdir(inputdir) and not os.path.isdir(inputdatdir):
                     marxanconpy.warn_dialog(message="Warning: Marxan Input File has an invalid input directory " + line)
 
+        inputpath = os.path.dirname(self.project['filepaths']['marxan_input'])
+        marxanpath = MCPATH
+        if os.path.dirname(self.project['filepaths']['marxan_input']).startswith("\\"):
+            inputpath = inputpath.replace(inputpath[0:2], "C:\\")
+            marxanpath = marxanpath.replace(marxanpath[0:2], "C:\\")
+
         if self.project['options']['marxan_bit']=="64-bit":
             if self.project['options']['marxan'] == "Marxan":
-                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                os.system('start /wait cmd /c "cd ' + inputpath +
                           '&' +
-                          os.path.join(MCPATH, 'Marxan243', 'Marxan_x64.exe') + ' ' +
+                          os.path.join(marxanpath, 'Marxan243', 'Marxan_x64.exe') + ' ' +
                           self.project['filepaths']['marxan_input'] + '"')
             else:
-                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                os.system('start /wait cmd /c "cd ' + inputpath +
                           '&' +
-                          os.path.join(MCPATH, 'Marxan243', 'MarZone_x64.exe') + ' ' +
+                          os.path.join(marxanpath, 'Marxan243', 'MarZone_x64.exe') + ' ' +
                           self.project['filepaths']['marxan_input'] + '"')
         else:
             if self.project['options']['marxan'] == "Marxan":
-                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                os.system('start /wait cmd /c "cd ' + inputpath +
                           '&' +
-                          os.path.join(MCPATH, 'Marxan243', 'Marxan.exe') + ' ' +
+                          os.path.join(marxanpath, 'Marxan243', 'Marxan.exe') + ' ' +
                           self.project['filepaths']['marxan_input'])
             else:
-                os.system('start /wait cmd /c "cd ' + os.path.dirname(self.project['filepaths']['marxan_input']) +
+                os.system('start /wait cmd /c "cd ' + inputpath +
                           '&' +
-                          os.path.join(MCPATH, 'Marxan243', 'MarZone.exe') + ' ' +
+                          os.path.join(marxanpath, 'Marxan243', 'MarZone.exe') + ' ' +
                           self.project['filepaths']['marxan_input'] + '"')
 
         # calculate selection frequency

@@ -108,7 +108,7 @@ map <- leaflet(output) %>%
 
 addTiles()
 
-groups <- names(select(output,-best_solution,-select_freq, -fa_included, -aa_included, -google_demo_pu))[c(-1,-2)]
+groups <- names(select(output,-best_solution,-select_freq, -google_demo_pu))[c(-1,-2)]
 
 groups <- groups[groups!="geometry"]
 
@@ -328,11 +328,7 @@ output <- read.csv("tutorial/CF_demographic/output/pu_connect.csv") %>%
 
 mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
 
-best_solution = as.logical(best_solution),
-
-fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
-
-aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>%
+best_solution = as.logical(best_solution)) %>%
 
 st_as_sf()
 
@@ -414,11 +410,7 @@ output <- read.csv("tutorial/CF_demographic/output/pu_no_connect.csv") %>%
 
 mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
 
-best_solution = as.logical(best_solution),
-
-fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
-
-aa_included = as.logical(gsub("True",TRUE,.$aa_included))) %>%
+best_solution = as.logical(best_solution)) %>%
 
 st_as_sf()
 
