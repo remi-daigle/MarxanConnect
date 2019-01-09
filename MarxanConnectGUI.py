@@ -2266,10 +2266,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             else:
                 marxan_exec = 'MarZone.exe'
 
-        os.system('start /wait cmd /c "cd ' + inputpath +
-                  '&' +
-                  os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
-                  self.project['filepaths']['marxan_input'])
+        subprocess.call(os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
+                        self.project['filepaths']['marxan_input'],
+                        creationflags=subprocess.CREATE_NEW_CONSOLE,
+                        cwd=inputpath)
 
         # calculate selection frequency
         for line in open(self.project['filepaths']['marxan_input']):
