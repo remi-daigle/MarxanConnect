@@ -25,12 +25,12 @@ import sys
 import pandas
 import numpy
 import json
+import platform
 
 # import gui template made by wxformbuilder
 import gui
 
-# import MarxanConnect python module
-import marxanconpy
+
 
 os.environ["UBUNTU_MENUPROXY"]="0"
 
@@ -44,7 +44,10 @@ if getattr(sys, 'frozen', False):
 else:
     MCPATH = os.path.dirname(os.path.abspath(__file__))
 
-os.chdir(MCPATH)
+sys.path.append(MCPATH)
+
+# import MarxanConnect python module
+import marxanconpy
 
 with open(os.path.join(MCPATH, 'VERSION')) as version_file:
     MarxanConnectVersion = version_file.read().strip()
@@ -97,7 +100,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.load_project_function(launch=True)
         else:
             # launch a blank new project
-            self.on_new_project(event=None, launch=True)
+            self.on_new_project(event=None, rootpath=MCPATH, launch=True)
 
             # launch Getting started window
             GettingStartedframe = GettingStarted(parent=self)
@@ -164,13 +167,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 # ##########################  project managment functions ##############################################################
 
-    def on_new_project(self, event, launch=False):
+    def on_new_project(self, event, rootpath, launch=False):
         """
         open a new project and name/save a new project file
         """
         # create project list to store project specific data
         self.spatial = {}
-        self.project = marxanconpy.marcon.new_project()
+        self.project = marxanconpy.marcon.new_project(rootpath)
         self.project['version']['MarxanConnect'] = MarxanConnectVersion
         self.workingdirectory = sys.path[0]
 
@@ -2248,26 +2251,25 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         if self.project['options']['marxan_bit']=="64-bit":
             if self.project['options']['marxan'] == "Marxan":
-                os.system('start /wait cmd /c "cd ' + inputpath +
-                          '&' +
-                          os.path.join(marxanpath, 'Marxan243', 'Marxan_x64.exe') + ' ' +
-                          self.project['filepaths']['marxan_input'] + '"')
+                if platform.system() == 'Windows':
+                    marxan_exec = 'Marxan_x64.exe'
+                elif platform.system() == 'Darwin':
+                    marxan_exec = 'MarOpt_v243_Mac64'
             else:
-                os.system('start /wait cmd /c "cd ' + inputpath +
-                          '&' +
-                          os.path.join(marxanpath, 'Marxan243', 'MarZone_x64.exe') + ' ' +
-                          self.project['filepaths']['marxan_input'] + '"')
+                marxan_exec = 'MarZone_x64.exe'
         else:
             if self.project['options']['marxan'] == "Marxan":
-                os.system('start /wait cmd /c "cd ' + inputpath +
-                          '&' +
-                          os.path.join(marxanpath, 'Marxan243', 'Marxan.exe') + ' ' +
-                          self.project['filepaths']['marxan_input'])
+                if platform.system() == 'Windows':
+                    marxan_exec = 'Marxan.exe'
+                elif platform.system() == 'Darwin':
+                    marxan_exec = 'MarOpt_v243_Mac32'
             else:
-                os.system('start /wait cmd /c "cd ' + inputpath +
-                          '&' +
-                          os.path.join(marxanpath, 'Marxan243', 'MarZone.exe') + ' ' +
-                          self.project['filepaths']['marxan_input'] + '"')
+                marxan_exec = 'MarZone.exe'
+
+        os.system('start /wait cmd /c "cd ' + inputpath +
+                  '&' +
+                  os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
+                  self.project['filepaths']['marxan_input'])
 
         # calculate selection frequency
         for line in open(self.project['filepaths']['marxan_input']):
