@@ -38,6 +38,20 @@ endif
 	# build gui
 	pyinstaller setup.spec -y --clean --windowed --icon=docs/images/icon_bundle.ico;\
 
+mac: gui.py MarxanConnectGUI.py
+	# builds the executable
+	# if you add the 'daily=1' argument to make, then it appends date/time
+ifeq (${daily},1)
+	echo ${version}-rc${rc} > VERSION
+else
+	echo ${version} > VERSION
+endif
+	# remove old builds
+	rm -rf build
+	rm -rf dist
+	# build gui
+	pyinstaller setup.spec -y --clean --windowed --icon=docs/images/icon_mac.icns;\
+
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" WindowsSetupBuilder.iss
