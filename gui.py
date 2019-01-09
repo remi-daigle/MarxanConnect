@@ -249,7 +249,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -993,7 +993,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
 
-		self.metric_definition_html = wx.html2.WebView.New( self.connectivityMetrics)
+		self.metric_definition_html = wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )
 		metric_help_sizer.Add( self.metric_definition_html, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -1622,8 +1622,8 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxan_logotxt_sizer.SetFlexibleDirection( wx.BOTH )
 		marxan_logotxt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.marxan_logo = wx.StaticBitmap( self.marxanAnalysis, wx.ID_ANY, wx.Bitmap( u"docs/images/marxanlogo.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
-		marxan_logotxt_sizer.Add( self.marxan_logo, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		self.marxan_logo_bitmap = wx.StaticBitmap( self.marxanAnalysis, wx.ID_ANY, wx.Bitmap( u"docs/images/marxanlogo.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		marxan_logotxt_sizer.Add( self.marxan_logo_bitmap, 0, wx.ALL, 5 )
 
 		marxan_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -1666,14 +1666,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.NUMREPS_txt = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Repeat Runs", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.NUMREPS_txt.Wrap( -1 )
 
-		self.NUMREPS_txt.SetToolTip( u"The Connectivity Strength Modifier is also known as the Boundary Length Modifier." )
+		self.NUMREPS_txt.SetToolTip( u"The number of repeated runs, also known as \"NUMREPS\"." )
 
 		marxan_misc.Add( self.NUMREPS_txt, 0, wx.ALL, 5 )
 
 		self.SCENNAME_txt = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Scenario Name", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.SCENNAME_txt.Wrap( -1 )
 
-		self.SCENNAME_txt.SetToolTip( u"The Connectivity Strength Modifier is also known as the Boundary Length Modifier." )
+		self.SCENNAME_txt.SetToolTip( u"The scenario name which gets included in the output filenames, also known as \"SCENNAME\"." )
 
 		marxan_misc.Add( self.SCENNAME_txt, 0, wx.ALL, 5 )
 
@@ -1693,14 +1693,14 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxan_CFChoices = [ u"Original", u"New" ]
 		self.marxan_CF = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Conservation Features", wx.DefaultPosition, wx.DefaultSize, marxan_CFChoices, 2, wx.RA_SPECIFY_COLS )
 		self.marxan_CF.SetSelection( 1 )
-		self.marxan_CF.SetToolTip( u"Processing speed is typically higher with the 64-bit version of Marxan, but this is only compatible with 64-bit computers. Asymmetric linkage definitions may not be compatible with 32-bit Marxan." )
+		self.marxan_CF.SetToolTip( u"Use the the 'Original' (probably without connectivity) or 'New' (probably with connectivity) files for conservation features (e.g. spec.dat and puvspr.dat)?" )
 
 		marxan_input_Radio_Sizer.Add( self.marxan_CF, 0, wx.ALL|wx.EXPAND, 5 )
 
 		marxan_boundChoices = [ u"Original", u"New", u"None" ]
 		self.marxan_bound = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Spatial Dependencies", wx.DefaultPosition, wx.DefaultSize, marxan_boundChoices, 3, wx.RA_SPECIFY_COLS )
 		self.marxan_bound.SetSelection( 1 )
-		self.marxan_bound.SetToolTip( u"Processing speed is typically higher with the 64-bit version of Marxan, but this is only compatible with 64-bit computers. Asymmetric linkage definitions may not be compatible with 32-bit Marxan." )
+		self.marxan_bound.SetToolTip( u"Use the the 'Original' (probably without connectivity) or 'New' (probably with connectivity) files for spatial dependencies (e.g. bound.dat)? Or none at all." )
 
 		marxan_input_Radio_Sizer.Add( self.marxan_bound, 0, wx.ALL, 5 )
 
@@ -1727,7 +1727,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxan_PUChoices = [ u"Original", u"New" ]
 		self.marxan_PU = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Planning Units", wx.DefaultPosition, wx.DefaultSize, marxan_PUChoices, 2, wx.RA_SPECIFY_COLS )
 		self.marxan_PU.SetSelection( 1 )
-		self.marxan_PU.SetToolTip( u"Processing speed is typically higher with the 64-bit version of Marxan, but this is only compatible with 64-bit computers. Asymmetric linkage definitions may not be compatible with 32-bit Marxan." )
+		self.marxan_PU.SetToolTip( u"Use the the 'Original' (probably without connectivity) or 'New' (probably with connectivity) files for planning units (e.g. pu.dat)?" )
 
 		marxan_input_Radio_Sizer.Add( self.marxan_PU, 0, wx.ALL, 5 )
 
@@ -1742,9 +1742,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		marxan_RadioChoices = [ u"Marxan", u"Marxan with Zones" ]
 		self.marxan_Radio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Marxan Version", wx.DefaultPosition, wx.DefaultSize, marxan_RadioChoices, 2, wx.RA_SPECIFY_COLS )
-		self.marxan_Radio.SetSelection( 0 )
-		self.marxan_Radio.SetToolTip( u"Processing speed is typically higher with the 64-bit version of Marxan, but this is only compatible with 64-bit computers. Asymmetric linkage definitions may not be compatible with 32-bit Marxan." )
-
+		self.marxan_Radio.SetSelection( 1 )
 		marxan_Radio_sizer.Add( self.marxan_Radio, 0, wx.ALL|wx.EXPAND, 5 )
 
 		marxanBit_RadioChoices = [ u"32-bit", u"64-bit" ]
@@ -1810,7 +1808,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"6) Run Marxan", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"6) Run Marxan", False, wx.NullBitmap )
 		self.postHocEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		postHocMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		postHocMainSizer.AddGrowableCol( 0 )
@@ -2886,7 +2884,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.09.15. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
