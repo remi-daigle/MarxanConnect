@@ -1487,8 +1487,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['marxan_bound'] = self.marxan_bound.GetStringSelection()
         if not self.marxan_bound.GetStringSelection() == 'New':
             self.inputdat_symmRadio.Enable(False)
+            self.csm_txt.SetLabel('Boundary Length Modifier')
+            if self.marxan_bound.GetStringSelection() == 'None':
+                self.CSM.Enable(False)
         else:
             self.inputdat_symmRadio.Enable(True)
+            self.CSM.Enable(True)
+            self.csm_txt.SetLabel('Connectivity Strength Modifier')
 
     def on_CSM( self, event ):
         """
