@@ -26,21 +26,23 @@ filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
 with open('gui.py', 'w', encoding="utf8") as file:
   file.write(filedata)
 
-# Read in the WindowsSetupBuilder file to edit version
-with open('WindowsSetupBuilder.iss', 'r', encoding="utf8") as file :
-  filedata = file.read()
-
-# Replace the target string
-filedata = re.sub(r'#define MyAppVersion "v.*"', '#define MyAppVersion "' + MarxanConnectVersion + '"',filedata)
-filedata = re.sub(r'OutputBaseFilename=MarxanConnect-v.*-windows-setup', 'OutputBaseFilename=MarxanConnect-' + MarxanConnectVersion.replace(".","-") + '-windows-setup',filedata)
-
-# Write the file out again
-with open('WindowsSetupBuilder.iss', 'w', encoding="utf8") as file:
-  file.write(filedata)
-
 block_cipher = None
 
 if platform.system() == 'Windows':
+    # Read in the WindowsSetupBuilder file to edit version
+    with open('WindowsSetupBuilder.iss', 'r', encoding="utf8") as file:
+        filedata = file.read()
+
+    # Replace the target string
+    filedata = re.sub(r'#define MyAppVersion "v.*"', '#define MyAppVersion "' + MarxanConnectVersion + '"', filedata)
+    filedata = re.sub(r'OutputBaseFilename=MarxanConnect-v.*-windows-setup',
+                      'OutputBaseFilename=MarxanConnect-' + MarxanConnectVersion.replace(".", "-") + '-windows-setup',
+                      filedata)
+
+    # Write the file out again
+    with open('WindowsSetupBuilder.iss', 'w', encoding="utf8") as file:
+        file.write(filedata)
+
     # Prepare for pyinstaller
     env_path = os.environ['CONDA_PREFIX']
     dlls = os.path.join(env_path, 'DLLs')
@@ -208,5 +210,5 @@ if platform.system() == 'Darwin':
                    name='MarxanConnectGUI')
     app = BUNDLE(coll,
                  name='MarxanConnectGUI.app',
-                 icon=None,
+                 icon='docs/images/icon_mac.icns',
                  bundle_identifier=None)
