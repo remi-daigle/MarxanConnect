@@ -26,6 +26,7 @@ import pandas
 import numpy
 import json
 import platform
+import subprocess
 
 # import gui template made by wxformbuilder
 import gui
@@ -59,7 +60,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         gui.MarxanConnectGUI.__init__(self, parent)
         # set the icon
-        self.set_icon(frame=self)
+        self.set_icon(frame=self, rootpath=MCPATH)
 
         # start up log
         self.log = LogForm(parent=self)
@@ -97,6 +98,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = str(sys.argv[1])
             self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
+            os.chdir(self.workingdirectory)
             self.load_project_function(launch=True)
         else:
             # launch a blank new project
@@ -110,12 +112,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
             # self.load_project_function(launch=True)
 
-    def set_icon(self, frame):
-        if sys.path[0].endswith('.zip'):
-            rootpath = os.path.dirname(sys.path[0])
-        else:
-            rootpath = sys.path[0]
-
+    def set_icon(self, frame, rootpath):
         # set the icon
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]:
@@ -175,7 +172,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.spatial = {}
         self.project = marxanconpy.marcon.new_project(rootpath)
         self.project['version']['MarxanConnect'] = MarxanConnectVersion
-        self.workingdirectory = sys.path[0]
+        self.workingdirectory = MCPATH
 
         # if called at launch time, no need to ask users to create a new project file right away
         if not launch:
@@ -190,9 +187,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             dlg.Destroy()
 
         # set default file paths in GUI
+        os.chdir(self.workingdirectory)
         self.project = marxanconpy.marcon.edit_working_directory(self.project,self.workingdirectory,'absolute')
         self.set_GUI_options()
         self.set_GUI_filepaths()
+
 
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event=None)
@@ -224,6 +223,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.workingdirectory = dlg.GetDirectory()
+            os.chdir(self.workingdirectory)
         dlg.Destroy()
         self.load_project_function()
 
@@ -464,6 +464,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.project['filepaths']['projfilename'] = dlg.GetFilename()
             self.workingdirectory = dlg.GetDirectory()
+            os.chdir(self.workingdirectory)
             self.set_metric_options()
             self.save_project_gui()
         dlg.Destroy()
@@ -2514,7 +2515,7 @@ class spec_customizer(gui.spec_customizer):
         gui.spec_customizer.__init__(self, parent)
         self.parent = parent
         # set the icon
-        parent.set_icon(frame=self)
+        parent.set_icon(frame=self, rootpath=MCPATH)
         self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
 
     def on_spec_ok(self, event):
@@ -2551,7 +2552,7 @@ class GettingStarted (wx.Frame):
     def __init__(self, parent):
         gui.GettingStarted.__init__(self, parent)
         # set the icon
-        parent.set_icon(frame=self)
+        parent.set_icon(frame=self, rootpath=MCPATH)
         self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL)
 
 # ########################### file popup viewer #####################################################################
@@ -2643,7 +2644,7 @@ class LogForm(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, wx.ID_ANY, "Debbuging Console")
         self.Bind(wx.EVT_CLOSE, self.__close)
-        parent.set_icon(frame=self)
+        parent.set_icon(frame=self, rootpath=MCPATH)
 
         # Add a panel
         panel = wx.Panel(self, wx.ID_ANY)
