@@ -1539,6 +1539,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_spec_radio( self, event ):
         self.project['options']['spec_set'] = self.spec_radio.GetStringSelection()
+        self.targets_txt.SetLabel(self.project['options']['spec_set']+'s')
 
     def on_targets( self, event ):
         self.project['options']['targets'] = self.targets.GetValue()
