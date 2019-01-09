@@ -23,7 +23,7 @@
         "orig_pudat_filepath": ".\\input\\pu.dat",
         "orig_spec_filepath": ".\\input\\spec.dat",
         "posthoc": ".\\output\\posthoc.csv",
-        "projfile": "C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\docs\\tutorial\\CSD_landscape\\tutorial.MarCon",
+        "projfile": ".\\tutorial.MarCon",
         "projfilename": "tutorial.MarCon",
         "pu_file_pu_id": "",
         "pu_filepath": "",
@@ -32,6 +32,7 @@
         "pushp": ".\\output\\pu.shp",
         "spec_filepath": ".\\input\\spec_connect.dat"
     },
+    "operating_system": "Windows",
     "options": {
         "CSM": "10",
         "NUMREPS": "100",
@@ -57,6 +58,7 @@
             "in_degree": false,
             "inflow": false,
             "local_retention": false,
+            "min_plan_graph": false,
             "out_degree": false,
             "outflow": false,
             "self_recruit": false,
@@ -78,6 +80,7 @@
             "fa_recipients": false,
             "google": false,
             "in_degree": false,
+            "min_plan_graph": false,
             "out_degree": false
         },
         "land_pu_cm_progress": true,
@@ -95,8 +98,9 @@
         "spec_set": "Proportion",
         "targets": "0.5"
     },
+    "spec_dat": "{\"columns\":[\"id\",\"prop\",\"spf\",\"name\"],\"index\":[],\"data\":[]}",
     "version": {
-        "MarxanConnect": "v0.1.2-rc2019.01.05.18",
-        "marxanconpy": "v0.1.2rc2019010519"
+        "MarxanConnect": "v0.1.2-rc2019.01.09.15",
+        "marxanconpy": "v0.1.2rc2019010915"
     }
 }

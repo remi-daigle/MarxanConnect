@@ -2198,7 +2198,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                 "Operation Successful")
 
     def on_default_input_template(self, event):
-        self.project['filepaths']['marxan_template_input'] == 'Default'
+        self.project['filepaths']['marxan_template_input'] = 'Default'
         self.inputdat_template_file.SetPath('Default')
 
     def on_customize_inpudat( self, event ):

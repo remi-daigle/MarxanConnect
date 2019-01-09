@@ -3298,7 +3298,7 @@
         "map": ".\\output\\pu_connect.png",
         "marxan_dir": "C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\Marxan243",
         "marxan_input": ".\\input_connect.dat",
-        "marxan_template_input": "C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\Marxan243\\input_template.dat",
+        "marxan_template_input": "Default",
         "orig_bd_filepath": "",
         "orig_cf_filepath": ".\\input\\puvspr.dat",
         "orig_pudat_filepath": ".\\input\\pu.dat",
@@ -3313,6 +3313,7 @@
         "pushp": ".\\output\\pu_connect.shp",
         "spec_filepath": ".\\input\\spec_connect.dat"
     },
+    "operating_system": "Windows",
     "options": {
         "CSM": "10",
         "NUMREPS": "100",
@@ -3381,7 +3382,7 @@
     "postHoc": "{\"columns\":[\"Metric\",\"Planning Area\",\"Solution\",\"Percent\"],\"index\":[0,1,2,3],\"data\":[[\"Planning Units\",653.0,96.0,14.7013782542],[\"Connections\",175129.0,4022.0,2.2965927973],[\"Graph Density\",0.4113365402,0.4410087719,107.2136143653],[\"Eigenvalue\",18.6529090067,5.5341453918,29.669074083]]}",
     "spec_dat": "{\"columns\":[\"id\",\"prop\",\"spf\",\"name\"],\"index\":[0],\"data\":[[\"1\",\"0.25\",\"1000\",\"google_demo_pu_discrete_median_to_maximum\"]]}",
     "version": {
-        "MarxanConnect": "v0.1.2-rc2018.12.26.13",
-        "marxanconpy": "v0.1.2b6"
+        "MarxanConnect": "v0.1.2-rc2019.01.09.10",
+        "marxanconpy": "v0.1.2rc2019010915"
     }
 }
