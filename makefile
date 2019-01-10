@@ -38,7 +38,7 @@ endif
 	# build gui
 	pyinstaller setup.spec -y --clean --windowed --icon=docs/images/icon_bundle.ico;\
 
-mac: gui.py MarxanConnectGUI.py
+app: gui.py MarxanConnectGUI.py
 	# builds the executable
 	# if you add the 'daily=1' argument to make, then it appends date/time
 ifeq (${daily},1)
@@ -51,6 +51,14 @@ endif
 	rm -rf dist
 	# build gui
 	pyinstaller setup.spec -y --clean --windowed --icon=docs/images/icon_mac.icns;\
+
+mac: app
+ifeq (${daily},1)
+	dmgbuild -s mac_dmg_settings.py -D app=dist/MarxanConnectGUI.app "Marxan Connect ${version}-rc${rc}" MarxanConnect${version}-rc${rc}.dmg
+else
+	dmgbuild -s mac_dmg_settings.py -D app=dist/MarxanConnectGUI.app "Marxan Connect ${version}" MarxanConnect${version}.dmg
+endif
+
 
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
