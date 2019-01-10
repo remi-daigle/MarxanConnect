@@ -41,7 +41,7 @@ wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
 
 
 if getattr(sys, 'frozen', False):
-    MCPATH = os.path.dirname(sys.executable)
+    MCPATH = sys._MEIPASS
 else:
     MCPATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -58,6 +58,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         initialize parent class (the entire GUI)
         """
+        os.chdir(MCPATH)
         gui.MarxanConnectGUI.__init__(self, parent)
         # set the icon
         self.set_icon(frame=self, rootpath=MCPATH)
