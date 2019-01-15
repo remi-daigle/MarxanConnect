@@ -360,7 +360,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">1) Spatial Input</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -8992,7 +8992,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">4) Pre-Evaluation</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -9323,7 +9323,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Metric</property>
+                                                                    <property name="label">Selection</property>
                                                                     <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
@@ -9603,7 +9603,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Remove Selected Metric</property>
+                                                                    <property name="label">Remove Selection</property>
                                                                     <property name="margins"></property>
                                                                     <property name="markup">0</property>
                                                                     <property name="max_size"></property>
@@ -11095,7 +11095,7 @@
                                             <property name="gripper">0</property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Create New Metric</property>
+                                            <property name="label">Create New Feature</property>
                                             <property name="margins"></property>
                                             <property name="markup">0</property>
                                             <property name="max_size"></property>
@@ -11221,7 +11221,7 @@
                                             <property name="gripper">0</property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Connectivity Metric Available for Export:</property>
+                                            <property name="label">Connectivity-Based Conservation Feature Available for Export:</property>
                                             <property name="markup">0</property>
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
@@ -11278,7 +11278,7 @@
                                             <property name="close_button">1</property>
                                             <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                                             <property name="col_label_size">30</property>
-                                            <property name="col_label_values">&quot;Discrete Metric&quot; &quot;Status&quot;</property>
+                                            <property name="col_label_values">&quot;New Conservation Feature&quot; &quot;Status&quot;</property>
                                             <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                             <property name="cols">2</property>
                                             <property name="column_sizes">600,50</property>

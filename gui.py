@@ -249,7 +249,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -1081,7 +1081,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_shp_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 
-		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_metric_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Selection", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_metric_txt.Wrap( -1 )
 
 		preEval_metrics_opt_sizer.Add( self.preEval_metric_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
@@ -1106,7 +1106,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		bSizer56.Add( self.plot_freq_metric, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
-		self.remove_metric = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selected Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.remove_metric = wx.Button( self.preEvaluation, wx.ID_ANY, u"Remove Selection", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer56.Add( self.remove_metric, 0, wx.ALIGN_BOTTOM|wx.ALL, 4 )
 
 		preEval_status_radioChoices = [ u"Locked in", u"Locked out", u"Status-quo" ]
@@ -1314,13 +1314,13 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		preEvalMainSizer.Add( preEval_table_discrete_sizer, 1, wx.EXPAND, 5 )
 
-		self.preEval_create_new = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_create_new = wx.Button( self.preEvaluation, wx.ID_ANY, u"Create New Feature", wx.DefaultPosition, wx.DefaultSize, 0 )
 		preEvalMainSizer.Add( self.preEval_create_new, 0, wx.ALIGN_BOTTOM|wx.ALIGN_RIGHT|wx.ALL, 5 )
 
 		self.m_staticline8 = wx.StaticLine( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		preEvalMainSizer.Add( self.m_staticline8, 0, wx.EXPAND |wx.ALL, 5 )
 
-		self.preEval_choice_txt2 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Connectivity Metric Available for Export:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_choice_txt2 = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Connectivity-Based Conservation Feature Available for Export:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_choice_txt2.Wrap( -1 )
 
 		self.preEval_choice_txt2.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
@@ -1342,7 +1342,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.discrete_grid.EnableDragColMove( False )
 		self.discrete_grid.EnableDragColSize( True )
 		self.discrete_grid.SetColLabelSize( 30 )
-		self.discrete_grid.SetColLabelValue( 0, u"Discrete Metric" )
+		self.discrete_grid.SetColLabelValue( 0, u"New Conservation Feature" )
 		self.discrete_grid.SetColLabelValue( 1, u"Status" )
 		self.discrete_grid.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
@@ -1361,7 +1361,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.preEvaluation.SetSizer( preEvalMainSizer )
 		self.preEvaluation.Layout()
 		preEvalMainSizer.Fit( self.preEvaluation )
-		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.preEvaluation, u"4) Pre-Evaluation", True, wx.NullBitmap )
 		self.exportMarxan = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		exportMarxanMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		exportMarxanMainSizer.AddGrowableCol( 0 )
@@ -2884,7 +2884,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.09.19. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.15.16. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
