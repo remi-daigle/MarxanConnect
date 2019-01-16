@@ -68,11 +68,18 @@ write.csv(flowMatrix,"tutorial/CF_demographic/hexFlow.csv")
 ### make boundary.dat
 reefs <- st_read("tutorial/CF_demographic/hex_planning_units.shp")
 
-bound <- st_overlaps(reefs %>% st_buffer(1), sparse = FALSE) %>% 
-    data.frame(check.names = FALSE) %>% 
-    mutate(id1=row.names(.)) %>% 
+bound_mat <- st_overlaps(reefs %>% st_buffer(1), sparse = FALSE) %>% 
+    data.frame(check.names = FALSE) 
+
+colnames(bound_mat) <- reefs$FID
+bound <- bound_mat %>% 
+    mutate(id1=reefs$FID) %>% 
     gather(key = 'id2', value='boundary',-id1) %>% 
-    mutate(boundary=as.numeric(boundary)) %>% 
+    mutate(boundary=as.numeric(boundary),
+           id1=as.character(id1),
+           id2=as.character(id2)) %>% 
     filter(boundary>0)
 
-write.csv(bound,"tutorial/CF_demographic/bound.dat")
+write.csv(bound,"tutorial/CF_demographic/input/bound.dat",row.names = FALSE)
+write.csv(bound,"tutorial/CSD_landscape/input/bound.dat",row.names = FALSE)
+
