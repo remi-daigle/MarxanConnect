@@ -10,11 +10,11 @@ bibliography: references.bib
 
 # Overview
 
-The following section provides an example of a possible workflow using **landscape** connectivity data used as a conservation feature. It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. It is the user's responsibility to ensure that all analysis decisions are valid.
+The following section provides an example of a possible workflow using **landscape** connectivity data as **spatial dependencies** (i.e. bound.dat). It is important to note that these are indeed examples of the software's capabilities and are not intended to be used as scientific advice in a spatial conservation planning process. 
+
+The maps and plots shown in this tutorial were created in R using the shapefile exported from the "Plotting Options" tab of Marxan Connect. The R code used to make the plots can be revealed by clicking on the `Code` button below
 
 ```{r load packages,message=FALSE, warning=FALSE}
-# The maps and plots shown in this tutorial were created in R using the shapefile exported from the "Plotting Options" tab of Marxan Connect. The R code used to make the plots can be revealed by clicking on the `Code` button below
-
 library(sf)
 
 library(leaflet)
@@ -30,12 +30,16 @@ library(DT)
 proj <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
 
 ```
+# Case Study
+
+In this case study, we will be working with data from the Great Barrier Reef in Australia. 
+Our represenation features consist of a subset of [bioregions](http://www.gbrmpa.gov.au/__data/assets/pdf_file/0012/17301/reef-bioregions-in-the-gbrmp-and-gbrwh.pdf) identified by the Great Barrier Reef Marine Park Authority. In this example, we will generate the connectivity input data using Marxan Connect.
 
 # Input Data
 
-Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/docs/tutorial/CSD_landscape). This folder contains the Marxan Connect Project file, the input data, and the output data from this example. 
+Download the example [project folder](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/remi-daigle/MarxanConnect/tree/master/docs/tutorial/CSD_landscape). This folder contains the Marxan Connect Project file, the input data, and the output data from this example.  
 
-Before opening Marxan Connect, let's manually look through the 'traditional' Marxan files (**spec.dat**, **puvspr.dat** and **pu.dat**) in the **input** folder of the **CSD_landscape** folder, which contain only representation targets. The planning unit file (**hex_planning_units.shp**) includes hexagonal planning units that cover the Great Barrier Reef. We've identified a few bioregion types as our conservation features, for which we've set conservation targets.
+Before opening Marxan Connect, let's manually look through the 'traditional' Marxan files (**spec.dat**, **puvspr.dat**, **bound.dat**, and **pu.dat**) in the **input** folder of the **CSD_landscape** folder, which contain only representation targets. The planning unit file (**hex_planning_units.shp**) includes 653 hexagonal planning units that cover the Great Barrier Reef. We've identified a few bioregion types as our conservation features, for which we've set conservation targets.
 
 ## `spec.dat`
 
@@ -59,6 +63,15 @@ datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
 
 ```
 
+## `bound.dat`
+
+The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the bound.dat file. The original dataset has 3600 entries.
+```{r}
+bound <- read.csv("tutorial/CSD_landscape/input/bound.dat")
+
+datatable(bound[1:30,],rownames = FALSE, options = list(searching = FALSE))
+```
+
 ## `pu.dat`
 
 The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the puvspr.dat file. The original dataset has 653 entries.
@@ -71,7 +84,7 @@ datatable(pu[1:30,],rownames = FALSE, options = list(searching = FALSE))
 
 ```
 
-## Inital Conservation Features
+## Initial Conservation Features
 
 This map shows the bioregions, which serve as conservation features in the Marxan analysis with no connectivity.
 
@@ -171,7 +184,7 @@ showGroup("BIORE_102")
 
 ## Adding Connectivity
 
-Now let's examine the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), the [focus areas](glossary.html#4_focus_areas), and the [avoidance areas](glossary.html#4_focus_areas). These spatial layers are shown in the map below.
+The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics. Let's examine the spatial layers we've added in order to incorporate connectivity into the Marxan analysis. Marxan Connect needs a shapefile for the [planning units](glossary.html#5_planning_units), and **optionally** the [focus areas](glossary.html#4_focus_areas) and [avoidance areas](glossary.html#4_focus_areas). For simplicity, we have not included focus or avoidance areas in this tutorial. These spatial layers are shown in the map below.
 
 ```{r load all layers for CSD_landscape,results='hide'}
 
@@ -181,45 +194,29 @@ pu <- st_read("tutorial/CSD_landscape/hex_planning_units.shp") %>%
 
 st_transform(proj)
 
-#focus areas (IUCN level I or II protected areas)
-
-fa <- st_read("tutorial/CSD_landscape/IUCN_IorII.shp") %>%
-
-st_transform(proj)
-
-# avoidance areas (ports)
-
-aa <- st_read("tutorial/CSD_landscape/ports.shp") %>%
-
-st_transform(proj)
-
 ```
+
+
 
 ```{r}
 
-p <- qtm(pu,fill = '#7570b3') +
-
-qtm(fa,fill = '#1b9e77') +
-
-qtm(aa,fill = '#d95f02')
+p <- qtm(pu,fill = '#7570b3')
 
 tmap_leaflet(p) %>%
 
 addLegend(position = "topright",
 
-labels = c("Planning Units","Focus Areas (IUCN I or II)","Avoidance Areas (ports)"),
+labels = c("Planning Units"),
 
-colors = c("#7570b3","#1b9e77","#d95f02"),
+colors = c("#7570b3"),
 
 title = "Layers")
 
 ```
 
-### `connectivity_matrix.csv`
+### `IsolationByDistance.csv`
 
-The connectivity data is at the 'heart' of Marxan Connect's functionality. It allows the generation of new conservation features based on connectivity metrics.
-
-The connectivity data for this analysis can be found in the **IsolationByDistance.csv** file in the **CSD_landscape** folder. This connectivity data was generated by Marxan Connect and represents the _proportion_ of those individuals _originating_ from a donor planning unit (which contains a particular habitat type) which arrive into a recipient planning unit (which contains a that same habitat type)  (*i.e.* a [probability](glossary.html#probability) matrix) in a [edge list with type](glossary.html#edge_list_with_type) (*i.e.* habitat type) format. The connectivity data generating procedure is described in more detail in the [Connectivity Input](CSD_landscape.html#connectivity_input) section. Below is the connectivity matrix of our example conservation priority. For the sake of you web browser, this table only contains the 7 row and columns of the connectivity matrix. The real file has 1279227 entries.
+The connectivity data for this analysis can be found in the **IsolationByDistance.csv** file in the **CSD_landscape** folder. This connectivity data was generated by Marxan Connect and represents the _proportion_ of those individuals _originating_ from a donor planning unit (which contains a particular habitat type) which arrive into a recipient planning unit (which contains that same habitat type)  (*i.e.* a [probability](glossary.html#probability) matrix) in a [edge list with type](glossary.html#edge_list_with_type) (*i.e.* habitat type) format. The connectivity data generating procedure is described in more detail in the [Connectivity Input](CSD_landscape.html#connectivity_input) section. Below is the connectivity matrix of our example conservation priority. For the sake of your web browser, this table only contains the 7 rows and columns of the connectivity matrix. The real file has 1279227 entries.
 
 ```{r}
 
@@ -233,7 +230,7 @@ datatable(conmat[1:7,],rownames = FALSE, options = list(searching = FALSE))
 
 ## Loading your project in Marxan Connect
  
- Now that we have explored the input files, we are ready to open Marxan Connect and load our project. Please load the `tutorial.MarCon` file in the **CSD_landscape** folder into Marxan Connect. You should not have to change any inputs in the project, but it is important to understand what these choices entail.
+Now that we have explored the input files, we are ready to open Marxan Connect and load our project. Please load the `tutorial.MarCon` file in the **CSD_landscape** folder into Marxan Connect. You should not have to change any inputs in the project, but it is important to understand what these choices entail. 
  
 ![**Figure 1:** *Loading Marxan Connect tutorial .*\label{workflow}](images/Load_tutorial.png)
 
@@ -247,7 +244,7 @@ After loading `tutorial.MarCon` your **Spatial Input** tab should now look somet
 
 ![**Figure 3:** *Spatial Input tab .*\label{workflow}](images/Spatial_Input_tab_landscape.png)
 
-Make sure that the **Planning Unit Shapefile**, **Focus Area Shapefile** and **Avoidance Area Shapefile** correspond to the appropriate input files. On this tab, you can also choose whether the **Focus Area Shapefile** and **Avoidance Areas Shapefile** should be locked in, locked out, or status-quo (i.e. the planning unit status stays the same as what is designated in the pu.dat file). In this example, our **Focus Areas** represents protected areas with IUCN categories I and II, and our **Avoidance Areas** represent ports. We have chosen to keep the same planning unit "status" (locked in/locked out) as the pu.dat file by selecting the status quo option.
+Make sure that the **Planning Unit Shapefile** and when relevant, the, **Focus Area Shapefile** and **Avoidance Area Shapefile** correspond to the appropriate input files (the Focus and Avoidance areas are not used in this example). On this tab, you can also choose whether the **Focus Area Shapefile** and **Avoidance Areas Shapefile** should be locked in, locked out, or status-quo (i.e. the planning unit status stays the same as what is designated in the pu.dat file). 
 
 Now we are ready to proceed to the **Connectivity Input** tab.
 
@@ -255,11 +252,14 @@ Now we are ready to proceed to the **Connectivity Input** tab.
 
 Since we are working with landscape data, we choose the **Landscape Input** option from the **Choose Connectivity Input Category** dropdown menu. Alternatively, **Demographic Input** could be chosen (see [demographic connectivity tutorial ](./CF_demographic.html)). 
 
-For the landscape connectivity approach, Marxan Connect calculates connectivity metrics from networks based either on Euclidean distance or least-cost path between the centroid of planning units. However, other software packages such as [Circuitscape](http://www.circuitscape.org/) [@McRae2009-aq] and [Conefor](http://www.conefor.org/) [@Saura2009-sa] currently provide a richer set of options and specialized  methods. These software packages can be used to generate custom conservation features or connectivity matrices both of which can then be used in Marxan Connect. For example, one could generate a network using current density using Circuitscape and input the resulting connectivity matrix into Marxan Connect to generate conservation features or spatial dependencies.
+For the landscape connectivity approach, Marxan Connect calculates connectivity metrics from networks based either on Euclidean distance or least-cost path between the centroid of planning units. The connectivity data we use in this example was created using the "**Habitat Type + Resistance**" option from the second dropdown menu. We selected the "**Euclidean Distance** "Distance Calculation Type" to estimate the connectivity between each planning unit. We selected the **bioregion_short.shp** as the **Habitat Type Shapefile** so that pairs of planning units which contain the same habitat type are connected while others are not. The probability of connectivity then becomes ${1/distance^2}$, if pairs of planning units contain the same habitat type, and are normalized for each source planning unit so that the sum of probabilities equals 1 (*i.e.* row normalized). The **Habitat Neighbour Buffer** is the maximum distance (in meters) that neighbouring planning units could be considered directly connected. In this case, it is set to 1 meter. The **Habitat Connectivity Lower Threshold** is the value below which connectivity links are considered negligible and set to 0. 
 
-The connectivity data we use in this example was created by Marxan Connect by calculating using the "**Habitat Type +Resistance**" options. We selected the "**Euclidean Distance**" Distance Calculation Type to estimate the connectivity between each planning unit. We selected the **bioregion_short.shp** as the **Habitat Type Shapefile** so that pairs of planning units which contain the same habitat type are connected while others are not. The probability of connectivity then becomes ${1/distance^2}$, if pairs of planning units which contain the same habitat type, normalized for each source planning unit so that the sum of probabilities is 1 (*i.e.* row normalized). The **Habitat Neighbour Buffer**, in this case set to 1 m, is the maximum distance in meters where neighbouring planning units could be considered directly connected. The **Habitat Connectivity Lower Threshold** is the value below which connectivity links are considered negligible and set to 0. However, since this whole process is fairly time consuming we've provided the pre-calculated matrix. 
+Since the process of creating the landscape connectivity matrix is fairly time consuming we've provided the pre-calculated matrix using the above options. On this tab, ensure that the **Landscape Connectivity Matrix** refers to the correct file. For this example, this should read **IsolationByDistance.csv**.  
 
-Ensure that the **Connectivity Matrix** refers to the correct file. For this example, this should read **IsolationByDistance.csv**.
+##WHAT DOES THIS DATA REPRESENT##
+Since this data represents XXX in a matrix format, we have selected.
+
+*******EXPLAIN OTHER POTENTIAL LANDSCAPE CONNECTIVITY DATA OPTIONS?****.
 
 Your **Connectivity Input** tab should look like this (you should not have to change any settings):
 
@@ -269,48 +269,47 @@ Now proceed to the **Connectivity Metrics** tab.
 
 ## Connectivity Metrics
 
-In this example, we have chosen to incorporate landscape connectivity data as the spatial dependencies between planning units, and therefore, have selected the **Connectivity as boundary** option in the **Planning Unit Dependency as Boundary Definition** section.  This option directly substitutes the supplied connectivity data (_i.e._ Spatial Dependencies) for the boundary lengths in the boundary definitions file (_i.e._ `boundary.dat`; see Beger et al. (2010)), and assumes the user has provided appropriate connectivity data (_e.g._ appropriate scale, units, and rank-order). 
+In this example, we have chosen to incorporate landscape connectivity data as the spatial dependencies between planning units, and therefore, have selected the **Connectivity as boundary** option in the **Planning Unit Dependency as Boundary Definition** section.  This option uses the strengths of connectivity as the spatial dependencies (i.e. instead of the shared boundary lengths) so it can later be exported into the `bound.dat` file (see Beger et al. (2010) for an example). This method assumes the user has provided appropriate connectivity data (_e.g._ appropriate scale, units, and rank-order). 
 
 Alternatively, landscape connectivity data could be incorporated as a discrete conservation feature. The drop down menu in the top right corner gives definitions, possible objectives and the mathematical formulations for different conservation feature options.  See [demographic connectivity tutorial ](./CF_demographic.html) for more information.
-
 ![**Figure 5:** *Connectivity Metrics Tab .*\label{workflow}](images/Connectivity_Metrics_tab_landscape.png)
 
 Once you have selected the appropriate landscape connectivity inputs press **Calculate Metrics** and proceed to the **Pre-Evaluation** tab.
 
 ## Pre-Evaluation
 
-This page allows you to evaluate the metrics created on the **Connectivity Metrics** tab in more detail. It also allows you to choose how you would like to create the connectivity metrics file for further analysis. In this example, we've chosen to append the new connectivity based conservation metrics to the existing Marxan files by selecting **Append**  under the Metrics option box, but since you're not adding any new conservation features Export and Append are equivalent.
+This page allows you to evaluate the metrics created on the **Connectivity Metrics** tab in more detail. It also allows you to choose how you would like to create the connectivity metrics file for further analysis. Since we are using connectivity as boundaries, we do not need to create new features. However, if you are using both spatial dependencies and conservation features, you will need to create features for those metrics. You may now proceed to the **Marxan Files** tab.
 
-![**Figure 6:** *Pre-Evaluation tab .*\label{workflow}](images/Pre_Eval_tab_landscape.png)
+## Marxan Files
 
-Once the desired options have been chosen, press **Export Files** in the bottom right corner of the screen. This will create a new boundary file (**boundary.dat**) that incorporates the landscape connectivity metrics (or update the files, as it has already been created) in the **input** folder of the **CSD_landscape** folder.
+In this example, we have not created any new conservation features, so we can ignore all file inputs/exports except the Spatial Dependencies section.
+
+Under the **Spatial Dependencies (boundary.dat) File** section, we can specify the name of our new boundary file. Make sure the **Original Spatial Dependencies File** lists the original bound.dat file, and choose a desired name for the new bound.dat file (e.g. bound_connect.dat). If both files have the same name, the original bound.dat file will be overwritten. Once the desired options have been chosen, press **Export** button next to the new spatial dependencies file name.  This will create a new boundary file that incorporates the landscape connectivity metrics (or update the files, as it has already been created) in the **input** folder of the **CSD_landscape** folder. A pop-up window should appear signifying that the file was exported successfully.
 
 Let's examine the appended file.
 
-## `boundary.dat`
+## `bound_connect.dat`
 
-Locate the **boundary.dat** file that was created in your Marxan directory folder. This file should look like the table below, which
-### `boundary.dat`
+Locate the **bound_connect.dat** file that was created in your Marxan directory folder. This file should look like the table below. This table represents the spatial dependence boundaries between planning units as the values in the connectivity matrix from above (**IsolationByDistance.csv**, *i.e.* connectivity strength instead of boundary length).
 
-This table represents the spatial dependencies  between planning units as the values in the connectivity matrix from above (**IsolationByDistance.csv**) above (*i.e.* connectivity strength instead of boundary length).
-
-The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the **boundary.dat ** file. The original dataset has 38648 entries.
+The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the **bound_connect.dat ** file. The original dataset has 38648 entries.
 
 ```{r}
 
-boundary <- read.csv("tutorial/CSD_landscape/input/boundary.dat")
+bound <- read.csv("tutorial/CSD_landscape/input/bound_connect.dat")
 
-datatable(boundary[1:30,],rownames = FALSE, options = list(searching = FALSE))
+datatable(bound[1:30,],rownames = FALSE, options = list(searching = FALSE))
 
 ```
-## Marxan Analysis
+Proceed to the **Run Marxan** tab.
 
-Now that the necessary connectivity files have been created, We are ready to run Marxan Connect. Make sure that **Marxan Directory** is set to the location of your Marxan program (**Marxan.exe**), and that the **Marxan Input File** corresponds to the new **input_connect.dat** file. In this example, we have created the **input_connect.dat** file for you. However, when using your own data, you will need to create this file yourself (manually or with the 'customize' button that calls Marxan's 'inedit'), following the same format as the file that is provided.  
+## Run Marxan
 
- ![**Figure 7:** *Marxan Analysis tab .*\label{workflow}](images/Marxan_analysis_tab_landscape.png)
+Now that the necessary connectivity files have been created, we are ready to run Marxan Connect. Make sure that **Marxan Input File** corresponds to the new **input_connect.dat** file. In this example, we have created the **input_connect.dat** file for you. However, when using your own data, you will need to create this file yourself (manually or with the 'customize' button that calls Marxan's 'inedit'), following the same format as the file that is provided.  
 
-To run Marxan Connect press the **Run Marxan** button in the bottom right corner of this tab. 
-Finally, running Marxan with the connectivity conservation features and boundary definitions results in the following Marxan different solution:.
+![**Figure 7:** *Marxan Analysis tab .*\label{workflow}](images/Marxan_analysis_tab_landscape.png)
+
+To run Marxan Connect press the **Run Marxan** button in the bottom right corner of this tab. Finally, running Marxan with the connectivity conservation features and boundary definitions results in the following different Marxan solution:
 
 ```{r}
 
@@ -408,11 +407,7 @@ output <- read.csv("tutorial/CSD_landscape/output/pu_no_connect.csv") %>%
 
 mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
 
-best_solution = as.logical(best_solution),
-
-# fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
-
-# aa_included = as.logical(gsub("True",TRUE,.$aa_included))
+best_solution = as.logical(best_solution))
 
 ) %>%
 

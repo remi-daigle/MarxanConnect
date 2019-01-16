@@ -228,8 +228,7 @@ datatable(conmat,rownames = FALSE, options = list(searching = FALSE))
 
 ## Loading your project in Marxan Connect
 
-Now that we have explored the input files, we are ready to open Marxan Connect and load our project. Please load the `tutorial.MarCon` file in the **CF_demographic** folder into Marxan Connect. 
-File-> Load Project_> "tutorial.MarCon"
+Now that we have explored the input files, we are ready to open Marxan Connect and load our project. Please load the `tutorial.MarCon` file in the **CF_demographic** folder into Marxan Connect. You should not have to change any inputs in the project, but it is important to understand what these choices entail. 
 
 ![**Figure 1:** *Loading Marxan Connect tutorial .*\label{workflow}](images/Load_tutorial.png)
 
