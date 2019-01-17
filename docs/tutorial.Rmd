@@ -67,7 +67,7 @@ The pre-evaluation tab allows users to modify (*i.e.* discretize), plot, and rem
 
 Discretizing creates a spatial feature containing a subset of the metric output. A summary of each metric is shown in table form on the left side of the window to help guide the user through metric modifications. The user can discretize connectivity metrics using quartiles, percentiles or custom values using the ‘Make discrete feature from’ and ‘Make discrete feature to’ panels. To view the frequency histogram for each metric, users can click the ‘Plot Frequency button beside the drop down menu for metrics. Users can also remove the selected metric if deemed not appropriate for the Marxan analysis. Once the upper and lower range of the metric are selected, users will click the ‘Create New Metric’ button. This will save the modifications made to that metric and it will appear in the ‘Connectivity Metric Available for Export’ chart. Users will have to repeat this process until all metrics have been discretized.
 
-##Marxan Files
+## Marxan Files
 
 This tab allows users to append, export to ignore discrete connectivity metrics, spatial dependencies and the planning unit status to Marxan formatted files. 
 

@@ -15,12 +15,12 @@ navbar:
       href: tutorial.html
     - text: Conservation Features + demographic data
       href: CF_demographic.html
-    - text: Conservation Features + landscape data
-      href: CF_landscape.html
-    - text: Connectivity as Spatial Dependency + demographic data
-      href: CSD_demographic.html
     - text: Connectivity as Spatial Dependency + landscape data
       href: CSD_landscape.html
+    - text: Conservation Features + landscape data (in-development)
+      href: CF_landscape.html
+    - text: Connectivity as Spatial Dependency + demographic data (in-development)
+      href: CSD_demographic.html
     - text: Setting Targets and Post-hoc Evaluation
       href: targets.html
   - text: Glossary

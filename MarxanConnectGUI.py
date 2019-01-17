@@ -1446,6 +1446,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.bd_land_conn_boundary.Enable(enable=land_enable)
         self.bd_land_min_plan_graph.Enable(enable=land_enable)
 
+        if any(self.project['options']['land_metrics'].values()) or any(self.project['options']['demo_metrics'].values()):
+            print('yes')
+            self.calc_metrics.Enable(True)
+        else:
+            print('no')
+            self.calc_metrics.Enable(False)
+
     def on_bd_land_conn_boundary(self, event):
         if self.bd_land_conn_boundary.GetValue():
             self.bd_demo_conn_boundary.SetValue(False)
@@ -1688,8 +1695,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             self.set_metric_options()
 
+            if not any(self.project['options']['land_metrics'].values()) or any(
+                    self.project['options']['demo_metrics'].values()):
+                marxanconpy.warn_dialog(message="No metrics selected")
+                raise Exception("No metrics selected")
+
             if not self.calc_metrics_pu.GetValue() and not self.calc_metrics_cu.GetValue():
                 marxanconpy.warn_dialog(message="No 'Units' selected for metric calculations.")
+                raise Exception("No 'Units' selected for metric calculations.")
 
             marxanconpy.manipulation.calc_metrics(project=self.project,
                                                   progressbar=True,
