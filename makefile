@@ -54,9 +54,9 @@ endif
 
 mac: app
 ifeq (${daily},1)
-	dmgbuild -s mac_dmg_settings.py -D app=dist/MarxanConnectGUI.app "Marxan Connect ${version}-rc${rc}" MarxanConnect-${version}-rc${rc}.dmg
+	dmgbuild -s mac_dmg_settings.py -D app=dist/MarxanConnectGUI.app "Marxan Connect ${version}-rc${rc}" MarxanConnect-${version}-rc${rc}-macOS.dmg
 else
-	dmgbuild -s mac_dmg_settings.py -D app=dist/MarxanConnectGUI.app "Marxan Connect ${version}" MarxanConnect-${version}.dmg
+	dmgbuild -s mac_dmg_settings.py -D app=dist/MarxanConnectGUI.app "Marxan Connect ${version}" MarxanConnect-${version}-macOS.dmg
 endif
 
 
