@@ -175,7 +175,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Google PageRank
 
-**Definition**: PageRank uses the number and quality (weight) of connections associated with a planning unit, to estimate the importance of the planning unit. PageRank is functionally similar to Eigenvector Centrality, and is recommended for well connected planning areas. Appropriate matrices to be used with the PageRank algorithm include the [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), and [${P}$](glossary.html#probability).  
+**Definition**: PageRank uses the number and quality (weight) of connections associated with a planning unit, to estimate the importance of the planning unit [Kininmonth2019-j]. PageRank is functionally similar to Eigenvector Centrality, and is recommended for well connected planning areas. Appropriate matrices to be used with the PageRank algorithm include the [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), and [${P}$](glossary.html#probability).  
 
 **Possible Objectives**: Prioritize planning units which are important to maintaining or influencing connectivity within the whole planning area (*i.e.* study extent).
 
@@ -741,7 +741,7 @@ The entire spatial domain over which the planning process is occuring. This is s
 
 # Planning Units
 
-Spatial sub-units of the entire planning area (*i.e.* domain, or study area). Can be gridded (*e.g.* hexagonal) or feature based (e.g. reefs) as in Marxan.
+Spatial sub-units of the entire planning area (*i.e.* domain, or study area). Can be gridded (*e.g.* hexagonal) or feature based (e.g. reefs) as in Marxan. They can be created uniquely for the Marxan analysis, or recycled from existing data (*e.g.* connectivity data, species distribution model output)
 
 # Resistance Matrix
 
