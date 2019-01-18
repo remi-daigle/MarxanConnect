@@ -9097,7 +9097,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">This tab will allow you to evaluate the metrics created on the previous tab and discretize the metrics to create connectivity-based conservation features by choosing a minimum and maximum threshold. These discrete features can optionally be locked in or out when they are created. Selected metrics or discrete features can be removed if they are not appropriate for the Marxan analysis.</property>
+                                                    <property name="label">This tab will allow you to evaluate the metrics created on the previous tab and discretize the metrics to create connectivity-based conservation features by choosing a minimum and maximum threshold. These thresholds can be chosen from the quartiles, a percentile, or a custom numeric value. These discrete features can optionally be locked in or out when they are created. Selected metrics or discrete features can be removed if they are not appropriate for the Marxan analysis.</property>
                                                     <property name="markup">0</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
