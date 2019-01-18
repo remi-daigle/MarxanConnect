@@ -249,7 +249,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -479,7 +479,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_cm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.land_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can:  1) load a connectivity matrix directly,  2) load a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or  3) load a habitat type shapefile and an optional resistance matrix, which can used to calculate the connectivity matrix via least-cost path or Euclidean distance analysis.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can:  1) load a habitat type shapefile and an optional resistance matrix, which can used to calculate the connectivity matrix via least-cost path or Euclidean distance analysis, 2) load a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or  3) load a connectivity matrix directly", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_CM_def.Wrap( -1 )
 
 		land_cm_def_sizer.Add( self.land_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
@@ -1038,7 +1038,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.connectivityMetrics.SetSizer( metricsMainSizer )
 		self.connectivityMetrics.Layout()
 		metricsMainSizer.Fit( self.connectivityMetrics )
-		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.connectivityMetrics, u"3) Connectivity Metrics", False, wx.NullBitmap )
 		self.preEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		preEvalMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		preEvalMainSizer.AddGrowableCol( 0 )
@@ -1049,7 +1049,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		preEval_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.preEval_def_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"This tab will allow you to evaluate the metrics created on the previous tab. They can be removed if they are not appropriate for the Marxan analysis, transformed into discrete features which can be locked in or out.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_def_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"This tab will allow you to evaluate the metrics created on the previous tab and discretize the metrics to create connectivity-based conservation features by choosing a minimum and maximum threshold. These discrete features can optionally be locked in or out when they are created. Selected metrics or discrete features can be removed if they are not appropriate for the Marxan analysis.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_def_txt.Wrap( -1 )
 
 		preEval_def_sizer.Add( self.preEval_def_txt, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 5 )
@@ -1193,7 +1193,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_discrete_from_sizer.SetFlexibleDirection( wx.BOTH )
 		preEval_discrete_from_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.preEval_discrete_from_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Make discrete feature from:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_discrete_from_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Make discrete feature from minimum threshold:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_discrete_from_txt.Wrap( -1 )
 
 		self.preEval_discrete_from_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
@@ -1256,7 +1256,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		preEval_discrete_to_sizer.SetFlexibleDirection( wx.BOTH )
 		preEval_discrete_to_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.preEval_discrete_to_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Make discrete feature to:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.preEval_discrete_to_txt = wx.StaticText( self.preEvaluation, wx.ID_ANY, u"Make discrete feature to maximum threshold:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.preEval_discrete_to_txt.Wrap( -1 )
 
 		self.preEval_discrete_to_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
@@ -2884,7 +2884,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.17.14. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.18.10. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
