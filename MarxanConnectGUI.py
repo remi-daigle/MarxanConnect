@@ -86,8 +86,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flow matrix (often mislabeled as a flux matrix), each cell represents the number of elements/individuals moving from site A (row) to site B (column) per unit time.")
 
         self.demo_matrixFormatRadioBox.SetItemToolTip(0,"Matrix format data has the connectivity values arranged is a square format (i.e.the same number of rows and columns). The row names are the donor sites and the column names are the recipient sites ")
-        self.demo_matrixFormatRadioBox.SetItemToolTip(1,"Edge Edge Listwith habi has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
-        self.demo_matrixFormatRadioBox.SetItemToolTip(2,"An Edge List with Time has 4 columns: time ('time'), the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(1,"An Edge List has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(2,"An Edge List with Time has 4 columns: time ('time'), the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(3,"An Edge List with Type has 4 columns: type ('type'), the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
+
+        self.demo_rescale_edgeRadioBox.SetItemToolTip(0,"Rescales the connectivity matrix using a spatially weighted average where there is overlap. In areas with partial overlap, connectivity is assumed to be proportional to the overlap. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, the connectivity value is taken from a spatial average across that planning unit (i.e. a final connectivity value of 5).")
+        self.demo_rescale_edgeRadioBox.SetItemToolTip(1,"Rescales the connectivity matrix using a spatially weighted average where there is overlap. In areas with partial overlap, connectivity is assumed to be homogeneous. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, the connectivity value is considered homogenous across the planning unit (i.e. a final connectivity value of 10).")
 
         # Either load or launch new project
         if len(sys.argv) > 1:
@@ -199,6 +203,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.on_demo_rescaleRadioBox(event=None)
         self.on_land_type_choice(event=None)
         self.enable_metrics()
+        self.enable_discrete()
         self.enable_postHoc()
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
@@ -272,6 +277,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.export_metrics.Enable(enable=True)
             self.custom_spec_panel.SetToolTip(None)
         self.enable_metrics()
+        self.enable_discrete()
         self.enable_postHoc()
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
@@ -2100,12 +2106,45 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.preEval_discrete_from_percentile.SetValue(False)
         self.preEval_discrete_from_value.SetValue(False)
         event.GetEventObject().SetValue(True)
+        self.enable_discrete()
 
     def on_to_check(self, event):
         self.preEval_discrete_to_quartile.SetValue(False)
         self.preEval_discrete_to_percentile.SetValue(False)
         self.preEval_discrete_to_value.SetValue(False)
         event.GetEventObject().SetValue(True)
+        self.enable_discrete()
+
+    def enable_discrete(self):
+        if self.preEval_discrete_from_quartile.GetValue():
+            self.preEval_discrete_from_quartile_radio.Enable(True)
+        else:
+            self.preEval_discrete_from_quartile_radio.Enable(False)
+
+        if self.preEval_discrete_from_percentile.GetValue():
+            self.preEval_discrete_from_percentile_slider.Enable(True)
+        else:
+            self.preEval_discrete_from_percentile_slider.Enable(False)
+
+        if self.preEval_discrete_from_value.GetValue():
+            self.preEval_discrete_from_value_txtctrl.Enable(True)
+        else:
+            self.preEval_discrete_from_value_txtctrl.Enable(False)
+
+        if self.preEval_discrete_to_quartile.GetValue():
+            self.preEval_discrete_to_quartile_radio.Enable(True)
+        else:
+            self.preEval_discrete_to_quartile_radio.Enable(False)
+
+        if self.preEval_discrete_to_percentile.GetValue():
+            self.preEval_discrete_to_percentile_slider.Enable(True)
+        else:
+            self.preEval_discrete_to_percentile_slider.Enable(False)
+
+        if self.preEval_discrete_to_value.GetValue():
+            self.preEval_discrete_to_value_txtctrl.Enable(True)
+        else:
+            self.preEval_discrete_to_value_txtctrl.Enable(False)
 
     def update_discrete_grid(self):
         self.all_types = []

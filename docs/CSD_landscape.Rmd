@@ -91,94 +91,94 @@ This map shows the bioregions, which serve as conservation features in the Marxa
 ```{r}
 
 puvspr_wide <- puvspr %>%
-
-left_join(select(spec,"id","name"),
-
-by=c("species"="id")) %>%
-
-select(-species) %>%
-
-spread(key="name",value="amount")
+    
+    left_join(select(spec,"id","name"),
+              
+              by=c("species"="id")) %>%
+    
+    select(-species) %>%
+    
+    spread(key="name",value="amount")
 
 # planning units with output
 
 output <- read.csv("tutorial/CSD_landscape/output/pu_no_connect.csv") %>%
-
-mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-
-best_solution = as.logical(best_solution)) %>%
-
-st_as_sf() %>%
-
-left_join(puvspr_wide,by=c("FID"="pu"))
+    
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           
+           best_solution = as.logical(best_solution)) %>%
+    
+    st_as_sf() %>%
+    
+    left_join(puvspr_wide,by=c("FID"="pu"))
 
 ```
 
 ```{r,warning=FALSE,message=FALSE}
 
 map <- leaflet(output) %>%
-
-addTiles()
+    
+    addTiles()
 
 groups <- names(select(output,-best_solution,-select_freq))[c(-1,-2)]
 
 groups <- groups[groups!="geometry"]
 
 for(i in groups){
-
-z <- unlist(data.frame(output)[i])
-
-if(is.numeric(z)){
-
-pal <- colorBin("YlOrRd", domain = z)
-
-}else{
-
-pal <- colorFactor("YlOrRd", domain = z)
-
-}
-
-map = map %>%
-
-addPolygons(fillColor = ~pal(z),
-
-fillOpacity = 0.6,
-
-weight=0.5,
-
-color="white",
-
-group=i,
-
-label = as.character(z)) %>%
-
-addLegend(pal = pal,
-
-values = z,
-
-title = i,
-
-group = i,
-
-position="bottomleft")
-
+    
+    z <- unlist(data.frame(output)[i])
+    
+    if(is.numeric(z)){
+        
+        pal <- colorBin("YlOrRd", domain = z)
+        
+    }else{
+        
+        pal <- colorFactor("YlOrRd", domain = z)
+        
+    }
+    
+    map = map %>%
+        
+        addPolygons(fillColor = ~pal(z),
+                    
+                    fillOpacity = 0.6,
+                    
+                    weight=0.5,
+                    
+                    color="white",
+                    
+                    group=i,
+                    
+                    label = as.character(z)) %>%
+        
+        addLegend(pal = pal,
+                  
+                  values = z,
+                  
+                  title = i,
+                  
+                  group = i,
+                  
+                  position="bottomleft")
+    
 }
 
 map <- map %>%
-
-addLayersControl(overlayGroups  = groups,
-
-options = layersControlOptions(collapsed = FALSE))
+    
+    addLayersControl(overlayGroups  = groups,
+                     
+                     options = layersControlOptions(collapsed = FALSE))
 
 for(i in groups){
-
-map <- map %>% hideGroup(i)
-
+    
+    map <- map %>% hideGroup(i)
+    
 }
 
 map %>%
-
-showGroup("BIORE_102")
+    
+    showGroup("BIORE_102")
 
 ```
 
@@ -191,8 +191,8 @@ The connectivity data is at the 'heart' of Marxan Connect's functionality. It al
 # planning units
 
 pu <- st_read("tutorial/CSD_landscape/hex_planning_units.shp") %>%
-
-st_transform(proj)
+    
+    st_transform(proj)
 
 ```
 
@@ -203,14 +203,14 @@ st_transform(proj)
 p <- qtm(pu,fill = '#7570b3')
 
 tmap_leaflet(p) %>%
-
-addLegend(position = "topright",
-
-labels = c("Planning Units"),
-
-colors = c("#7570b3"),
-
-title = "Layers")
+    
+    addLegend(position = "topright",
+              
+              labels = c("Planning Units"),
+              
+              colors = c("#7570b3"),
+              
+              title = "Layers")
 
 ```
 
@@ -229,9 +229,9 @@ datatable(conmat[1:7,],rownames = FALSE, options = list(searching = FALSE))
 # Marxan Connect
 
 ## Loading your project in Marxan Connect
- 
+
 Now that we have explored the input files, we are ready to open Marxan Connect and load our project. Please load the `tutorial.MarCon` file in the **CSD_landscape** folder into Marxan Connect. You should not have to change any inputs in the project, but it is important to understand what these choices entail. 
- 
+
 ![**Figure 1:** *Loading Marxan Connect tutorial .*\label{workflow}](images/Load_tutorial.png)
 
 We will now step through the Marxan Connect workflow following the work flow tabs.
@@ -316,84 +316,84 @@ To run Marxan Connect press the **Run Marxan** button in the bottom right corner
 # planning units with output
 
 output <- read.csv("tutorial/CSD_landscape/output/pu_connect.csv") %>%
-
-mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-
-best_solution = as.logical(best_solution),
-
-# fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
-
-# aa_included = as.logical(gsub("True",TRUE,.$aa_included))
-
-) %>%
-
-st_as_sf()
+    
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           
+           best_solution = as.logical(best_solution)#,
+           
+           # fa_included = as.logical(gsub("True",TRUE,.$fa_included)),
+           
+           # aa_included = as.logical(gsub("True",TRUE,.$aa_included))
+           
+    ) %>%
+    
+    st_as_sf()
 
 ```
 
 ```{r,warning=FALSE,message=FALSE}
 
 map <- leaflet(output) %>%
-
-addTiles()
+    
+    addTiles()
 
 groups <- c("best_solution","select_freq")
 
 for(i in groups){
-
-z <- unlist(data.frame(output)[i])
-
-if(is.numeric(z)){
-
-pal <- colorBin("YlOrRd", domain = z)
-
-}else{
-
-pal <- colorFactor("YlOrRd", domain = z)
-
-}
-
-map = map %>%
-
-addPolygons(fillColor = ~pal(z),
-
-fillOpacity = 0.6,
-
-weight=0.5,
-
-color="white",
-
-group=i,
-
-label = as.character(z)) %>%
-
-addLegend(pal = pal,
-
-values = z,
-
-title = i,
-
-group = i,
-
-position="bottomleft")
-
+    
+    z <- unlist(data.frame(output)[i])
+    
+    if(is.numeric(z)){
+        
+        pal <- colorBin("YlOrRd", domain = z)
+        
+    }else{
+        
+        pal <- colorFactor("YlOrRd", domain = z)
+        
+    }
+    
+    map = map %>%
+        
+        addPolygons(fillColor = ~pal(z),
+                    
+                    fillOpacity = 0.6,
+                    
+                    weight=0.5,
+                    
+                    color="white",
+                    
+                    group=i,
+                    
+                    label = as.character(z)) %>%
+        
+        addLegend(pal = pal,
+                  
+                  values = z,
+                  
+                  title = i,
+                  
+                  group = i,
+                  
+                  position="bottomleft")
+    
 }
 
 map <- map %>%
-
-addLayersControl(overlayGroups  = groups,
-
-options = layersControlOptions(collapsed = FALSE))
+    
+    addLayersControl(overlayGroups  = groups,
+                     
+                     options = layersControlOptions(collapsed = FALSE))
 
 for(i in groups){
-
-map <- map %>% hideGroup(i)
-
+    
+    map <- map %>% hideGroup(i)
+    
 }
 
 map %>%
-
-showGroup("select_freq")
+    
+    showGroup("select_freq")
 
 ```
 
@@ -404,80 +404,78 @@ Here is the output of our example with no connectivity for comparison.
 # planning units with output
 
 output <- read.csv("tutorial/CSD_landscape/output/pu_no_connect.csv") %>%
-
-mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
-
-best_solution = as.logical(best_solution))
-
-) %>%
-
-st_as_sf()
+    
+    mutate(geometry=st_as_sfc(geometry,"+proj=longlat +datum=WGS84"),
+           
+           best_solution = as.logical(best_solution)) %>%
+    
+    st_as_sf()
 
 ```
 
 ```{r,warning=FALSE,message=FALSE}
 
 map <- leaflet(output) %>%
-
-addTiles()
+    
+    addTiles()
 
 groups <- c("best_solution","select_freq")
 
 for(i in groups){
-
-z <- unlist(data.frame(output)[i])
-
-if(is.numeric(z)){
-
-pal <- colorBin("YlOrRd", domain = z)
-
-}else{
-
-pal <- colorFactor("YlOrRd", domain = z)
-
-}
-
-map = map %>%
-
-addPolygons(fillColor = ~pal(z),
-
-fillOpacity = 0.6,
-
-weight=0.5,
-
-color="white",
-
-group=i,
-
-label = as.character(z)) %>%
-
-addLegend(pal = pal,
-
-values = z,
-
-title = i,
-
-group = i,
-
-position="bottomleft")
-
+    
+    z <- unlist(data.frame(output)[i])
+    
+    if(is.numeric(z)){
+        
+        pal <- colorBin("YlOrRd", domain = z)
+        
+    }else{
+        
+        pal <- colorFactor("YlOrRd", domain = z)
+        
+    }
+    
+    map = map %>%
+        
+        addPolygons(fillColor = ~pal(z),
+                    
+                    fillOpacity = 0.6,
+                    
+                    weight=0.5,
+                    
+                    color="white",
+                    
+                    group=i,
+                    
+                    label = as.character(z)) %>%
+        
+        addLegend(pal = pal,
+                  
+                  values = z,
+                  
+                  title = i,
+                  
+                  group = i,
+                  
+                  position="bottomleft")
+    
 }
 
 map <- map %>%
-
-addLayersControl(overlayGroups  = groups,
-
-options = layersControlOptions(collapsed = FALSE))
+    
+    addLayersControl(overlayGroups  = groups,
+                     
+                     options = layersControlOptions(collapsed = FALSE))
 
 for(i in groups){
-
-map <- map %>% hideGroup(i)
-
+    
+    map <- map %>% hideGroup(i)
+    
 }
 
 map %>%
-
-showGroup("select_freq")
+    
+    showGroup("select_freq")
 
 ```
 

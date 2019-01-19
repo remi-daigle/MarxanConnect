@@ -360,7 +360,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">1) Spatial Input</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -3361,7 +3361,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can:  1) load a connectivity matrix directly,  2) load a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or  3) load a habitat type shapefile and an optional resistance matrix, which can used to calculate the connectivity matrix via least-cost path or Euclidean distance analysis.</property>
+                                                                        <property name="label">The connectivity matrix (or list) is the ultimate input format for landscape data, but there are multiple input types that can be used to calculate connectivity matrices. Users can:  1) load a habitat type shapefile and an optional resistance matrix, which can used to calculate the connectivity matrix via least-cost path or Euclidean distance analysis, 2) load a resistance surface that can be used to calculate the connectivity matrix via least-cost path analysis, or  3) load a connectivity matrix directly</property>
                                                                         <property name="markup">0</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
@@ -5805,7 +5805,7 @@
                         <object class="auinotebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">3) Connectivity Metrics</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -9097,7 +9097,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">This tab will allow you to evaluate the metrics created on the previous tab. They can be removed if they are not appropriate for the Marxan analysis, transformed into discrete features which can be locked in or out.</property>
+                                                    <property name="label">This tab will allow you to evaluate the metrics created on the previous tab and discretize the metrics to create connectivity-based conservation features by choosing a minimum and maximum threshold. These thresholds can be chosen from the quartiles, a percentile, or a custom numeric value. These discrete features can optionally be locked in or out when they are created. Selected metrics or discrete features can be removed if they are not appropriate for the Marxan analysis.</property>
                                                     <property name="markup">0</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
@@ -10000,7 +10000,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Make discrete feature from:</property>
+                                                            <property name="label">Make discrete feature from minimum threshold:</property>
                                                             <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
@@ -10581,7 +10581,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Make discrete feature to:</property>
+                                                            <property name="label">Make discrete feature to maximum threshold:</property>
                                                             <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
