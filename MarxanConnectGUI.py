@@ -93,6 +93,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_rescale_edgeRadioBox.SetItemToolTip(0,"Rescales the connectivity matrix using a spatially weighted average where there is overlap. In areas with partial overlap, connectivity is assumed to be proportional to the overlap. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, the connectivity value is taken from a spatial average across that planning unit (i.e. a final connectivity value of 5).")
         self.demo_rescale_edgeRadioBox.SetItemToolTip(1,"Rescales the connectivity matrix using a spatially weighted average where there is overlap. In areas with partial overlap, connectivity is assumed to be homogeneous. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, the connectivity value is considered homogenous across the planning unit (i.e. a final connectivity value of 10).")
 
+        self.demo_rescale_edgeRadioBox.GetItemToolTip(0).SetAutoPop(30000)
+        self.demo_rescale_edgeRadioBox.GetItemToolTip(1).SetAutoPop(30000)
+
         # Either load or launch new project
         if len(sys.argv) > 1:
             self.spatial = {}
@@ -1453,10 +1456,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.bd_land_min_plan_graph.Enable(enable=land_enable)
 
         if any(self.project['options']['land_metrics'].values()) or any(self.project['options']['demo_metrics'].values()):
-            print('yes')
             self.calc_metrics.Enable(True)
         else:
-            print('no')
             self.calc_metrics.Enable(False)
 
     def on_bd_land_conn_boundary(self, event):
