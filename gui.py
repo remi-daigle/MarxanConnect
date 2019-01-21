@@ -671,10 +671,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_pucm_seperator = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		land_pucm_output_txt_sizer.Add( self.land_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 
-		self.demo_PUCM_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Connectivity Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PUCM_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Connectivity Edge List:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_PUCM_text.Wrap( -1 )
 
-		self.demo_PUCM_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.demo_PUCM_text.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		land_pucm_output_txt_sizer.Add( self.demo_PUCM_text, 0, wx.ALL, 5 )
 
@@ -731,7 +731,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_LP_text = wx.StaticText( self.connectivityInput, wx.ID_ANY, u"Local Production:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_LP_text.Wrap( -1 )
 
-		self.demo_LP_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.demo_LP_text.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		LP_txt_sizer.Add( self.demo_LP_text, 0, wx.ALL, 5 )
 

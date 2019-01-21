@@ -5057,11 +5057,11 @@
                                                                         <property name="enabled">1</property>
                                                                         <property name="fg"></property>
                                                                         <property name="floatable">1</property>
-                                                                        <property name="font">Arial,90,92,9,74,1</property>
+                                                                        <property name="font">,90,92,-1,70,1</property>
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Connectivity Matrix:</property>
+                                                                        <property name="label">Connectivity Edge List:</property>
                                                                         <property name="markup">0</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
@@ -5547,7 +5547,7 @@
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
                                                     <property name="floatable">1</property>
-                                                    <property name="font">Arial,90,92,9,74,1</property>
+                                                    <property name="font">,90,92,-1,70,1</property>
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
