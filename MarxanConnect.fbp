@@ -3450,7 +3450,7 @@
                                                                 <property name="window_style"></property>
                                                                 <event name="OnChoicebookPageChanged">on_land_type_choice</event>
                                                                 <object class="choicebookpage" expanded="0">
-                                                                    <property name="label">Habitat Type + Resistance</property>
+                                                                    <property name="label">Habitat Type + Isolation</property>
                                                                     <property name="select">1</property>
                                                                     <object class="wxPanel" expanded="0">
                                                                         <property name="BottomDockable">1</property>
@@ -4905,7 +4905,7 @@
                                                                     </object>
                                                                 </object>
                                                                 <object class="choicebookpage" expanded="0">
-                                                                    <property name="label">Connectivity Matrix</property>
+                                                                    <property name="label">Connectivity Edge List with Habitat</property>
                                                                     <property name="select">0</property>
                                                                     <object class="wxPanel" expanded="0">
                                                                         <property name="BottomDockable">1</property>
@@ -5133,7 +5133,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">The Planning Unit Connectivity Matrix is either the only user input for the landscape category, or the output of the least-cost path analysis. It will be used to calcuate the Connectivity Metrics for the planning units.</property>
+                                                                        <property name="label">The connectivity &quot;edge list with habitat&quot; is either the only user input for the landscape category, or the output of the least-cost path analysis. It will be used to calcuate the Connectivity Metrics for the planning units.</property>
                                                                         <property name="markup">0</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
@@ -5277,7 +5277,7 @@
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
-                                                                        <property name="label">Landscape Connectivity Matrix:</property>
+                                                                        <property name="label">Landscape Connectivity Edge List</property>
                                                                         <property name="markup">0</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>

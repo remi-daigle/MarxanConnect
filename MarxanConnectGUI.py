@@ -1277,10 +1277,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             enable_hab = False
             enable_surface = True
             marxanconpy.warn_dialog(message="This feature is not yet operational, please check back in the next version!")
-        elif self.project['options']['land_conmat_type'] == "Connectivity Matrix":
+        elif self.project['options']['land_conmat_type'] == "Connectivity Edge List with Habitat":
             enable_hab = False
             enable_surface = False
-        elif self.project['options']['land_conmat_type'] == "Habitat Type + Resistance":
+        elif self.project['options']['land_conmat_type'] == "Habitat Type + Isolation":
             enable_hab = True
             enable_surface = False
 

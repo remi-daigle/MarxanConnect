@@ -1,10 +1,10 @@
 ---
 title: "Tutorial"
 output:
-html_document: 
-code_folding: hide
-toc: yes
-toc_float: yes
+  html_document: 
+    code_folding: hide
+    toc: yes
+    toc_float: yes
 bibliography: references.bib
 ---
 
@@ -107,10 +107,7 @@ output <- read.csv("tutorial/CF_demographic/output/pu_no_connect.csv") %>%
            
            best_solution = as.logical(best_solution)) %>%
     
-    st_as_sf() %>%
-    
-    left_join(puvspr_wide,by=c("FID"="pu"))
-
+    st_as_sf()
 ```
 
 ```{r,warning=FALSE,message=FALSE}
@@ -212,7 +209,7 @@ tmap_leaflet(p) %>%
 
 ## `hexflow.csv`
 
-The connectivity data for this analysis can be found in the **hexFlow.csv** file in the **CF_demographic** folder. For this example, we have created the connectivity matrix for you. We note, however, that for demographic connectivity analyses, this file should be created in the Marxan Connect workflow and should best reflect the demographic connectivity goals of the user. For landscape connectivity data, Marxan Connect does have some functionality to create connectivity matrices from resistance data (see [landscape connectivity tutorial] (./CSD_landscape.html)). 
+The connectivity data for this analysis can be found in the **hexFlow.csv** file in the **CF_demographic** folder. For this example, we have created the connectivity matrix for you. We note, however, that for demographic connectivity analyses, this file should be created ahead of the Marxan Connect workflow and should best reflect the demographic connectivity goals of the user (*e.g.* dispersal models, movement data). For landscape connectivity data, Marxan Connect does have some functionality to create connectivity matrices from resistance data (see [landscape connectivity tutorial] (./CSD_landscape.html)). 
 
 For the sake of your web browser, this table only contains the 7 rows and columns of the connectivity matrix. The real file is a 653 X 653 matrix.
 

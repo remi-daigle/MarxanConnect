@@ -595,7 +595,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.hab_res.SetSizer( hab_res_sizer )
 		self.hab_res.Layout()
 		hab_res_sizer.Fit( self.hab_res )
-		self.land_type_choice.AddPage( self.hab_res, u"Habitat Type + Resistance", True )
+		self.land_type_choice.AddPage( self.hab_res, u"Habitat Type + Isolation", True )
 		self.res_suf = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		land_res_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		land_res_sizer.AddGrowableCol( 0 )
@@ -663,7 +663,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_res_sizer.Fit( self.res_suf )
 		self.land_type_choice.AddPage( self.res_suf, u"Resistance Surface", False )
 		self.con_mat = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.land_type_choice.AddPage( self.con_mat, u"Connectivity Matrix", False )
+		self.land_type_choice.AddPage( self.con_mat, u"Connectivity Edge List with Habitat", False )
 		landMainSizer.Add( self.land_type_choice, 1, wx.EXPAND, 5 )
 
 		land_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
@@ -683,7 +683,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_pucm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.land_PU_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The Planning Unit Connectivity Matrix is either the only user input for the landscape category, or the output of the least-cost path analysis. It will be used to calcuate the Connectivity Metrics for the planning units.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity \"edge list with habitat\" is either the only user input for the landscape category, or the output of the least-cost path analysis. It will be used to calcuate the Connectivity Metrics for the planning units.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_PU_CM_def.Wrap( -1 )
 
 		land_pucm_def_sizer.Add( self.land_PU_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
@@ -700,7 +700,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_PU_CM_progress.SetValue(True)
 		land_pucm_sizer.Add( self.land_PU_CM_progress, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_PU_CM_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Landscape Connectivity Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Landscape Connectivity Edge List", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_PU_CM_filetext.Wrap( -1 )
 
 		self.land_PU_CM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
@@ -2884,7 +2884,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.20.15. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.21.14. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
