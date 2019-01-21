@@ -1,7 +1,7 @@
 Number of Planning Units 653
 Number of Conservation Values 20
 Starting proportion 0.50
-Connection modifier 10.00
+Connection modifier 0.50
 
 Clumping - default step function
 Algorithm Used :Annealing and Iterative Improvement
