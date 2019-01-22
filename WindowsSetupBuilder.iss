@@ -63,3 +63,6 @@ Root: HKCR; Subkey: "MarxanConnectProject\DefaultIcon"; ValueType: string; Value
 [Messages]
 DirExists=The folder: %1 already exists. %n%nTo avoid conflicts, it is recommended that you uninstall any previous versions of Marxan Connect before re-installing the program. Alternatively, you may choose a new folder location on the previous page to install in another location. %n%nWould you like to install Marxan Connect to this folder anyway? Proceed at your own risk: answering "yes" below will likely result in errors.
 DirExistsTitle=Warning: Folder Exists
+
+[Dirs]
+Name: "{app}"; Flags: uninsalwaysuninstall
