@@ -251,7 +251,7 @@ On this tab, ensure that the **Connectivity Matrix** refers to the correct file.
 
 Additionally, we have chosen the **Identical Grids** option from the **Rescale Connectivity Matrix** menu. This signifies that our connectivity data is on an identical grid as our planning units. If our connectivity data was not on the same grid as our planning units, we could choose to rescale the connectivity matrix, which essentially does a spatial averaging routine to calculate connectivity on the planning unit grid. If rescaling is chosen, the user needs to decide whether to rescale the connectivity data proportional to the overlap or to assume homogeneous connectivity. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, does the user want the connectivity value to be taken from a spatial average across that planning unit (i.e. the connectivity value of that planning unit would then be 5) or be considered homogenous across the planning unit (i.e. a connectivity value of 10).
 
-Your **Connectivity Input** tab should look like this (you should not have to change any settings):
+Your **Connectivity Input** tab should look like this (you should not have to change any settings if you loaded the `.MarCon` project):
 
 ![**Figure 4:** *Connectivity Input Tab .*\label{workflow}](images/Connectivity_Input_tab_demographic.png)
 
@@ -259,7 +259,7 @@ Now proceed to the **Connectivity Metrics** tab.
 
 ## Connectivity Metrics
 
-In this example, we have chosen to use the **google page rank metric** to create our connectivity-based conservation feature. However, there are a variety of metrics to choose from. We encourage you to scroll through the drop down menu in the top right corner for definitions, possible objectives and the mathematical formulations for different connectivity-based conservation feature options. We will ignore the **Planning Unit Dependency as Boundary Definition** in this example. 
+In this example, we have chosen to use the **Google PageRank** metric to create our connectivity-based conservation feature. However, there are a variety of metrics to choose from. We encourage you to scroll through the drop down menu in the top right corner for definitions, possible objectives and the mathematical formulations for different connectivity-based conservation feature options. We will ignore the **Planning Unit Dependency as Boundary Definition** in this example. 
 
 ![**Figure 5:** *Connectivity Metrics Tab .*\label{workflow}](images/Connectivity_Metrics_tab_demographic.png)
 
@@ -267,9 +267,9 @@ Once you have selected a demographic conservation feature press **Calculate Metr
 
 ## Pre-Evaluation
 
-This page allows you to evaluate the metrics created in the **Connectivity Metrics** tab in more detail. It also allows you to choose how you would like to transform the continuous connectivity metrics into conservation features for further analysis. To discretize the continuous metric, we've used the **Quartile** option and set the *median* of the continuous metric Google PageRank as the lower threshold (**Make discrete feature from**) and the *maximum* value as the upper threshold (**Make discrete feature to:**). Once you have established the parameters of your desired metric, press **Create New Feature**. 
+This page allows you to evaluate the metrics created in the **Connectivity Metrics** tab in more detail. It also allows you to choose how you would like to transform the continuous connectivity metrics into conservation features for further analysis. To discretize the continuous metric, we've used the **Quartile** option and set the *median* of the continuous metric Google PageRank as the lower threshold (**Make discrete feature from minimum threshold:**) and the *maximum* value as the upper threshold (**Make discrete feature to maximum threshold:**). These thresholds can be informed by relevant ecological literature, or through trial and error to find a balance between conservation outcomes and cost. Once you have established the parameters of your desired metric, press **Create New Feature**. 
 
-When this is complete, your new discrete feature should appear under  **Continuous Metric Available for Export**.
+When this is complete, your new discrete feature should appear under  **Connectivity-based Conservation Feature Available for Export**.
 
 ![**Figure 6:** *Pre-Evaluation tab .*\label{workflow}](images/Pre_Eval_tab_demographic.png)
 
@@ -279,7 +279,9 @@ Now we are ready to move to the **Marxan Files** tab.
 
 Here, we add our new connectivity metric features to our Marxan input files. In this example, we've chosen to append the new connectivity based conservation features to the existing Marxan files by selecting **Append**  under the **Metrics** option box. Ensure your original **puvspr.dat** and **spec.dat** files are listed by the **Original .. Feature File** options. You can then name the new, appended files in the **New ... Conservation Feature File** tabs.  If you choose the same filename for the new files as the original files, the original files will be overwritten. 
 
-In this tab, you will also set a target for each connectivity based conservation feature. This can be done by setting a proportion (e.g. 10% of the entire feature) or a target (e.g. number of total whales - if your puvspr file contains amounts). However, for a connectivity feature this will be the number of planning units that contain the discrete feature.
+In this tab, you will also set a target for each connectivity based conservation feature. This can be done by setting a proportion (e.g. 10% of the entire feature) or a target (e.g. number of total whales - if your puvspr file contains amounts). However, for a connectivity feature this will be the number of planning units that contain the discrete feature. The `Customize Conservation Feature File` button allows you to customize the new `spec.dat` before exporting (**Note:** custom edits will be lost if changes are made in previous tabs). 
+
+![**Figure 7:** *Marxan Files tab .*\label{workflow}](images/Marxan_files_tab_demographic.png)
 
 Once the files are named, press **Export Both Conservation Features Files**. A pop-up window should appear stating that the export was successful. You should now see two new appended files in your Marxan database **input** folder.  
 
@@ -315,10 +317,9 @@ Now that the necessary connectivity files have been created, We are ready to run
 
 ## Run Marxan 
 
-On this tab, we will run Marxan via Marxan Connect. 
+On this tab, we will run Marxan via Marxan Connect. Marxan Connect allows users to generate a Marxan input file (*i.e.* `input.dat`) from a **Default** template or a user defined template. Users should set their commonly used Marxan parameters (*e.g.* **Repeat Runs**, **Scenario Name**), choose whether to use the **Original** (*i.e.* without connectivity) or **New** (*i.e.* with connectivity) **Conservation Features** (*i.e.* `puvspr.dat` and `spec.dat`), **Spatial Dependencies** (*i.e.* `bound.dat`), or **Planning Unit** status files (*i.e.* `pu.dat`). In this example since we have only modified the conservation features we will select **New** for those, but **Original** for the other files. Using spatial dependencies requires two more options **Spatial Dependencies Type** and the **Connectivity Strength Modifier** (or Boundary Length Modifier). In this case, the connectivity matrix is **Symmetrical** and a **Boundary Length Modifier** of 10 provided a reasonable balance between conservation outcomes and cost. To generate a new Marxan input file from the template and selected options, click on the **Generate New Input File From Template**. You can view or customize this file further by clicking on the **Customize** button.  Please see the traditional [Marxan documentation](http://marxan.net/userguides) for more information
 
-Make sure that the **Marxan Input File** corresponds to the new **input_connect.dat** file. In this example, we have created the **input_connect.dat** file for you. However, when using your own data, you will need to create this file yourself (manually or with the 'customize' button that calls Marxan's 'inedit'), following the same format as the file that is provided.  Please see the traditional [Marxan documentation](http://marxan.net/userguides) for more information
-![**Figure 7:** *Marxan Analysis tab .*\label{workflow}](images/Marxan_analysis_tab_demographic.png)
+![**Figure 8:** *Marxan Analysis tab .*\label{workflow}](images/Marxan_analysis_tab_demographic.png)
 
 To run Marxan, press the **Run Marxan** button in the bottom right corner of this tab. 
 

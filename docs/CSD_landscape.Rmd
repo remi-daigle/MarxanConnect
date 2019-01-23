@@ -267,6 +267,7 @@ Now proceed to the **Connectivity Metrics** tab.
 In this example, we have chosen to incorporate landscape connectivity data as the spatial dependencies between planning units, and therefore, have selected the **Connectivity as boundary** option in the **Planning Unit Dependency as Boundary Definition** section.  This option uses the strengths of connectivity as the spatial dependencies (i.e. instead of the shared boundary lengths) so it can later be exported into the `bound.dat` file (see Beger et al. (2010) for an example). This method assumes the user has provided appropriate connectivity data (_e.g._ appropriate scale, units, and rank-order). 
 
 Alternatively, landscape connectivity data could be incorporated as a discrete conservation feature. The drop down menu in the top right corner gives definitions, possible objectives and the mathematical formulations for different conservation feature options.  See [demographic connectivity tutorial ](./CF_demographic.html) for more information.
+
 ![**Figure 5:** *Connectivity Metrics Tab .*\label{workflow}](images/Connectivity_Metrics_tab_landscape.png)
 
 Once you have selected the appropriate landscape connectivity inputs press **Calculate Metrics** and proceed to the **Pre-Evaluation** tab.
@@ -280,6 +281,8 @@ This page allows you to evaluate the metrics created on the **Connectivity Metri
 In this example, we have not created any new conservation features, so we can ignore all file inputs/exports except the Spatial Dependencies section.
 
 Under the **Spatial Dependencies (boundary.dat) File** section, we can specify the name of our new boundary file. Make sure the **Original Spatial Dependencies File** lists the original bound.dat file, and choose a desired name for the new bound.dat file (e.g. bound_connect.dat). If both files have the same name, the original bound.dat file will be overwritten. Once the desired options have been chosen, press **Export** button next to the new spatial dependencies file name.  This will create a new boundary file that incorporates the landscape connectivity metrics (or update the files, as it has already been created) in the **input** folder of the **CSD_landscape** folder. A pop-up window should appear signifying that the file was exported successfully.
+
+![**Figure 6:** *Marxan Files Tab .*\label{workflow}](images/Marxan_files_tab_landscape.png)
 
 Let's examine the appended file.
 
@@ -300,7 +303,7 @@ Proceed to the **Run Marxan** tab.
 
 ## Run Marxan
 
-Now that the necessary connectivity files have been created, we are ready to run Marxan Connect. Make sure that **Marxan Input File** corresponds to the new **input_connect.dat** file. In this example, we have created the **input_connect.dat** file for you. However, when using your own data, you will need to create this file yourself (manually or with the 'customize' button that calls Marxan's 'inedit'), following the same format as the file that is provided.  
+On this tab, we will run Marxan via Marxan Connect. Marxan Connect allows users to generate a Marxan input file (*i.e.* `input.dat`) from a **Default** template or a user defined template. Users should set their commonly used Marxan parameters (*e.g.* **Repeat Runs**, **Scenario Name**), choose whether to use the **Original** (*i.e.* without connectivity) or **New** (*i.e.* with connectivity) **Conservation Features** (*i.e.* `puvspr.dat` and `spec.dat`), **Spatial Dependencies** (*i.e.* `bound.dat`), or **Planning Unit** status files (*i.e.* `pu.dat`). In this example since we have only modified the spatial dependencies we will select **New** for those, but **Original** for the other files. Using spatial dependencies requires two more options **Spatial Dependencies Type** and the **Connectivity Strength Modifier** (or Boundary Length Modifier). In this case, the connectivity matrix is **Symmetrical** and a **Connectivity Strength Modifier** of 50 provided a reasonable balance between conservation outcomes and cost. To generate a new Marxan input file from the template and selected options, click on the **Generate New Input File From Template**. You can view or customize this file further by clicking on the **Customize** button.  Please see the traditional [Marxan documentation](http://marxan.net/userguides) for more information  
 
 ![**Figure 7:** *Marxan Analysis tab .*\label{workflow}](images/Marxan_analysis_tab_landscape.png)
 
