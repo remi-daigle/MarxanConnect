@@ -2382,6 +2382,29 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_PU_CM_file )
 		self.land_generate_button.Bind( wx.EVT_BUTTON, self.on_land_generate_button )
 		self.LP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_LP_file )
+		self.cf_demo_in_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_out_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_between_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_eig_vect_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_google.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_self_recruit.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_local_retention.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_inflow.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_outflow.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_stochasticity.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_fa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_fa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_aa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_aa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_in_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_out_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_between_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_eig_vect_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_google.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_fa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_fa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_aa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_aa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
 		self.bd_demo_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_conn_boundary )
 		self.bd_demo_min_plan_graph.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_min_plan_graph )
 		self.bd_land_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_land_conn_boundary )
@@ -2589,6 +2612,31 @@ class MarxanConnectGUI ( wx.Frame ):
 
 	def on_LP_file( self, event ):
 		event.Skip()
+
+	def enable_calc_metrics( self, event ):
+		event.Skip()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	def on_bd_demo_conn_boundary( self, event ):
 		event.Skip()

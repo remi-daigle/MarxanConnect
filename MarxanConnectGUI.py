@@ -172,7 +172,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
 # ##########################  project managment functions ##############################################################
 
-    def on_new_project(self, event, rootpath, launch=False):
+    def on_new_project(self, event, rootpath=MCPATH, launch=False):
         """
         open a new project and name/save a new project file
         """
@@ -1454,17 +1454,22 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         self.bd_land_conn_boundary.Enable(enable=land_enable)
         self.bd_land_min_plan_graph.Enable(enable=land_enable)
+        self.enable_calc_metrics()
 
+    def enable_calc_metrics(self, event=None):
+        self.set_metric_options()
         if any(self.project['options']['land_metrics'].values()) or any(self.project['options']['demo_metrics'].values()):
             self.calc_metrics.Enable(True)
         else:
             self.calc_metrics.Enable(False)
 
     def on_bd_land_conn_boundary(self, event):
+        self.enable_calc_metrics()
         if self.bd_land_conn_boundary.GetValue():
             self.bd_demo_conn_boundary.SetValue(False)
 
     def on_bd_demo_conn_boundary(self, event):
+        self.enable_calc_metrics()
         if self.bd_demo_conn_boundary.GetValue():
             self.bd_land_conn_boundary.SetValue(False)
 
@@ -1702,7 +1707,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             self.set_metric_options()
 
-            if not any(self.project['options']['land_metrics'].values()) or any(
+            if not any(self.project['options']['land_metrics'].values()) and not any(
                     self.project['options']['demo_metrics'].values()):
                 marxanconpy.warn_dialog(message="No metrics selected")
                 raise Exception("No metrics selected")
