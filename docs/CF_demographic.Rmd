@@ -209,7 +209,7 @@ tmap_leaflet(p) %>%
 
 ## `hexflow.csv`
 
-The connectivity data for this analysis can be found in the **hexFlow.csv** file in the **CF_demographic** folder. For this example, we have created the connectivity matrix for you. We note, however, that for demographic connectivity analyses, this file should be created ahead of the Marxan Connect workflow and should best reflect the demographic connectivity goals of the user (*e.g.* dispersal models, movement data). For landscape connectivity data, Marxan Connect does have some functionality to create connectivity matrices from resistance data (see [landscape connectivity tutorial] (./CSD_landscape.html)). 
+The connectivity data for this analysis can be found in the **hexFlow.csv** file in the **CF_demographic** folder. For this example, we have created the connectivity matrix for you. We note, however, that for demographic connectivity analyses, this file should be created ahead of the Marxan Connect workflow and should best reflect the demographic connectivity goals of the user (*e.g.* dispersal models, movement data). For landscape connectivity data, Marxan Connect does have some functionality to create connectivity matrices from resistance data (see [landscape connectivity tutorial](./CSD_landscape.html)). 
 
 For the sake of your web browser, this table only contains the 7 rows and columns of the connectivity matrix. The real file is a 653 X 653 matrix.
 
@@ -245,7 +245,7 @@ Now we are ready to proceed to the **Connectivity Input** tab.
 
 ## Connectivity Input
 
-Since we are working with demographic data, we choose the **Demographic Input** option from the **Choose Connectivity Input Category** dropdown menu. Alternatively, **Landscape Input** could be chosen (see [landscape connectivity tutorial] (./CSD_landscape.html)). 
+Since we are working with demographic data, we choose the **Demographic Input** option from the **Choose Connectivity Input Category** dropdown menu. Alternatively, **Landscape Input** could be chosen (see [landscape connectivity tutorial](./CSD_landscape.html)). 
 
 On this tab, ensure that the **Connectivity Matrix** refers to the correct file. For this example, this should read **hexFlow.csv**. Since this data represents the _amount_ of movement between planning units (*i.e.* number of larvae) in a matrix format (*i.e.* a [flow](glossary.html#flow) matrix), we have selected the **Flow** Connectivity Matrix Type and the **Matrix** Format. 
 
