@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Marxan Connect"
-#define MyAppVersion "v0.1.2-rc2019.01.20.15"
+#define MyAppVersion "v0.1.2-rc2019.01.23.13"
 #define MyAppPublisher "Canadian Healthy Oceans Network"
 #define MyAppURL "http://marxanconnect.ca/"
 #define MyAppExeName "MarxanConnectGUI.exe"
@@ -24,7 +24,7 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\LICENSE
 OutputDir=C:\Users\daigl\Documents\GitHub\MarxanConnect
-OutputBaseFilename=MarxanConnect-v0-1-2-rc2019-01-20-15-windows-setup
+OutputBaseFilename=MarxanConnect-v0-1-2-rc2019-01-23-13-windows-setup
 SetupIconFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\images\icon_bundle.ico
 Compression=lzma
 SolidCompression=yes
@@ -63,3 +63,6 @@ Root: HKCR; Subkey: "MarxanConnectProject\DefaultIcon"; ValueType: string; Value
 [Messages]
 DirExists=The folder: %1 already exists. %n%nTo avoid conflicts, it is recommended that you uninstall any previous versions of Marxan Connect before re-installing the program. Alternatively, you may choose a new folder location on the previous page to install in another location. %n%nWould you like to install Marxan Connect to this folder anyway? Proceed at your own risk: answering "yes" below will likely result in errors.
 DirExistsTitle=Warning: Folder Exists
+
+[Dirs]
+Name: "{app}"; Flags: uninsalwaysuninstall

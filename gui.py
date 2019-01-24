@@ -100,7 +100,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.pu_title = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Planning Units", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.pu_title.Wrap( -1 )
 
-		self.pu_title.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.pu_title.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		spatialMainSizer.Add( self.pu_title, 0, wx.ALL, 5 )
 
@@ -122,7 +122,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.PU_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Planning Unit Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.PU_filetext.Wrap( -1 )
 
-		self.PU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.PU_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 
 		pu_file_sizer1.Add( self.PU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
@@ -147,7 +147,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.fa_title = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Focus Areas:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.fa_title.Wrap( -1 )
 
-		self.fa_title.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.fa_title.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		spatialMainSizer.Add( self.fa_title, 0, wx.ALL, 5 )
 
@@ -169,7 +169,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.FA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Focus Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.FA_filetext.Wrap( -1 )
 
-		self.FA_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.FA_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 
 		fa_file_sizer.Add( self.FA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
@@ -197,7 +197,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.aa_title = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Avoidance Areas:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.aa_title.Wrap( -1 )
 
-		self.aa_title.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.aa_title.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		spatialMainSizer.Add( self.aa_title, 0, wx.ALL, 5 )
 
@@ -219,7 +219,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.AA_filetext = wx.StaticText( self.spatialInput, wx.ID_ANY, u"Avoidance Areas Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.AA_filetext.Wrap( -1 )
 
-		self.AA_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.AA_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 
 		aa_file_sizer.Add( self.AA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
@@ -372,7 +372,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_PU_CM_outputtext = wx.StaticText( self.demographic, wx.ID_ANY, u"Rescaling:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_PU_CM_outputtext.Wrap( -1 )
 
-		self.demo_PU_CM_outputtext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.demo_PU_CM_outputtext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 		self.demo_PU_CM_outputtext.Enable( False )
 
 		demo_pucm_output_txt_sizer.Add( self.demo_PU_CM_outputtext, 0, wx.ALL, 5 )
@@ -388,7 +388,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_CU_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Connectivity Unit Shapefile:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_CU_filetext.Wrap( -1 )
 
-		self.demo_CU_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.demo_CU_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		self.demo_CU_filetext.Enable( False )
 
 		demo_cu_file_sizer.Add( self.demo_CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
@@ -447,7 +447,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_PU_CM_filetext = wx.StaticText( self.demographic, wx.ID_ANY, u"Output Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_PU_CM_filetext.Wrap( -1 )
 
-		self.demo_PU_CM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.demo_PU_CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 		self.demo_PU_CM_filetext.Enable( False )
 
 		demo_pucm_sizer.Add( self.demo_PU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
@@ -515,7 +515,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_HAB_filetext = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat Type Shapefile", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_HAB_filetext.Wrap( -1 )
 
-		self.land_HAB_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.land_HAB_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 
 		land_cu_file_sizer.Add( self.land_HAB_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
@@ -595,7 +595,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.hab_res.SetSizer( hab_res_sizer )
 		self.hab_res.Layout()
 		hab_res_sizer.Fit( self.hab_res )
-		self.land_type_choice.AddPage( self.hab_res, u"Habitat Type + Resistance", True )
+		self.land_type_choice.AddPage( self.hab_res, u"Habitat Type + Isolation", True )
 		self.res_suf = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		land_res_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		land_res_sizer.AddGrowableCol( 0 )
@@ -663,7 +663,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_res_sizer.Fit( self.res_suf )
 		self.land_type_choice.AddPage( self.res_suf, u"Resistance Surface", False )
 		self.con_mat = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.land_type_choice.AddPage( self.con_mat, u"Connectivity Matrix", False )
+		self.land_type_choice.AddPage( self.con_mat, u"Connectivity Edge List with Habitat", False )
 		landMainSizer.Add( self.land_type_choice, 1, wx.EXPAND, 5 )
 
 		land_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
@@ -671,10 +671,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_pucm_seperator = wx.StaticLine( self.landscape, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 		land_pucm_output_txt_sizer.Add( self.land_pucm_seperator, 0, wx.EXPAND |wx.ALL, 5 )
 
-		self.demo_PUCM_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Connectivity Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.demo_PUCM_text = wx.StaticText( self.landscape, wx.ID_ANY, u"Connectivity Edge List:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_PUCM_text.Wrap( -1 )
 
-		self.demo_PUCM_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.demo_PUCM_text.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		land_pucm_output_txt_sizer.Add( self.demo_PUCM_text, 0, wx.ALL, 5 )
 
@@ -683,7 +683,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_pucm_def_sizer = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.land_PU_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The Planning Unit Connectivity Matrix is either the only user input for the landscape category, or the output of the least-cost path analysis. It will be used to calcuate the Connectivity Metrics for the planning units.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_def = wx.StaticText( self.landscape, wx.ID_ANY, u"The connectivity \"edge list with habitat\" is either the only user input for the landscape category, or the output of the least-cost path analysis. It will be used to calcuate the Connectivity Metrics for the planning units.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_PU_CM_def.Wrap( -1 )
 
 		land_pucm_def_sizer.Add( self.land_PU_CM_def, 0, wx.ALL|wx.EXPAND, 5 )
@@ -700,10 +700,10 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_PU_CM_progress.SetValue(True)
 		land_pucm_sizer.Add( self.land_PU_CM_progress, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_PU_CM_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Landscape Connectivity Matrix:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.land_PU_CM_filetext = wx.StaticText( self.landscape, wx.ID_ANY, u"Landscape Connectivity Edge List", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.land_PU_CM_filetext.Wrap( -1 )
 
-		self.land_PU_CM_filetext.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, "Arial" ) )
+		self.land_PU_CM_filetext.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 
 		land_pucm_sizer.Add( self.land_PU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
@@ -731,7 +731,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.demo_LP_text = wx.StaticText( self.connectivityInput, wx.ID_ANY, u"Local Production:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.demo_LP_text.Wrap( -1 )
 
-		self.demo_LP_text.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, "Arial" ) )
+		self.demo_LP_text.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		LP_txt_sizer.Add( self.demo_LP_text, 0, wx.ALL, 5 )
 
@@ -2382,6 +2382,29 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.land_PU_CM_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_land_PU_CM_file )
 		self.land_generate_button.Bind( wx.EVT_BUTTON, self.on_land_generate_button )
 		self.LP_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_LP_file )
+		self.cf_demo_in_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_out_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_between_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_eig_vect_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_google.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_self_recruit.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_local_retention.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_inflow.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_outflow.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_stochasticity.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_fa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_fa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_aa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_demo_aa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_in_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_out_degree.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_between_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_eig_vect_cent.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_google.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_fa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_fa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_aa_recipients.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
+		self.cf_land_aa_donors.Bind( wx.EVT_CHECKBOX, self.enable_calc_metrics )
 		self.bd_demo_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_conn_boundary )
 		self.bd_demo_min_plan_graph.Bind( wx.EVT_CHECKBOX, self.on_bd_demo_min_plan_graph )
 		self.bd_land_conn_boundary.Bind( wx.EVT_CHECKBOX, self.on_bd_land_conn_boundary )
@@ -2589,6 +2612,31 @@ class MarxanConnectGUI ( wx.Frame ):
 
 	def on_LP_file( self, event ):
 		event.Skip()
+
+	def enable_calc_metrics( self, event ):
+		event.Skip()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	def on_bd_demo_conn_boundary( self, event ):
 		event.Skip()
@@ -2884,7 +2932,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.20.15. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.23.13. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
