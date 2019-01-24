@@ -988,7 +988,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		metric_help_sizer.SetFlexibleDirection( wx.BOTH )
 		metric_help_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Out-Flow", u"In-Flow", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as boundary" ]
+		metric_definition_choiceChoices = [ u"In Degree", u"Out Degree", u"Betweenness Centrality", u"Eigenvector Centrality", u"Google PageRank", u"Self Recruitment", u"Local Retention", u"Out-Flow", u"In-Flow", u"Temporal Connectivity Covariance", u"Focus Area Recipients", u"Focus Area Donors", u"Avoidance Area Recipients", u"Avoidance Area Donors", u"Connectivity as spatial dependency" ]
 		self.metric_definition_choice = wx.Choice( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, metric_definition_choiceChoices, 0 )
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
@@ -2932,7 +2932,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.23.13. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.01.24.11. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
