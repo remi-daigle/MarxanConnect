@@ -1,5 +1,5 @@
 ---
-title: "Tutorial"
+title: "Tutorial: Connectivity as Spatial Dependency + Landscape Data"
 output:
   html_document: 
     code_folding: hide
@@ -270,7 +270,7 @@ Alternatively, landscape connectivity data could be incorporated as a discrete c
 
 ![**Figure 5:** *Connectivity Metrics Tab .*\label{workflow}](images/Connectivity_Metrics_tab_landscape.png)
 
-Once you have selected the appropriate landscape connectivity inputs press **Calculate Metrics** and proceed to the **Pre-Evaluation** tab.
+Once you have selected the appropriate landscape connectivity inputs press **Calculate Metrics** and proceed to the **Pre-Evaluation** tab. You will normally get a few warnings here. The first: "*All connectivity values for type 'N' are below or equal to zero, excluding from futher analysis*" says that the habitat type 'N' has no connectivity, so it will not be used in any analyses. The second: "*A connectivity Edge List with Habitat was provided. The Ecological Distance to be used as the Boundary Definitions will be calculated from the mean of connectivity matrices supplied*" means that you have supplied connectivity data for more than one type of habitat, so the average strength of connectivity of all (non-zero, *i.e.* not 'N') habitats will be used. 
 
 ## Pre-Evaluation
 
@@ -307,7 +307,7 @@ On this tab, we will run Marxan via Marxan Connect. Marxan Connect allows users 
 
 ![**Figure 7:** *Marxan Analysis tab .*\label{workflow}](images/Marxan_analysis_tab_landscape.png)
 
-To run Marxan Connect press the **Run Marxan** button in the bottom right corner of this tab. Finally, running Marxan with the connectivity conservation features and boundary definitions results in the following different Marxan solution:
+To run Marxan Connect press the **Run Marxan** button in the bottom right corner of this tab. Running Marxan with the new spatial dependencies will take **much** longer (~6h) since there are so many spatial dependencies. Finally, running Marxan with the connectivity conservation features and boundary definitions results in the following different Marxan solution:
 
 ```{r}
 

@@ -1,5 +1,5 @@
 ---
-title: "Tutorial"
+title: "Tutorial: Conservation Features + Demographic Data"
 output:
   html_document: 
     code_folding: hide
@@ -64,7 +64,9 @@ puvspr <- read.csv("tutorial/CF_demographic/input/puvspr.dat")
 datatable(puvspr[1:30,],rownames = FALSE, options = list(searching = FALSE))
 
 ```
+
 ## `bound.dat`
+
 The table shown here is a trimmed version showing the first 30 rows as an example of the type of data in the bound.dat file. The original dataset has 3600 entries.
 
 ```{r}
@@ -209,7 +211,7 @@ tmap_leaflet(p) %>%
 
 ## `hexflow.csv`
 
-The connectivity data for this analysis can be found in the **hexFlow.csv** file in the **CF_demographic** folder. For this example, we have created the connectivity matrix for you. We note, however, that for demographic connectivity analyses, this file should be created ahead of the Marxan Connect workflow and should best reflect the demographic connectivity goals of the user (*e.g.* dispersal models, movement data). For landscape connectivity data, Marxan Connect does have some functionality to create connectivity matrices from resistance data (see [landscape connectivity tutorial](./CSD_landscape.html)). 
+The connectivity data for this analysis can be found in the **hexFlow.csv** file in the **CF_demographic** folder. For this example, we have created the connectivity matrix for you. This data was simulated solely for the purpose of this tutorial and should not be used for other purposes. For more information on what this data represents, see '[Connectivity Input](CF_demographic.html#connectivity-input)'. We note, however, that for demographic connectivity analyses, this file should be created ahead of the Marxan Connect workflow and should best reflect the demographic connectivity goals of the user (*e.g.* dispersal models, movement data). For landscape connectivity data, Marxan Connect does have some functionality to create connectivity matrices from resistance data (see [landscape connectivity tutorial](./CSD_landscape.html)). 
 
 For the sake of your web browser, this table only contains the 7 rows and columns of the connectivity matrix. The real file is a 653 X 653 matrix.
 
@@ -249,7 +251,7 @@ Since we are working with demographic data, we choose the **Demographic Input** 
 
 On this tab, ensure that the **Connectivity Matrix** refers to the correct file. For this example, this should read **hexFlow.csv**. Since this data represents the _amount_ of movement between planning units (*i.e.* number of larvae) in a matrix format (*i.e.* a [flow](glossary.html#flow) matrix), we have selected the **Flow** Connectivity Matrix Type and the **Matrix** Format. 
 
-Additionally, we have chosen the **Identical Grids** option from the **Rescale Connectivity Matrix** menu. This signifies that our connectivity data is on an identical grid as our planning units. If our connectivity data was not on the same grid as our planning units, we could choose to rescale the connectivity matrix, which essentially does a spatial averaging routine to calculate connectivity on the planning unit grid. If rescaling is chosen, the user needs to decide whether to rescale the connectivity data proportional to the overlap or to assume homogeneous connectivity. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, does the user want the connectivity value to be taken from a spatial average across that planning unit (i.e. the connectivity value of that planning unit would then be 5) or be considered homogenous across the planning unit (i.e. a connectivity value of 10).
+Additionally, we have chosen the **Identical Grids** option from the **Rescale Connectivity Matrix** menu. This signifies that our connectivity data is on an identical grid as our planning units. If our connectivity data was not on the same grid as our planning units, we could choose to rescale the connectivity matrix, which essentially does a spatial averaging routine to calculate connectivity on the planning unit grid. However, rescaling connectivity data requires assumptions (e.g. @Beger2015-zo; @Beger2014-jx), and can be problematic (i.e. does the rescaled data accurately represent the connectivity process and spatial context of interest?). To avoid making inappropriate assumptions (e.g. resolution, neighborhood size, extrapolation), it is preferable and more appropriate to collect or generate the connectivity data at the resolution of the planning units. If rescaling is chosen, the user needs to decide whether to rescale the connectivity data proportional to the overlap or to assume homogeneous connectivity. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, does the user want the connectivity value to be taken from a spatial average across that planning unit (i.e. the connectivity value of that planning unit would then be 5) or be considered homogenous across the planning unit (i.e. a connectivity value of 10).
 
 Your **Connectivity Input** tab should look like this (you should not have to change any settings if you loaded the `.MarCon` project):
 
@@ -490,3 +492,5 @@ map %>%
 ## Plotting Options
 
 Here the users can plot up to two layers of input or output data on a built-in basemap (provided by the [basemap](https://matplotlib.org/basemap/) package). The tab allows users to choose a few basic color, transparency, and legend positioning options, as well as export the output data in various formats to provide further plotting or analysis options.
+
+# References

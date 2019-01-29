@@ -184,7 +184,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # if called at launch time, no need to ask users to create a new project file right away
         if not launch:
-            dlg = wx.FileDialog(self, "Create a new project file:", style=wx.FD_SAVE, wildcard=wc_MarCon)
+            dlg = wx.FileDialog(self, "Create a new project file:", style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT, wildcard=wc_MarCon)
             if dlg.ShowModal() == wx.ID_OK:
                 self.project['filepaths']['projfile'] = dlg.GetPath()
                 self.project['filepaths']['projfilename'] = dlg.GetFilename()
@@ -468,7 +468,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg = wx.FileDialog(
             self, message="Save file as ...",
             defaultDir=self.workingdirectory,
-            defaultFile="", wildcard=wc_MarCon, style=wx.FD_SAVE
+            defaultFile="", wildcard=wc_MarCon, style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.project['filepaths']['projfile'] = dlg.GetPath()
