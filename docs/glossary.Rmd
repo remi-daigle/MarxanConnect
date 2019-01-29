@@ -709,7 +709,7 @@ Note, these data could be represented as an Edge List as well.
 
 ## Probability
 
-The probability matrix, ${P}$, represents the *proportion* of those individuals *originating* from a donor planning unit which arrive into a recipient planning unit. The values of this matrix are therefore relative to the amount released from the donor unit (often influenced by amount or quality of habitat in that planning unit). The rows of this matrix often sum to a value much less than one as many individuals die or are lost from the system of interest. Rows may sum to one if  either all individuals that originate from a source planning unit successfully arrive to a planning unit (e.g., no mortality), or if the matrix was normalized with respect to sums across columns (often done if the user is only interested in relative strengths of connectivity and not realistic levels of connectivity), then rows will sum to 1. Either matrix is appropriate, but the assumptions need to be considered when interpreting the results.
+The probability matrix, ${P}$, represents the *proportion* of those individuals *originating* from a donor planning unit which arrive into a recipient planning unit. In this way the proportion arriving can be interpreted as the arrival likelihood, or probability. The values of this matrix are therefore relative to the amount released from the donor unit (often influenced by amount or quality of habitat in that planning unit). The rows of this matrix often sum to a value much less than one as many individuals die or are lost from the system of interest. Rows may sum to one if  either all individuals that originate from a source planning unit successfully arrive to a planning unit (e.g., no mortality), or if the matrix was normalized with respect to sums across columns (often done if the user is only interested in relative strengths of connectivity and not realistic levels of connectivity), then rows will sum to 1. Either matrix is appropriate, but the assumptions need to be considered when interpreting the results.
 
 Example Probability Matrix:
 
@@ -742,7 +742,7 @@ The entire spatial domain over which the planning process is occuring. This is s
 
 # Planning Units
 
-Spatial sub-units of the entire planning area (*i.e.* domain, or study area). Can be gridded (*e.g.* hexagonal) or feature based (e.g. reefs) as in Marxan. They can be created uniquely for the Marxan analysis, or recycled from existing data (*e.g.* connectivity data, species distribution model output)
+Spatial sub-units of the entire planning area (*i.e.* domain, or study area). Can be gridded (*e.g.* hexagonal) or feature based (e.g. reefs) as in Marxan. They can be created uniquely for the Marxan analysis, or developed from existing data (*e.g.* connectivity data, species distribution model output)
 
 # Resistance Matrix
 
