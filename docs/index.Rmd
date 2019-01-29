@@ -15,7 +15,7 @@ The app also includes a fully functional Python package that is operated via com
 
 To use this software, please visit the [Tutorial](./tutorial.html) and the [Glossary](./glossary.html). Otherwise, if you would just like to get started, please [install](#installing) the app and proceed through all the tabs from left to right starting the "Spatial Input". After calculating the "Connectivity Metrics", you can choose to conduct a Marxan or (experimentally) Marxan with Zones analysis in the app, export the connectivity metrics for use in a standalone custom Marxan analysis, or you can visualize the Connectivity Metrics using the "Plotting Options" tab
 
-If you would like to report any bugs or request a missing feature, please post an issue on the GitHub repository. Please provide as much information as possible, such as: detailed description, app version, operating system, even a link to your data if relevant (also, see [Contributing](#contributing)). 
+If you would like to report any bugs or request a missing feature, please post an [issue](https://github.com/remi-daigle/MarxanConnect/issues) on the GitHub repository. Please provide as much information as possible, such as: detailed description, app version, operating system, even a link to your data if relevant (also, see [Contributing](#contributing)). 
 
 In terms of using the software for conservation planning, 'best practices' (*i.e. detailed documentation, case studies) are currently under development. 
 

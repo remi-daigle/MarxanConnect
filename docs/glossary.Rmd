@@ -175,7 +175,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Google PageRank
 
-**Definition**: PageRank uses the number and quality (weight) of connections associated with a planning unit, to estimate the importance of the planning unit [@Kininmonth2019-j]. PageRank is functionally similar to Eigenvector Centrality, and is recommended for well connected planning areas. Appropriate matrices to be used with the PageRank algorithm include the [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or[${P}$](glossary.html#probability).  
+**Definition**: PageRank uses the number and quality (weight) of connections associated with a planning unit, to estimate the importance of the planning unit [@Kininmonth2019-jl]. PageRank is functionally similar to Eigenvector Centrality, and is recommended for well connected planning areas. Appropriate matrices to be used with the PageRank algorithm include the [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or[${P}$](glossary.html#probability).  
 
 **Possible Objectives**: Prioritize planning units which are important to maintaining or influencing connectivity within the whole planning area (*i.e.* study extent).
 
@@ -594,7 +594,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 # Data Formats
 
-"Connectivity"" means very different things in different ecological and conservation contexts. Although there is no standard in how these data should be incorporated into the conservation planning process, Marxan Connect has the flexibility to accept different formats of connectivity data to accommodate a broad suite of situations. As with any model, great care should be taken in developing and using these data.
+"Connectivity" means very different things in different ecological and conservation contexts. Although there is no standard in how these data should be incorporated into the conservation planning process, Marxan Connect has the flexibility to accept different formats of connectivity data to accommodate a broad suite of situations. As with any model, great care should be taken in developing and using these data.
 
 Typically, the values in a connectivity matrix represents the movement of individuals between planning units (i.e., large values equate to 'strong' connectivity) or some likelihood of movement, but values could also represent geographic distance (e.g., large values equate to 'weak' connectivity at large distances), gene flow, mass transfer (e.g., of carbon), nutrients, energy, etc. Care should be taken into ensuring the data used, and the rank order (i.e., large values equate to 'strong' connectivity) are appropriate for the analyses performed within Marxan Connect.  
 

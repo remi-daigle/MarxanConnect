@@ -1,5 +1,5 @@
 ---
-title: "Tutorial: Conservation Features + Demographic Data"
+title: "Conservation Features + Demographic Data"
 output:
   html_document: 
     code_folding: hide
@@ -118,7 +118,7 @@ map <- leaflet(output) %>%
     
     addTiles()
 
-groups <- names(select(output,-best_solution,-select_freq))[c(-1,-2)]
+groups <- names(select(output,-best_solution,-select_freq,-google_demo_pu_discrete_median_to_maximum,-google_demo_pu,-status))[c(-1,-2)]
 
 groups <- groups[groups!="geometry"]
 
