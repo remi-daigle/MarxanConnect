@@ -25,12 +25,12 @@ For some of the connectivity metrics (e.g. Avoidance Area Recipients), it is imp
 
 Marxan Connect can calculate various network metrics (e.g. betweeness centrality) and several several ecologically meaningful measures (e.g., out-flow), which can be used as conservation features in Marxan.
 
-It should be noted that both of these approaches of incorporating connectivity into Marxan (as conservation features or as an [spatial dependency](glossary.html#spatial-dependency)) can be used alone or in combination, but some combinations may be redundant or inapporpriate (e.g. eigenvector centrality as a conservation feature and connectivity-based spatial dependencies) and we encourage careful consideration. In all cases, an appropriate level of sensitivity testing should be completed to help with interpretation and communication of outcomes. 
+It should be noted that both approaches of incorporating connectivity into Marxan (as conservation features or as an [spatial dependency](glossary.html#spatial-dependency)) can be used alone or in combination, but some combinations may be redundant or inapporpriate (e.g. eigenvector centrality as a conservation feature and connectivity-based spatial dependencies) and we encourage careful consideration. In all cases, an appropriate level of sensitivity testing should be completed to help with interpretation and communication of outcomes. 
 
 
 ## In-Degree
 
-**Definition**: In-degree indicates the number of connections coming into each planning unit [@Minor2007-fb]. This metric ignores edge weights or strengths, and can be calculated from [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or[${P}$](glossary.html#probability) .
+**Definition**: In-degree indicates the number of connections coming into each planning unit [@Minor2007-fb]. This metric ignores edge weights or strengths, and can be calculated from [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or [${P}$](glossary.html#probability) .
 
 **Possible Objectives**: Prioritize planning units which receive input from a larger number of other planning units. The recipient planning units with a high In-degree may have higher genetic diversity [@Almany2009-vt; @Munguia-Vega2015-rh], species diversity and population resilience through greater rescue potential [@Hanski1982-kw] as a result of the high in number of incoming connections. However, planning units with high In-degree may be susceptible to outbreaks and invasive species [*e.g.* @Hock2014-or]
 
@@ -66,7 +66,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Out-Degree
 
-**Definition**: Out degree indicates the number of connections originating from each planning unit [@Minor2007-fb]. This metric ignores edge weights or strengths, and can be calculated from [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or[${P}$](glossary.html#probability).  
+**Definition**: Out degree indicates the number of connections originating from each planning unit [@Minor2007-fb]. This metric ignores edge weights or strengths, and can be calculated from [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or [${P}$](glossary.html#probability).  
 
 **Possible Objectives**: Prioritize for planning units which have a high number of connections going out to other planning units. Out-degree is often seen as a proxy for 'influence', where a high out-degree signifies a larger influence on many other units (*e.g.* a higher likelihood to rescue many other sites). Units with an extremely high out-degree are considered hubs and may have a influence on local and network-wide dynamics.
 
@@ -102,7 +102,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Betweenness Centrality 
 
-**Definition**: Betweenness centrality is a measure of the relative number of all shortest paths across a network (i.e., between all possible pairs of planning units) that pass through the focal planning unit [@Minor2007-fb]. Here, every edge (*i.e.* connection), irrespective of strength, is given a length of 1.  This metric ignores edge weights or strengths, and can be calculated from [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or[${P}$](glossary.html#probability).
+**Definition**: Betweenness centrality is a measure of the relative number of all shortest paths across a network (i.e., between all possible pairs of planning units) that pass through the focal planning unit [@Minor2007-fb]. Here, every edge (*i.e.* connection), irrespective of strength, is given a length of 1.  This metric ignores edge weights or strengths, and can be calculated from [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or [${P}$](glossary.html#probability).
 
 **Possible Objectives**: Prioritize planning units which may act as important stepping stones among other planning units (those that have a high betweenness centrality).
 
@@ -175,7 +175,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Google PageRank
 
-**Definition**: PageRank uses the number and quality (weight) of connections associated with a planning unit, to estimate the importance of the planning unit [@Kininmonth2019-jl]. PageRank is functionally similar to Eigenvector Centrality, and is recommended for well connected planning areas. Appropriate matrices to be used with the PageRank algorithm include the [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or[${P}$](glossary.html#probability).  
+**Definition**: PageRank uses the number and quality (weight) of connections associated with a planning unit, to estimate the importance of the planning unit [@Kininmonth2019-jl]. PageRank is functionally similar to Eigenvector Centrality, and is recommended for well connected planning areas. Appropriate matrices to be used with the PageRank algorithm include the [${F}$](glossary.html#flow), [${M}$](glossary.html#migration), or [${P}$](glossary.html#probability).  
 
 **Possible Objectives**: Prioritize planning units which are important to maintaining or influencing connectivity within the whole planning area (*i.e.* study extent).
 
@@ -214,7 +214,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 **Definition**: Self-recruitment is the diagonal of the migration matrix, [M]. It is the proportion of individuals that arrived to a planning unit that originated from that same planning unit [see @DAloia2017-jp; @Lett2015-wv].
 
-**Possible Objectives**: Prioritize planning units which are dominated by locally-produced individuals. High self-recruitment sites is often used as a proxy for isolation. A high self-recruitment value may indicate a greater degree of isolation. Note that it should be used cautiously, as high self recruitment does not equate high recruitment (*e.g.* a planning unit can be 100% self-recruiting when only one individual arrives, which also originated from that unit).  
+**Possible Objectives**: Prioritize planning units which are dominated by locally-produced individuals. A high self-recruitment value may indicate a greater degree of isolation. Note that it should be used cautiously, as high self recruitment does not equate high recruitment (*e.g.* a planning unit can be 100% self-recruiting when only one individual arrives, which also originated from that unit).  
 
 **Equation**: The self recruitment of a planning unit ${v}$ (${SR(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity (probability) matrix.
 
@@ -433,7 +433,7 @@ p <- ggraph(graph,layout="fr") +
 
 ## Focus Area Recipients
 
-**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, high genetic diversity sites, climate-adapted sites). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas - these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [${F}$](glossary.html#flow) or migration matrix [${M}$](glossary.html#migration).
+**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically important sites, climate-adapted sites). In these cases, one might wish to target planning units that significantly benefit by receiving individuals from these focus areas - these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [${F}$](glossary.html#flow) or migration matrix [${M}$](glossary.html#migration).
 
 **Possible Objectives**: Prioritize planning units which are subsidized by the focus area (*e.g.* fully protected reserves).
 
@@ -473,7 +473,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Focus Area Donors
 
-**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, high genetic diversity sites, climate-adapted sites). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas - these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix [${F}$](glossary.html#flow). 
+**Definition**: A "focus area" may represent an existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically important sites, climate-adapted sites). In these cases, one might wish to target planning units that significantly contribute individuals to these focus areas - these planning units are considered significant donors. The focus area donors metric is the sum of all individuals originating from a planning unit that is received by a focus area. This is calculated by taking the sum across all recipient focus areas (columns) for each donor (row)  of an appropriate flow matrix [${F}$](glossary.html#flow). 
 
 **Possible Objectives**: Prioritize planning units which subsidize the focus area (e.g. protect demographic sources to existing protected areas).
 
@@ -513,9 +513,9 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Avoidance Area Recipients
 
-**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that receive *fewer* individuals from these avoidance areas - these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [${F}$](glossary.html#flow) or migration matrix [${M}$](glossary.html#migration). **Warning**: A low score is likely desirable for this metric (*i.e.* when you set the minimum and maximum thresholds in the "Pre-Evaluation" tab). 
+**Definition**: An "avoidance area" may represent an area heavily infested or more likely to be invaded by invasive species (*e.g.* international shipping ports), or areas that are potential sources of pollutants (*e.g.* oil extraction, river outflows). In these cases, one might wish to target planning units that receive *fewer* individuals from these avoidance areas - these planning units are considered significant recipients. The focus area recipients metric is the sum of all individuals received by a planning unit that is from a focus area. This is calculated by taking the sum across all donor focus areas (rows) for each recipient planning unit (column)  of an appropriate flow matrix [${F}$](glossary.html#flow) or migration matrix [${M}$](glossary.html#migration). 
 
-**Possible Objectives**: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots).
+**Possible Objectives**: Prioritize planning units which are least subsidized by the avoidance area (e.g. avoid connectivity for invasive species hot-spots). **Warning**: A low score is likely desirable for this metric (*i.e.* when you set the minimum and maximum thresholds in the "Pre-Evaluation" tab).
 
 **Equation**: The avoidance area recipients of a planning unit ${v}$ (${AAR(v)}$) in a graph ${G:=(V,E)}$ with ${V}$ vertices (*i.e.* planning units) and ${E}$ edges (*i.e.* connections), let ${C=(c_{v,t})}$ be the connectivity (probability) matrix.
 
@@ -600,7 +600,7 @@ Typically, the values in a connectivity matrix represents the movement of indivi
 
 ## Connectivity Matrix
 
-The connectivity matrix is how we refer to the generic data structure where donor (or source) sites are rows and the recipient (or destination) sites are the columns. Donor IDs are shown in the first column (*i.e.* unique for each source site) and the recipient site IDs in the first row (*i.e.*,* unique for each destination ). Note, most Marxan Connect requires that the source sites and the destination sites are exactly the same (forming a square matrix), match the ID's of the planning units, and arranged in the same order.  
+The connectivity matrix is how we refer to the generic data structure where donor (or source) sites are rows and the recipient (or destination) sites are the columns. Donor IDs are shown in the first column (*i.e.* unique for each source site) and the recipient site IDs in the first row (*i.e.*,* unique for each destination ). Note, most Marxan Connect analyses requires that the source sites and the destination sites are exactly the same (forming a square matrix), match the ID's of the planning units, and arranged in the same order.  
 
 |     |   1   |   2   |   3   |   4   |  ...  |
 |:---:|:-----:|:-----:|:-----:|:-----:|:-----:|
@@ -726,7 +726,7 @@ Note, these data could be represented as an Edge List as well.
 
 # Focus Areas
 
-For some of the connectivity metrics (e.g. Focus Area Donors), it is important to consider 'focus areas' for which connectivity should be considered. Examples of such focus areas are existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically unique and potentially adaptively advantageous populations). Marxan Connect does not assume that the planning units within the focus areas will be protected. Loading focus areas into Marxan Connect allows users to set conservation targets for other areas that complement focus areas, or to "lock-in" (fixed in the final reserve) the planning units which are overlap the focus area.
+For some of the connectivity metrics (e.g. Focus Area Donors), it is important to consider 'focus areas' for which connectivity should be considered. Examples of such focus areas are existing protected areas, critical habitat for endangered species, and/or otherwise important habitats for connectivity (e.g. nursery grounds, genetically important sites, climate-adapted sites). Marxan Connect does not assume that the planning units within the focus areas will be protected. Loading focus areas into Marxan Connect allows users to set conservation targets for other areas that complement focus areas, or to "lock-in" (fixed in the final reserve) the planning units which are overlap the focus area.
 
 # GONE
 
@@ -774,7 +774,7 @@ Alternatively (or in conjunction), connectivity may be incorporated into the Mar
 
 ## Connectivity as spatial dependency
 
-Directly substitutes the supplied connectivity data (*i.e.* Spatial Dependencies) for the boundary lengths in the boundary definitions file (*i.e.* `boundary.dat`; see @Beger2010-ir). Consequently, instead of reducing the spatial edges (see [above](glossary.html#spatial-dependency)), it will reduce the amount of organisms exiting the reserve network. This approach assumes the user has provided appropriate connectivity data (*e.g.* appropriate scale, units, and rank-order).
+Directly substitutes the supplied connectivity data (*i.e.* Spatial Dependencies) for the boundary lengths in the boundary definitions file (*i.e.* `boundary.dat`; see @Beger2010-ir). Consequently, instead of reducing the spatial edges (see [above](glossary.html#spatial-dependency)), it will reduce the amount of organisms exiting the reserve network. This approach assumes the user has provided appropriate connectivity data (*e.g.* appropriate scale, units, and rank-order). This method will not capture sites that are poorly connected, and if these are important then users should consider this in combination with other approaches.
 
 <!--
 Removing MPG for now, the app was not calculating correctly!
