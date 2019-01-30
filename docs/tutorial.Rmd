@@ -43,7 +43,9 @@ The Marxan Connect interface is divided into seven separate tabs, one for each s
 
 ## Spatial Input
 
-This tab allows users to identify and load their [planning units](./glossary.html#planning_units), and optionally [focus areas](./glossary.html#focus_areas) or [avoidance areas](./glossary.html#avoidance_areas).
+This tab allows users to identify and load their [planning units](./glossary.html#planning_units), and optionally [focus areas](./glossary.html#focus_areas) or [avoidance areas](./glossary.html#avoidance_areas). 
+
+At this stage, Marxan Connect will choose a projection to transform all spatial data based on the geographic position and extent of the planning units. See the [Projections](./glossary.html#projections) for more details.
 
 ## Connectivity Input
 

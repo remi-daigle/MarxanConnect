@@ -744,6 +744,12 @@ The entire spatial domain over which the planning process is occuring. This is s
 
 Spatial sub-units of the entire planning area (*i.e.* domain, or study area). Can be gridded (*e.g.* hexagonal) or feature based (e.g. reefs) as in Marxan. They can be created uniquely for the Marxan analysis, or developed from existing data (*e.g.* connectivity data, species distribution model output)
 
+# Projections
+
+When displaying or analysing area-based data (e.g., reserves, organism distributions, etc.) at broad scales, an equal-area map projection should be used to avoid errors due to map distortion [@Snyder1987-kx]. Therefore, Marxan Connect will automatically transform all spatial data into an equal-area projection (see exception in next paragraph) chosen based on the geographic position and extent of the planning units. To see which projection is being used, activate debug mode after setting the planning unit.
+
+**Least-cost path exception**: For least-cost path calculations, the relevant spatial data is temporarily transformed into an equal-distance projection chosen based on the geographic position and extent of the planning units. To see which projection is being used, activate debug mode after calculating least-cost path.
+
 # Resistance Matrix
 
 Used to calculate isolation by resistance type connectivity matrices [*e.g.* @McRae2006-nf]. Contains habitat or species specific values for resistance to movement through each habitat type. Home habitat IDs are in the first column and IDs for habitats through which movement may occur are in the first row. In the example below, for and organism that lives in a Sand habitat (row ID) a value of 30 for Boulder (column ID) means that moving through a boulder planning unit is 30x more resistant than moving through sand.

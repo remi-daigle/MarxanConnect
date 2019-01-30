@@ -588,6 +588,11 @@
 <h1>Planning Units</h1>
 <p>Spatial sub-units of the entire planning area (<em>i.e.</em> domain, or study area). Can be gridded (<em>e.g.</em> hexagonal) or feature based (e.g. reefs) as in Marxan. They can be created uniquely for the Marxan analysis, or developed from existing data (<em>e.g.</em> connectivity data, species distribution model output)</p>
 </div>
+<div id="projections" class="section level1">
+<h1>Projections</h1>
+<p>When displaying or analysing area-based data (e.g., reserves, organism distributions, etc.) at broad scales, an equal-area map projection should be used to avoid errors due to map distortion <span class="citation">(Snyder 1987)</span>. Therefore, Marxan Connect will automatically transform all spatial data into an equal-area projection (see exception in next paragraph) chosen based on the geographic position and extent of the planning units. To see which projection is being used, activate debug mode after setting the planning unit.</p>
+<p><strong>Least-cost path exception</strong>: For least-cost path calculations, the relevant spatial data is temporarily transformed into an equal-distance projection chosen based on the geographic position and extent of the planning units. To see which projection is being used, activate debug mode after calculating least-cost path.</p>
+</div>
 <div id="resistance-matrix" class="section level1">
 <h1>Resistance Matrix</h1>
 <p>Used to calculate isolation by resistance type connectivity matrices <span class="citation">(<em>e.g.</em> McRae and Nürnberger 2006)</span>. Contains habitat or species specific values for resistance to movement through each habitat type. Home habitat IDs are in the first column and IDs for habitats through which movement may occur are in the first row. In the example below, for and organism that lives in a Sand habitat (row ID) a value of 30 for Boulder (column ID) means that moving through a boulder planning unit is 30x more resistant than moving through sand.</p>
@@ -707,6 +712,9 @@ TODO:  add more specific information here. Plus assumptions.
 </div>
 <div id="ref-Munguia-Vega2015-rh">
 <p>Munguía-Vega, Adrián, Andrea Sáenz-Arroyo, Ashley P Greenley, Jose Antonio Espinoza-Montes, Stephen R Palumbi, Marisa Rossetto, and Fiorenza Micheli. 2015. “Marine Reserves Help Preserve Genetic Diversity After Impacts Derived from Climate Variability: Lessons from the Pink Abalone in Baja California.” <em>Global Ecology and Conservation</em> 4 (July): 264–76.</p>
+</div>
+<div id="ref-Snyder1987-kx">
+<p>Snyder, John Parr. 1987. <em>Map Projections–a Working Manual</em>. U.S. Government Printing Office.</p>
 </div>
 <div id="ref-Watson2012-ug">
 <p>Watson, James R, Bruce E Kendall, David A Siegel, and Satoshi Mitarai. 2012. “Changing Seascapes, Stochastic Connectivity, and Marine Metapopulation Dynamics.” <em>Am. Nat.</em> 180 (1): 99–112.</p>
