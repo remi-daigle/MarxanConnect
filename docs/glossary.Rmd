@@ -212,7 +212,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Self-Recruitment
 
-**Definition**: Self-recruitment is the diagonal of the migration matrix, [M]. It is the proportion of individuals that arrived to a planning unit that originated from that same planning unit [see @DAloia2017-jp; @Lett2015-wv].
+**Definition**: Self-recruitment is the diagonal of the migration matrix, [${M}$](glossary.html#migration). It is the proportion of individuals that arrived to a planning unit that originated from that same planning unit [see @DAloia2017-jp; @Lett2015-wv]. 
 
 **Possible Objectives**: Prioritize planning units which are dominated by locally-produced individuals. A high self-recruitment value may indicate a greater degree of isolation. Note that it should be used cautiously, as high self recruitment does not equate high recruitment (*e.g.* a planning unit can be 100% self-recruiting when only one individual arrives, which also originated from that unit).  
 
@@ -249,7 +249,7 @@ ggraph(as_tbl_graph(G),layout="fr") +
 
 ## Local Retention
 
-**Definition**: Local retention is the diagonal of the probability matrix, [P], and is the proportion of those individuals originating from a planning unit that are retained within that planning unit. Therefore, this value is independent of contributions from all other planning units [@Lett2015-wv]. 
+**Definition**: Local retention is the diagonal of the probability matrix, [${P}$](glossary.html#probability), and is the proportion of those individuals originating from a planning unit that are retained within that planning unit. Therefore, this value is independent of contributions from all other planning units [@Lett2015-wv]. 
 
 **Possible Objectives**: Prioritize planning units which retain a large proportion of the individuals produced. This may be used as a proxy for the planning unit to be self-sustaining (@Burgess2014-mf).
 

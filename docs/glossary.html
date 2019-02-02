@@ -486,7 +486,7 @@ div.tocify {
 <div id="in-degree" class="section level2">
 <h2>In-Degree</h2>
 <p><strong>Definition</strong>: In-degree indicates the number of connections coming into each planning unit <span class="citation">(Minor and Urban 2007)</span>. This metric ignores edge weights or strengths, and can be calculated from <a href="glossary.html#flow"><span class="math inline">\({F}\)</span></a>, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>, or <a href="glossary.html#probability"><span class="math inline">\({P}\)</span></a> .</p>
-<p><strong>Possible Objectives</strong>: Prioritize planning units which receive input from a larger number of other planning units. The recipient planning units with a high In-degree may have higher genetic diversity <span class="citation">(Almany et al. 2009; Munguía-Vega et al. 2015)</span>, species diversity and population resilience through greater rescue potential <span class="citation">(Hanski 1982)</span> as a result of the high in number of incoming connections. However, planning units with high In-degree may be susceptible to outbreaks and invasive species <span class="citation">(<em>e.g.</em> Hock et al. 2014)</span></p>
+<p><strong>Possible Objectives</strong>: Prioritize planning units which receive input from a larger number of other planning units. The recipient planning units with a high In-degree may have higher genetic diversity <span class="citation">(Almany et al. 2009; Munguı́a-Vega et al. 2015)</span>, species diversity and population resilience through greater rescue potential <span class="citation">(Hanski 1982)</span> as a result of the high in number of incoming connections. However, planning units with high In-degree may be susceptible to outbreaks and invasive species <span class="citation">(<em>e.g.</em> Hock et al. 2014)</span></p>
 <p><strong>Equation</strong>: The in degree of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({ID(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections).</p>
 <p><span class="math display">\[{\displaystyle ID(v) = deg^{-}(v)}\]</span></p>
 <p>where <span class="math inline">\({deg^{-}(v)}\)</span> is the number if inward pointing <span class="math inline">\({E}\)</span> for planning unit <span class="math inline">\({v}\)</span>.</p>
@@ -535,7 +535,7 @@ div.tocify {
 </div>
 <div id="self-recruitment" class="section level2">
 <h2>Self-Recruitment</h2>
-<p><strong>Definition</strong>: Self-recruitment is the diagonal of the migration matrix, [M]. It is the proportion of individuals that arrived to a planning unit that originated from that same planning unit <span class="citation">(see D’Aloia et al. 2017; Lett et al. 2015)</span>.</p>
+<p><strong>Definition</strong>: Self-recruitment is the diagonal of the migration matrix, <a href="glossary.html#migration"><span class="math inline">\({M}\)</span></a>. It is the proportion of individuals that arrived to a planning unit that originated from that same planning unit <span class="citation">(see D’Aloia et al. 2017; Lett et al. 2015)</span>.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which are dominated by locally-produced individuals. A high self-recruitment value may indicate a greater degree of isolation. Note that it should be used cautiously, as high self recruitment does not equate high recruitment (<em>e.g.</em> a planning unit can be 100% self-recruiting when only one individual arrives, which also originated from that unit).</p>
 <p><strong>Equation</strong>: The self recruitment of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({SR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[{\displaystyle SR(v) = \frac{c_{v,v}N_v}{\sum_{t \in V}c_{t,v}N_v}}\]</span></p>
@@ -545,7 +545,7 @@ div.tocify {
 </div>
 <div id="local-retention" class="section level2">
 <h2>Local Retention</h2>
-<p><strong>Definition</strong>: Local retention is the diagonal of the probability matrix, [P], and is the proportion of those individuals originating from a planning unit that are retained within that planning unit. Therefore, this value is independent of contributions from all other planning units <span class="citation">(Lett et al. 2015)</span>.</p>
+<p><strong>Definition</strong>: Local retention is the diagonal of the probability matrix, <a href="glossary.html#probability"><span class="math inline">\({P}\)</span></a>, and is the proportion of those individuals originating from a planning unit that are retained within that planning unit. Therefore, this value is independent of contributions from all other planning units <span class="citation">(Lett et al. 2015)</span>.</p>
 <p><strong>Possible Objectives</strong>: Prioritize planning units which retain a large proportion of the individuals produced. This may be used as a proxy for the planning unit to be self-sustaining (<span class="citation">Burgess et al. (2014)</span>).</p>
 <p><strong>Equation</strong>: The local retention of a planning unit <span class="math inline">\({v}\)</span> (<span class="math inline">\({LR(v)}\)</span>) in a graph <span class="math inline">\({G:=(V,E)}\)</span> with <span class="math inline">\({V}\)</span> vertices (<em>i.e.</em> planning units) and <span class="math inline">\({E}\)</span> edges (<em>i.e.</em> connections), let <span class="math inline">\({C=(c_{v,t})}\)</span> be the connectivity (probability) matrix.</p>
 <p><span class="math display">\[\displaystyle LR(v) = c_{v,v}\]</span></p>
@@ -582,10 +582,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle TCC(v) = -\sum_{i \in E_{v,FA}} \sum_{j \in E_{FA,FA}}Cov(E_i,E_j)}\]</span></p>
 <p>where <span class="math inline">\({E_{FA,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that link 2 planning units, both of which spatially overlap with the focus area, <span class="math inline">\({E_{v,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that originate in <span class="math inline">\({v}\)</span> and end in a planning unit which spatially overlaps with the focus area, and <span class="math inline">\({Cov()}\)</span> is the temporal covariance.</p>
 <p><strong>Illustration</strong></p>
-<div class="figure">
-<img src="images/temporalconnectivity.gif" />
-
-</div>
+<p><img src="images/temporalconnectivity.gif" /></p>
 </div>
 <div id="focus-area-recipients" class="section level2">
 <h2>Focus Area Recipients</h2>
@@ -1139,13 +1136,13 @@ TODO:  add more specific information here. Plus assumptions.
 <h1>References</h1>
 <div id="refs" class="references">
 <div id="ref-Almany2009-vt">
-<p>Almany, G R, S R Connolly, D D Heath, J D Hogan, G P Jones, L J McCook, M Mills, R L Pressey, and D H Williamson. 2009. “Connectivity, Biodiversity Conservation and the Design of Marine Reserve Networks for Coral Reefs.” <em>Coral Reefs</em> 28 (2). Springer-Verlag: 339–51.</p>
+<p>Almany, G R, S R Connolly, D D Heath, J D Hogan, G P Jones, L J McCook, M Mills, R L Pressey, and D H Williamson. 2009. “Connectivity, Biodiversity Conservation and the Design of Marine Reserve Networks for Coral Reefs.” <em>Coral Reefs</em> 28 (2): 339–51.</p>
 </div>
 <div id="ref-Beger2010-ir">
-<p>Beger, Maria, Simon Linke, Matt Watts, Eddie Game, Eric Treml, Ian Ball, and Hugh P Possingham. 2010. “Incorporating Asymmetric Connectivity into Spatial Decision Making for Conservation.” <em>Conservation Letters</em> 3 (5). Blackwell Publishing Inc: 359–68.</p>
+<p>Beger, Maria, Simon Linke, Matt Watts, Eddie Game, Eric Treml, Ian Ball, and Hugh P Possingham. 2010. “Incorporating Asymmetric Connectivity into Spatial Decision Making for Conservation.” <em>Conservation Letters</em> 3 (5): 359–68.</p>
 </div>
 <div id="ref-Bodmer1968-vw">
-<p>Bodmer, W F, and L L Cavalli-Sforza. 1968. “A Migration Matrix Model for the Study of Random Genetic Drift.” <em>Genetics</em> 59 (4). Genetics Soc America: 565–92.</p>
+<p>Bodmer, W F, and L L Cavalli-Sforza. 1968. “A Migration Matrix Model for the Study of Random Genetic Drift.” <em>Genetics</em> 59 (4): 565–92.</p>
 </div>
 <div id="ref-Burgess2014-mf">
 <p>Burgess, Scott C, Kerry J Nickols, Chris D Griesemer, Lewis A K Barnett, Allison G Dedrick, Erin V Satterthwaite, Lauren Yamane, Steven G Morgan, J Wilson White, and Louis W Botsford. 2014. “Beyond Connectivity: How Empirical Methods Can Quantify Population Persistence to Improve Marine Protected-Area Design.” <em>Ecol. Appl.</em> 24 (2): 257–70.</p>
@@ -1157,7 +1154,7 @@ TODO:  add more specific information here. Plus assumptions.
 <p>D’Aloia, Cassidy C, Rémi M Daigle, Isabelle M Côté, Janelle M R Curtis, Frédéric Guichard, and Marie-Josée Fortin. 2017. “A Multiple-Species Framework for Integrating Movement Processes Across Life Stages into the Design of Marine Protected Areas.” <em>Biol. Conserv.</em> 216 (December): 93–100.</p>
 </div>
 <div id="ref-Hanski1982-kw">
-<p>Hanski, Ilkka. 1982. “Dynamics of Regional Distribution: The Core and Satellite Species Hypothesis.” <em>Oikos</em> 38 (2). [Nordic Society Oikos, Wiley]: 210–21.</p>
+<p>Hanski, Ilkka. 1982. “Dynamics of Regional Distribution: The Core and Satellite Species Hypothesis.” <em>Oikos</em> 38 (2): 210–21.</p>
 </div>
 <div id="ref-Hock2014-or">
 <p>Hock, Karlo, Nicholas H Wolff, Scott A Condie, Kenneth R N Anthony, and Peter J Mumby. 2014. “Connectivity Networks Reveal the Risks of Crown-of-Thorns Starfish Outbreaks on the Great Barrier Reef.” <em>J. Appl. Ecol.</em> 51 (5): 1188–96.</p>
@@ -1169,13 +1166,13 @@ TODO:  add more specific information here. Plus assumptions.
 <p>Lett, Christophe, Tri Nguyen-Huu, Marion Cuif, Pablo Saenz-Agudelo, and David M Kaplan. 2015. “Linking Local Retention, Self-Recruitment, and Persistence in Marine Metapopulations.” <em>Ecology</em> 96 (8): 2236–44.</p>
 </div>
 <div id="ref-McRae2006-nf">
-<p>McRae, Brad H, and B Nürnberger. 2006. “ISOLATION BY RESISTANCE.” <em>Evolution</em> 60 (8). The Society for the Study of Evolution: 1551–61.</p>
+<p>McRae, Brad H, and B Nürnberger. 2006. “ISOLATION BY RESISTANCE.” <em>Evolution</em> 60 (8): 1551–61.</p>
 </div>
 <div id="ref-Minor2007-fb">
 <p>Minor, Emily S, and Dean L Urban. 2007. “Graph Theory as a Proxy for Spatially Explicit Population Models in Conservation Planning.” <em>Ecol. Appl.</em> 17 (6): 1771–82.</p>
 </div>
 <div id="ref-Munguia-Vega2015-rh">
-<p>Munguía-Vega, Adrián, Andrea Sáenz-Arroyo, Ashley P Greenley, Jose Antonio Espinoza-Montes, Stephen R Palumbi, Marisa Rossetto, and Fiorenza Micheli. 2015. “Marine Reserves Help Preserve Genetic Diversity After Impacts Derived from Climate Variability: Lessons from the Pink Abalone in Baja California.” <em>Global Ecology and Conservation</em> 4 (July): 264–76.</p>
+<p>Munguı́a-Vega, Adrián, Andrea Sáenz-Arroyo, Ashley P Greenley, Jose Antonio Espinoza-Montes, Stephen R Palumbi, Marisa Rossetto, and Fiorenza Micheli. 2015. “Marine Reserves Help Preserve Genetic Diversity After Impacts Derived from Climate Variability: Lessons from the Pink Abalone in Baja California.” <em>Global Ecology and Conservation</em> 4 (July): 264–76.</p>
 </div>
 <div id="ref-Snyder1987-kx">
 <p>Snyder, John Parr. 1987. <em>Map Projections–a Working Manual</em>. U.S. Government Printing Office.</p>
