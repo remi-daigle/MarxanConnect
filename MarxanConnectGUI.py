@@ -2317,6 +2317,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             inputpath = inputpath.replace(inputpath[0:2], "C:\\")
             marxanpath = marxanpath.replace(marxanpath[0:2], "C:\\")
 
+        marxanconpy.warn_dialog("Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished and has been closed.")
+
         if self.project['options']['marxan_bit']=="64-bit":
             if self.project['options']['marxan'] == "Marxan":
                 if platform.system() == 'Windows':
