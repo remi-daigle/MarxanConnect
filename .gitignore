@@ -107,7 +107,7 @@ MarOptTotalAreas.csv
 DebugTraceFile_MarOpt.txt
 MarxanConnect.zip
 MarxanConnect/*
-docs/GADM_2.8_AUS_adm0.rds
 MarxanConnect-v*
 .DS_Store
 *.dmg
+*.rds

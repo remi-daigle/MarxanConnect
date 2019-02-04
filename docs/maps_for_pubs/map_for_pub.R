@@ -246,14 +246,14 @@ ggsave("maps_for_pubs/connect.png",connect,bg="transparent",height=6,width=4,dpi
 categorical <- ggplot()+
     geom_sf(data=oc_greater90, aes(fill="A",colour="A"),size=0.3)+
     geom_sf(data=oc_bottom5, aes(fill="B",colour="B"),size=0.3)+
-    scale_fill_manual("",values=c("#549b16","white"),labels=c("Always Irreplaceable","Rarely selected"))+
-    scale_colour_manual("",values=c("#549b16","black"),labels=c("Always Irreplaceable","Rarely selected"))+
+    scale_fill_manual("",values=c("#549b16","white"),labels=c("Always prioritized","Rarely selected"))+
+    scale_colour_manual("",values=c("#549b16","black"),labels=c("Always prioritized","Rarely selected"))+
     coord_sf(xlim=st_bbox(output_rotated)[c(1,3)],
              ylim=st_bbox(output_rotated)[c(2,4)],
              crs=proj_rotated,
              expand = FALSE)+
     theme_dark()+
-    theme(legend.position = c(1.6,0.5),
+    theme(legend.position = c(1.535,0.5),
           legend.direction = "vertical",
           plot.margin = margin(t=5.5,b=5.5,l=0,r=140,unit = "pt"),
           legend.text = element_text(size=10),
