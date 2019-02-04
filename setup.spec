@@ -21,6 +21,8 @@ filedata = filedata.replace('wx.html.HtmlWindow( self.connectivityMetrics, wx.ID
 'wx.html2.WebView.New( self.connectivityMetrics)')
 filedata = re.sub(r'Marxan Connect v.*\. https', 'Marxan Connect ' + MarxanConnectVersion +'. https', filedata)
 filedata = filedata.replace('wx.HyperlinkCtrl', 'wx.adv.HyperlinkCtrl')
+if platform.system() == 'Darwin':
+    filedata = filedata.replace('|All files (*.*)|*.*"', '"')
 
 # Write the file out again
 with open('gui.py', 'w', encoding="utf8") as file:

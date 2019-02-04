@@ -34,6 +34,8 @@ import gui
 
 
 os.environ["UBUNTU_MENUPROXY"]="0"
+if platform.system() == 'Darwin':
+    wx.SystemOptions.SetOption(u"osx.openfiledialog.always-show-types","1")
 
 # define wildcards
 wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
