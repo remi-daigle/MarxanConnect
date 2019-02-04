@@ -126,7 +126,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		pu_file_sizer1.Add( self.PU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.PU_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, u"~\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.PU_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, u"~\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		pu_file_sizer1.Add( self.PU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.PU_file_pu_id_txt = wx.StaticText( self.spatialInput, wx.ID_ANY, u"ID Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -173,7 +173,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		fa_file_sizer.Add( self.FA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.FA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.FA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		fa_file_sizer.Add( self.FA_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 
@@ -223,7 +223,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		aa_file_sizer.Add( self.AA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.AA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.AA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		aa_file_sizer.Add( self.AA_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 
@@ -349,7 +349,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		demo_cu_cm_file_sizer.Add( self.demo_CU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.demo_CU_CM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.demo_CU_CM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		demo_cu_cm_file_sizer.Add( self.demo_CU_CM_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 
@@ -393,7 +393,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		demo_cu_file_sizer.Add( self.demo_CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.demo_CU_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.demo_CU_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		self.demo_CU_file.Enable( False )
 
 		demo_cu_file_sizer.Add( self.demo_CU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
@@ -452,7 +452,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		demo_pucm_sizer.Add( self.demo_PU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.demo_PU_CM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\Documents\\PU_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
+		self.demo_PU_CM_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\Documents\\PU_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
 		self.demo_PU_CM_file.Enable( False )
 
 		demo_pucm_sizer.Add( self.demo_PU_CM_file, 0, wx.ALL|wx.EXPAND, 5 )
@@ -519,7 +519,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_cu_file_sizer.Add( self.land_HAB_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_HAB_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_HAB_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_cu_file_sizer.Add( self.land_HAB_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.land_HAB_file_hab_id_txt = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat ID Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -582,7 +582,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_cu_cm_file_sizer.Add( self.land_RES_mat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_RES_mat_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_RES_mat_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_cu_cm_file_sizer.Add( self.land_RES_mat_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.resistance_mat_customize = wx.Button( self.hab_res, wx.ID_ANY, u"Customize", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -639,7 +639,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_res_file_sizer.Add( self.land_RES_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_RES_file = wx.FilePickerCtrl( self.res_suf, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_RES_file = wx.FilePickerCtrl( self.res_suf, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_res_file_sizer.Add( self.land_RES_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.land_res_file_res_id_txt = wx.StaticText( self.res_suf, wx.ID_ANY, u"Resistance Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -707,7 +707,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_pucm_sizer.Add( self.land_PU_CM_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_PU_CM_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
+		self.land_PU_CM_file = wx.FilePickerCtrl( self.landscape, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_SAVE|wx.FLP_USE_TEXTCTRL )
 		land_pucm_sizer.Add( self.land_PU_CM_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -760,7 +760,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		LP_sizer.Add( self.LP_def, 0, wx.ALL|wx.EXPAND, 5 )
 
-		self.LP_file = wx.FilePickerCtrl( self.connectivityInput, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.LP_file = wx.FilePickerCtrl( self.connectivityInput, wx.ID_ANY, u"~\\data\\grid_connectivity_matrix.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		LP_sizer.Add( self.LP_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 
@@ -993,7 +993,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
 
-		self.metric_definition_html = wx.html2.WebView.New( self.connectivityMetrics)
+		self.metric_definition_html = wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )
 		metric_help_sizer.Add( self.metric_definition_html, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -1428,7 +1428,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		cf_file_export_sizer.Add( self.cf_export_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.orig_CF_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.orig_CF_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\puvspr.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		cf_file_export_sizer.Add( self.orig_CF_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.cf_export_txt1 = wx.StaticText( self.exportMarxan, wx.ID_ANY, u"New Planning Unit versus Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1436,7 +1436,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		cf_file_export_sizer.Add( self.cf_export_txt1, 0, wx.ALL, 5 )
 
-		self.CF_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\puvspr_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.CF_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\puvspr_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		cf_file_export_sizer.Add( self.CF_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.SPEC_filetxt = wx.StaticText( self.exportMarxan, wx.ID_ANY, u"Original Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1444,7 +1444,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		cf_file_export_sizer.Add( self.SPEC_filetxt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.orig_SPEC_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.orig_SPEC_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\spec.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		cf_file_export_sizer.Add( self.orig_SPEC_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.SPEC_filetxt1 = wx.StaticText( self.exportMarxan, wx.ID_ANY, u"New Conservation Feature File:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1452,7 +1452,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		cf_file_export_sizer.Add( self.SPEC_filetxt1, 0, wx.ALL, 5 )
 
-		self.SPEC_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\spec_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.SPEC_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\spec_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		cf_file_export_sizer.Add( self.SPEC_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.custom_spec_panel = wx.Panel( self.exportMarxan, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -1522,7 +1522,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		bd_file_sizer.Add( self.m_staticText142, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.orig_BD_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.orig_BD_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\bound.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		bd_file_sizer.Add( self.orig_BD_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.BD_filecheck = wx.CheckBox( self.exportMarxan, wx.ID_ANY, u"Export New Spatial Dependencies to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1534,7 +1534,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		BD_sizer.SetFlexibleDirection( wx.BOTH )
 		BD_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.BD_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\bound_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.BD_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\bound_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		BD_sizer.Add( self.BD_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.export_BD_file = wx.Button( self.exportMarxan, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1568,7 +1568,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		pudat_file_sizer.Add( self.orig_PUDAT_file_txt, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.orig_PUDAT_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\pu.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.orig_PUDAT_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\pu.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		pudat_file_sizer.Add( self.orig_PUDAT_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.PUDAT_filecheck = wx.CheckBox( self.exportMarxan, wx.ID_ANY, u"Export New Planning Unit File to: ", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1580,7 +1580,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		PUDAT_sizer.SetFlexibleDirection( wx.BOTH )
 		PUDAT_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.PUDAT_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\pu_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.PUDAT_file = wx.FilePickerCtrl( self.exportMarxan, wx.ID_ANY, u"~\\pu_connect.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		PUDAT_sizer.Add( self.PUDAT_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.export_pudat = wx.Button( self.exportMarxan, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1650,7 +1650,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		inputdat_file_sizer.Add( self.inputdat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.inputdat_template_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\Marxan243\\input_template.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.inputdat_template_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\Marxan243\\input_template.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		inputdat_file_sizer.Add( self.inputdat_template_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.default_input_template = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Reset to Default", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1773,7 +1773,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		inputdat_file_sizer.Add( self.inputdat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.inputdat_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.inputdat_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		inputdat_file_sizer.Add( self.inputdat_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.customize_inpudat = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Customize", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1909,7 +1909,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		pudat_file_sizer1.Add( self.postHoc_export_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 
-		self.postHoc_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.postHoc_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		pudat_file_sizer1.Add( self.postHoc_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -2283,7 +2283,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.PUSHP_filecheck.SetValue(True)
 		pushp_file_sizer.Add( self.PUSHP_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.PUSHP_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.PUSHP_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		pushp_file_sizer.Add( self.PUSHP_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -2298,7 +2298,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.PUCSV_filecheck.SetValue(True)
 		pucsv_file_sizer.Add( self.PUCSV_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.PUCSV_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\pu.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.PUCSV_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\pu.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		pucsv_file_sizer.Add( self.PUCSV_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -2313,7 +2313,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.MAP_filecheck.SetValue(True)
 		map_file_sizer.Add( self.MAP_filecheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.MAP_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\map.png", u"Select a file", u"Portable Network Graphics (*.png)|*.png|Joint Photographic Experts Group (*.jpg)|*.jpg", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		self.MAP_file = wx.FilePickerCtrl( self.plottingOptions, wx.ID_ANY, u"~\\map.png", u"Select a file", u"Portable Network Graphics (*.png)|*.png|Joint Photographic Experts Group (*.jpg)|*.jpg|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		map_file_sizer.Add( self.MAP_file, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -2932,7 +2932,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2-rc2019.02.04.14. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
