@@ -1140,7 +1140,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines conservation features (i.e. puvspr2.dat) file path
         """
         self.project['filepaths']['orig_cf_filepath'] = self.orig_CF_file.GetPath()
-        self.verify_marxan_options()
 
     def on_SPEC_file(self, event):
         """
@@ -1498,7 +1497,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         :return:
         """
         self.project['options']['marxan_CF'] = self.marxan_CF.GetStringSelection()
-        self.verify_marxan_options()
 
     def on_marxan_bound( self, event ):
         """
@@ -2274,7 +2272,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         :param event:
         :return:
         """
-        os.system("start "+self.project['filepaths']['marxan_input'])
+        if platform.system() == 'Windows':
+            os.system("start "+self.project['filepaths']['marxan_input'])
+        elif platform.system() == "Darwin":
+            os.system("open -t " + self.project['filepaths']['marxan_input'])
 
 
     def on_run_marxan(self, event):
@@ -2319,27 +2320,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         marxanconpy.warn_dialog("Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished and has been closed.")
 
-        if self.project['options']['marxan_bit']=="64-bit":
+        if platform.system() == 'Windows':
             if self.project['options']['marxan'] == "Marxan":
-                if platform.system() == 'Windows':
+                if self.project['options']['marxan_bit']=="64-bit":
                     marxan_exec = 'Marxan_x64.exe'
-                elif platform.system() == 'Darwin':
-                    marxan_exec = 'MarOpt_v243_Mac64'
-            else:
-                marxan_exec = 'MarZone_x64.exe'
-        else:
-            if self.project['options']['marxan'] == "Marxan":
-                if platform.system() == 'Windows':
+                else:
                     marxan_exec = 'Marxan.exe'
-                elif platform.system() == 'Darwin':
+            else:
+                if self.project['options']['marxan_bit']=="64-bit":
+                    marxan_exec = 'MarZone_x64.exe'
+                else:
+                    marxan_exec = 'MarZone.exe'
+
+            subprocess.call(os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
+                            self.project['filepaths']['marxan_input'],
+                            creationflags=subprocess.CREATE_NEW_CONSOLE,
+                            cwd=inputpath)
+
+        elif platform.system() == 'Darwin':
+            if self.project['options']['marxan'] == "Marxan":
+                if self.project['options']['marxan_bit']=="64-bit":
+                    marxan_exec = 'MarOpt_v243_Mac64'
+                else:
                     marxan_exec = 'MarOpt_v243_Mac32'
             else:
-                marxan_exec = 'MarZone.exe'
+                marxanconpy.warn_dialog('Sorry, this experimental feature is only available for Windows at the monment')
 
-        subprocess.call(os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
-                        self.project['filepaths']['marxan_input'],
-                        creationflags=subprocess.CREATE_NEW_CONSOLE,
-                        cwd=inputpath)
+            self.log.Show()
+            p=subprocess.call([os.path.join(marxanpath, 'Marxan243', marxan_exec),
+                             os.path.relpath(self.project['filepaths']['marxan_input'],inputpath)],
+                             # shell=True,
+                             # stdin=subprocess.PIPE,
+                             # stdout=subprocess.STD_OUTPUT_HANDLE,
+                             # stderr=subprocess.PIPE,
+                             cwd=inputpath)
+            p.communicate()
+
 
         # calculate selection frequency
         for line in open(self.project['filepaths']['marxan_input']):
