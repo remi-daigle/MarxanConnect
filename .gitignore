@@ -10,6 +10,7 @@ __pycache__/
 .Python
 env/
 build/
+dist/
 develop-eggs/
 
 downloads/
@@ -29,7 +30,6 @@ wheels/
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
-*.spec
 
 # Installer logs
 pip-log.txt
@@ -100,14 +100,14 @@ ENV/
 # mypy
 .mypy_cache/
 .idea*
-toymap.py
-*.exe
 *.bak
 .Rproj.user
 *.Rhistory
 MarOptTotalAreas.csv
 DebugTraceFile_MarOpt.txt
-Marxan243/*
 MarxanConnect.zip
 MarxanConnect/*
-docs/GADM_2.8_AUS_adm0.rds
+MarxanConnect-v*
+.DS_Store
+*.dmg
+*.rds

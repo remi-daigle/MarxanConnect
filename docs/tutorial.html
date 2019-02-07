@@ -11,7 +11,7 @@
 
 
 
-<title>Tutorial</title>
+<title>Tutorial Overview</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,9 +26,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-50638009-7"></script>
 <script>
@@ -120,6 +119,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -134,7 +136,6 @@ body {
   padding-top: 65px;
   margin-top: -65px;
 }
-
 .section h2 {
   padding-top: 65px;
   margin-top: -65px;
@@ -154,6 +155,43 @@ body {
 .section h6 {
   padding-top: 65px;
   margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -175,13 +213,73 @@ $(document).ready(function () {
 });
 </script>
 
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
 });
 </script>
 
@@ -194,7 +292,6 @@ $(document).ready(function () {
   window.initializeCodeFolding("hide" === "show");
 });
 </script>
-
 
 
 
@@ -330,13 +427,13 @@ div.tocify {
       <a href="CF_demographic.html">Conservation Features + demographic data</a>
     </li>
     <li>
-      <a href="CF_landscape.html">Conservation Features + landscape data</a>
-    </li>
-    <li>
-      <a href="CSD_demographic.html">Connectivity as Spatial Dependency + demographic data</a>
-    </li>
-    <li>
       <a href="CSD_landscape.html">Connectivity as Spatial Dependency + landscape data</a>
+    </li>
+    <li>
+      <a href="CF_landscape.html">Conservation Features + landscape data (in-development)</a>
+    </li>
+    <li>
+      <a href="CSD_demographic.html">Connectivity as Spatial Dependency + demographic data (in-development)</a>
     </li>
     <li>
       <a href="targets.html">Setting Targets and Post-hoc Evaluation</a>
@@ -390,100 +487,112 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Tutorial</h1>
+<h1 class="title toc-ignore">Tutorial Overview</h1>
 
 </div>
 
 
-<div id="overview" class="section level1">
-<h1><span class="header-section-number">1</span> Overview</h1>
-<p>This page provides an overview of ‘how-to’ incorporate connectivity into Marxan <span class="citation">(I. R. Ball, Possingham, and Watts 2009)</span>, some instructions for using Marxan Connect combined with example of workflows using both demographic and landscape connectivity data.</p>
-<p>The maps and plots shown in this tutorial were created in R using the shapefile exported from the “Plotting Options” tab of Marxan Connect. The R code used to make the plots can be revealed by clicking on the <code>Code</code> button below</p>
+<p>This page provides an overview of ‘how-to’ incorporate connectivity into Marxan <span class="citation">(I. R. Ball, Possingham, and Watts 2009)</span>, outlining instructions for using Marxan Connect, and example workflows using demographic and landscape connectivity data. These instructions assume you have already installed Marxan Connect, but if not, instructions can be found <a href="index.html#installing">here</a></p>
 <pre class="r"><code>library(sf)
+
 library(leaflet)
+
 library(tmap)
+
 library(tidyverse)
+
 library(DT)
 
-
 # set default projection for leaflet
+
 proj &lt;- &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs&quot;</code></pre>
-</div>
 <div id="introduction-to-marxan-connect" class="section level1">
-<h1><span class="header-section-number">2</span> Introduction to Marxan Connect</h1>
-<p>Because we recognize that there is considerable investment in Marxan-based prioritization, Marxan Connect was designed to help conservation practitioners incorporate connectivity into existing Marxan analyses. It acts as a preprocessing module to prepare connectivity data for inclusion in a Marxan analysis (Figure 1)</p>
+<h1><span class="header-section-number">1</span> Introduction to Marxan Connect</h1>
+<p>Marxan Connect was conceptualized in response to the growing need for connectivity to be incorporated into conservation planning on the land and sea. Our aim is to help conservation practitioners incorporate connectivity into the widely-used decision-support tool, Marxan. Marxan Connect is a graphical user interface that can be used to preprocess and prepare existing connectivity data for inclusion in a <a href="marxan.org">Marxan</a> analysis (Figure 1). In terms of connectivity data, practitioners will need to have access to connectivity data (e.g. dispersal models, GPS tagging data, etc) or at least information about the landscape (see <a href="./glossary.html#connectivity_input">Connectivity Input</a> section for more details). We note there are two primary ways to incorporate connectivity data into the Marxan input files: 1) as a feature, or 2) as spatial dependencies between planning units (the boundary term). The differences between these approaches are discussed in more detail below.</p>
 <div class="figure">
-<img src="images/workflow.png" alt="Figure 1: Comparison of workflows between Marxan and Marxan Connect. Marxan Connect facilitates the use of connectivity data, derived from tagging data, genetics, dispersal models, resistance models, or geographic distance, by producing connectivity metrics and connectivity strengths (i.e. spatial dependencies) to be used as boundary definitions before running Marxan. These connectivity metrics and linkage strengths are then used as input (conservation features and/or boundary definitions) in the traditional Marxan workflow. The cost data in the traditional Marxan analysis refers to the cost of protecting a planning unit (i.e. opportunity cost), not the cost to traverse a landscape." />
-<p class="caption"><strong>Figure 1:</strong> <em>Comparison of workflows between Marxan and “Marxan Connect.” Marxan Connect facilitates the use of connectivity data, derived from tagging data, genetics, dispersal models, resistance models, or geographic distance, by producing connectivity metrics and connectivity strengths (i.e. spatial dependencies) to be used as boundary definitions before running Marxan. These connectivity metrics and linkage strengths are then used as input (conservation features and/or boundary definitions) in the traditional Marxan workflow. The cost data in the traditional Marxan analysis refers to the cost of protecting a planning unit (i.e. opportunity cost), not the cost to traverse a landscape.</em></p>
+<img src="images/workflow.png" alt="Figure 1: Comparison of workflows between the representation only standard approach to Marxan and Marxan Connect. Marxan Connect facilitates the use of connectivity data, derived from animal tagging data, genetics, dispersal models, resistance models, or geographic distance, by producing connectivity metrics and connectivity strengths (i.e. spatial dependencies that are used in the place of boundary definitions) before running Marxan. These connectivity metrics and linkage strengths are then used as inputs (connectivity-based conservation features or spatial dependencies) in the traditional Marxan workflow. The cost data in the traditional Marxan analysis refer to the cost of protecting a planning unit (i.e. opportunity cost), not the cost to traverse a landscape." />
+<p class="caption"><strong>Figure 1:</strong> <em>Comparison of workflows between the “representation only” standard approach to Marxan and “Marxan Connect.” Marxan Connect facilitates the use of connectivity data, derived from animal tagging data, genetics, dispersal models, resistance models, or geographic distance, by producing connectivity metrics and connectivity strengths (i.e. spatial dependencies that are used in the place of boundary definitions) before running Marxan. These connectivity metrics and linkage strengths are then used as inputs (connectivity-based conservation features or spatial dependencies) in the traditional Marxan workflow. The cost data in the traditional Marxan analysis refer to the cost of protecting a planning unit (i.e. opportunity cost), not the cost to traverse a landscape.</em></p>
 </div>
-<p>Marxan Connect allows users to export data products (<em>e.g.</em> connectivity metrics, marxan files, etc) at any of the above steps to enable users to base their workflow in or outside Marxan Connect.</p>
-<p>The workflow is divided into seperate tabs which represent steps in the analysis.</p>
+<p>Beyond preprocessing, Marxan Connect also allows users to run the Marxan software internally or export data products (<em>e.g.</em> connectivity metrics, marxan files, etc) to run the analysis externally.</p>
+<p>The Marxan Connect interface is divided into seven separate tabs, one for each step in the workflow. Below we provide a basic description of the function/s available in each step and links to several practice demonstrations.</p>
+<div class="figure">
+<img src="images/workflow_tabs.png" alt="Figure 2: Tabs within Marxan Connect that represent steps in the workflow." />
+<p class="caption"><strong>Figure 2:</strong> <em>Tabs within Marxan Connect that represent steps in the workflow.</em></p>
+</div>
 <div id="spatial-input" class="section level2">
-<h2><span class="header-section-number">2.1</span> Spatial Input</h2>
-<p>This tab allows users to identify and load their <a href="./glossary.html#planning_units">planning units</a>, and optionally a <a href="./glossary.html#focus_areas">focus area</a> or <a href="./glossary.html#avoidance_areas">avoidance areas</a>.</p>
+<h2><span class="header-section-number">1.1</span> Spatial Input</h2>
+<p>This tab allows users to identify and load their <a href="./glossary.html#planning_units">planning units</a>, and optionally <a href="./glossary.html#focus_areas">focus areas</a> or <a href="./glossary.html#avoidance_areas">avoidance areas</a>.</p>
+<p>At this stage, Marxan Connect will choose a projection to transform all spatial data based on the geographic position and extent of the planning units. See the <a href="./glossary.html#projections">Projections</a> for more details.</p>
 </div>
 <div id="connectivity-input" class="section level2">
-<h2><span class="header-section-number">2.2</span> Connectivity Input</h2>
-<p>This tab allows users to input their demographic or landscape-based connectivity data. It also allows users to generate some landscape-based data or rescale demographic-based data. However, rescaling connectivity data can be probelmatic and it is preferable to collect or generate the connectivity data to the scale of the <a href="./glossary.html#planning_units">planning units</a>.</p>
-<p>For the landscape connectivity approach, Marxan Connect calculates connectivity metrics from networks based either on Euclidean distance or least-cost path between the centroid of planning units. However, other software packages such as <a href="http://www.circuitscape.org/">Circuitscape</a> <span class="citation">(McRae, Shah, and Mohapatra 2009)</span> and <a href="http://www.conefor.org/">Conefor</a> <span class="citation">(Saura and Torné 2009)</span> currently provide a richer set of options and specialized methods. These software packages can be used to generate custom conservation features or connectivity matrices both of which can then be used in Marxan Connect. For example, one could generate a network using current density using Circuitscape and input the resulting connectivity matrix into Marxan Connect to generate conservation features or spatial dependencies.</p>
+<h2><span class="header-section-number">1.2</span> Connectivity Input</h2>
+<p>This tab allows users to input demographic or landscape-based connectivity data, generate landscape-based connectivity data (isolation by distance or isolation by resistance) or rescale demographic-based data. However, rescaling connectivity data can be problematic and it is recommended to collect or generate the connectivity data to the scale of the <a href="./glossary.html#planning_units">planning units</a>.</p>
+<p>When using a landscape connectivity approach, Marxan Connect can calculate a connectivity matrix using Euclidean distance or Least-Cost Path between the centroids of planning units or the user can import an existing landscape connectivity matrix. Other software packages such as <a href="http://www.circuitscape.org/">Circuitscape</a> <span class="citation">(McRae, Shah, and Mohapatra 2009)</span> and <a href="http://www.conefor.org/">Conefor</a> <span class="citation">(Saura and Torné 2009)</span> currently provide a richer set of options and specialized methods to generate custom conservation features, or connectivity matrices, both of which can then be used in Marxan Connect. For example, one could generate a network using current theory (<em>i.e.</em> using the movement of electrons in a circuit to approximate organism movement) using Circuitscape and input the resulting connectivity matrix into Marxan Connect to generate conservation features or spatial dependencies.</p>
 </div>
 <div id="connectivity-metrics" class="section level2">
-<h2><span class="header-section-number">2.3</span> Connectivity Metrics</h2>
-<p>This tab guides users in their choice of methods and metrics, and allows them to calculate those metrics.</p>
+<h2><span class="header-section-number">1.3</span> Connectivity Metrics</h2>
+<p>This tab allows users to select which connectivity metrics to calculate and is dependent on the type of connectivity data imported on the previous tab (demographic or landscape). For example, if the user imports demographic data, only metrics under the demographic heading can be selected. At this point, users also select whether they would like to calculate metrics to create conservation features, spatial dependencies, or both.</p>
+<p>To learn more about each of the metrics, users can select each metric from the drop down menu on the right hand side of the window to view the definition, possible objectives, equation, and an illustration to visualize how the metric works.</p>
+<p>After selecting which metrics to calculate, users must click the “Calculate Metrics” button in the bottom right-hand corner of the window before moving onto the Pre-Evaluation tab.</p>
 </div>
 <div id="pre-evaluation" class="section level2">
-<h2><span class="header-section-number">2.4</span> Pre-Evaluation</h2>
-<p>This tab allows users to modify (<em>i.e.</em> discretize) connectivity metrics and export Marxan formatted files.</p>
+<h2><span class="header-section-number">1.4</span> Pre-Evaluation</h2>
+<p>The pre-evaluation tab allows users to modify (<em>i.e.</em> discretize), plot, and remove connectivity metrics calculated on the previous tab. Note than no action is required in the Pre-Evaluation tab for the spatial dependencies are calculated using the “Connectivity as boundary” option. However, if users want to include connectivity as a conservation feature, they will have to evaluate each of these metrics before moving on. Users can switch between the continuous and discretized metrics using the ‘Selection’ drop down menu.</p>
+<p>Discretizing creates a binary spatial feature which is ‘present’ when the value of the continuous connectivity metrics is between the minimum and maximum thresholds. A summary of each metric is shown in table form on the left side of the window to help guide the user through metric modifications. The user can discretize connectivity metrics using quartiles, percentiles or custom values using the ‘Make discrete feature from minimum threshold’ and ‘Make discrete feature to maximum threshold’ panels. To view the frequency histogram for each metric, users can click the ‘Plot Frequency button beside the drop down menu for metrics. Users can also remove the selected metric if deemed not appropriate for the Marxan analysis. Once the upper and lower range of the metric are selected, users will click the ’Create New Metric’ button. This will save the modifications made to that metric and it will appear in the ‘Connectivity Metric Available for Export’ chart. Users will have to repeat this process until all desired metrics have been discretized. Note the multiple conservation features can be created from a single continuous connectivity metric.</p>
 </div>
-<div id="marxan-analysis" class="section level2">
-<h2><span class="header-section-number">2.5</span> Marxan Analysis</h2>
-<p>This tab allows users to operate Marxan from Marxan Connect.</p>
+<div id="marxan-files" class="section level2">
+<h2><span class="header-section-number">1.5</span> Marxan Files</h2>
+<p>This tab allows users to append, export to ignore discrete connectivity metrics, spatial dependencies and the planning unit status to Marxan formatted files.</p>
+</div>
+<div id="run-marxan" class="section level2">
+<h2><span class="header-section-number">1.6</span> Run Marxan</h2>
+<p>This tab allows users to run the Marxan.exe from within Marxan Connect.</p>
 </div>
 <div id="plotting-options" class="section level2">
-<h2><span class="header-section-number">2.6</span> Plotting Options</h2>
+<h2><span class="header-section-number">1.7</span> Plotting Options</h2>
 <p>This tab allows users to plot connectivity metrics and Marxan results. It also allows the users to export maps and shapefiles that contain those connectivity metrics and Marxan results.</p>
 </div>
 </div>
-<div id="using-connectivity-data-as-a-feature" class="section level1">
-<h1><span class="header-section-number">3</span> Using connectivity data as a ‘feature’</h1>
-<p>A simple and accessible way to integrate connectivity data into spatial prioritization is to treat it as a conservation feature, such that <span class="math inline">\({r_{ij}}\)</span> is the amount of connectivity feature <span class="math inline">\({j}\)</span> (<em>e.g.</em> reproductive outflux) in planning unit <span class="math inline">\({i}\)</span>. In the classical minimum set problem (<em>i.e.</em> Marxan), a target is set for each feature, <span class="math inline">\({T_j}\)</span>, (<em>e.g.</em> 50%) and the reserve system needs to contain at least that amount. This can incorporate continuous or discrete conservation features (Figure 2). Examples of conservation targets best represented as continuous data include patch-level self-recruitment values (range between 0 and 1) or centrality measures <span class="citation">(D’Aloia et al. 2017; Magris et al. 2018; J. W. White et al. 2014)</span>. In this treatment, a metric that represents the process of connectivity across the entire planning area receives a target. Definitions and potential conservation objectives for each connectivity based conservation feature available in Marxan Connect can be found on in the <a href="./glossary.html">glossary</a>.</p>
-<p>To increase the probability that the connectivity process is maintained, and that the spatial conservation plan is influenced by the conservation feature, a target higher than that of most other conservation features should be set. We suggest using a tunable â€™constraintâ€™, a target multiplier (<span class="math inline">\({C}\)</span>), as a way to determine the higher target for connectivity-based conservation features (Figure 2). The target for the connectivity-based conservation feature, <span class="math inline">\({T_c}\)</span>, would then be: <span class="math display">\[{T_c=T_j*C}\]</span> with <span class="math inline">\({T_j}\)</span> being a typical conservation target for features not related to connectivity. An appropriate value for <span class="math inline">\({C}\)</span> can be determined by using a cost trade-off curve, similar to calibrating the Boundary Length Modifier (BLM), where one would test the sensitivity of cost of the best solution and the total summed metric. It is worth noting that the BLM may interact with <span class="math inline">\({C}\)</span>. The value of <span class="math inline">\({C}\)</span> could be chosen as the divergent point, where the greatest increase in the connectivity metric is achieved for a relatively small increase in cost. However, the preferred approach would be to establish conservation targets which lead to a reserve network design which meets ecologically relevant conservation objective(s) such as population viability or a within network metapopulation growth rate &gt; 1 (See “Post-hoc evaluation” section for more details).</p>
-<p>In contrast, conservation targets set for discretized connectivity conservation features <span class="math inline">\({X_j}\)</span> can capture different levels of importance to connectivity amongst sites <span class="citation">(Álvarez-Romero et al. 2018)</span> (Figure 2). To create a discrete feature, threshold value(s) must be chosen from the range of the continuous connectivity metric, ideally after ecological assessment or sensitivity analysis. The planning units that meet the threshold(s) are then discretized into unique features for which a target is set (Fig 2). Similarly, this type of threshold setting is often used with species distribution models, where each planning unit is assigned a probability of species occurrence, and a threshold value is used to convert these continuous distribution data to a binary map (presence vs absence or suitable vs unsuitable) used for a particular species (<em>e.g.</em>, <span class="citation">Minor et al. (2008)</span>). When appropriate, discrete and very high priority planning units could alternately be “locked-in”&quot; to the final solution to guarantee their inclusion.</p>
+<div id="integrating-connectivity-data-into-spatial-prioritization" class="section level1">
+<h1><span class="header-section-number">2</span> Integrating connectivity data into spatial prioritization</h1>
+<div id="using-connectivity-data-as-a-feature" class="section level2">
+<h2><span class="header-section-number">2.1</span> Using connectivity data as a ‘feature’</h2>
+<p>A simple way to integrate connectivity data into spatial prioritization is to create a discrete connectivity-based conservation feature <span class="citation">(D’Aloia et al. 2017; Magris et al. 2018; J. W. White et al. 2014)</span>. To do so requires calculating connectivity metric(s) which represent connectivity process(es) (<em>e.g.</em> betweenness centrality), and then choosing a threshold value(s) from the range of the metric. For example, you may wish to take only the planning units with a betweenness centrality value of 0.8 or higher, which are then converted into a discrete feature (<em>i.e.</em> importance areas for connectivity) (Figure 3). Under this treatment, the connectivity-based conservation feature <span class="math inline">\({j}\)</span> in planning unit <span class="math inline">\({i}\)</span> (<em>i.e.</em> <span class="math inline">\({r_{ij}}\)</span>) becomes binary based on if the planning unit meets (1) or does not meet (0), the threshold.This type of threshold setting is often used with species distribution models, where each planning unit is assigned a probability of species occurrence, and a threshold value is used to convert these continuous distribution data to a binary map (presence vs absence or suitable vs unsuitable) for a particular species <span class="citation">(<em>e.g.</em> Minor et al. 2008)</span>.</p>
+<p>These discrete connectivity features are then treated as any other feature in Marxan, where a minimum target is set, <span class="math inline">\({T_j}\)</span>, (<em>e.g.</em> 50% of feature <span class="math inline">\({j}\)</span>). In the absence of ecologically determined thresholds, an appropriate value for the thresholds and target <span class="math inline">\({T_j}\)</span> can be determined by using a cost trade-off curve where one would test the sensitivity of the cost of the best solution and the total summed metric captured in the solution. The value of the thresholds and target <span class="math inline">\({T_j}\)</span> could be chosen as the divergent point, where the greatest increase in the connectivity metric is achieved for a relatively small increase in cost (Figure 3) . However, the preferred approach would be to establish conservation targets which lead to a reserve network design which meets ecologically relevant conservation objective(s) such as population viability or a within network metapopulation growth rate &gt; 1 (See “<a href="./targets.html">Post-hoc evaluation</a>” section for more details).</p>
+<p>When appropriate, high connectivity value planning units may also be “locked-in” to the ensure they are always selected in the solutions, rather than setting a target. Definitions for each connectivity based conservation feature as well as and potential conservation objectives for which they may be useful are available in Marxan Connect can be found on in the <a href="./glossary.html">glossary</a>.</p>
 <div class="figure">
-<img src="images/general_workflow.png" alt="Figure 2: Data processing workflow for three possible workflows for using raw connectivity data in spatial prioritization: 1) Connectivity as Spatial Dependency in the objective function (Raw Data -&gt; Connectivity Matrix -&gt; Connectivity as Spatial Dependency), 2) Continuous conservation features (Raw Data -&gt; Connectivity Matrix -&gt; Continuous Metrics -&gt; Target Setting), or 3) Discrete conservation features (Raw Data -&gt; Connectivity Matrix -&gt; Continuous Metrics -&gt; Threshold Setting -&gt; Discrete Metrics. Coloured Arrows indicate important decision points. Red arrows indicate the conservation feature vs connectivity strength method decision point and yellow arrows indicate the continuous vs discrete conservation feature decision point. " />
-<p class="caption"><strong>Figure 2:</strong> <em>Data processing workflow for three possible workflows for using raw connectivity data in spatial prioritization: 1) Connectivity as Spatial Dependency in the objective function (Raw Data -&gt; Connectivity Matrix -&gt; Connectivity as Spatial Dependency), 2) Continuous conservation features (Raw Data -&gt; Connectivity Matrix -&gt; Continuous Metrics -&gt; Target Setting), or 3) Discrete conservation features (Raw Data -&gt; Connectivity Matrix -&gt; Continuous Metrics -&gt; Threshold Setting -&gt; Discrete Metrics. Coloured Arrows indicate important decision points. Red arrows indicate the conservation feature vs connectivity strength method decision point and yellow arrows indicate the continuous vs discrete conservation feature decision point.</em> </p>
+<img src="images/general_workflow_new.png" alt="Figure 3: Data processing workflow for two possible methods for using raw connectivity data in spatial prioritization: 1) Connectivity as Spatial Dependency in the objective function (Raw Data -&gt; Connectivity Matrix -&gt; Connectivity as Spatial Dependency), or 1) Discrete conservation features (Raw Data -&gt; Connectivity Matrix -&gt; Continuous Metrics -&gt; Threshold Setting -&gt; Discrete Feature -&gt; Target Setting). Black Arrows indicate a logical workflow, while red and yellow indicate a decision point. Red arrows indicate the conservation feature vs connectivity strength method decision point and yellow arrows new metric or new threshold decision point after target setting and post-hoc evaluation of conservation success. " />
+<p class="caption"><strong>Figure 3:</strong> <em>Data processing workflow for two possible methods for using raw connectivity data in spatial prioritization: 1) Connectivity as Spatial Dependency in the objective function (Raw Data -&gt; Connectivity Matrix -&gt; Connectivity as Spatial Dependency), or 1) Discrete conservation features (Raw Data -&gt; Connectivity Matrix -&gt; Continuous Metrics -&gt; Threshold Setting -&gt; Discrete Feature -&gt; Target Setting). Black Arrows indicate a logical workflow, while red and yellow indicate a decision point. Red arrows indicate the conservation feature vs connectivity strength method decision point and yellow arrows new metric or new threshold decision point after target setting and post-hoc evaluation of conservation success.</em> </p>
 </div>
 </div>
-<div id="connectivity-as-spatial-dependencies-in-the-objective-function" class="section level1">
-<h1><span class="header-section-number">4</span> Connectivity as spatial dependencies in the objective function</h1>
-<p>Another approach to incorporate connectivity in Marxan is using the directional connectivity-based data to inform the boundary cost <span class="math inline">\({cv_{ih}}\)</span>. This cost signifies the penalty associated with protecting one site but not its well-connected partner site <span class="citation">(Beger et al. 2010)</span>. Here, a directional connectivity data is used to parameterize the boundary cost between all pairs of planning units and set the importance of incorporating connectivity with the Boundary Length Modifier (BLM), also called “Connectivity Strength Modifier” (CSM) <span class="citation">(Beger et al. 2010)</span>. Increasing the BLM reduces the edge to area ratio by minimizing costs associated with unprotected boundaries; similarly, increasing the CSM will reduce the “leakiness” of the network (i.e. amount lost from the network) by minimizing costs associated with unprotected connectivity linkages, and thus maximising connectivity strengths across the entire Marxan solution.</p>
-<p>The approach of using connectivity estimates as spatial dependencies in the objective function has been used to design MPAs in the Coral Triangle <span class="citation">(Beger et al. 2010; Beger et al. 2015)</span>. This approach can maximize the within-network connectivity, and may improve the metapopulation growth rate and other performance metrics. In Marxan Connect, one can combine the use of connectivity as spatial dependencies with a locked-in “Focus Area” (<em>e.g.</em> an existing protected area) to generate candidate stepping stones. However, it should be noted that the method will likely triage isolated sites out of the final solution unless these are included using other methods (<em>e.g.</em> a conservation feature for an isolated site which happens to contain a unique species).</p>
+<div id="connectivity-as-spatial-dependencies-in-the-objective-function" class="section level2">
+<h2><span class="header-section-number">2.2</span> Connectivity as spatial dependencies in the objective function</h2>
+<p>Another approach to incorporate connectivity in Marxan is using the connectivity-based data to inform the boundary cost term in the objective function <span class="citation">(Beger et al. 2010)</span>.This cost signifies the penalty associated with protecting one site but not its well-connected partner site <span class="math inline">\({cv_{ih}}\)</span> <span class="citation">(Beger et al. 2010)</span>, which can be manipulated through the “Connectivity Strength Modifier” (CSM) and is similar to the BLM in standard Marxan (Figure 1). For example, as increasing the BLM reduces the edge to area ratio by minimizing costs associated with unprotected boundaries; similarly, increasing the CSM will minimize costs associated with unprotected connectivity linkages. See Beger et al. (2010); Beger et al. (2015) for examples using connectivity estimates as spatial dependencies in the objective function for MPAs in the Coral Triangle <span class="citation">(Beger et al. 2010; Beger et al. 2015)</span>.</p>
+<p>In Marxan Connect, one can combine the use of connectivity as spatial dependencies with a locked-in “Focus Area” (<em>e.g.</em> an existing protected area) to generate candidate stepping stones. However, it should be noted that the method will likely triage isolated sites out of the final solution unless these are included using other methods (<em>e.g.</em> a conservation feature for an isolated site which happens to contain a unique species).</p>
+</div>
 </div>
 <div id="project-files" class="section level1">
-<h1><span class="header-section-number">5</span> Project Files</h1>
-<p>Marxan Connect allows users to save Marxan Connect Project files (.MarCon) which is a JSON formatted text file that stores all the filepaths, options, and connectivity metrics defined by the user. This not only allows users to start off from their last save point, but it also allows project portability and reproducibility. It is recommended to keep Marxan Connect Project files in the root directory of your project folder (i.e. the folder that contains all the Marxan inputs, outputs, etc) since all filepaths outside this folder will be recorded as absolute paths and then the Marxan Connect Project file will not work on another computer.</p>
+<h1><span class="header-section-number">3</span> Project Files</h1>
+<p>Marxan Connect allows users to save Marxan Connect Project files (.MarCon) which is a JSON formatted text file that stores all the filepaths, options, and connectivity metrics defined by the user. This not only allows users to start off from their last save point, but it also allows project portability and reproducibility. It is recommended to keep Marxan Connect Project files in the root directory of your project folder (i.e. the folder that contains your Marxan database) since all filepaths outside this folder will be recorded as absolute paths and then the Marxan Connect Project file will not work on another computer.</p>
 </div>
 <div id="marxanconpy-python-module" class="section level1">
-<h1><span class="header-section-number">6</span> <code>marxanconpy</code> Python Module</h1>
-<p>This python module, <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/marxanconpy.py"><code>marxanconpy</code></a>, contains the mathematical heart of Marxan Connect and can be used independently via the command line.</p>
+<h1><span class="header-section-number">4</span> <code>marxanconpy</code> Python Module</h1>
+<p>This python module, <a href="https://remi-daigle.github.io/marxanconpy/"><code>marxanconpy</code></a>, contains the mathematical heart of Marxan Connect and can be used independently via the command line.</p>
 </div>
 <div id="workflow-examples" class="section level1">
-<h1><span class="header-section-number">7</span> Workflow Examples</h1>
+<h1><span class="header-section-number">5</span> Workflow Examples</h1>
 <p>We’ve provided a limited set of workflow examples designed to demonstrate some of Marxan Connect’s capabilities. These examples are for demonstration purposes and do not constitute planning advice.</p>
 <ul>
-<li><a href="./CF_demographic.html">Using the conservation features approach using demographic-based data</a></li>
-<li><a href="./CF_landscape.html">Using the conservation features approach using landscape-based data</a></li>
-<li><a href="./CSD_demographic.html">Using the spatial dependencies approach using demographic-based data</a></li>
-<li><a href="./CSD_landscape.html">Using the spatial dependencies approach using landscape-based data</a></li>
-<li><a href="./targets.html">Setting targets and post-hoc evaluation</a></li>
+<li><p><a href="./CF_demographic.html">Using the conservation features approach using demographic-based data</a></p></li>
+<li><p><a href="./CSD_landscape.html">Using the spatial dependencies approach using landscape-based data</a></p></li>
+<li><p><a href="./CSD_demographic.html">Using the spatial dependencies approach using demographic-based data</a> (in-development)</p></li>
+<li><p><a href="./CF_landscape.html">Using the conservation features approach using landscape-based data</a> (in-development)</p></li>
+<li><p><a href="./targets.html">Setting targets and post-hoc evaluation</a></p></li>
 </ul>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references">
-<div id="ref-Alvarez-Romero2018-uc">
-<p>Álvarez-Romero, Jorge G, Adrián Munguía-Vega, Maria Beger, Maria Del Mar Mancha-Cisneros, Alvin N Suárez-Castillo, Georgina G Gurney, Robert L Pressey, et al. 2018. “Designing Connected Marine Reserves in the Face of Global Warming.” <em>Glob. Chang. Biol.</em> 24 (2): e671–e691.</p>
-</div>
 <div id="ref-Ball2009-cp">
 <p>Ball, Ian R, Hugh P Possingham, and M Watts. 2009. “Marxan and Relatives: Software for Spatial Conservation Prioritisation.” <em>Spatial Conservation Prioritisation: Quantitative Methods and Computational Tools. Oxford University Press, Oxford</em>, 185–95.</p>
 </div>

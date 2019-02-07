@@ -25,9 +25,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-50638009-7"></script>
 <script>
@@ -119,6 +118,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -133,7 +135,6 @@ body {
   padding-top: 65px;
   margin-top: -65px;
 }
-
 .section h2 {
   padding-top: 65px;
   margin-top: -65px;
@@ -153,6 +154,43 @@ body {
 .section h6 {
   padding-top: 65px;
   margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -174,18 +212,77 @@ $(document).ready(function () {
 });
 </script>
 
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -321,13 +418,13 @@ div.tocify {
       <a href="CF_demographic.html">Conservation Features + demographic data</a>
     </li>
     <li>
-      <a href="CF_landscape.html">Conservation Features + landscape data</a>
-    </li>
-    <li>
-      <a href="CSD_demographic.html">Connectivity as Spatial Dependency + demographic data</a>
-    </li>
-    <li>
       <a href="CSD_landscape.html">Connectivity as Spatial Dependency + landscape data</a>
+    </li>
+    <li>
+      <a href="CF_landscape.html">Conservation Features + landscape data (in-development)</a>
+    </li>
+    <li>
+      <a href="CSD_demographic.html">Connectivity as Spatial Dependency + demographic data (in-development)</a>
     </li>
     <li>
       <a href="targets.html">Setting Targets and Post-hoc Evaluation</a>
@@ -378,12 +475,12 @@ div.tocify {
 </div>
 
 
-<p><strong>NEW</strong> The Marxan Connect <a href="https://www.biorxiv.org/content/early/2018/05/07/315424">bioRxiv preprint</a> is now available!</p>
 <p>Marxan Connect (henceforth the “app”) is a Graphical User Interface (GUI) to help conservationists include “connectivity” in their protected area network planning.</p>
 <p>The term “connectivity” has a variety of definitions (i.e. larval connectivity, genetic connectivity, landscape connectivity, etc) and protected area networks can be optimized for various connectivity objectives. The app is intended to guide conservationists through the process of identifying important aspects of connectivity for their conservation scenarios as well as highlighting the necessary data.</p>
-<p>The app also includes a fully functional Python module that is operated via command line. The Python module, <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/marxanconpy.py"><code>marxanconpy</code></a>, can be used to reproduce an analysis using the project file (<code>.MarCon</code>) generated by the GUI (in progress).</p>
-<p>To use this software, please visit the <a href="./tutorial.html">Tutorial</a> and the <a href="./glossary.html">Glossary</a> (both in progress). Otherwise, if you would just like to get started, please <a href="#installing">install</a> the app and proceed through all the tabs from left to right starting the “Spatial Input”. After calculating the “Connectivity Metrics”, you can choose to conduct a Marxan analysis in the app, export the connectivity metrics for use in a standalone custom Marxan analysis, or you can visualize the Connectivity Metrics using the “Plotting Options” tab</p>
-<p>If you would like to report any bugs or request a missing feature, please post an issue on the GitHub repository or <a href="mailto:remi.daigle@dal.ca?subject=Marxan%20with%20Connectivity%20bug%20or%20feature%20request">email</a> (although GitHub is preferred). Please provide as much information as possible, such as: detailed description, app version, operating system, even a link to your data if relevant (also, see <a href="#contributing">Contributing</a>).</p>
+<p>The app also includes a fully functional Python package that is operated via command line. The Python package, <a href="https://remi-daigle.github.io/marxanconpy/"><code>marxanconpy</code></a>, can be used to reproduce an analysis using the project file (<code>.MarCon</code>) generated by the GUI.</p>
+<p>To use this software, please visit the <a href="./tutorial.html">Tutorial</a> and the <a href="./glossary.html">Glossary</a>. Otherwise, if you would just like to get started, please <a href="#installing">install</a> the app and proceed through all the tabs from left to right starting the “Spatial Input”. After calculating the “Connectivity Metrics”, you can choose to conduct a Marxan or (experimentally) Marxan with Zones analysis in the app, export the connectivity metrics for use in a standalone custom Marxan analysis, or you can visualize the Connectivity Metrics using the “Plotting Options” tab</p>
+<p>If you would like to report any bugs or request a missing feature, please post an <a href="https://github.com/remi-daigle/MarxanConnect/issues">issue</a> on the GitHub repository. Please provide as much information as possible, such as: detailed description, app version, operating system, even a link to your data if relevant (also, see <a href="#contributing">Contributing</a>).</p>
+<p>In terms of using the software for conservation planning, ‘best practices’ (*i.e. detailed documentation, case studies) are currently under development.</p>
 <div id="authors" class="section level1">
 <h1>Authors</h1>
 <ul>
@@ -398,18 +495,33 @@ div.tocify {
 </ul>
 <p>See also the list of <a href="https://github.com/remi-daigle/MarxanConnect/contributors">contributors</a> who participated in this project on Github and the <a href="#acknowledgments">Acknowledgments</a> section.</p>
 </div>
-<div id="installing" class="section level1">
-<h1>Installing</h1>
-<p>Marxan Connect was built for Windows 10. Users may find compatibility issues with Windows 7 or 8 (the app may not be able to run Marxan, but can create Marxan files to run manually). The app is currently not compatible with Linux and Mac although the python processing script (<a href="https://github.com/remi-daigle/MarxanConnect/blob/master/marxanconpy.py"><code>marxanconpy</code></a>) and GUI scripts (<a href="https://github.com/remi-daigle/MarxanConnect/blob/master/gui.py"><code>gui</code></a> and <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/MarxanConnectGUI.py"><code>MarxanConnectGUI</code></a>) were designed with interoperability in mind.</p>
-<div id="windows-installer" class="section level2">
-<h2>Windows Installer</h2>
-<p>(<strong>WARNING! Marxan Connect is in ‘beta’ release and is not yet fully tested.</strong>)</p>
-<p>Please download the latest <a href="https://github.com/remi-daigle/MarxanConnect/releases">MarxanConnect-vX-Y-Z-windows-setup.exe</a> installer file, run it, and follow the instructions. Alternatively (for advanced users only), follow the <a href="#building-from-source">Building from source</a> instructions to use the latest bleeding edge version of the app.</p>
+<div id="installing-marxan-connect" class="section level1">
+<h1>Installing Marxan Connect</h1>
+<p>Marxan Connect was built for Windows or macOS. The app is currently not compatible with Linux although the python processing script (<a href="https://github.com/remi-daigle/MarxanConnect/blob/master/marxanconpy.py"><code>marxanconpy</code></a>) and GUI scripts (<a href="https://github.com/remi-daigle/MarxanConnect/blob/master/gui.py"><code>gui</code></a> and <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/MarxanConnectGUI.py"><code>MarxanConnectGUI</code></a>) were designed with interoperability in mind.</p>
+<div id="windows-7810" class="section level2">
+<h2>Windows (7/8/10)</h2>
+<div id="windows-installer" class="section level3">
+<h3>Windows Installer</h3>
+<p>(<strong>WARNING! Marxan Connect is in ‘beta’ release</strong>)</p>
+<p>Please download the latest <a href="https://github.com/remi-daigle/MarxanConnect/releases">MarxanConnect-vX-Y-Z-windows-setup.exe</a> installer file, run it, and follow the instructions. You may get a ‘Windows protected your PC’ security warning since we are not a large software company. Assuming you trust the contents of the app, click on <code>More info</code>, then <code>Run anyway</code> to install. Alternatively (for advanced users only), follow the <a href="#building-from-source">Building from source</a> instructions to use the latest bleeding edge version of the app.</p>
 </div>
-<div id="windows-zipped-bundle" class="section level2">
-<h2>Windows Zipped Bundle</h2>
+<div id="windows-zipped-bundle" class="section level3">
+<h3>Windows Zipped Bundle</h3>
 <p>If you cannot use the installer because you do not have administrative privileges, we’ve provided a zipped bundle of the app to allow users to bypass that problem. To use, download the latest <a href="https://github.com/remi-daigle/MarxanConnect/releases">MarxanConnect.zip</a>, unzip it to your preferred destination (e.g. <code>~/Desktop</code>), and double-click <code>MarxanConnectGUI.exe</code>. In this case you will have to generate any start menu shortcuts, or file associations (i.e. <code>.MarCon</code>) manually.</p>
 </div>
+</div>
+<div id="macos-yosemite-10.10.5" class="section level2">
+<h2>macOS (&gt;Yosemite 10.10.5)</h2>
+<p>Please download the latest <a href="https://github.com/remi-daigle/MarxanConnect/releases">MarxanConnect-vX-Y-Z.dmg</a> file, double-click the downloaded file and a Finder window wil appear, and click-and-drag into the Applications folder. You may get a ‘This is an application downloaded from the Internet’ security warning since we are not a large software company. Assuming you trust the contents of the app, in the Finder, locate Marxan Connect. Press the Control key and click the app icon, then choose Open from the shortcut menu. Click Open. Marxan Connect is saved as an exception to your security settings, and you can open it in the future by double-clicking it just as you can any registered app. This was built and tested in macOS Mojave (10.14), but has testing indicates it is compatible with older operating systems (&gt;Yosemite 10.10.5). Alternatively (for advanced users only), follow the <a href="#building-from-source">Building from source</a> instructions to use the latest bleeding edge version of the app.</p>
+</div>
+<div id="linux" class="section level2">
+<h2>Linux</h2>
+<p>There is no prebuilt version of Marxan Connect for Linux, see <a href="https://github.com/remi-daigle/MarxanConnect/issues/57">this issue</a> for more information. If you know how to resolve this issue, please submit a pull request or comment on the issue page. Alternatively (for advanced users only), follow the <a href="#building-from-source">Building from source</a> instructions to use the latest bleeding edge version of the app.</p>
+</div>
+</div>
+<div id="installing-the-command-line-interface" class="section level1">
+<h1>Installing the command line interface</h1>
+<p>For users who prefer the command line, please visit the <a href="https://remi-daigle.github.io/marxanconpy/"><code>marxanconpy</code> website</a></p>
 </div>
 <div id="building-from-source" class="section level1">
 <h1>Building from source</h1>
@@ -417,10 +529,11 @@ div.tocify {
 <ul>
 <li>Download this repository</li>
 <li>If necessary, edit the hard coded file paths in <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/setup.py">setup.py</a> and <a href="https://github.com/remi-daigle/MarxanConnect/blob/master/WindowsSetupBuilder.iss">WindowsSetupBuilder.iss</a></li>
-<li>open a terminal or <code>cmd</code> window (or git bash) in the project directory and type:</li>
+<li>If necessary, edit the version number (see the <a href="#versioning">Versioning</a> section)</li>
+<li>On Windows, open a terminal or <code>cmd</code> window (or git bash) in the project directory and type:</li>
 </ul>
 <pre><code>make</code></pre>
-<p>Alternatively, you can compile the website with <code>make web</code>, the Marxan Connect executable with <code>make exe</code>, the windows installer <code>make win</code>, and the zip with <code>make zip</code></p>
+<p>The default <code>make</code> will try to compile the windows version, so on macOS a full build would be <code>make web mac</code> or <code>make web mac daily=1</code> for a release candidate. Alternatively, you can compile the website with <code>make web</code>, the Marxan Connect Windows executable with <code>make exe</code>, the windows installer <code>make win</code>, the Windows zip with <code>make zip</code>, and the macOS image with <code>make mac</code>. During development, if you don’t want to build an ‘official <em>version</em>’, then use the <code>daily=1</code> argument for the makefile (<em>e.g.</em> <code>make exe daily=1</code>) to create an automaticaly named release candidate.</p>
 <div id="prerequisites-for-building-from-source" class="section level2">
 <h2>Prerequisites (for building from source)</h2>
 <ul>
@@ -428,24 +541,36 @@ div.tocify {
 <li><a href="https://github.com/wxFormBuilder/wxFormBuilder">wxFormBuilder</a></li>
 <li><a href="http://www.jrsoftware.org/isinfo.php">Inno Setup</a></li>
 <li><a href="https://www.r-project.org/">R</a> and the <a href="http://rmarkdown.rstudio.com/"><code>rmarkdown</code></a> package</li>
+<li><a href="https://pandoc.org/installing.html">Pandoc</a> and pandoc-citeproc</li>
 </ul>
-<p>It also assumes you have all the pre-requisite python modules installed, <em>i.e.</em>:</p>
-<pre><code>#!/bin/bash
-# for basic GUI
-pip install wxpython
-pip install matplotlib
-pip install matplotlib.basemap
-pip install geopandas
-pip install descartes
-pip install python-igraph
-pip install shapely
-pip install pandas
-pip install numpy
-pip install bs4
+<p>It also assumes you have all the pre-requisite python modules installed to build the app itself, <em>i.e.</em>:</p>
+<pre class="bash"><code>#!/bin/bash
 
+conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
+# line 155 of basemap&#39;s __init__ file may need to change to &quot;pyproj_datadir = pyproj.pyproj_datadir&quot;
+# without quotes if you get the dreaded &quot;PROJ_LIB&quot; error
+# if you get the &#39;epsg&#39; error you may need to install an older version of pyproj 
+# conda install pyproj=1.9.5.1=py36_0
 
-# for compiling executable
-pip install cx_Freeze</code></pre>
+source activate marcon # for windows
+conda activate marcon # for mac/linux
+
+pip install python-igraph # on windows you may need to install via wheel https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
+pip install PyInstaller marxanconpy bs4
+pip install dmgbuild pexpect # for mac only</code></pre>
+<p>As well as pre-requesite R packages to build the website, <em>i.e.</em>:</p>
+<pre class="r"><code>if(!require(&quot;rmarkdown&quot;)) install.packages(&quot;rmarkdown&quot;)</code></pre>
+<pre><code>## Loading required package: rmarkdown</code></pre>
+<pre class="r"><code>if(!require(&quot;sf&quot;)) install.packages(&quot;sf&quot;)
+if(!require(&quot;leaflet&quot;)) install.packages(&quot;leaflet&quot;)
+if(!require(&quot;tmap&quot;)) install.packages(&quot;tmap&quot;)
+if(!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
+if(!require(&quot;DT&quot;)) install.packages(&quot;DT&quot;)
+if(!require(&quot;igraph&quot;)) install.packages(&quot;igraph&quot;)
+if(!require(&quot;ggraph&quot;)) install.packages(&quot;ggraph&quot;)
+if(!require(&quot;gganimate&quot;)) devtools::install_github(&#39;thomasp85/gganimate&#39;)
+if(!require(&quot;tidygraph&quot;)) install.packages(&quot;tidygraph&quot;)
+if(!require(&quot;RColorBrewer&quot;)) install.packages(&quot;RColorBrewer&quot;)</code></pre>
 </div>
 </div>
 <div id="built-with" class="section level1">

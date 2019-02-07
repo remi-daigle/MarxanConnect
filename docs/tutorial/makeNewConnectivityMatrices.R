@@ -2,7 +2,7 @@
 require(tidyverse)
 require(sf)
 # based on reefs
-reefs <- st_read("tutorial_data/CSM_demographic/reefs.shp") %>%
+reefs <- st_read("tutorial/CSM_demographic/reefs.shp") %>%
     mutate(area = st_area(.))
 
 distanceMatrix <- round(st_distance(reefs))
@@ -31,10 +31,10 @@ test <- runif(nrow(probabilityMatrix),0,1)<0.1
 Re(eigen(flowMatrix[test,test])$values[1])
 image(log(flowMatrix))
 
-write.csv(flowMatrix,"tutorial_data/CSM_demographic/reefFlow.csv")
+write.csv(flowMatrix,"tutorial/CSM_demographic/reefFlow.csv")
 
 # based on hex
-reefs <- st_read("tutorial_data/CF_demographic/hex_planning_units.shp") %>%
+reefs <- st_read("tutorial/CF_demographic/hex_planning_units.shp") %>%
     mutate(area = st_area(.))
 
 distanceMatrix <- round(st_distance(reefs))
@@ -63,4 +63,23 @@ test <- runif(nrow(probabilityMatrix),0,1)<0.1
 Re(eigen(flowMatrix[test,test])$values[1])
 image(log(flowMatrix))
 
-write.csv(flowMatrix,"tutorial_data/CF_demographic/hexFlow.csv")
+write.csv(flowMatrix,"tutorial/CF_demographic/hexFlow.csv")
+
+### make boundary.dat
+reefs <- st_read("tutorial/CF_demographic/hex_planning_units.shp")
+
+bound_mat <- st_overlaps(reefs %>% st_buffer(1), sparse = FALSE) %>% 
+    data.frame(check.names = FALSE) 
+
+colnames(bound_mat) <- reefs$FID
+bound <- bound_mat %>% 
+    mutate(id1=reefs$FID) %>% 
+    gather(key = 'id2', value='boundary',-id1) %>% 
+    mutate(boundary=as.numeric(boundary),
+           id1=as.character(id1),
+           id2=as.character(id2)) %>% 
+    filter(boundary>0)
+
+write.csv(bound,"tutorial/CF_demographic/input/bound.dat",row.names = FALSE)
+write.csv(bound,"tutorial/CSD_landscape/input/bound.dat",row.names = FALSE)
+

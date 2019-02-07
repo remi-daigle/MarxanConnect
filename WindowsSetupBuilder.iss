@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Marxan Connect"
-#define MyAppVersion "v0.1.1"
+#define MyAppVersion "v0.1.2"
 #define MyAppPublisher "Canadian Healthy Oceans Network"
-#define MyAppURL "https://github.com/remi-daigle/MarxanConnect"
+#define MyAppURL "http://marxanconnect.ca/"
 #define MyAppExeName "MarxanConnectGUI.exe"
 
 [Setup]
@@ -24,11 +24,13 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\LICENSE
 OutputDir=C:\Users\daigl\Documents\GitHub\MarxanConnect
-OutputBaseFilename=MarxanConnect-v0-1-1-windows-setup
+OutputBaseFilename=MarxanConnect-v0-1-2-windows-setup
 SetupIconFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\images\icon_bundle.ico
 Compression=lzma
 SolidCompression=yes
 AlwaysRestart=True
+UsePreviousAppDir=False
+DisableDirPage=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -38,8 +40,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\daigl\Documents\GitHub\MarxanConnect\MarxanConnect\MarxanConnectGUI.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\daigl\Documents\GitHub\MarxanConnect\MarxanConnect\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\daigl\Documents\GitHub\MarxanConnect\dist\MarxanConnect\MarxanConnectGUI.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\daigl\Documents\GitHub\MarxanConnect\dist\MarxanConnect\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -58,3 +60,9 @@ Root: HKCR; SubKey: "MarxanConnectProject"; ValueType: string; ValueData: "Marxa
 Root: HKCR; SubKey: "MarxanConnectProject\Shell\Open\Command"; ValueType: string; ValueData: """{app}\MarxanConnectGUI.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; Subkey: "MarxanConnectProject\DefaultIcon"; ValueType: string; ValueData: "{app}\MarxanConnectGUI.exe,0"; Flags: uninsdeletevalue
 
+[Messages]
+DirExists=The folder: %1 already exists. %n%nTo avoid conflicts, it is recommended that you uninstall any previous versions of Marxan Connect before re-installing the program. Alternatively, you may choose a new folder location on the previous page to install in another location. %n%nWould you like to install Marxan Connect to this folder anyway? Proceed at your own risk: answering "yes" below will likely result in errors.
+DirExistsTitle=Warning: Folder Exists
+
+[Dirs]
+Name: "{app}"; Flags: uninsalwaysuninstall

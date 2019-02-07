@@ -2,9 +2,8 @@
 import wx
 import wx.lib.agw.aui as aui
 import wx.adv
+import wx.html2
 
-# import gui
-import gui
 
 # import matplotlib
 import matplotlib
@@ -25,38 +24,62 @@ import os
 import sys
 import pandas
 import numpy
-import subprocess
 import json
-import bs4
+import platform
+import subprocess
+
+# import gui template made by wxformbuilder
+import gui
 
 
-# import MarxanConnect python module
-import marxanconpy
 
 os.environ["UBUNTU_MENUPROXY"]="0"
+if platform.system() == 'Darwin':
+    import pexpect
+    wx.SystemOptions.SetOption(u"osx.openfiledialog.always-show-types","1")
 
 # define wildcards
 wc_MarCon = "Marxan Connect Project (*.MarCon)|*.MarCon|" \
             "All files (*.*)|*.*"
 
 
-if len(sys.argv) > 1:
-    os.chdir(os.path.dirname(sys.argv[0]))
+if getattr(sys, 'frozen', False):
+    MCPATH = sys._MEIPASS
+else:
+    MCPATH = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.append(MCPATH)
+
+# import MarxanConnect python module
+import marxanconpy
+
+with open(os.path.join(MCPATH, 'VERSION')) as version_file:
+    MarxanConnectVersion = version_file.read().strip()
 
 class MarxanConnectGUI(gui.MarxanConnectGUI):
     def __init__(self, parent):
         """
         initialize parent class (the entire GUI)
         """
+        os.chdir(MCPATH)
         gui.MarxanConnectGUI.__init__(self, parent)
         # set the icon
-        self.set_icon(frame=self)
+        self.set_icon(frame=self, rootpath=MCPATH)
 
         # start up log
         self.log = LogForm(parent=self)
+        print(MCPATH)
 
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
+
+        # set posthoc page off by default
+        self.posthocdefault = False
+        self.on_posthoc(event=None)
+
+        # set MwZ option off by default
+        self.mwzdefault = False
+        self.on_mwz(event=None)
 
         # set help page
         # self.on_metric_definition_choice(event=None) #currently disabled so that help appears blank/less intimidating
@@ -66,36 +89,46 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.demo_matrixTypeRadioBox.SetItemToolTip(2, "In a flow matrix (often mislabeled as a flux matrix), each cell represents the number of elements/individuals moving from site A (row) to site B (column) per unit time.")
 
         self.demo_matrixFormatRadioBox.SetItemToolTip(0,"Matrix format data has the connectivity values arranged is a square format (i.e.the same number of rows and columns). The row names are the donor sites and the column names are the recipient sites ")
-        self.demo_matrixFormatRadioBox.SetItemToolTip(1,"Edge Edge Listwith habi has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
-        self.demo_matrixFormatRadioBox.SetItemToolTip(2,"An Edge List with Time has 4 columns: time ('time'), the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(1,"An Edge List has 3 columns: the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(2,"An Edge List with Time has 4 columns: time ('time'), the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
+        self.demo_matrixFormatRadioBox.SetItemToolTip(3,"An Edge List with Type has 4 columns: type ('type'), the donor sites ('id1'), the recipient sites ('id2'), and the connectivity values ('value')")
+
+        self.demo_rescale_edgeRadioBox.SetItemToolTip(0,"Rescales the connectivity matrix using a spatially weighted average where there is overlap. In areas with partial overlap, connectivity is assumed to be proportional to the overlap. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, the connectivity value is taken from a spatial average across that planning unit (i.e. a final connectivity value of 5).")
+        self.demo_rescale_edgeRadioBox.SetItemToolTip(1,"Rescales the connectivity matrix using a spatially weighted average where there is overlap. In areas with partial overlap, connectivity is assumed to be homogeneous. For example, if a planning unit has a 50% overlap with connectivity data (i.e. half of the planning unit has connectivity data, and the other half does not), and the connectivity value is 10, the connectivity value is considered homogenous across the planning unit (i.e. a final connectivity value of 10).")
+
+        self.demo_rescale_edgeRadioBox.GetItemToolTip(0).SetAutoPop(30000)
+        self.demo_rescale_edgeRadioBox.GetItemToolTip(1).SetAutoPop(30000)
 
         # Either load or launch new project
         if len(sys.argv) > 1:
             self.spatial = {}
             self.project = {}
-            self.project['version'] = marxanconpy.MarxanConnectVersion
+            self.project['version'] = {}
+            self.project['version']['marxanconpy'] = marxanconpy.__version__
+            self.project['version']['MarxanConnect'] = MarxanConnectVersion
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = str(sys.argv[1])
             self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
-            self.load_project_function()
+            os.chdir(self.workingdirectory)
+            self.load_project_function(launch=True)
         else:
             # launch a blank new project
-            self.on_new_project(event=None, launch=True)
+            self.on_new_project(event=None, rootpath=MCPATH, launch=True)
 
             # launch Getting started window
             GettingStartedframe = GettingStarted(parent=self)
             GettingStartedframe.Show()
             # self.project['filepaths'] = {}
-            # self.project['filepaths']['projfile'] ="C:\\Users\\Remi-Work\\Desktop\\begermethod\\tutorial.MarCon"
+            # self.project['filepaths']['projfile'] =r"C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\tutorial\CF_demographic\tutorial.MarCon"
             # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
-            # self.load_project_function()
+            # self.load_project_function(launch=True)
 
-    def set_icon(self, frame):
+    def set_icon(self, frame, rootpath):
         # set the icon
         icons = wx.IconBundle()
         for sz in [16, 32, 48, 96, 256]:
             try:
-                icon = wx.Icon(os.path.join(sys.path[0], 'docs' , 'images' , 'icon_bundle.ico'),
+                icon = wx.Icon(os.path.join(rootpath, 'docs' , 'images' , 'icon_bundle.ico'),
                                wx.BITMAP_TYPE_ICO,
                                desiredWidth=sz,
                                desiredHeight=sz)
@@ -104,107 +137,80 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 pass
                 frame.SetIcons(icons)
 
+    def on_posthoc(self, event):
+        for i in range(self.auinotebook.GetPageCount()):
+            if self.auinotebook.GetPageText(i) == "7) Post-Hoc Evaluation":
+                posthocpage = i
+            if self.auinotebook.GetPageText(i) == "8) Plotting Options" or self.auinotebook.GetPageText(i) == "7) Plotting Options":
+                plottingpage = i
+            if self.auinotebook.GetPageText(i) == "9) Plot" or self.auinotebook.GetPageText(i) == "8) Plot":
+                plotpage = i
+
+        if not self.posthocdefault:
+            self.auinotebook.SetPageText(plottingpage, u"7) Plotting Options")
+            if hasattr(self, 'plot'):
+                self.auinotebook.SetPageText(plotpage, u"8) Plot")
+                print(plotpage)
+            self.auinotebook.RemovePage(posthocpage)
+            self.posthocdefault = True
+        else:
+            if hasattr(self, 'plot'):
+                self.auinotebook.RemovePage(plotpage)
+            self.auinotebook.RemovePage(plottingpage)
+            self.auinotebook.AddPage(self.postHocEvaluation, u"7) Post-Hoc Evaluation", False, wx.NullBitmap)
+            self.auinotebook.AddPage(self.plottingOptions, u"8) Plotting Options", False, wx.NullBitmap)
+            if hasattr(self, 'plot'):
+                self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
+            self.posthocdefault = False
+
+    def on_mwz( self, event ):
+        if not self.mwzdefault:
+            self.marxan_Radio.Hide()
+            self.marxanAnalysis.Layout()
+            self.mwzdefault = True
+        else:
+            self.marxan_Radio.Show()
+            self.marxanAnalysis.Layout()
+            self.mwzdefault = False
+
 # ##########################  project managment functions ##############################################################
 
-    def on_new_project(self, event, launch=False):
+    def on_new_project(self, event, rootpath=MCPATH, launch=False):
         """
         open a new project and name/save a new project file
         """
         # create project list to store project specific data
         self.spatial = {}
-        self.project = {}
-        self.project['version'] = marxanconpy.MarxanConnectVersion
-        self.project['filepaths'] = {}
-        self.workingdirectory = sys.path[0] #os.path.expanduser(os.path.join("~", "Documents"))
-        self.project['options'] = {}
-
-        # set default options
-        self.project['options']['fa_status'] = self.fa_status_radioBox.GetStringSelection()
-        self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
-        self.project['options']['demo_pu_cm_progress'] = self.demo_PU_CM_progress.GetValue()
-        self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
-        self.project['options']['demo_conmat_format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
-        self.project['options']['demo_conmat_rescale'] = self.demo_rescaleRadioBox.GetStringSelection()
-        self.project['options']['demo_conmat_rescale_edge'] = self.demo_rescale_edgeRadioBox.GetStringSelection()
-        self.project['options']['land_hab_buff'] = self.land_HAB_buff.GetValue()
-        self.project['options']['land_hab_thresh'] = self.land_HAB_thresh.GetValue()
-        self.project['options']['land_pu_cm_progress'] = self.land_PU_CM_progress.GetValue()
-        self.project['options']['land_conmat_type'] = self.land_type_choice.GetPageText(self.land_type_choice.GetSelection())
-        self.project['options']['land_res_matrixType'] = self.land_res_matrixTypeRadioBox.GetStringSelection()
-        self.project['options']['calc_metrics_pu'] = self.calc_metrics_pu.GetValue()
-        self.project['options']['calc_metrics_cu'] = self.calc_metrics_cu.GetValue()
-        self.project['options']['metricsCalculated'] = False
-        self.set_metric_options()
-        self.project['options']['cf_export'] = self.cf_export_radioBox.GetStringSelection()
-
-        self.project['options']['bd_filecheck'] = self.BD_filecheck.GetValue()
-        self.project['options']['pudat_filecheck'] = self.PUDAT_filecheck.GetValue()
-
-        self.project['options']['marxan_bit'] = self.marxanBit_Radio.GetStringSelection()
-        self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
-
-        self.project['options']['pushp_filecheck'] = self.PUSHP_filecheck.GetValue()
-        self.project['options']['pucsv_filecheck'] = self.PUCSV_filecheck.GetValue()
-        self.project['options']['map_filecheck'] = self.MAP_filecheck.GetValue()
-
-        # set default file paths
-        # spatial input
-        self.project['filepaths']['pu_filepath'] = ""
-        self.project['filepaths']['pu_file_pu_id'] = ""
-        self.project['filepaths']['fa_filepath'] = ""
-        self.project['filepaths']['aa_filepath'] = ""
-
-        # connectivity input
-        self.project['filepaths']['demo_cu_filepath'] = ""
-        self.project['filepaths']['demo_cu_file_pu_id'] = ""
-        self.project['filepaths']['demo_cu_cm_filepath'] = ""
-        self.project['filepaths']['demo_pu_cm_filepath'] = ""
-        self.project['filepaths']['land_cu_filepath'] = ""
-        self.project['filepaths']['land_cu_file_hab_id'] = ""
-        self.project['filepaths']['land_res_mat_filepath'] = ""
-        self.project['filepaths']['land_res_filepath'] = ""
-        self.project['filepaths']['land_res_file_hab_id'] = ""
-        self.project['filepaths']['land_pu_cm_filepath'] = ""
-        self.project['filepaths']['lp_filepath'] = ""
-
-        # Marxan metrics files
-        self.project['filepaths']['cf_filepath'] = os.path.join("~", "input", "puvspr2.dat")
-        self.project['filepaths']['spec_filepath'] = os.path.join("~", "input", "spec.dat")
-        self.project['filepaths']['bd_filepath'] = os.path.join("~", "input", "boundary.dat")
-        self.project['filepaths']['pudat_filepath'] = os.path.join("~", "input", "pu.dat")
-
-        # Marxan analysis
-        self.project['filepaths']['marxan_input'] = os.path.join("~", "input.dat")
-        self.project['filepaths']['marxan_dir'] = os.path.join("~", "Marxan243")
-
-        # Export plot data
-        self.project['filepaths']['pushp'] = os.path.join("~", "pu.shp")
-        self.project['filepaths']['pucsv'] = os.path.join("~", "pu.csv")
-        self.project['filepaths']['map'] = os.path.join("~", "map.png")
+        self.project = marxanconpy.marcon.new_project(rootpath)
+        self.project['version']['MarxanConnect'] = MarxanConnectVersion
+        self.workingdirectory = MCPATH
 
         # if called at launch time, no need to ask users to create a new project file right away
         if not launch:
-            dlg = wx.FileDialog(self, "Create a new project file:", style=wx.FD_SAVE, wildcard=wc_MarCon)
+            dlg = wx.FileDialog(self, "Create a new project file:", style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT, wildcard=wc_MarCon)
             if dlg.ShowModal() == wx.ID_OK:
                 self.project['filepaths']['projfile'] = dlg.GetPath()
                 self.project['filepaths']['projfilename'] = dlg.GetFilename()
                 self.workingdirectory = dlg.GetDirectory()
                 with open(self.project['filepaths']['projfile'], 'w') as fp:
                     json.dump(self.project, fp, indent=4, sort_keys=True)
-                frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+                frame.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
             dlg.Destroy()
 
         # set default file paths in GUI
-        for p in self.project['filepaths']:
-            self.project['filepaths'][p] = self.project['filepaths'][p].replace("~\\",
-                                                                                self.workingdirectory + "\\")
+        os.chdir(self.workingdirectory)
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,self.workingdirectory,'absolute')
+        self.set_GUI_options()
         self.set_GUI_filepaths()
+
 
         # trigger functions which enable/disable options
         self.on_demo_matrixFormatRadioBox(event=None)
         self.on_demo_rescaleRadioBox(event=None)
         self.on_land_type_choice(event=None)
         self.enable_metrics()
+        self.enable_discrete()
+        self.enable_postHoc()
         self.outline_shapefile_choices()
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
@@ -223,26 +229,71 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.project = {}
-            self.project['version'] = marxanconpy.MarxanConnectVersion
+            self.project['version'] = {}
+            self.project['version']['marxanconpy'] = marxanconpy.__version__
+            self.project['version']['MarxanConnect'] = MarxanConnectVersion
             self.project['filepaths'] = {}
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.workingdirectory = dlg.GetDirectory()
+            os.chdir(self.workingdirectory)
         dlg.Destroy()
-
         self.load_project_function()
 
-    def load_project_function(self):
+    def load_project_function(self,launch=False):
         self.spatial = {}
-        with open(self.project['filepaths']['projfile'], 'r') as fp:
-            self.project = json.loads(fp.read())
+        self.project = marxanconpy.marcon.load_project(self.project['filepaths']['projfile'])
+        marxanconpy.marcon.validate_project(self.project)
+        if not launch:
+            frame.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
+        else:
+            self.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
 
-        for p in self.project['filepaths']:
-            if p != "working_directory":
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    "~\\",self.workingdirectory + "\\")
+        if 'MarxanConnect' in self.project['version']:
+            if self.project['version']['MarxanConnect'] != MarxanConnectVersion:
+                print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
+                      "update for compatibility")
+                self.project['version']['MarxanConnect'] = MarxanConnectVersion
+        else:
+            print("Warning: This project file was created with a different version of Marxan Connect. Attempting to "
+                  "update for compatibility")
+            self.project['version'] = {}
+            self.project['version']['marxanconpy'] = marxanconpy.__version__
+            self.project['version']['MarxanConnect'] = MarxanConnectVersion
 
-        self.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,
+                                                                 self.workingdirectory,
+                                                                 "absolute")
 
+        self.set_GUI_options()
+
+        # set default file paths in GUI
+        self.set_GUI_filepaths()
+
+        # trigger functions which enable/disable options
+        self.on_PU_file(event=None)
+        self.on_FA_file(event=None)
+        self.on_AA_file(event=None)
+        self.on_demo_matrixFormatRadioBox(event=None)
+        self.on_demo_rescaleRadioBox(event=None)
+        if self.project['options']['metricsCalculated']:
+            self.customize_spec.Enable(enable=True)
+            self.export_CF_files.Enable(enable=True)
+            self.export_BD_file.Enable(enable=True)
+            self.export_pudat.Enable(enable=True)
+            self.export_metrics.Enable(enable=True)
+            self.custom_spec_panel.SetToolTip(None)
+        self.enable_metrics()
+        self.enable_discrete()
+        self.enable_postHoc()
+        self.outline_shapefile_choices()
+        self.colormap_shapefile_choices()
+        self.colormap_metric_choices(1)
+        self.colormap_metric_choices(2)
+        self.colormap_metric_choices("pre-eval")
+        self.on_new_spec()
+        self.update_discrete_grid()
+
+    def set_GUI_options(self):
         # set default options
         self.fa_status_radioBox.SetStringSelection(self.project['options']['fa_status'])
         self.aa_status_radioBox.SetStringSelection(self.project['options']['aa_status'])
@@ -277,7 +328,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_demo_aa_donors.SetValue(self.project['options']['demo_metrics']['aa_donors'])
 
         self.bd_demo_conn_boundary.SetValue(self.project['options']['demo_metrics']['conn_boundary'])
-        self.bd_demo_min_plan_graph.SetValue(self.project['options']['demo_metrics']['min_plan_graph'])
 
         self.cf_land_in_degree.SetValue(self.project['options']['land_metrics']['in_degree'])
         self.cf_land_out_degree.SetValue(self.project['options']['land_metrics']['out_degree'])
@@ -290,45 +340,31 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.cf_land_aa_donors.SetValue(self.project['options']['land_metrics']['aa_donors'])
 
         self.bd_land_conn_boundary.SetValue(self.project['options']['land_metrics']['conn_boundary'])
-        self.bd_land_min_plan_graph.SetValue(self.project['options']['land_metrics']['min_plan_graph'])
 
         self.calc_metrics_pu.SetValue(self.project['options']['calc_metrics_pu'])
         self.calc_metrics_cu.SetValue(self.project['options']['calc_metrics_cu'])
 
+        self.cf_export_radioBox.SetStringSelection(self.project['options']['cf_export'])
+        self.spec_radio.SetStringSelection(self.project['options']['spec_set'])
+        self.targets.SetValue(self.project['options']['targets'])
         self.BD_filecheck.SetValue(self.project['options']['bd_filecheck'])
         self.PUDAT_filecheck.SetValue(self.project['options']['pudat_filecheck'])
 
-        self.marxanBit_Radio.SetStringSelection(self.project['options']['marxan_bit'])
+        self.NUMREPS.SetValue(self.project['options']['NUMREPS'])
+        self.SCENNAME.SetValue(self.project['options']['SCENNAME'])
+        self.marxan_CF.SetStringSelection(self.project['options']['marxan_CF'])
+        self.marxan_bound.SetStringSelection(self.project['options']['marxan_bound'])
         self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
+        self.on_marxan_bound(event=None)
+        self.CSM.SetValue(self.project['options']['CSM'])
+        self.marxan_PU.SetStringSelection(self.project['options']['marxan_PU'])
+        self.marxanBit_Radio.SetStringSelection(self.project['options']['marxan_bit'])
+        self.marxan_Radio.SetStringSelection(self.project['options']['marxan'])
+
 
         self.PUSHP_filecheck.SetValue(self.project['options']['pushp_filecheck'])
         self.PUCSV_filecheck.SetValue(self.project['options']['pucsv_filecheck'])
         self.MAP_filecheck.SetValue(self.project['options']['map_filecheck'])
-
-
-
-        # set default file paths in GUI
-        self.set_GUI_filepaths()
-
-        # trigger functions which enable/disable options
-        self.on_PU_file(event=None)
-        self.on_FA_file(event=None)
-        self.on_AA_file(event=None)
-        self.on_demo_matrixFormatRadioBox(event=None)
-        self.on_demo_matrixFormatRadioBox(event=None)
-        self.on_demo_matrixFormatRadioBox(event=None)
-        self.on_demo_rescaleRadioBox(event=None)
-        if self.project['options']['metricsCalculated']:
-            self.customize_spec.Enable(enable=True)
-            self.CFT_percent_slider.Enable(enable=True)
-            self.export_metrics.Enable(enable=True)
-            self.custom_spec_panel.SetToolTip(None)
-        self.enable_metrics()
-        self.outline_shapefile_choices()
-        self.colormap_shapefile_choices()
-        self.colormap_metric_choices(1)
-        self.colormap_metric_choices(2)
-        self.colormap_metric_choices("pre-eval")
 
     def set_GUI_filepaths(self):
         # set default file paths
@@ -358,14 +394,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.LP_file.SetPath(self.project['filepaths']['lp_filepath'])
 
         # Marxan metrics files
+        self.orig_CF_file.SetPath(self.project['filepaths']['orig_cf_filepath'])
         self.CF_file.SetPath(self.project['filepaths']['cf_filepath'])
+        self.orig_SPEC_file.SetPath(self.project['filepaths']['orig_spec_filepath'])
         self.SPEC_file.SetPath(self.project['filepaths']['spec_filepath'])
+        self.orig_BD_file.SetPath(self.project['filepaths']['orig_bd_filepath'])
         self.BD_file.SetPath(self.project['filepaths']['bd_filepath'])
+        self.orig_PUDAT_file.SetPath(self.project['filepaths']['orig_pudat_filepath'])
         self.PUDAT_file.SetPath(self.project['filepaths']['pudat_filepath'])
 
         # Marxan analysis
+        self.inputdat_template_file.SetPath(self.project['filepaths']['marxan_template_input'])
         self.inputdat_file.SetPath(self.project['filepaths']['marxan_input'])
-        self.marxan_dir.SetPath(self.project['filepaths']['marxan_dir'])
+
+        # Post-Hoc
+        self.postHoc_file.SetPath(self.project['filepaths']['posthoc'])
 
         # Export plot data
         self.PUSHP_file.SetPath(self.project['filepaths']['pushp'])
@@ -417,15 +460,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         if 'projfile' in self.project['filepaths']:
             self.set_metric_options()
-            self.projfile = self.project['filepaths']['projfile']
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    self.workingdirectory + "\\", "~\\")
-            with open(self.projfile, 'w') as fp:
-                json.dump(self.project, fp, indent=4, sort_keys=True)
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    "~\\",self.workingdirectory + "\\")
+            self.save_project_gui()
         else:
             self.on_save_project_as(event=None)
 
@@ -436,24 +471,27 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         dlg = wx.FileDialog(
             self, message="Save file as ...",
             defaultDir=self.workingdirectory,
-            defaultFile="", wildcard=wc_MarCon, style=wx.FD_SAVE
+            defaultFile="", wildcard=wc_MarCon, style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.project['filepaths']['projfile'] = dlg.GetPath()
             self.project['filepaths']['projfilename'] = dlg.GetFilename()
             self.workingdirectory = dlg.GetDirectory()
+            os.chdir(self.workingdirectory)
             self.set_metric_options()
-            self.projfile = self.project['filepaths']['projfile']
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    self.workingdirectory + "\\", "~\\")
-            with open(self.projfile, 'w') as fp:
-                json.dump(self.project, fp, indent=4, sort_keys=True)
-            for p in self.project['filepaths']:
-                self.project['filepaths'][p] = self.project['filepaths'][p].replace(
-                    "~\\", self.workingdirectory + "\\")
+            self.save_project_gui()
         dlg.Destroy()
-        frame.SetTitle('Marxan with Connectivity (Project: ' + self.project['filepaths']['projfilename'] + ')')
+        frame.SetTitle('Marxan Connect (Project: ' + self.project['filepaths']['projfilename'] + ')')
+
+    def save_project_gui(self):
+        projfile = self.project['filepaths']['projfile']
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,
+                                                                              self.workingdirectory,
+                                                                              "relative")
+        marxanconpy.marcon.save_project(project=self.project,projfile=projfile)
+        self.project = marxanconpy.marcon.edit_working_directory(self.project,
+                                                                              self.workingdirectory,
+                                                                              "absolute")
 
 # ########################## html pop-up functions #####################################################################
 
@@ -479,34 +517,26 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         with open('LICENSE', 'r', encoding="utf8") as file:
             filedata = file.read()
         dlg = wx.MessageBox(message=filedata,
-                            caption="Marxan with Connectivity License",
+                            caption="Marxan Connect License",
                             style=wx.OK)
-        dlg.Destroy()
 
     def on_about(self, event):
-        dlg = wx.MessageBox(message="Version: " + marxanconpy.MarxanConnectVersion + "\n(C) 2017 Remi Daigle\n",
-                            caption="About Marxan with Connectivity",
+        dlg = wx.MessageBox(message="Marxan Connect: " +
+                                    MarxanConnectVersion +
+                                    "\n Running marxanconpy: " +
+                                    marxanconpy.__version__ +
+                                    "\n(C) 2019 Remi Daigle\n",
+                            caption="About Marxan Connect",
                             style=wx.OK)
-        dlg.Destroy()
 
     def on_getting_started (self, event):
         # insert getting started tab and hyperlinks (wxFormBuilder can't handle hyperlinks)
-        GettingStartedframe = GettingStarted (parent=self)
+        GettingStartedframe = GettingStarted(parent=self)
         GettingStartedframe.Show()
 
     def on_metric_definition_choice(self,event):
-        soup = bs4.BeautifulSoup(open(os.path.join("docs" , "glossary_webtex.html"), encoding="utf8"),"html.parser")
-
-        # find the node with id of "Plot"
-        div = soup.find(id=self.metric_definition_choice.GetStringSelection().lower().replace(" ","-"))
-        self.metric_definition_html.SetPage(str(div).replace("glossary_files","docs/glossary_files"))
-
-# ##########################  warning functions ########################################################################
-    def warn_dialog(self, message, caption="Warning!"):
-        """
-        Warning
-        """
-        wx.MessageBox(message, caption, style=wx.OK | wx.ICON_WARNING)
+        self.metric_definition_html.LoadURL(os.path.join(os.path.dirname(sys.argv[0]),'docs','glossary_webtex.html#'+
+                           self.metric_definition_choice.GetStringSelection().lower().replace(" ", "-")))
 
 # ##########################  map plotting functions ###################################################################
     def on_plot_map_button(self, event):
@@ -516,7 +546,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         # warn if no connectivity metrics
         if not 'connectivityMetrics' in self.project:
-            self.warn_dialog(
+            marxanconpy.warn_dialog(
                 message="No connectivity metrics have been calculated yet, please return to the 'Connectivity "
                         "Metrics' tab to calculate metrics before attempting to plot.")
             return  # end plotting
@@ -524,7 +554,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # prepare plotting window
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-            self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
+            for i in range(self.auinotebook.GetPageCount()):
+                if self.auinotebook.GetPageText(i) == "7) Plotting Options":
+                    self.auinotebook.AddPage(self.plot, u"8) Plot", False, wx.NullBitmap)
+                elif self.auinotebook.GetPageText(i) == "8) Plotting Options":
+                    self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
         self.plot.figure = plt.figure(figsize=self.plot.GetClientSize()/wx.ScreenDC().GetPPI()[0])
         self.plot.axes = self.plot.figure.gca()
         self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
@@ -561,7 +595,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # warn and break if shapefile not the same size as metrics
             if self.lyr1_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
                 if not sf1.shape[0] == len(metric1):
-                    self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
+                    marxanconpy.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
                                              "are " + str(len(metric1)) + " rows in the selected metric and " + str(
                         sf1.shape[0]) +
                                              " rows in the shapefile")
@@ -595,7 +629,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             # warn and break if shapefile not the same size as metrics
             if self.lyr2_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
                 if not sf2.shape[0] == len(metric2):
-                    self.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
+                    marxanconpy.warn_dialog(message="The selected shapefile does not have the expected number of rows. There "
                                              "are " + str(len(metric2)) + " rows in the selected metric and " + str(
                         sf2.shape[0]) +
                                              " rows in the shapefile")
@@ -608,10 +642,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         elif self.lyr2_plot_check.GetValue():
             gdf_list = [sf2]
         else:
-            self.warn_dialog(message="No data layers were selected")
+            marxanconpy.warn_dialog(message="No data layers were selected")
             lonmin, lonmax, latmin, latmax = -180, 180, -90, -90
 
-        lonmin, lonmax, latmin, latmax = marxanconpy.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
+        lonmin, lonmax, latmin, latmax = marxanconpy.spatial.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
 
 
         self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
@@ -649,7 +683,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # change selection to plot tab
         for i in range(self.auinotebook.GetPageCount()):
-            if self.auinotebook.GetPageText(i) == "7) Plot":
+            if self.auinotebook.GetPageText(i) == "8) Plot" or self.auinotebook.GetPageText(i) == "9) Plot":
                 self.auinotebook.ChangeSelection(i)
 
     def draw_shapefiles(self, sf, colour=None, trans=None, metric=None, lowcol=None, hicol=None, legend=None):
@@ -915,7 +949,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['pu_filepath'] = self.PU_file.GetPath()
         if os.path.isfile(self.project['filepaths']['pu_filepath']):
             self.spatial['pu_shp'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
-            self.spatial['pu_proj'] = marxanconpy.get_appropriate_projection(self.spatial['pu_shp'], 'area')
+            self.spatial['pu_proj'] = marxanconpy.spatial.get_appropriate_projection(self.spatial['pu_shp'], 'area')
             self.spatial['pu_shp'] = self.spatial['pu_shp'].to_crs(self.spatial['pu_proj'])
             self.temp['items'] = list(gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']))
             self.PU_file_pu_id.SetItems(self.temp['items'])
@@ -950,7 +984,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.spatial['pu_shp'].loc[index,'fa_included'] = self.spatial[
                         'fa_shp'].geometry.intersects(purow.geometry).bool()
         # enable metrics
-        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
+        self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
         self.enable_metrics()
 
     def on_AA_file(self, event):
@@ -967,7 +1001,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 for index, purow in self.spatial['pu_shp'].iterrows():
                     self.spatial['pu_shp'].loc[index,'aa_included'] = self.spatial['aa_shp'].geometry.intersects(purow.geometry).bool()
         # enable metrics
-        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
+        self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
         self.enable_metrics()
 
 
@@ -1013,6 +1047,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['demo_pu_cm_filepath'] = self.demo_PU_CM_file.GetPath()
         # enable metrics
         self.enable_metrics()
+        self.enable_postHoc()
 
     def on_land_HAB_file(self, event):
         """
@@ -1088,6 +1123,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['filepaths']['land_pu_cm_filepath'] = self.land_PU_CM_file.GetPath()
         # enable metrics
         self.enable_metrics()
+        self.enable_postHoc()
 
     def on_LP_file(self, event):
         self.project['filepaths']['lp_filepath'] = self.LP_file.GetPath()
@@ -1100,11 +1136,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['cf_filepath'] = self.CF_file.GetPath()
 
+    def on_orig_CF_file(self, event):
+        """
+        Defines conservation features (i.e. puvspr2.dat) file path
+        """
+        self.project['filepaths']['orig_cf_filepath'] = self.orig_CF_file.GetPath()
+
     def on_SPEC_file(self, event):
         """
         Defines spec.dat file path
         """
         self.project['filepaths']['spec_filepath'] = self.SPEC_file.GetPath()
+
+    def on_orig_SPEC_file(self, event):
+        """
+        Defines spec.dat file path
+        """
+        self.project['filepaths']['orig_spec_filepath'] = self.orig_SPEC_file.GetPath()
 
     def on_BD_file(self, event):
         """
@@ -1112,28 +1160,37 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['bd_filepath'] = self.BD_file.GetPath()
 
+    def on_orig_BD_file(self, event):
+        """
+        Defines boundary definition file path
+        """
+        self.project['filepaths']['orig_bd_filepath'] = self.orig_BD_file.GetPath()
+
     def on_PUDAT_file(self, event):
         """
         Defines planning unit data file path
         """
         self.project['filepaths']['pudat_filepath'] = self.PUDAT_file.GetPath()
-        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
 
+    def on_orig_PUDAT_file(self, event):
+        """
+        Defines planning unit data file path
+        """
+        self.project['filepaths']['orig_pudat_filepath'] = self.orig_PUDAT_file.GetPath()
+        self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
 
-    def on_marxan_dir(self, event):
-        """
-        Defines the directory that contains the Marxan application
-        """
-        self.project['filepaths']['marxan_dir'] = self.marxan_dir.GetPath()
-        if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
-                not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
-            self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
 
     def on_inputdat_file(self, event):
         """
         Defines the input file for Marxan
         """
         self.project['filepaths']['marxan_input'] = self.inputdat_file.GetPath()
+
+    def on_inputdat_template_file(self, event):
+        """
+        Defines the template input file for before input file creation
+        """
+        self.project['filepaths']['marxan_template_input'] = self.inputdat_template_file.GetPath()
 
 
     def on_PUSHP_file( self, event ):
@@ -1158,11 +1215,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
     def on_fa_status_radioBox(self, event):
         self.project['options']['fa_status'] = self.fa_status_radioBox.GetStringSelection()
-        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
+        self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
 
     def on_aa_status_radioBox(self, event):
         self.project['options']['aa_status'] = self.aa_status_radioBox.GetStringSelection()
-        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
+        self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
 
     def on_demo_matrixTypeRadioBox(self, event):
         self.project['options']['demo_conmat_type'] = self.demo_matrixTypeRadioBox.GetStringSelection()
@@ -1221,11 +1278,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.project['options']['land_conmat_type'] == "Resistance Surface":
             enable_hab = False
             enable_surface = True
-            self.warn_dialog("This feature is not yet operational, please check back in the next version!")
-        elif self.project['options']['land_conmat_type'] == "Connectivity Matrix":
+            marxanconpy.warn_dialog(message="This feature is not yet operational, please check back in the next version!")
+        elif self.project['options']['land_conmat_type'] == "Connectivity Edge List with Habitat":
             enable_hab = False
             enable_surface = False
-        elif self.project['options']['land_conmat_type'] == "Habitat Type + Resistance":
+        elif self.project['options']['land_conmat_type'] == "Habitat Type + Isolation":
             enable_hab = True
             enable_surface = False
 
@@ -1399,14 +1456,81 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         self.bd_land_conn_boundary.Enable(enable=land_enable)
         self.bd_land_min_plan_graph.Enable(enable=land_enable)
+        self.enable_calc_metrics()
+
+    def enable_calc_metrics(self, event=None):
+        self.set_metric_options()
+        if any(self.project['options']['land_metrics'].values()) or any(self.project['options']['demo_metrics'].values()):
+            self.calc_metrics.Enable(True)
+        else:
+            self.calc_metrics.Enable(False)
 
     def on_bd_land_conn_boundary(self, event):
+        self.enable_calc_metrics()
         if self.bd_land_conn_boundary.GetValue():
             self.bd_demo_conn_boundary.SetValue(False)
 
     def on_bd_demo_conn_boundary(self, event):
+        self.enable_calc_metrics()
         if self.bd_demo_conn_boundary.GetValue():
             self.bd_land_conn_boundary.SetValue(False)
+
+    def on_NUMREPS( self, event ):
+        """
+        define NUMREPS
+        :param event:
+        :return:
+        """
+        self.project['options']['NUMREPS'] = self.NUMREPS.GetValue()
+
+    def on_SCENNAME( self, event ):
+        """
+        define SCENNAME
+        :param event:
+        :return:
+        """
+        self.project['options']['SCENNAME'] = self.SCENNAME.GetValue()
+
+    def on_marxan_CF( self, event ):
+        """
+        define whether to use original or new conservation features in Marxan
+        :param event:
+        :return:
+        """
+        self.project['options']['marxan_CF'] = self.marxan_CF.GetStringSelection()
+
+    def on_marxan_bound( self, event ):
+        """
+        define whether to use original or new spatial dependencies in Marxan
+        :param event:
+        :return:
+        """
+        self.project['options']['marxan_bound'] = self.marxan_bound.GetStringSelection()
+        if not self.marxan_bound.GetStringSelection() == 'New':
+            self.inputdat_symmRadio.Enable(False)
+            self.csm_txt.SetLabel('Boundary Length Modifier')
+            if self.marxan_bound.GetStringSelection() == 'None':
+                self.CSM.Enable(False)
+        else:
+            self.inputdat_symmRadio.Enable(True)
+            self.CSM.Enable(True)
+            self.csm_txt.SetLabel('Connectivity Strength Modifier')
+
+    def on_CSM( self, event ):
+        """
+        define CSM
+        :param event:
+        :return:
+        """
+        self.project['options']['CSM'] = self.CSM.GetValue()
+
+    def on_marxan_PU( self, event ):
+        """
+        define whether to use original or new planning unit (status) file in Marxan
+        :param event:
+        :return:
+        """
+        self.project['options']['marxan_PU'] = self.marxan_PU.GetStringSelection()
 
     def on_marxanBit_Radio( self, event ):
         """
@@ -1414,11 +1538,33 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['options']['marxan_bit'] = self.marxanBit_Radio.GetStringSelection()
 
+    def on_marxan_Radio( self, event ):
+        """
+        Option for Marxan version
+        """
+        self.project['options']['marxan'] = self.marxan_Radio.GetStringSelection()
+        if self.project['options']['marxan'] == "Marxan":
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan.exe")) or\
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan_x64.exe")):
+                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+        else:
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone.exe")) or \
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone_x64.exe")):
+                marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
+
     def on_inputdat_symmRadio(self, event):
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
 
     def on_cf_export_radioBox( self, event ):
         self.project['options']['cf_export'] = self.cf_export_radioBox.GetStringSelection()
+
+    def on_spec_radio( self, event ):
+        self.project['options']['spec_set'] = self.spec_radio.GetStringSelection()
+        self.targets_txt.SetLabel(self.project['options']['spec_set']+'s')
+
+    def on_targets( self, event ):
+        self.project['options']['targets'] = self.targets.GetValue()
+        self.on_new_spec()
 
     def on_PUSHP_filecheck(self, event):
         """
@@ -1444,67 +1590,75 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Rescales the connectivity matrix to match the scale of the planning units
         """
-        self.warn_dialog("Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
-                         " if the rescaling is ecologically valid. We recommend acquiring connectivity data at the same"
-                         " scale as the planning unit")
+        try:
+            marxanconpy.warn_dialog(message="Rescaling of matrices is offered as a convenience function. It it up to the user to determine"
+                             " if the rescaling is ecologically valid. We recommend acquiring connectivity data at the same"
+                             " scale as the planning unit")
 
-        self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
-                                      filepath=self.project['filepaths']['demo_cu_cm_filepath'])
-        self.temp = {}
-        # create dict entry for connectivityMetrics
+            self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
+                                          filepath=self.project['filepaths']['demo_cu_cm_filepath'])
+            self.temp = {}
+            # create dict entry for connectivityMetrics
 
-        if 'connectivityMetrics' not in self.project:
+            if 'connectivityMetrics' not in self.project:
 
-            self.project['connectivityMetrics'] = {}
+                self.project['connectivityMetrics'] = {}
 
-        self.temp['demo_pu_conmat'] = marxanconpy.rescale_matrix(
-            self.project['filepaths']['pu_filepath'],
-            self.project['filepaths']['pu_file_pu_id'],
-            self.project['filepaths']['demo_cu_filepath'],
-            self.project['filepaths']['demo_cu_file_pu_id'],
-            self.project['filepaths']['demo_cu_cm_filepath'],
-            matrixformat=self.project['options']['demo_conmat_format'],
-            edge=self.project['options']['demo_conmat_rescale_edge'],
-            progressbar=self.project['options']['demo_pu_cm_progress'])
+            self.temp['demo_pu_conmat'] = marxanconpy.spatial.rescale_matrix(
+                self.project['filepaths']['pu_filepath'],
+                self.project['filepaths']['pu_file_pu_id'],
+                self.project['filepaths']['demo_cu_filepath'],
+                self.project['filepaths']['demo_cu_file_pu_id'],
+                self.project['filepaths']['demo_cu_cm_filepath'],
+                matrixformat=self.project['options']['demo_conmat_format'],
+                edge=self.project['options']['demo_conmat_rescale_edge'],
+                progressbar=self.project['options']['demo_pu_cm_progress'])
 
-        if self.demo_matrixFormatRadioBox.GetStringSelection() == "Edge List with Time":
-            self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
-                self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
-                                                                           var_name='id2',
-                                                                           value_name='value').to_json(
-                orient='split')
-            self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
-                self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(
-                orient='split')
-            pandas.read_json(self.temp['demo_pu_conmat_time'],
-                             orient='split').to_csv(
-                self.project['filepaths']['demo_pu_cm_filepath'],
-                index=False, header=True, sep=",")
-            pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
-                str.replace(self.project['filepaths']['demo_pu_cm_filepath'], '.csv',
-                            '_mean_of_times.csv'),
-                index=True, header=True, sep=",")
+            if self.demo_matrixFormatRadioBox.GetStringSelection() == "Edge List with Time":
+                self.temp['demo_pu_conmat_time'] = self.temp['demo_pu_conmat'][
+                    self.temp['demo_pu_conmat']['time'] != 'mean'].copy().melt(id_vars=['time', 'id1'],
+                                                                               var_name='id2',
+                                                                               value_name='value').to_json(
+                    orient='split')
+                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'][
+                    self.temp['demo_pu_conmat']['time'] == 'mean'].drop(['id1', 'time'], axis=1).to_json(
+                    orient='split')
+                pandas.read_json(self.temp['demo_pu_conmat_time'],
+                                 orient='split').to_csv(
+                    self.project['filepaths']['demo_pu_cm_filepath'],
+                    index=False, header=True, sep=",")
+                pandas.read_json(self.temp['demo_pu_conmat'], orient='split').to_csv(
+                    str.replace(self.project['filepaths']['demo_pu_cm_filepath'], '.csv',
+                                '_mean_of_times.csv'),
+                    index=True, header=True, sep=",")
 
-        else:
-            self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
-            pandas.read_json(self.temp['demo_pu_conmat'],
-                             orient='split').to_csv(
-                self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+            else:
+                self.temp['demo_pu_conmat'] = self.temp['demo_pu_conmat'].to_json(orient='split')
+                pandas.read_json(self.temp['demo_pu_conmat'],
+                                 orient='split').to_csv(
+                    self.project['filepaths']['demo_pu_cm_filepath'], index=True, header=True, sep=",")
+        except:
+            self.log.Show()
+            raise
 
     def on_land_generate_button(self, event):
-        self.temp = {}
-        self.temp['land_pu_conmat'] = marxanconpy.habitatresistance2conmats(
-            buff=float(self.project['options']['land_hab_buff']),
-            hab_filepath=self.project['filepaths']['land_cu_filepath'],
-            hab_id=self.project['filepaths']['land_cu_file_hab_id'],
-            res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
-            pu_filepath=self.project['filepaths']['pu_filepath'],
-            pu_id=self.project['filepaths']['pu_file_pu_id'],
-            res_type=self.project['options']['land_res_matrixType'],
-            progressbar=self.land_PU_CM_progress.GetValue())
+        try:
+            self.temp = {}
+            self.temp['land_pu_conmat'] = marxanconpy.spatial.habitatresistance2conmats(
+                buff=float(self.project['options']['land_hab_buff']),
+                hab_filepath=self.project['filepaths']['land_cu_filepath'],
+                hab_id=self.project['filepaths']['land_cu_file_hab_id'],
+                res_mat_filepath=self.project['filepaths']['land_res_mat_filepath'],
+                pu_filepath=self.project['filepaths']['pu_filepath'],
+                pu_id=self.project['filepaths']['pu_file_pu_id'],
+                res_type=self.project['options']['land_res_matrixType'],
+                progressbar=self.land_PU_CM_progress.GetValue())
 
-        pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
-            self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")
+            pandas.read_json(self.temp['land_pu_conmat'], orient='split').to_csv(
+                self.project['filepaths']['land_pu_cm_filepath'], index=0, header=True, sep=",")
+        except:
+            self.log.Show()
+            raise
 
     def on_resistance_mat_customize(self, event):
         file_viewer(parent=self, file=self.project['filepaths']['land_res_mat_filepath'],
@@ -1539,7 +1693,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                "' which may be missing in the file."
                 self.warn = True
             if self.warn:
-                self.warn_dialog(message=self.message)
+                marxanconpy.warn_dialog(message=self.message)
         return
 
 
@@ -1551,483 +1705,85 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         try:
             print("Calculating Metrics")
-            # create dict entry for connectivityMetrics
-            self.project['connectivityMetrics'] = {}
-            self.temp = {}
 
-            self.all_types = []
-            if self.calc_metrics_pu.GetValue() and self.calc_metrics_cu.GetValue():
-                if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
-                    self.all_types += ['demo_pu', 'demo_cu']
-                if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
-                    self.all_types += ['land_pu']
-            elif self.calc_metrics_pu.GetValue():
-                if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
-                    self.all_types += ['demo_pu']
-                if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
-                    self.all_types += ['land_pu']
-            elif self.calc_metrics_cu.GetValue():
-                if os.path.isfile(self.project['filepaths']['demo_cu_cm_filepath']):
-                    self.all_types += ['demo_cu']
-            else:
-                self.warn_dialog(message="No 'Units' selected for metric calculations.")
+            self.set_metric_options()
 
-            # create dict entries for boundary
-            self.project['connectivityMetrics']['boundary'] = {}
-            bd_demo_conn_boundary_done = False
-            bd_land_conn_boundary_done = False
+            if not any(self.project['options']['land_metrics'].values()) and not any(
+                    self.project['options']['demo_metrics'].values()):
+                marxanconpy.warn_dialog(message="No metrics selected")
+                raise Exception("No metrics selected")
 
-            # load local production
-            if os.path.isfile(self.project['filepaths']['lp_filepath']):
-                self.temp['localProd'] = pandas.read_csv(self.project['filepaths']['lp_filepath'], index_col=0)
-            else:
-                self.temp['localProd'] = 0
+            if not self.calc_metrics_pu.GetValue() and not self.calc_metrics_cu.GetValue():
+                marxanconpy.warn_dialog(message="No 'Units' selected for metric calculations.")
+                raise Exception("No 'Units' selected for metric calculations.")
 
-            # start progressbar
-            max = 100 * len(self.all_types)
-            dlg = wx.ProgressDialog("Calculating Connectivity Metrics",
-                                    "Please wait while the connectivity metrics are being calculated.",
-                                    maximum = max,
-                                    parent=None,
-                                    style = wx.PD_APP_MODAL
-                                            | wx.PD_CAN_ABORT
-                                            | wx.PD_AUTO_HIDE
-                                            | wx.PD_ELAPSED_TIME
-                                            | wx.PD_ESTIMATED_TIME
-                                            | wx.PD_REMAINING_TIME
-                                    )
-            count = 0
-            keepGoing = True
-            for self.type in self.all_types:
-                if not keepGoing: break
-
-                # check format
-                if self.type[-2:] == 'pu':
-                    if self.type == 'demo_pu':
-                        self.check_matrix_list_format(format=self.demo_matrixFormatRadioBox.GetStringSelection(),
-                                                      filepath=self.project['filepaths'][self.type + '_cm_filepath'])
-                        self.temp['format'] = self.demo_matrixFormatRadioBox.GetStringSelection()
-                    if self.type == 'land_pu':
-                        self.temp['format'] = "Edge List with Habitat"
-
-                # load correct matrix and transform if necessary
-                if os.path.isfile(self.project['filepaths'][self.type + '_cm_filepath']):
-                    if self.temp['format'] == "Matrix":
-                        self.temp[self.type + '_conmat'] = {}
-                        self.temp[self.type + '_conmat']['default_type_replace'] = pandas.read_csv(
-                            self.project['filepaths'][self.type + '_cm_filepath'], index_col=0)
-                    elif self.temp['format'] == "Edge List":
-                        self.temp[self.type + '_conmat'] = {}
-                        self.temp[self.type + '_conmat']['default_type_replace'] = pandas.read_csv(
-                            self.project['filepaths'][self.type + '_cm_filepath'])
-                        self.temp[self.type + '_conmat']['default_type_replace'] = self.temp[self.type + '_conmat']['default_type_replace'].pivot_table(values='value',
-                                                                                                        index='id1',
-                                                                                                        columns='id2')
-                    elif self.temp['format'] == "Edge List with Time":
-                        self.temp[self.type + '_conmat_time'] = pandas.read_csv(
-                            self.project['filepaths'][self.type + '_cm_filepath'])
-
-                        self.temp[self.type + '_conmat'] = {}
-                        self.temp[self.type + '_conmat']['default_type_replace'] = self.temp[self.type + '_conmat_time'][
-                            ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
-                        self.temp[self.type + '_conmat']['default_type_replace'] = self.temp[self.type + '_conmat']['default_type_replace'].pivot_table(values='value',
-                                                                                                        index='id1',
-                                                                                                        columns='id2')
-
-                        self.warn_dialog(
-                            message="A connectivity 'Edge List with Time' was provided; however, all metrics except "
-                                    "'Temporal Connectivity Correlation' will be calculated from the temporal"
-                                    "mean of connectivity")
-                    elif self.temp['format'] == "Edge List with Type":
-                        self.temp[self.type + '_conmat_many'] = pandas.read_csv(
-                            self.project['filepaths'][self.type + '_cm_filepath'])
-
-                        self.temp[self.type + '_conmat'] = {}
-                        for t in self.temp[self.type + '_conmat_many']['type'].unique():
-                            self.temp[self.type + '_conmat'][t] = self.temp[self.type + '_conmat_many'][
-                                self.temp[self.type + '_conmat_many']['type'] == t].pivot_table(values='value',
-                                                                                                  index='id1',
-                                                                                                  columns='id2')
-                            if not self.temp[self.type + '_conmat'][t].values.sum() > 0:
-                                del self.temp[self.type + '_conmat'][t]
-                                self.warn_dialog("All connectivity values for type '" + str(
-                                    t) + "' are below or equal to zero, excluding from further analyses")
-
-                    elif self.temp['format'] == "Edge List with Habitat":
-                        self.temp[self.type + '_conmat_many'] = pandas.read_csv(
-                            self.project['filepaths'][self.type + '_cm_filepath'])
-                        self.temp[self.type + '_conmat_many'].loc[self.temp[self.type + '_conmat_many']['value'] < float(
-                            self.project['options']['land_hab_thresh']),'value'] = 0
-
-                        self.temp[self.type + '_conmat'] = {}
-                        for h in self.temp[self.type + '_conmat_many']['habitat'].unique():
-                            self.temp[self.type + '_conmat'][h] = self.temp[self.type + '_conmat_many'][
-                                self.temp[self.type + '_conmat_many']['habitat'] == h].pivot_table(values='value', index='id1',
-                                                                                              columns='id2')
-                            if not self.temp[self.type + '_conmat'][h].values.sum()>0:
-                                del self.temp[self.type + '_conmat'][h]
-                                self.warn_dialog("All connectivity values for type '" + str(
-                                    t) + "' are below or equal to zero, excluding from further analyses")
-
-                else:
-                    self.warn_dialog(message="File not found: " + self.project['filepaths'][self.type + '_cm_filepath'])
+            marxanconpy.manipulation.calc_metrics(project=self.project,
+                                                  progressbar=True,
+                                                  calc_metrics_pu=self.calc_metrics_pu.GetValue(),
+                                                  calc_metrics_cu=self.calc_metrics_cu.GetValue())
 
 
-                # load correct shapefile path
-                if self.type[-2:] == 'pu':
-                    self.temp['shp_filepath'] = self.project['filepaths']['pu_filepath']
-                    self.temp['shp_file_pu_id'] = self.project['filepaths']['pu_file_pu_id']
-                else:
-                    self.temp['shp_filepath'] = self.project['filepaths'][self.type + '_filepath']
-                    self.temp['shp_file_pu_id'] = self.project['filepaths'][self.type + '_file_pu_id']
 
-                # create dict entries for spec
-                self.project['connectivityMetrics']['spec_' + self.type] = {}
 
-                # warn if files not the same length
-                # if self.temp['format'] == "Edge List with Habitat" or "Edge List with Type":
-                #     self.temp['conmat_len'] = str(len(next(iter(self.temp[self.type + '_conmat'].values()))))
-                # else:
-                #     self.temp['conmat_len'] = str(len(self.temp[self.type + '_conmat']))
-                self.temp['conmat_len'] = str(len(next(iter(self.temp[self.type + '_conmat'].values()))))
-                self.temp['shp_len'] = str(gpd.GeoDataFrame.from_file(self.temp['shp_filepath']).shape[0])
-                if self.temp['conmat_len'] != self.temp['shp_len']:
-                    self.warn_dialog(
-                        message="The selected shapefile and connectivity matrix do not have the expected number of rows. "
-                                "There are " + self.temp['conmat_len'] + " rows in the selected connectivity matrix and " +
-                                self.temp['shp_len'] + " rows in the shapefile")
 
-                # warn and end if pu_id not in shapefile
-                # self.temp['shp_file_pu_id']
-                # self.temp['shp_filepath']
 
-                # calculate demographic metrics
-                if self.type[:4] == 'demo':
-                    for t in self.temp[self.type + '_conmat'].keys():
-                        if not keepGoing: break
-                        if t == 'default_type_replace':
-                            typesuffix = ''
-                        else:
-                            typesuffix = '_' + t
-
-                        self.temp['n'] = round(100/15/len(self.temp[self.type + '_conmat'].keys()))
-                        # if not os.path.isfile(self.project['filepaths']['lp_filepath']):
-                            # self.warn_dialog("No Local Production input. Marxan Connect will assume equal production in each planning unit.")
-
-                        if self.cf_demo_in_degree.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['in_degree_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'][t],mode='IN')
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_out_degree.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['out_degree_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2vertexdegree(self.temp[self.type + '_conmat'][t],mode='OUT')
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_between_cent.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2betweencent(self.temp[self.type + '_conmat'][t])
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_eig_vect_cent.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2eigvectcent(
-                                    marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Migration',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']))
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_google.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['google_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2google(self.temp[self.type + '_conmat'][t])
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_self_recruit.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['self_recruit_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2selfrecruit(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Migration',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']))
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_local_retention.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['local_retention_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2selfrecruit(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Probability',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']))
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_outflow.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['outflow_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2outflow(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Flow',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']))
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_inflow.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['inflow_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2inflow(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Flow',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']))
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_fa_recipients.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2recipients(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Flow',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']),
-                                                        self.project['filepaths']['fa_filepath'],
-                                                        self.temp['shp_filepath'],
-                                                        self.temp['shp_file_pu_id']
-                                                        )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_fa_donors.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2donors(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Flow',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']),
-                                                        self.project['filepaths']['fa_filepath'],
-                                                        self.temp['shp_filepath'],
-                                                        self.temp['shp_file_pu_id']
-                                                        )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_aa_recipients.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['aa_recipients_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2recipients(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Flow',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']),
-                                                              self.project['filepaths']['aa_filepath'],
-                                                              self.temp['shp_filepath'],
-                                                              self.temp['shp_file_pu_id'],
-                                                              True
-                                                              )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_aa_donors.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['aa_donors_' + self.type + typesuffix] = \
-                                marxanconpy.conmat2donors(marxanconpy.convert_matrix_type(self.demo_matrixTypeRadioBox.GetStringSelection(),
-                                                                    'Flow',
-                                                                    self.temp[self.type + '_conmat'][t],
-                                                                    self.temp['localProd']),
-                                                          self.project['filepaths']['aa_filepath'],
-                                                          self.temp['shp_filepath'],
-                                                          self.temp['shp_file_pu_id'],
-                                                          True
-                                                          )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_demo_stochasticity.GetValue() and keepGoing:
-                            if 'fa_filepath' in self.project['filepaths']:
-                                self.project['connectivityMetrics']['spec_' + self.type]['temp_conn_cov_' + self.type + typesuffix] = \
-                                    marxanconpy.conmattime2temp_conn_cov(self.temp[self.type + '_conmat_time'],
-                                                                           self.project['filepaths']['fa_filepath'],
-                                                                           self.temp['shp_filepath']
-                                                                           )
-                            else:
-                                self.warn_dialog(message="No 'Focus Area' has been specified. Please load a focus area file in "
-                                                         "the Spatial Input tab")
-                                return
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.bd_demo_conn_boundary.GetValue() and keepGoing:
-                            if bd_demo_conn_boundary_done == False:
-                                if t == 'default_type_replace':
-                                    self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][t])
-                                else:
-                                    self.temp[self.type + '_conmat_mean'] = self.temp[self.type + '_conmat_many'][
-                                        ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
-                                    self.temp[self.type + '_conmat_mean'] = self.temp[self.type + '_conmat_mean'].pivot_table(
-                                        values='value',
-                                        index='id1',
-                                        columns='id2')
-                                    self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][t])
-
-                                    self.warn_dialog(
-                                        message="A connectivity " + self.temp['format'] + " was provided. The Ecological "
-                                                "Distance to be used as the Boundary Definitions will be calculated from the "
-                                                "mean of connectivity matrices supplied")
-                                bd_demo_conn_boundary_done = True
-                                count += self.temp['n']
-                                (keepGoing, skip) = dlg.Update(count)
-
-                        # if self.bd_demo_min_plan_graph.GetValue():
-                        #     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type] = \
-                        #         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'])
-                        # count += self.temp['n']
-                        # (keepGoing, skip) = dlg.Update(count)
-
-                # calculate landscape metrics ############################################################################
-                if self.type[-7:] == 'land_pu':
-                    for h in self.temp[self.type + '_conmat'].keys():
-                        if not keepGoing: break
-                        self.temp['n'] = 100 / 10 / len(self.temp[self.type + '_conmat'].keys())
-                        if self.cf_land_in_degree.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type][
-                                'in_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
-                                self.temp[self.type + '_conmat'][h], mode='IN')
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_land_out_degree.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type][
-                                'out_degree_' + self.type + "_" + str(h)] = marxanconpy.conmat2vertexdegree(
-                                self.temp[self.type + '_conmat'][h], mode='OUT')
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_land_between_cent.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['between_cent_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2betweencent(self.temp[self.type + '_conmat'][h])
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_land_eig_vect_cent.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['eig_vect_cent_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2eigvectcent(self.temp[self.type + '_conmat'][h])
-
-                        if self.cf_land_google.GetValue():
-                            self.project['connectivityMetrics']['spec_' + self.type]['google_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2google(self.temp[self.type + '_conmat'][h])
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_land_fa_recipients.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['fa_recipients_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'][h],
-                                                        self.project['filepaths']['fa_filepath'],
-                                                        self.temp['shp_filepath'],
-                                                        self.temp['shp_file_pu_id']
-                                                        )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_land_fa_donors.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type]['fa_donors_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2donors(self.temp[self.type + '_conmat'][h],
-                                                          self.project['filepaths']['fa_filepath'],
-                                                          self.temp['shp_filepath'],
-                                                          self.temp['shp_file_pu_id']
-                                                          )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_land_aa_recipients.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type][
-                                'aa_recipients_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2recipients(self.temp[self.type + '_conmat'][h],
-                                                              self.project['filepaths']['aa_filepath'],
-                                                              self.temp['shp_filepath'],
-                                                              self.temp['shp_file_pu_id'],
-                                                              True
-                                                              )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.cf_land_aa_donors.GetValue() and keepGoing:
-                            self.project['connectivityMetrics']['spec_' + self.type][
-                                'aa_donors_' + self.type + "_" + str(h)] = \
-                                marxanconpy.conmat2donors(self.temp[self.type + '_conmat'][h],
-                                                          self.project['filepaths']['aa_filepath'],
-                                                          self.temp['shp_filepath'],
-                                                          self.temp['shp_file_pu_id'],
-                                                          True
-                                                          )
-                        count += self.temp['n']
-                        (keepGoing, skip) = dlg.Update(count)
-
-                        if self.bd_land_conn_boundary.GetValue() and keepGoing:
-                            if bd_land_conn_boundary_done == False:
-                                if h == 'default_type_replace':
-                                    self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
-                                else:
-                                    self.temp[self.type + '_conmat_mean'] = self.temp[self.type + '_conmat_many'][
-                                        ['id1', 'id2', 'value']].groupby(['id1', 'id2']).mean()
-                                    self.temp[self.type + '_conmat_mean'] = self.temp[
-                                        self.type + '_conmat_mean'].pivot_table(
-                                        values='value',
-                                        index='id1',
-                                        columns='id2')
-                                    self.project['connectivityMetrics']['boundary']['conn_boundary_' + self.type] = \
-                                        marxanconpy.conmat2connboundary(self.temp[self.type + '_conmat'][h])
-
-                                    self.warn_dialog(
-                                        message="A connectivity " + self.temp['format'] + " was provided. The Ecological "
-                                                                                          "Distance to be used as the Boundary Definitions will be calculated from the "
-                                                                                          "mean of connectivity matrices supplied")
-                                bd_land_conn_boundary_done = True
-                                count += self.temp['n']
-                                (keepGoing, skip) = dlg.Update(count)
-
-                        # if self.bd_land_min_plan_graph.GetValue():
-                        #     self.project['connectivityMetrics']['boundary']['min_plan_graph_' + self.type + "_" + str(h)] = \
-                        #         marxanconpy.conmat2minplanarboundary(self.temp[self.type + '_conmat'][h])
-                        # count += self.temp['n']
-                        # (keepGoing, skip) = dlg.Update(count)
 
 
             # create initial spec
             self.project['options']['metricsCalculated'] = True
             self.on_new_spec()
             self.customize_spec.Enable(enable=True)
-            self.CFT_percent_slider.Enable(enable=True)
+            self.export_CF_files.Enable(enable=True)
+            self.export_BD_file.Enable(enable=True)
+            self.export_pudat.Enable(enable=True)
             self.export_metrics.Enable(enable=True)
             self.custom_spec_panel.SetToolTip(None)
             self.colormap_shapefile_choices()
             self.colormap_metric_choices(1)
             self.colormap_metric_choices(2)
             self.colormap_metric_choices("pre-eval")
-            dlg.Destroy()
+            self.update_discrete_grid()
+
         except:
             print("Warning: Error in metrics calculation")
             self.log.Show()
-            dlg.Destroy()
             raise
+        marxanconpy.warn_dialog("All calculations completed successfully.",
+                                "Calculations Successful")
 
     def on_export_metrics(self, event):
+        self.on_export_CF_files(event=None, mute=True)
+        self.on_export_BD_file(event=None, mute=True)
+        self.on_export_PUDAT(event=None, mute=True)
+        marxanconpy.warn_dialog("All files exported successfully.",
+                                "Export Successful")
+
+    def on_export_CF_files( self, event, mute=False ):
         cf = {}
         spec = {}
-        for type in ['spec_demo_pu','spec_land_pu']:
+        for type in ['spec_demo_pu', 'spec_land_pu']:
             if type in self.project['connectivityMetrics']:
-                for k in self.project['connectivityMetrics'][type].keys():
+                metrics = list(self.project['connectivityMetrics'][type])
+                approved = ['discrete']
+                metrics[:] = [m for m in metrics if any(a in m for a in approved)]
+                for k in metrics:
                     cf[k] = self.project['connectivityMetrics'][type].copy().pop(k)
 
         spec = pandas.read_json(self.project['spec_dat'], orient='split')
         if len(cf) == 0:
-            self.warn_dialog(message="No conservation features associated with planning units were calculated.")
+            marxanconpy.warn_dialog(message="No conservation features associated with planning units were calculated.")
         else:
             # Export or append feature files
-            if self.cf_export_radioBox.GetSelection() == 0:
+            if self.cf_export_radioBox.GetStringSelection() == "Export":
                 # export spec
 
                 spec.to_csv(self.project['filepaths']['spec_filepath'], index=0)
                 # export conservation features
                 cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
+                try:
+                    cf['pu'] = cf['pu'].astype('int').astype('str')
+                except:
+                    cf['pu'] = cf['pu'].astype('str')
                 cf = pandas.DataFrame(cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
                 cf = pandas.merge(cf, spec, how='outer', on='name')
                 cf = cf.rename(columns={'id': 'species'}).sort_values(['pu', 'species'])
@@ -2035,33 +1791,76 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 cf = cf.sort_values(by=['pu'])
                 cf[['species', 'pu', 'amount']].to_csv(self.project['filepaths']['cf_filepath'], index=0)
 
-            elif self.cf_export_radioBox.GetSelection() == 1:
+            elif self.cf_export_radioBox.GetStringSelection() == "Append":
                 # append
-                old_spec = pandas.read_csv(self.project['filepaths']['spec_filepath'])
-                old_cf = pandas.read_csv(self.project['filepaths']['cf_filepath'])
+                if os.path.isfile(self.project['filepaths']['orig_spec_filepath']):
+                    old_spec = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_spec_filepath'])
+                else:
+                    marxanconpy.warn_dialog("Warning! File: " +
+                                            self.project['filepaths']['orig_spec_filepath'] +
+                                            " does not exist.")
+
+                if os.path.isfile(self.project['filepaths']['orig_cf_filepath']):
+                    old_cf = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_cf_filepath'])
+                    try:
+                        old_cf['pu'] = old_cf['pu'].astype('int').astype('str')
+                    except:
+                        old_cf['pu'] = old_cf['pu'].astype('str')
+                else:
+                    marxanconpy.warn_dialog("Warning! File: " +
+                                            self.project['filepaths']['orig_cf_filepath'] +
+                                            " does not exist.")
+
+
 
                 # append spec
                 new_spec = spec.copy()
                 new_spec['id'] = new_spec['id'] + max(old_spec['id'])
-                pandas.concat([old_spec, new_spec]).fillna(0.0).to_csv(
-                    str.replace(self.project['filepaths']['spec_filepath'],
-                                ".dat",
-                                "_appended.dat")
+                pandas.concat([old_spec, new_spec],sort=False).fillna(0.0).to_csv(
+                    self.project['filepaths']['spec_filepath']
                     , index=0)
                 # append conservation features
                 new_cf = cf.copy()
                 new_cf['pu'] = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath'])[self.project['filepaths']['pu_file_pu_id']]
+                try:
+                    new_cf['pu'] = new_cf['pu'].astype('int').astype('str')
+                except:
+                    new_cf['pu'] = new_cf['pu'].astype('str')
+
                 new_cf = pandas.DataFrame(new_cf).melt(id_vars=['pu'], var_name='name', value_name='amount')
                 new_cf = pandas.merge(new_cf, new_spec, how='outer', on='name')
                 new_cf = new_cf.rename(columns={'id': 'species'})
                 new_cf = new_cf[new_cf['amount']>0]
-                pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]]).sort_values(['pu','species']).to_csv(
-                    str.replace(self.project['filepaths']['cf_filepath'], ".dat", "_appended.dat"), index=0)
+                pandas.concat([old_cf, new_cf[['species', 'pu', 'amount']]],sort=False).sort_values(['pu','species']).to_csv(
+                    self.project['filepaths']['cf_filepath'], index=0)
 
+        if not mute:
+            marxanconpy.warn_dialog("Planning Unit versus Conservation Feature (i.e. puvspr.dat) and Conservation Feature (i.e. spec.dat) files exported successfully.",
+                                    "Export Successful")
+
+    def on_export_BD_file( self, event, mute=False):
         if self.BD_filecheck.GetValue():
             self.export_boundary_file(BD_filepath=self.project['filepaths']['bd_filepath'])
+        if not mute:
+            marxanconpy.warn_dialog("Spatial Dependencies (i.e. boundary.dat) file exported successfully.",
+                                    "Export Successful")
+
+    def on_export_PUDAT( self, event, mute=False):
         if self.PUDAT_filecheck.GetValue():
-            self.export_pudat_file(pudat_filepath=self.project['filepaths']['pudat_filepath'])
+            if os.path.isfile(self.project['filepaths']['orig_pudat_filepath']):
+                self.temp = {}
+                self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
+                self.temp['pudat'] = marxanconpy.read_csv_tsv(self.project['filepaths']['orig_pudat_filepath'])
+                self.temp['pudat']['status'] = self.project['connectivityMetrics']['status']
+                self.temp['pudat'].to_csv(self.project['filepaths']['pudat_filepath'], index=0)
+            else:
+                marxanconpy.warn_dialog("Warning! File: " +
+                                        self.project['filepaths']['orig_pudat_filepath'] +
+                                        " does not exist.")
+
+        if not mute:
+            marxanconpy.warn_dialog("Planning Unit (i.e. pu.dat) file exported successfully.",
+                                    "Export Successful")
 
     def export_boundary_file(self, BD_filepath):
         self.all_types = []
@@ -2069,7 +1868,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if 'spec_'+type in self.project['connectivityMetrics']:
                 self.all_types += [type]
         if len(self.all_types)==0:
-            self.warn_dialog(message="Boundary files can only be exported for planning units.")
+            marxanconpy.warn_dialog(message="Boundary files can only be exported for planning units.")
             return
         multiple = len(self.project['connectivityMetrics']['boundary'].keys()) > 1
 
@@ -2087,13 +1886,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # warn when multiple boundary definitions
         if multiple:
-            self.warn_dialog(message="Multiple Boundary Definitions were selected. Boundary file names have been"
+            marxanconpy.warn_dialog(message="Multiple Boundary Definitions were selected. Boundary file names have been"
                                      " edited to include type.", caption="Warning!")
 
     def lock_pudat(self, pudat_filepath):
-        if os.path.isfile(self.project['filepaths']['pudat_filepath']):
+        if os.path.isfile(pudat_filepath):
             self.temp = {}
-            self.temp['pudat'] = pandas.read_csv(pudat_filepath)
+            self.temp['pudat'] = marxanconpy.read_csv_tsv(pudat_filepath)
             if os.path.isfile(self.project['filepaths']['fa_filepath']):
                 if self.fa_status_radioBox.GetStringSelection() == "Locked out":
                     self.temp['pudat'].loc[numpy.array(self.spatial['pu_shp']['fa_included']), 'status'] = 3
@@ -2128,11 +1927,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.colormap_shapefile_choices()
                 self.colormap_metric_choices(1)
                 self.colormap_metric_choices(2)
-
-    def export_pudat_file(self, pudat_filepath):
-        self.lock_pudat(pudat_filepath)
-        self.temp['pudat'].to_csv(self.project['filepaths']['pudat_filepath'],index=0)
-        # self.temp['pudat'].to_csv(str.replace(self.project['filepaths']['pudat_filepath'], ".dat", "_lock.dat"), index=0)
 
 # ########################## pre-evaluation functions ##################################################################
     def on_preEval_metric_shp_choice(self,event):
@@ -2184,7 +1978,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # prepare plotting window
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-            self.auinotebook.AddPage(self.plot, u"7) Plot", False, wx.NullBitmap)
+            for i in range(self.auinotebook.GetPageCount()):
+                if self.auinotebook.GetPageText(i) == "7) Plotting Options":
+                    self.auinotebook.AddPage(self.plot, u"8) Plot", False, wx.NullBitmap)
+                elif self.auinotebook.GetPageText(i) == "8) Plotting Options":
+                    self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
         self.plot.figure = plt.figure(figsize=self.plot.GetClientSize() / wx.ScreenDC().GetPPI()[0])
         self.plot.axes = self.plot.figure.gca()
         self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
@@ -2204,7 +2002,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 70), sum(self.plot.axes.get_ylim()) / 2, 'Upper Quartile', rotation=90,verticalalignment='center')
         # change selection to plot tab
         for i in range(self.auinotebook.GetPageCount()):
-            if self.auinotebook.GetPageText(i) == "7) Plot":
+            if self.auinotebook.GetPageText(i) == "8) Plot" or self.auinotebook.GetPageText(i) == "9) Plot":
                 self.auinotebook.ChangeSelection(i)
 
     def on_remove_metric(self,event):
@@ -2220,6 +2018,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)
         self.on_new_spec()
+        self.update_discrete_grid()
 
     def on_preEval_create_new(self, event):
         self.temp = {}
@@ -2227,7 +2026,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         metric_type = self.get_metric_type(selection=self.preEval_metric_choice.GetStringSelection(),
                                            type=self.get_plot_type(
                                                selection=self.preEval_metric_shp_choice.GetStringSelection()))
-        
+
         # get the 'from' for discretization
         if 'spec_' + type in self.project['connectivityMetrics']:
             self.temp['metric'] = numpy.array(self.project['connectivityMetrics']['spec_' + type][metric_type])
@@ -2252,11 +2051,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.preEval_discrete_from_percentile.GetValue():
             self.temp['from'] = numpy.percentile(self.temp['metric'],
                                                  self.preEval_discrete_from_percentile_slider.GetValue())
-            self.temp['from_type'] = str(self.temp['from']) + 'th_percentile'
+            self.temp['from_type'] = str(self.preEval_discrete_from_percentile_slider.GetValue()) + 'th_percentile'
 
         if self.preEval_discrete_from_value.GetValue():
             self.temp['from'] = float(self.preEval_discrete_from_value_txtctrl.GetValue())
-            self.temp['from_type'] = str(self.temp['from']) + 'th_percentile'
+            self.temp['from_type'] = str(self.temp['from'])
 
         # get the 'to' for discretization
         if self.preEval_discrete_to_quartile.GetValue():
@@ -2279,54 +2078,219 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if self.preEval_discrete_to_percentile.GetValue():
             self.temp['to'] = numpy.percentile(self.temp['metric'],
                                                  self.preEval_discrete_to_percentile_slider.GetValue())
-            self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
+            self.temp['to_type'] = str(self.preEval_discrete_to_percentile_slider.GetValue()) + 'th_percentile'
 
         if self.preEval_discrete_to_value.GetValue():
             self.temp['to'] = float(self.preEval_discrete_to_value_txtctrl.GetValue())
-            self.temp['to_type'] = str(self.temp['to']) + 'th_percentile'
+            self.temp['to_type'] = str(self.temp['to'])
 
-        
+
         # create new metric
         self.temp['new_metric'] = (self.temp['metric']>=self.temp['from']) & (self.temp['metric']<=self.temp['to']).astype(int)
         if self.preEval_status_radio.GetStringSelection() == "Status-quo":
             self.project['connectivityMetrics']['spec_' + type][
-            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type']] = self.temp[
+            metric_type + '_discrete_' + self.temp['from_type'] + '_to_' + self.temp['to_type']] = self.temp[
             'new_metric'].tolist()
         if self.preEval_status_radio.GetStringSelection() == "Locked out":
             self.project['connectivityMetrics']['spec_' + type][
-            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockout'] = self.temp[
+            metric_type + '_discrete_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockout'] = self.temp[
             'new_metric'].tolist()
         if self.preEval_status_radio.GetStringSelection() == "Locked in":
             self.project['connectivityMetrics']['spec_' + type][
-            metric_type + '_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockin'] = self.temp[
+            metric_type + '_discrete_' + self.temp['from_type'] + '_to_' + self.temp['to_type'] + '_lockin'] = self.temp[
             'new_metric'].tolist()
-        
+
         # reset choices
-        self.lock_pudat(self.project['filepaths']['pudat_filepath'])
+        self.lock_pudat(self.project['filepaths']['orig_pudat_filepath'])
         self.colormap_shapefile_choices()
         self.colormap_metric_choices("pre-eval")
         self.on_preEval_metric_choice(event=None)
         self.on_new_spec()
+        self.update_discrete_grid()
+
+    def on_from_check( self, event ):
+        self.preEval_discrete_from_quartile.SetValue(False)
+        self.preEval_discrete_from_percentile.SetValue(False)
+        self.preEval_discrete_from_value.SetValue(False)
+        event.GetEventObject().SetValue(True)
+        self.enable_discrete()
+
+    def on_to_check(self, event):
+        self.preEval_discrete_to_quartile.SetValue(False)
+        self.preEval_discrete_to_percentile.SetValue(False)
+        self.preEval_discrete_to_value.SetValue(False)
+        event.GetEventObject().SetValue(True)
+        self.enable_discrete()
+
+    def enable_discrete(self):
+        if self.preEval_discrete_from_quartile.GetValue():
+            self.preEval_discrete_from_quartile_radio.Enable(True)
+        else:
+            self.preEval_discrete_from_quartile_radio.Enable(False)
+
+        if self.preEval_discrete_from_percentile.GetValue():
+            self.preEval_discrete_from_percentile_slider.Enable(True)
+        else:
+            self.preEval_discrete_from_percentile_slider.Enable(False)
+
+        if self.preEval_discrete_from_value.GetValue():
+            self.preEval_discrete_from_value_txtctrl.Enable(True)
+        else:
+            self.preEval_discrete_from_value_txtctrl.Enable(False)
+
+        if self.preEval_discrete_to_quartile.GetValue():
+            self.preEval_discrete_to_quartile_radio.Enable(True)
+        else:
+            self.preEval_discrete_to_quartile_radio.Enable(False)
+
+        if self.preEval_discrete_to_percentile.GetValue():
+            self.preEval_discrete_to_percentile_slider.Enable(True)
+        else:
+            self.preEval_discrete_to_percentile_slider.Enable(False)
+
+        if self.preEval_discrete_to_value.GetValue():
+            self.preEval_discrete_to_value_txtctrl.Enable(True)
+        else:
+            self.preEval_discrete_to_value_txtctrl.Enable(False)
+
+    def update_discrete_grid(self):
+        self.all_types = []
+        if self.calc_metrics_pu.GetValue():
+            if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+                self.all_types += ['demo_pu']
+            if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
+                self.all_types += ['land_pu']
+        else:
+            marxanconpy.warn_dialog(message="'Planning Units' not selected for metric calculations.")
+            return
+
+        for self.type in self.all_types:
+            metrics = list(self.project['connectivityMetrics']['spec_' + self.type])
+            approved = ['discrete']
+            metrics[:] = [m for m in metrics if any(a in m for a in approved)]
+
+            Rows = self.discrete_grid.GetNumberRows()
+            if Rows > 0:
+                self.discrete_grid.DeleteRows(0, Rows, True)
+            for j in range(len(metrics)):
+                if j != self.discrete_grid.GetNumberRows():
+                    i = self.discrete_grid.GetNumberRows()
+                else:
+                    i = j
+                self.discrete_grid.InsertRows(i)
+                self.discrete_grid.SetCellValue(i, 0, str(metrics[i]))
+                if metrics[i].endswith('lockout'):
+                    self.discrete_grid.SetCellValue(i, 1, str("Locked Out"))
+                elif metrics[i].endswith('lockin'):
+                    self.discrete_grid.SetCellValue(i, 1, str("Locked In"))
+                else:
+                    self.discrete_grid.SetCellValue(i, 1, str("Status Quo"))
+
+        self.discrete_grid.AutoSize()
 
 # ########################## marxan functions ##########################################################################
-    def on_inedit(self, event):
+
+    def on_generate_inputdat( self, event ):
         """
-        Starts Inedit (will fail to load file if it is not named input.dat)
+        Generate the Marxan input file from the template
+        :param event:
+        :return:
         """
-        if os.path.basename(self.project['filepaths']['marxan_input']) != "input.dat":
-            self.warn_dialog("Marxan Inedit will attempt to load 'input.dat' from " + os.path.dirname(
-                self.project['filepaths'][
-                    'marxan_input']) + "by default. You will have to manually load your file in Inedit")
-        subprocess.call(os.path.join(self.project['filepaths']['marxan_dir'], 'Inedit.exe'),
-                        cwd=os.path.dirname(self.project['filepaths']['marxan_input']))
+        if self.project['filepaths']['marxan_template_input'] == 'Default':
+            with open(os.path.join(MCPATH, 'Marxan243','input_template.dat'), 'r', encoding="utf8") as file:
+                filedata = file.readlines()
+        else:
+            with open(self.project['filepaths']['marxan_template_input'], 'r', encoding="utf8") as file:
+                filedata = file.readlines()
+
+        if self.project['options']['inputdat_boundary'] == 'Asymmetric':
+            if not 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
+                filedata.insert([index for index, line in enumerate(filedata) if line.startswith('NUMREPS')][0] + 1,
+                            'ASYMMETRICCONNECTIVITY  1\n')
+        else:
+            if 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
+                filedata.remove('ASYMMETRICCONNECTIVITY  1\n')
+
+        # Replace the target string
+        pudat = []
+        for index, line in enumerate(filedata):
+            if line.startswith("INPUTDIR"):
+                inputdir = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),
+                                        line.replace('INPUTDIR ', '').replace('\n', ''))
+
+            if line.startswith("NUMREPS"):
+                line = 'NUMREPS ' + self.project['options']['NUMREPS'] + '\n'
+
+
+            if line.startswith("SCENNAME"):
+                line = 'SCENNAME ' + self.project['options']['SCENNAME'] + '\n'
+
+            if line.startswith("BLM"):
+                line = 'BLM ' + self.project['options']['CSM'] + '\n'
+
+            if line.startswith("PUVSPRNAME"):
+                if self.project['options']['marxan_CF'] == 'New':
+                    line = 'PUVSPRNAME ' + os.path.relpath(self.project['filepaths']['cf_filepath'],inputdir) + '\n'
+                else:
+                    line = 'PUVSPRNAME ' + os.path.relpath(self.project['filepaths']['orig_cf_filepath'],inputdir) + '\n'
+
+            if line.startswith("SPECNAME"):
+                if self.project['options']['marxan_CF'] == 'New':
+                    line = 'SPECNAME ' + os.path.relpath(self.project['filepaths']['spec_filepath'],inputdir) + '\n'
+                else:
+                    line = 'SPECNAME ' + os.path.relpath(self.project['filepaths']['orig_spec_filepath'],inputdir) + '\n'
+
+            if line.startswith("PUNAME"):
+                if self.project['options']['marxan_PU'] == 'New':
+                    line = 'PUNAME ' + os.path.relpath(self.project['filepaths']['pudat_filepath'],inputdir) + '\n'
+                else:
+                    line = 'PUNAME ' + os.path.relpath(self.project['filepaths']['orig_pudat_filepath'],inputdir) + '\n'
+
+            if line.startswith("BOUNDNAME"):
+                if self.project['options']['marxan_bound'] == 'New':
+                    line = 'BOUNDNAME ' + os.path.relpath(self.project['filepaths']['bd_filepath'],inputdir) + '\n'
+                elif self.project['options']['marxan_bound'] == 'Original':
+                    line = 'BOUNDNAME ' + os.path.relpath(self.project['filepaths']['orig_bd_filepath'],inputdir) + '\n'
+                else:
+                    line = '\n'
+
+
+            pudat.append(line)
+
+        with open(self.project['filepaths']['marxan_input'], 'w', encoding="utf8") as file:
+            file.writelines(pudat)
+
+        marxanconpy.warn_dialog("The Marxan input file (i.e. input.dat) has been generated successfully.",
+                                "Operation Successful")
+
+    def on_default_input_template(self, event):
+        self.project['filepaths']['marxan_template_input'] = 'Default'
+        self.inputdat_template_file.SetPath('Default')
+
+    def on_customize_inpudat( self, event ):
+        """
+        Customize the Marxan input file
+        :param event:
+        :return:
+        """
+        if platform.system() == 'Windows':
+            os.system("start "+self.project['filepaths']['marxan_input'])
+        elif platform.system() == "Darwin":
+            os.system("open -t " + self.project['filepaths']['marxan_input'])
+
 
     def on_run_marxan(self, event):
         """
         Starts Marxan
         """
-        if not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan.exe")) or\
-                not os.path.isfile(os.path.join(self.project['filepaths']['marxan_dir'],"Marxan_x64.exe")):
-            self.warn_dialog("Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+        if self.project['options']['marxan'] == "Marxan":
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan.exe")) or\
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan_x64.exe")):
+                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+        else:
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone.exe")) or \
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone_x64.exe")):
+                marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
 
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics'] = {}
@@ -2339,34 +2303,63 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         for index, line in enumerate(filedata):
             if line.startswith("INPUTDIR"):
-                if not os.path.isdir(line.replace("INPUTDIR ", "").strip('\n')):
-                    self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
+                inputdir = line.replace("INPUTDIR ", "").strip('\n')
+                inputdatdir = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), inputdir)
+                if not os.path.isdir(inputdir) and not os.path.isdir(inputdatdir):
+                    marxanconpy.warn_dialog(message="Warning: Marxan Input File has an invalid input directory " + line)
             if line.startswith("OUTPUTDIR"):
-                if not os.path.isdir(line.replace("OUTPUTDIR ", "").strip('\n')):
-                    self.warn_dialog("Warning: Marxan Input File has an invalid input directory " + line)
+                inputdir = line.replace("OUTPUTDIR ", "").strip('\n')
+                inputdatdir = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), inputdir)
+                if not os.path.isdir(inputdir) and not os.path.isdir(inputdatdir):
+                    marxanconpy.warn_dialog(message="Warning: Marxan Input File has an invalid input directory " + line)
 
-        if self.project['options']['inputdat_boundary'] == 'Asymmetric':
-            if not 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
-                filedata.insert([index for index, line in enumerate(filedata) if line.startswith('NUMREPS')][0] + 1,
-                            'ASYMMETRICCONNECTIVITY  1\n')
-        else:
-            if 'ASYMMETRICCONNECTIVITY  1\n' in filedata:
-                filedata.remove('ASYMMETRICCONNECTIVITY  1\n')
-
-        # Write the file out again
-        with open(self.project['filepaths']['marxan_input'], 'w', encoding="utf8") as file:
-            file.write("".join(filedata))
+        inputpath = os.path.dirname(self.project['filepaths']['marxan_input'])
+        marxanpath = MCPATH
+        if os.path.dirname(self.project['filepaths']['marxan_input']).startswith("\\"):
+            inputpath = inputpath.replace(inputpath[0:2], "C:\\")
+            marxanpath = marxanpath.replace(marxanpath[0:2], "C:\\")
 
 
 
-        if self.project['options']['marxan_bit']=="64-bit":
-            os.system("start /wait cmd /c " +
-                  os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan_x64.exe') + ' ' +
-                      self.project['filepaths']['marxan_input'])
-        else:
-            os.system("start /wait cmd /c " +
-                      os.path.join(self.project['filepaths']['marxan_dir'], 'Marxan.exe') + ' ' +
-                      self.project['filepaths']['marxan_input'])
+        if platform.system() == 'Windows':
+            marxanconpy.warn_dialog(
+                "Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished and has been closed.")
+            if self.project['options']['marxan'] == "Marxan":
+                if self.project['options']['marxan_bit']=="64-bit":
+                    marxan_exec = 'Marxan_x64.exe'
+                else:
+                    marxan_exec = 'Marxan.exe'
+            else:
+                if self.project['options']['marxan_bit']=="64-bit":
+                    marxan_exec = 'MarZone_x64.exe'
+                else:
+                    marxan_exec = 'MarZone.exe'
+
+            subprocess.call(os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
+                            self.project['filepaths']['marxan_input'],
+                            creationflags=subprocess.CREATE_NEW_CONSOLE,
+                            cwd=inputpath)
+
+        elif platform.system() == 'Darwin':
+            self.log.Show()
+            marxanconpy.warn_dialog(
+                "Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished. On macOS,"
+                "Marxan Connect does not provide 'live' updates on Marxan's progress. See the 'macOS Marxan feedback' "
+                "issue on our github page")
+            if self.project['options']['marxan'] == "Marxan":
+                if self.project['options']['marxan_bit']=="64-bit":
+                    marxan_exec = 'MarOpt_v243_Mac64'
+                else:
+                    marxan_exec = 'MarOpt_v243_Mac32'
+            else:
+                marxanconpy.warn_dialog('Sorry, this experimental feature is only available for Windows at the monment')
+
+
+            proc = pexpect.spawnu(os.path.join(marxanpath, 'Marxan243', marxan_exec)+' '+os.path.relpath(self.project['filepaths']['marxan_input'],inputpath),cwd=inputpath)
+            proc.logfile = sys.stdout
+            proc.expect('.*Press return to exit.*')
+            proc.close()
+
 
         # calculate selection frequency
         for line in open(self.project['filepaths']['marxan_input']):
@@ -2377,25 +2370,30 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
 
+        if not os.path.isdir(self.temp['OUTPUTDIR']):
+            self.temp['OUTPUTDIR'] = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),
+                                                  self.temp['OUTPUTDIR'])
+
         for self.temp['file'] in range(self.temp['NUMREPS']):
             self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'],
                                            self.temp['SCENNAME'] + "_r" + "%05d" % (self.temp['file'] + 1) + ".txt")
             if self.temp['file'] == 0:
-                self.temp['select_freq'] = pandas.read_csv(self.temp['fn'])
+                self.temp['select_freq'] = marxanconpy.read_csv_tsv(self.temp['fn'])
             else:
-                self.temp['select_freq']['solution'] = self.temp['select_freq']['solution'] + \
-                                                       pandas.read_csv(self.temp['fn'])['solution']
+                self.temp['select_freq'].iloc[:,1] = self.temp['select_freq'].iloc[:,1] + \
+                                                       marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1]
 
-        self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq']['solution'].tolist()
+        self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq'].iloc[:,1].tolist()
 
         # load best solution
         self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + "_best.txt")
-        self.project['connectivityMetrics']['best_solution'] = pandas.read_csv(self.temp['fn'])['solution'].tolist()
+        self.project['connectivityMetrics']['best_solution'] = marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1].tolist()
 
         # update plotting options
         self.colormap_shapefile_choices()
         self.colormap_metric_choices(1)
         self.colormap_metric_choices(2)
+        self.enable_postHoc()
 
     def on_view_mvbest(self,event):
         self.temp = {}
@@ -2404,8 +2402,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        file_viewer(parent=self, file=os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest.txt'),
-                    title='mvbest')
+        mvbest = os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest.txt')
+        if os.path.isfile(mvbest):
+            file_viewer(parent=self, file=mvbest,title='mvbest')
+        else:
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest),
+                        title='mvbest')
 
     def on_view_sum(self,event):
         self.temp = {}
@@ -2414,22 +2417,141 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        file_viewer(parent=self, file=os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_sum.txt'),
-                    title='sum')
+        sumtxt = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + '_sum.txt')
+        if os.path.isfile(sumtxt):
+            file_viewer(parent=self, file=sumtxt, title='sum')
+        else:
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt),
+                        title='sum')
+
+# ########################## postHoc functions ##########################################################################
+
+    def enable_postHoc(self):
+        self.set_postHoc_category_choice()
+        if 'connectivityMetrics' in self.project:
+            if 'best_solution' in self.project['connectivityMetrics']:
+                self.calc_postHoc.Enable(True)
+            else:
+                self.calc_postHoc.Enable(False)
+        else:
+            self.calc_postHoc.Enable(False)
+        if 'postHoc' in self.project:
+            self.export_postHoc.Enable(True)
+        else:
+            self.export_postHoc.Enable(False)
+
+    def set_postHoc_category_choice(self):
+        choices = []
+        if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
+            choices.append("Landscape Data")
+        if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
+            choices.append("Demographic Data")
+        self.postHoc_category_choice.SetItems(choices)
+        self.postHoc_category_choice.SetSelection(0)
+        self.set_postHoc_output_choice()
+
+    def on_postHoc_category_choice(self, event):
+        Cols = self.postHoc_grid.GetNumberCols()
+        Rows = self.postHoc_grid.GetNumberRows()
+        if Cols > 0 or Rows > 0:
+            self.postHoc_grid.DeleteCols(0, Cols, True)
+            self.postHoc_grid.DeleteRows(0, Rows, True)
+
+    def on_postHoc_output_choice(self, event):
+        Cols = self.postHoc_grid.GetNumberCols()
+        Rows = self.postHoc_grid.GetNumberRows()
+        if Cols > 0 or Rows > 0:
+            self.postHoc_grid.DeleteCols(0, Cols, True)
+            self.postHoc_grid.DeleteRows(0, Rows, True)
+
+    def on_calc_postHoc(self, event):
+        if self.postHoc_category_choice.GetStringSelection() == "Landscape Data":
+            format = "Edge List with Habitat"
+            filename = self.project['filepaths']['land_pu_cm_filepath']
+        elif self.postHoc_category_choice.GetStringSelection() == "Demographic Data":
+            format = self.demo_matrixFormatRadioBox.GetStringSelection()
+            filename = self.project['filepaths']['demo_pu_cm_filepath']
+
+        # solution = pandas.read_csv("C://Users//daigl//Documents//GitHub//MarxanConnect//docs//tutorial//CF_demographic//output//connect_best.txt")
+        solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+                                                              self.postHoc_output_choice.GetStringSelection())
+        postHoc = marxanconpy.posthoc.calc_postHoc(filename,
+                                                        format,
+                                                        IDs=solution.iloc[:,0].values,
+                                                        selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
+
+        Cols = self.postHoc_grid.GetNumberCols()
+        Rows = self.postHoc_grid.GetNumberRows()
+        if Cols > 0 or Rows > 0:
+            self.postHoc_grid.DeleteCols(0, Cols, True)
+            self.postHoc_grid.DeleteRows(0, Rows, True)
+        for col, label in enumerate(postHoc.columns):
+            if not col == 0:
+                self.postHoc_grid.AppendCols()
+                self.postHoc_grid.SetColLabelValue(col-1, label)
+            for index in postHoc.index:
+                print(postHoc["Metric"][index])
+                if col == 0:
+                    self.postHoc_grid.AppendRows()
+                    self.postHoc_grid.SetRowLabelValue(index, str(postHoc.iloc[index, col]))
+                elif label == "Type":
+                    self.postHoc_grid.SetCellValue(index, col - 1, str(postHoc.iloc[index, col]))
+                elif label == "Percent":
+                    self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
+                else:
+                    if postHoc["Metric"][index] in ("Planning Units","Connections"):
+                        self.postHoc_grid.SetCellValue(index, col-1, str(int(postHoc.iloc[index, col])))
+                    else:
+                        self.postHoc_grid.SetCellValue(index, col-1, str(round(postHoc.iloc[index, col], 2)))
+
+        self.postHoc_grid.SetRowLabelSize(125)
+        self.postHoc_grid.AutoSizeColumns()
+        self.postHoc_grid.AutoSizeRows()
+        self.postHoc_grid.SetColLabelAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
+        self.postHoc_grid.AutoSize()
+        self.Layout()
+        self.project["postHoc"] = postHoc.to_json(orient='split')
+        self.enable_postHoc()
+
+    def on_export_postHoc( self, event ):
+        pandas.read_json(self.project["postHoc"], orient='split').to_csv(self.postHoc_file.GetPath(), index=0)
+
+    def set_postHoc_output_choice(self):
+        if os.path.isfile(self.project['filepaths']['marxan_input']):
+            for line in open(self.project['filepaths']['marxan_input']):
+                if line.startswith('SCENNAME'):
+                    SCENNAME = line.replace('SCENNAME ', '').replace('\n', '')
+                if line.startswith('NUMREPS'):
+                    NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
+
+            self.postHoc_output_choice.SetItems(['Best Solution'] +
+                                                      ["r" + "%05d" % t for t in range(1, NUMREPS)])
+            self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
+            self.postHoc_output_choice.SetSelection(0)
+
+    def on_postHoc_file(self,event):
+        self.project['filepaths']['posthoc'] = self.postHoc_file.GetPath()
+
 
 # ###########################  spec grid popup functions ###############################################################
     def on_customize_spec(self, event):
         if self.calc_metrics_pu.GetValue() & self.project['options']['metricsCalculated']:
-            if hasattr(self,'spec_frame'):
+            if hasattr(self,'spec_frame') and bool(self.spec_frame):
                 self.spec_frame.Show()
             else:
                 self.on_new_spec()
                 self.spec_frame.Show()
         else:
-            self.warn_dialog(message="'Planning Units' not selected for metric calculations.")
+            marxanconpy.warn_dialog(message="'Planning Units' not selected for metric calculations.")
 
     def on_new_spec(self):
         self.spec_frame = spec_customizer(parent=self)
+        if self.project['options']['spec_set'] == "Proportion":
+            self.spec_frame.spec_grid.SetColLabelValue(1,"prop")
+        elif self.project['options']['spec_set'] == "Target":
+            self.spec_frame.spec_grid.SetColLabelValue(1, "target")
+
         self.all_types = []
         if self.calc_metrics_pu.GetValue():
             if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
@@ -2437,11 +2559,25 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
                 self.all_types += ['land_pu']
         else:
-            self.warn_dialog(message="'Planning Units' not selected for metric calculations.")
+            marxanconpy.warn_dialog(message="'Planning Units' not selected for metric calculations.")
             return
 
         for self.type in self.all_types:
-            self.spec_frame.keys = list(self.project['connectivityMetrics']['spec_' + self.type])
+            metrics = list(self.project['connectivityMetrics']['spec_' + self.type])
+            approved = ['discrete']
+            metrics[:] = [m for m in metrics if any(a in m for a in approved)]
+
+            self.spec_frame.keys = metrics
+
+            targets = self.project['options']['targets'].split(',')
+            if len(targets) < len(metrics):
+                targets = numpy.resize(targets,len(metrics))
+                # marxanconpy.warn_dialog(
+                #     "There are more connectivity based conservation features than targets. Repeating given targets")
+            elif len(targets) > len(metrics):
+                targets = numpy.resize(targets, len(metrics))
+                # marxanconpy.warn_dialog(
+                #     "There are fewer connectivity based conservation features than targets. Selecting only first targets")
 
             for j in range(len(self.spec_frame.keys)):
                 if j != self.spec_frame.spec_grid.GetNumberRows():
@@ -2450,18 +2586,22 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     i=j
                 self.spec_frame.spec_grid.InsertRows(i)
                 self.spec_frame.spec_grid.SetCellValue(i, 0, str(i + 1))
-                sum_metric = sum(self.project['connectivityMetrics']['spec_' + self.type][self.spec_frame.keys[j]])
-                self.spec_frame.spec_grid.SetCellValue(i, 1, str(sum_metric * self.CFT_percent_slider.GetValue() / 100))
+                self.spec_frame.spec_grid.SetCellValue(i, 1, str(float(targets[i])))
                 self.spec_frame.spec_grid.SetCellValue(i, 2, str(1000))
                 self.spec_frame.spec_grid.SetCellValue(i, 3, self.spec_frame.keys[j])
-                w, h = self.spec_frame.GetClientSize()
 
-                self.spec_frame.SetSize((w + 16, h + 39 + 20))
-                self.spec_frame.Layout()
-                self.spec_frame.spec_grid.AutoSize()
+        self.spec_frame.spec_grid.AutoSize()
+        w, h = self.spec_frame.spec_grid.GetSize()
+        self.spec_frame.SetSize((w+16,h+75))
+
         self.project['spec_dat'] = pandas.DataFrame(
             numpy.full((self.spec_frame.spec_grid.GetNumberRows(), self.spec_frame.spec_grid.GetNumberCols()), None))
-        self.project['spec_dat'].columns = ["id", "target", "spf", "name"]
+
+        if self.project['options']['spec_set'] == "Proportion":
+            self.project['spec_dat'].columns = ["id", "prop", "spf", "name"]
+        elif self.project['options']['spec_set'] == "Target":
+            self.project['spec_dat'].columns = ["id", "target", "spf", "name"]
+
 
         for c in range(self.spec_frame.spec_grid.GetNumberCols()):
             for r in range(self.spec_frame.spec_grid.GetNumberRows()):
@@ -2469,25 +2609,38 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         self.project['spec_dat'] = self.project['spec_dat'].to_json(orient='split')
 
-    def on_CFT_percent_slider(self, event):
-        self.on_new_spec()
-
 class spec_customizer(gui.spec_customizer):
     def __init__(self, parent):
         gui.spec_customizer.__init__(self, parent)
         self.parent = parent
+        # set the icon
+        parent.set_icon(frame=self, rootpath=MCPATH)
+        self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE | wx.FRAME_FLOAT_ON_PARENT | wx.TAB_TRAVERSAL)
 
     def on_spec_ok(self, event):
         self.parent.project['spec_dat'] = pandas.DataFrame(
             numpy.full((self.spec_grid.GetNumberRows(),
                         self.spec_grid.GetNumberCols()), None))
-        self.parent.project['spec_dat'].columns = ["id", "target", "spf", "name"]
+        if self.parent.project['options']['spec_set'] == "Proportion":
+            self.parent.project['spec_dat'].columns = ["id", "prop", "spf", "name"]
+        elif self.parent.project['options']['spec_set'] == "Target":
+            self.parent.project['spec_dat'].columns = ["id", "target", "spf", "name"]
 
         for c in range(self.spec_grid.GetNumberCols()):
             for r in range(self.spec_grid.GetNumberRows()):
                 self.parent.project['spec_dat'].iloc[r, c] = self.spec_grid.GetCellValue(r, c)
+
+        spec_copy = self.parent.project['spec_dat'].copy()
         self.parent.project['spec_dat'] = self.parent.project[
             'spec_dat'].to_json(orient='split')
+        if self.parent.project['options']['spec_set'] == "Proportion":
+            self.parent.project['options']['targets'] = ','.join(map(str,spec_copy['prop'].values))
+        elif self.parent.project['options']['spec_set'] == "Target":
+            self.parent.project['options']['targets'] = ','.join(map(str,spec_copy['target'].values))
+
+        if not self.parent.project['options']['targets'] == self.parent.targets.GetValue():
+            self.parent.targets.SetValue(self.parent.project['options']['targets'])
+
         self.Hide()
 
     def on_spec_cancel(self, event):
@@ -2498,8 +2651,8 @@ class GettingStarted (wx.Frame):
     def __init__(self, parent):
         gui.GettingStarted.__init__(self, parent)
         # set the icon
-        parent.set_icon(frame=self)
-        self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL|wx.STAY_ON_TOP)
+        parent.set_icon(frame=self, rootpath=MCPATH)
+        self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL)
 
 # ########################### file popup viewer #####################################################################
 
@@ -2517,7 +2670,7 @@ class file_viewer(wx.Dialog):
         self.file_grid = wx.grid.Grid(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
 
         # Load file
-        df = pandas.read_csv(file)
+        df = marxanconpy.read_csv_tsv(file)
 
         # Grid
         self.file_grid.CreateGrid(df.shape[0], df.shape[1])
@@ -2585,12 +2738,15 @@ class RedirectText(object):
     def write(self, string):
         wx.CallAfter(self.out.WriteText, string)
 
+    def flush(self):
+        # do nothing...
+       None
 
 class LogForm(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, wx.ID_ANY, "Debbuging Console")
         self.Bind(wx.EVT_CLOSE, self.__close)
-        parent.set_icon(frame=self)
+        parent.set_icon(frame=self, rootpath=MCPATH)
 
         # Add a panel
         panel = wx.Panel(self, wx.ID_ANY)
@@ -2622,3 +2778,4 @@ app.MainLoop()
 
 # stop the app
 app.Destroy()
+
