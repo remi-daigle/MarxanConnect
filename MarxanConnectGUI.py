@@ -35,6 +35,7 @@ import gui
 
 os.environ["UBUNTU_MENUPROXY"]="0"
 if platform.system() == 'Darwin':
+    import pexpect
     wx.SystemOptions.SetOption(u"osx.openfiledialog.always-show-types","1")
 
 # define wildcards
@@ -2318,9 +2319,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             inputpath = inputpath.replace(inputpath[0:2], "C:\\")
             marxanpath = marxanpath.replace(marxanpath[0:2], "C:\\")
 
-        marxanconpy.warn_dialog("Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished and has been closed.")
+
 
         if platform.system() == 'Windows':
+            marxanconpy.warn_dialog(
+                "Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished and has been closed.")
             if self.project['options']['marxan'] == "Marxan":
                 if self.project['options']['marxan_bit']=="64-bit":
                     marxan_exec = 'Marxan_x64.exe'
@@ -2338,6 +2341,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                             cwd=inputpath)
 
         elif platform.system() == 'Darwin':
+            self.log.Show()
+            marxanconpy.warn_dialog(
+                "Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished. On macOS,"
+                "Marxan Connect does not provide 'live' updates on Marxan's progress. See the 'macOS Marxan feedback' "
+                "issue on our github page")
             if self.project['options']['marxan'] == "Marxan":
                 if self.project['options']['marxan_bit']=="64-bit":
                     marxan_exec = 'MarOpt_v243_Mac64'
@@ -2346,15 +2354,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             else:
                 marxanconpy.warn_dialog('Sorry, this experimental feature is only available for Windows at the monment')
 
-            self.log.Show()
-            p=subprocess.call([os.path.join(marxanpath, 'Marxan243', marxan_exec),
-                             os.path.relpath(self.project['filepaths']['marxan_input'],inputpath)],
-                             # shell=True,
-                             # stdin=subprocess.PIPE,
-                             # stdout=subprocess.STD_OUTPUT_HANDLE,
-                             # stderr=subprocess.PIPE,
-                             cwd=inputpath)
-            p.communicate()
+
+            proc = pexpect.spawnu(os.path.join(marxanpath, 'Marxan243', marxan_exec)+' '+os.path.relpath(self.project['filepaths']['marxan_input'],inputpath),cwd=inputpath)
+            proc.logfile = sys.stdout
+            proc.expect('.*Press return to exit.*')
+            proc.close()
 
 
         # calculate selection frequency
@@ -2398,8 +2402,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        file_viewer(parent=self, file=os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest.txt'),
-                    title='mvbest')
+        mvbest = os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest.txt')
+        if os.path.isfile(mvbest):
+            file_viewer(parent=self, file=mvbest,title='mvbest')
+        else:
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest),
+                        title='mvbest')
 
     def on_view_sum(self,event):
         self.temp = {}
@@ -2408,8 +2417,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        file_viewer(parent=self, file=os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_sum.txt'),
-                    title='sum')
+        sumtxt = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + '_sum.txt')
+        if os.path.isfile(sumtxt):
+            file_viewer(parent=self, file=sumtxt, title='sum')
+        else:
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt),
+                        title='sum')
 
 # ########################## postHoc functions ##########################################################################
 
@@ -2724,6 +2738,9 @@ class RedirectText(object):
     def write(self, string):
         wx.CallAfter(self.out.WriteText, string)
 
+    def flush(self):
+        # do nothing...
+       None
 
 class LogForm(wx.Frame):
     def __init__(self, parent):
