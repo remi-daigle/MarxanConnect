@@ -89,7 +89,7 @@ It also assumes you have all the pre-requisite python modules installed to build
 ```bash
 #!/bin/bash
 
-conda create --name marcon -c conda-forge wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
+conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
 # line 155 of basemap's __init__ file may need to change to "pyproj_datadir = pyproj.pyproj_datadir"
 # without quotes if you get the dreaded "PROJ_LIB" error
 # if you get the 'epsg' error you may need to install an older version of pyproj 
@@ -100,7 +100,7 @@ conda activate marcon # for mac/linux
 
 pip install python-igraph # on windows you may need to install via wheel https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
 pip install PyInstaller marxanconpy bs4
-pip install dmgbuild # for mac only
+pip install dmgbuild pexpect # for mac only
 ```
 
 As well as pre-requesite R packages to build the website, *i.e.*:
