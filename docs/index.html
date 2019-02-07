@@ -546,7 +546,7 @@ div.tocify {
 <p>It also assumes you have all the pre-requisite python modules installed to build the app itself, <em>i.e.</em>:</p>
 <pre class="bash"><code>#!/bin/bash
 
-conda create --name marcon -c conda-forge wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
+conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
 # line 155 of basemap&#39;s __init__ file may need to change to &quot;pyproj_datadir = pyproj.pyproj_datadir&quot;
 # without quotes if you get the dreaded &quot;PROJ_LIB&quot; error
 # if you get the &#39;epsg&#39; error you may need to install an older version of pyproj 
@@ -557,7 +557,7 @@ conda activate marcon # for mac/linux
 
 pip install python-igraph # on windows you may need to install via wheel https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
 pip install PyInstaller marxanconpy bs4
-pip install dmgbuild # for mac only</code></pre>
+pip install dmgbuild pexpect # for mac only</code></pre>
 <p>As well as pre-requesite R packages to build the website, <em>i.e.</em>:</p>
 <pre class="r"><code>if(!require(&quot;rmarkdown&quot;)) install.packages(&quot;rmarkdown&quot;)</code></pre>
 <pre><code>## Loading required package: rmarkdown</code></pre>
