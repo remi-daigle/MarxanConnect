@@ -3314,7 +3314,7 @@
     },
     "operating_system": "Windows",
     "options": {
-        "CSM": "10",
+        "CSM": "0.2",
         "NUMREPS": "100",
         "SCENNAME": "connect",
         "aa_status": "Status-quo",
