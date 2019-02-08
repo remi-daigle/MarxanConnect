@@ -430,12 +430,6 @@ div.tocify {
       <a href="CSD_landscape.html">Connectivity as Spatial Dependency + landscape data</a>
     </li>
     <li>
-      <a href="CF_landscape.html">Conservation Features + landscape data (in-development)</a>
-    </li>
-    <li>
-      <a href="CSD_demographic.html">Connectivity as Spatial Dependency + demographic data (in-development)</a>
-    </li>
-    <li>
       <a href="targets.html">Setting Targets and Post-hoc Evaluation</a>
     </li>
   </ul>
@@ -557,7 +551,7 @@ proj &lt;- &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.
 <h1><span class="header-section-number">2</span> Integrating connectivity data into spatial prioritization</h1>
 <div id="using-connectivity-data-as-a-feature" class="section level2">
 <h2><span class="header-section-number">2.1</span> Using connectivity data as a ‘feature’</h2>
-<p>A simple way to integrate connectivity data into spatial prioritization is to create a discrete connectivity-based conservation feature <span class="citation">(D’Aloia et al. 2017; Magris et al. 2018; J. W. White et al. 2014)</span>. To do so requires calculating connectivity metric(s) which represent connectivity process(es) (<em>e.g.</em> betweenness centrality), and then choosing a threshold value(s) from the range of the metric. For example, you may wish to take only the planning units with a betweenness centrality value of 0.8 or higher, which are then converted into a discrete feature (<em>i.e.</em> importance areas for connectivity) (Figure 3). Under this treatment, the connectivity-based conservation feature <span class="math inline">\({j}\)</span> in planning unit <span class="math inline">\({i}\)</span> (<em>i.e.</em> <span class="math inline">\({r_{ij}}\)</span>) becomes binary based on if the planning unit meets (1) or does not meet (0), the threshold.This type of threshold setting is often used with species distribution models, where each planning unit is assigned a probability of species occurrence, and a threshold value is used to convert these continuous distribution data to a binary map (presence vs absence or suitable vs unsuitable) for a particular species <span class="citation">(<em>e.g.</em> Minor et al. 2008)</span>.</p>
+<p>A simple way to integrate connectivity data into spatial prioritization is to create a discrete connectivity-based conservation feature <span class="citation">(D’Aloia et al. 2017; Magris et al. 2018; White et al. 2014)</span>. To do so requires calculating connectivity metric(s) which represent connectivity process(es) (<em>e.g.</em> betweenness centrality), and then choosing a threshold value(s) from the range of the metric. For example, you may wish to take only the planning units with a betweenness centrality value of 0.8 or higher, which are then converted into a discrete feature (<em>i.e.</em> importance areas for connectivity) (Figure 3). Under this treatment, the connectivity-based conservation feature <span class="math inline">\({j}\)</span> in planning unit <span class="math inline">\({i}\)</span> (<em>i.e.</em> <span class="math inline">\({r_{ij}}\)</span>) becomes binary based on if the planning unit meets (1) or does not meet (0), the threshold. This type of threshold setting is often used with species distribution models, where each planning unit is assigned a probability of species occurrence, and a threshold value is used to convert these continuous distribution data to a binary map (presence vs absence or suitable vs unsuitable) for a particular species <span class="citation">(<em>e.g.</em> Minor et al. 2008)</span>.</p>
 <p>These discrete connectivity features are then treated as any other feature in Marxan, where a minimum target is set, <span class="math inline">\({T_j}\)</span>, (<em>e.g.</em> 50% of feature <span class="math inline">\({j}\)</span>). In the absence of ecologically determined thresholds, an appropriate value for the thresholds and target <span class="math inline">\({T_j}\)</span> can be determined by using a cost trade-off curve where one would test the sensitivity of the cost of the best solution and the total summed metric captured in the solution. The value of the thresholds and target <span class="math inline">\({T_j}\)</span> could be chosen as the divergent point, where the greatest increase in the connectivity metric is achieved for a relatively small increase in cost (Figure 3) . However, the preferred approach would be to establish conservation targets which lead to a reserve network design which meets ecologically relevant conservation objective(s) such as population viability or a within network metapopulation growth rate &gt; 1 (See “<a href="./targets.html">Post-hoc evaluation</a>” section for more details).</p>
 <p>When appropriate, high connectivity value planning units may also be “locked-in” to the ensure they are always selected in the solutions, rather than setting a target. Definitions for each connectivity based conservation feature as well as and potential conservation objectives for which they may be useful are available in Marxan Connect can be found on in the <a href="./glossary.html">glossary</a>.</p>
 <div class="figure">
@@ -567,7 +561,7 @@ proj &lt;- &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.
 </div>
 <div id="connectivity-as-spatial-dependencies-in-the-objective-function" class="section level2">
 <h2><span class="header-section-number">2.2</span> Connectivity as spatial dependencies in the objective function</h2>
-<p>Another approach to incorporate connectivity in Marxan is using the connectivity-based data to inform the boundary cost term in the objective function <span class="citation">(Beger et al. 2010)</span>.This cost signifies the penalty associated with protecting one site but not its well-connected partner site <span class="math inline">\({cv_{ih}}\)</span> <span class="citation">(Beger et al. 2010)</span>, which can be manipulated through the “Connectivity Strength Modifier” (CSM) and is similar to the BLM in standard Marxan (Figure 1). For example, as increasing the BLM reduces the edge to area ratio by minimizing costs associated with unprotected boundaries; similarly, increasing the CSM will minimize costs associated with unprotected connectivity linkages. See Beger et al. (2010); Beger et al. (2015) for examples using connectivity estimates as spatial dependencies in the objective function for MPAs in the Coral Triangle <span class="citation">(Beger et al. 2010; Beger et al. 2015)</span>.</p>
+<p>Another approach to incorporate connectivity in Marxan is using the connectivity-based data to inform the boundary cost term in the objective function <span class="citation">(Beger et al. 2010)</span>.This cost signifies the penalty associated with protecting one site but not its well-connected partner site <span class="math inline">\({cv_{ih}}\)</span> <span class="citation">(Beger et al. 2010)</span>, which can be manipulated through the “Connectivity Strength Modifier” (CSM) and is similar to the BLM in standard Marxan (Figure 1). For example, as increasing the BLM reduces the edge to area ratio by minimizing costs associated with unprotected boundaries; similarly, increasing the CSM will minimize costs associated with unprotected connectivity linkages. See Beger et al. (2010); Beger et al. (2015) for examples using connectivity estimates as spatial dependencies in the objective function for MPAs in the Coral Triangle.</p>
 <p>In Marxan Connect, one can combine the use of connectivity as spatial dependencies with a locked-in “Focus Area” (<em>e.g.</em> an existing protected area) to generate candidate stepping stones. However, it should be noted that the method will likely triage isolated sites out of the final solution unless these are included using other methods (<em>e.g.</em> a conservation feature for an isolated site which happens to contain a unique species).</p>
 </div>
 </div>
@@ -585,8 +579,8 @@ proj &lt;- &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.
 <ul>
 <li><p><a href="./CF_demographic.html">Using the conservation features approach using demographic-based data</a></p></li>
 <li><p><a href="./CSD_landscape.html">Using the spatial dependencies approach using landscape-based data</a></p></li>
-<li><p><a href="./CSD_demographic.html">Using the spatial dependencies approach using demographic-based data</a> (in-development)</p></li>
-<li><p><a href="./CF_landscape.html">Using the conservation features approach using landscape-based data</a> (in-development)</p></li>
+<li><p>Using the spatial dependencies approach using demographic-based data (in-development)</p></li>
+<li><p>Using the conservation features approach using landscape-based data (in-development)</p></li>
 <li><p><a href="./targets.html">Setting targets and post-hoc evaluation</a></p></li>
 </ul>
 </div>
@@ -598,9 +592,6 @@ proj &lt;- &quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.
 </div>
 <div id="ref-Beger2010-ir">
 <p>Beger, Maria, Simon Linke, Matt Watts, Eddie Game, Eric Treml, Ian Ball, and Hugh P Possingham. 2010. “Incorporating Asymmetric Connectivity into Spatial Decision Making for Conservation.” <em>Conservation Letters</em> 3 (5). Blackwell Publishing Inc: 359–68.</p>
-</div>
-<div id="ref-Beger2015-zo">
-<p>Beger, Maria, Jennifer McGowan, Eric A Treml, Alison L Green, Alan T White, Nicholas H Wolff, Carissa J Klein, Peter J Mumby, and Hugh P Possingham. 2015. “Integrating Regional Conservation Priorities for Multiple Objectives into National Policy.” <em>Nat. Commun.</em> 6 (September). nature.com: 8208.</p>
 </div>
 <div id="ref-DAloia2017-jp">
 <p>D’Aloia, Cassidy C, Rémi M Daigle, Isabelle M Côté, Janelle M R Curtis, Frédéric Guichard, and Marie-Josée Fortin. 2017. “A Multiple-Species Framework for Integrating Movement Processes Across Life Stages into the Design of Marine Protected Areas.” <em>Biol. Conserv.</em> 216 (December): 93–100.</p>
