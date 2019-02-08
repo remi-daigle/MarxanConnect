@@ -17,10 +17,6 @@ navbar:
       href: CF_demographic.html
     - text: Connectivity as Spatial Dependency + landscape data
       href: CSD_landscape.html
-    - text: Conservation Features + landscape data (in-development)
-      href: CF_landscape.html
-    - text: Connectivity as Spatial Dependency + demographic data (in-development)
-      href: CSD_demographic.html
     - text: Setting Targets and Post-hoc Evaluation
       href: targets.html
   - text: Glossary
