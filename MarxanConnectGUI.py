@@ -2335,6 +2335,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 else:
                     marxan_exec = 'MarZone.exe'
 
+            if " " in self.project['filepaths']['marxan_input']:
+                marxanconpy.warn_dialog("Marxan will likely fail to find the input file because the filepath contains "
+                                        "spaces. Please move your project folder or rename the offending directory")
+
             subprocess.call(os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
                             self.project['filepaths']['marxan_input'],
                             creationflags=subprocess.CREATE_NEW_CONSOLE,
@@ -2354,7 +2358,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             else:
                 marxanconpy.warn_dialog('Sorry, this experimental feature is only available for Windows at the monment')
 
-
+            if " " in self.project['filepaths']['marxan_input']:
+                marxanconpy.warn_dialog("Marxan will likely fail to find the input file because the filepath contains "
+                                        "spaces. Please move your project folder or rename the offending directory")
+                
             proc = pexpect.spawnu(os.path.join(marxanpath, 'Marxan243', marxan_exec)+' '+os.path.relpath(self.project['filepaths']['marxan_input'],inputpath),cwd=inputpath)
             proc.logfile = sys.stdout
             proc.expect('.*Press return to exit.*')
