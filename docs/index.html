@@ -541,8 +541,17 @@ div.tocify {
 <pre class="bash"><code>#!/bin/bash
 
 conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
-# line 155 of basemap&#39;s __init__ file may need to change to &quot;pyproj_datadir = pyproj.pyproj_datadir&quot;
-# without quotes if you get the dreaded &quot;PROJ_LIB&quot; error
+# if you get the dreaded &quot;PROJ_LIB&quot; error, line 155 of basemap&#39;s __init__ file may need to change to:
+# if &#39;PROJ_LIB&#39; in os.environ:
+#     pyproj_datadir = os.environ[&#39;PROJ_LIB&#39;]
+#     if not os.path.isdir(pyproj_datadir):
+#         raise RuntimeError(&#39;Path in environment PROJ_LIB not a directory&#39;)
+# else:
+#   if os.name == &#39;nt&#39;:
+#     pyproj_datadir = pyproj.pyproj_datadir
+#   else:
+#     pyproj_datadir = os.path.join(sys.prefix, &#39;share&#39;, &#39;proj&#39;)
+
 # if you get the &#39;epsg&#39; error you may need to install an older version of pyproj 
 # conda install pyproj=1.9.5.1=py36_0
 
