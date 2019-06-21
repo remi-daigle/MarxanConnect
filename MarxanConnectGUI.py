@@ -2664,7 +2664,7 @@ class GettingStarted (gui.GettingStarted):
 
     def on_tutorial_button(self, event):
         print('test')
-        self.parent.on_glossary(event=None)
+        self.parent.on_tutorial(event=None)
 
     def on_glossary_button(self, event):
         self.parent.on_glossary(event=None)
