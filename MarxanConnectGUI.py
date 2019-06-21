@@ -2670,7 +2670,7 @@ class GettingStarted (gui.GettingStarted):
         self.parent.on_glossary(event=None)
 
     def on_issue_button(self, event):
-        self.parent.openhtml(os.path.join("github.com", "remi-daigle", "MarxanConnect", "issues"))
+        self.parent.on_github(event=None)
 
 
 # ########################### file popup viewer #####################################################################
