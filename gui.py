@@ -12,7 +12,6 @@ import wx.xrc
 import wx.aui
 import wx.html
 import wx.grid
-import wx.adv
 
 ###########################################################################
 ## Class MarxanConnectGUI
@@ -2867,14 +2866,14 @@ class GettingStarted ( wx.Frame ):
 		fgSizer62.SetFlexibleDirection( wx.BOTH )
 		fgSizer62.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.m_hyperlink2 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Tutorial", u"docs\\tutorial.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		fgSizer62.Add( self.m_hyperlink2, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		self.tutorial_button = wx.Button( self.m_panel27, wx.ID_ANY, u"Tutorial", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer62.Add( self.tutorial_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 
-		self.m_hyperlink3 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Glossary", u"docs\\glossary.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		fgSizer62.Add( self.m_hyperlink3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
+		self.glossary_button = wx.Button( self.m_panel27, wx.ID_ANY, u"Glossary", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer62.Add( self.glossary_button, 0, wx.ALL, 5 )
 
-		self.m_hyperlink4 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Report Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		fgSizer62.Add( self.m_hyperlink4, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		self.issues_button = wx.Button( self.m_panel27, wx.ID_ANY, u"Report Issues", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer62.Add( self.issues_button, 0, wx.ALL, 5 )
 
 
 		fgSizer61.Add( fgSizer62, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
@@ -2982,8 +2981,24 @@ class GettingStarted ( wx.Frame ):
 
 		self.Centre( wx.BOTH )
 
+		# Connect Events
+		self.tutorial_button.Bind( wx.EVT_BUTTON, self.on_tutorial_button )
+		self.glossary_button.Bind( wx.EVT_BUTTON, self.on_glossary_button )
+		self.issues_button.Bind( wx.EVT_BUTTON, self.on_issue_button )
+
 	def __del__( self ):
 		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def on_tutorial_button( self, event ):
+		event.Skip()
+
+	def on_glossary_button( self, event ):
+		event.Skip()
+
+	def on_issue_button( self, event ):
+		event.Skip()
 
 
 ###########################################################################
