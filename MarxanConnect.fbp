@@ -693,7 +693,7 @@
                                                     <property name="validator_type">wxDefaultValidator</property>
                                                     <property name="validator_variable"></property>
                                                     <property name="value">~\data\shapefiles\marxan_pu.shp</property>
-                                                    <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*</property>
+                                                    <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
@@ -1097,7 +1097,7 @@
                                                     <property name="validator_type">wxDefaultValidator</property>
                                                     <property name="validator_variable"></property>
                                                     <property name="value"></property>
-                                                    <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*</property>
+                                                    <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.shp|All files (*.*)|*.*</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
@@ -1460,7 +1460,7 @@
                                                     <property name="validator_type">wxDefaultValidator</property>
                                                     <property name="validator_variable"></property>
                                                     <property name="value"></property>
-                                                    <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*</property>
+                                                    <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.shp|All files (*.*)|*.*</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
@@ -2750,7 +2750,7 @@
                                                                         <property name="validator_type">wxDefaultValidator</property>
                                                                         <property name="validator_variable"></property>
                                                                         <property name="value">~\data\shapefiles\connectivity_grid.shp</property>
-                                                                        <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*</property>
+                                                                        <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*</property>
                                                                         <property name="window_extra_style"></property>
                                                                         <property name="window_name"></property>
                                                                         <property name="window_style"></property>
@@ -3736,7 +3736,7 @@
                                                                                             <property name="validator_type">wxDefaultValidator</property>
                                                                                             <property name="validator_variable"></property>
                                                                                             <property name="value"></property>
-                                                                                            <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*</property>
+                                                                                            <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*</property>
                                                                                             <property name="window_extra_style"></property>
                                                                                             <property name="window_name"></property>
                                                                                             <property name="window_style"></property>
@@ -4766,7 +4766,7 @@
                                                                                             <property name="validator_type">wxDefaultValidator</property>
                                                                                             <property name="validator_variable"></property>
                                                                                             <property name="value"></property>
-                                                                                            <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*</property>
+                                                                                            <property name="wildcard">ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*</property>
                                                                                             <property name="window_extra_style"></property>
                                                                                             <property name="window_name"></property>
                                                                                             <property name="window_style"></property>
