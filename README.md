@@ -90,8 +90,17 @@ It also assumes you have all the pre-requisite python modules installed to build
 #!/bin/bash
 
 conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
-# line 155 of basemap's __init__ file may need to change to "pyproj_datadir = pyproj.pyproj_datadir"
-# without quotes if you get the dreaded "PROJ_LIB" error
+# if you get the dreaded "PROJ_LIB" error, line 155 of basemap's __init__ file may need to change to:
+# if 'PROJ_LIB' in os.environ:
+#     pyproj_datadir = os.environ['PROJ_LIB']
+#     if not os.path.isdir(pyproj_datadir):
+#         raise RuntimeError('Path in environment PROJ_LIB not a directory')
+# else:
+#   if os.name == 'nt':
+#     pyproj_datadir = pyproj.pyproj_datadir
+#   else:
+#     pyproj_datadir = os.path.join(sys.prefix, 'share', 'proj')
+
 # if you get the 'epsg' error you may need to install an older version of pyproj 
 # conda install pyproj=1.9.5.1=py36_0
 

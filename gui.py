@@ -12,7 +12,6 @@ import wx.xrc
 import wx.aui
 import wx.html
 import wx.grid
-import wx.adv
 
 ###########################################################################
 ## Class MarxanConnectGUI
@@ -126,7 +125,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		pu_file_sizer1.Add( self.PU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.PU_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, u"~\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.PU_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, u"~\\data\\shapefiles\\marxan_pu.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		pu_file_sizer1.Add( self.PU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.PU_file_pu_id_txt = wx.StaticText( self.spatialInput, wx.ID_ANY, u"ID Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -173,7 +172,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		fa_file_sizer.Add( self.FA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.FA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.FA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		fa_file_sizer.Add( self.FA_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 
@@ -223,7 +222,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		aa_file_sizer.Add( self.AA_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.AA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.AA_file = wx.FilePickerCtrl( self.spatialInput, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		aa_file_sizer.Add( self.AA_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 
@@ -393,7 +392,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		demo_cu_file_sizer.Add( self.demo_CU_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.demo_CU_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.demo_CU_file = wx.FilePickerCtrl( self.demographic, wx.ID_ANY, u"~\\data\\shapefiles\\connectivity_grid.shp", u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		self.demo_CU_file.Enable( False )
 
 		demo_cu_file_sizer.Add( self.demo_CU_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
@@ -519,7 +518,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_cu_file_sizer.Add( self.land_HAB_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_HAB_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_HAB_file = wx.FilePickerCtrl( self.hab_res, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_cu_file_sizer.Add( self.land_HAB_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.land_HAB_file_hab_id_txt = wx.StaticText( self.hab_res, wx.ID_ANY, u"Habitat ID Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -639,7 +638,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		land_res_file_sizer.Add( self.land_RES_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.land_RES_file = wx.FilePickerCtrl( self.res_suf, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.land_RES_file = wx.FilePickerCtrl( self.res_suf, wx.ID_ANY, wx.EmptyString, u"Select a file", u"ESRI Shapefile (*.shp)|*.shp|GeoPackage (*.gpkg)|*.gpkg|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		land_res_file_sizer.Add( self.land_RES_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.land_res_file_res_id_txt = wx.StaticText( self.res_suf, wx.ID_ANY, u"Resistance Column Label", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1650,7 +1649,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		inputdat_file_sizer.Add( self.inputdat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.inputdat_template_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\Marxan243\\input_template.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.inputdat_template_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\daigl\\Documents\\GitHub\\MarxanConnect\\Marxan243\\input_template.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		inputdat_file_sizer.Add( self.inputdat_template_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.default_input_template = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Reset to Default", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -1773,7 +1772,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		inputdat_file_sizer.Add( self.inputdat_filetext, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-		self.inputdat_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		self.inputdat_file = wx.FilePickerCtrl( self.marxanAnalysis, wx.ID_ANY, u"C:\\Users\\Remi-Work\\Desktop\\MarxanConnectGUI\\data\\GBR\\input.dat", u"Select a file", u"Marxan Data Files (*.dat)|*.dat|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
 		inputdat_file_sizer.Add( self.inputdat_file, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
 
 		self.customize_inpudat = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Customize", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -2867,14 +2866,14 @@ class GettingStarted ( wx.Frame ):
 		fgSizer62.SetFlexibleDirection( wx.BOTH )
 		fgSizer62.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.m_hyperlink2 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Tutorial", u"docs\\tutorial.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		fgSizer62.Add( self.m_hyperlink2, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
+		self.tutorial_button = wx.Button( self.m_panel27, wx.ID_ANY, u"Tutorial", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer62.Add( self.tutorial_button, 0, wx.ALIGN_RIGHT|wx.ALL, 5 )
 
-		self.m_hyperlink3 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Glossary", u"docs\\glossary.html", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		fgSizer62.Add( self.m_hyperlink3, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
+		self.glossary_button = wx.Button( self.m_panel27, wx.ID_ANY, u"Glossary", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer62.Add( self.glossary_button, 0, wx.ALL, 5 )
 
-		self.m_hyperlink4 = wx.adv.HyperlinkCtrl( self.m_panel27, wx.ID_ANY, u"Report Issues", u"https://github.com/remi-daigle/MarxanConnect/issues", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
-		fgSizer62.Add( self.m_hyperlink4, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 5 )
+		self.issues_button = wx.Button( self.m_panel27, wx.ID_ANY, u"Report Issues", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer62.Add( self.issues_button, 0, wx.ALL, 5 )
 
 
 		fgSizer61.Add( fgSizer62, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
@@ -2932,7 +2931,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.2. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.4. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
@@ -2982,8 +2981,24 @@ class GettingStarted ( wx.Frame ):
 
 		self.Centre( wx.BOTH )
 
+		# Connect Events
+		self.tutorial_button.Bind( wx.EVT_BUTTON, self.on_tutorial_button )
+		self.glossary_button.Bind( wx.EVT_BUTTON, self.on_glossary_button )
+		self.issues_button.Bind( wx.EVT_BUTTON, self.on_issue_button )
+
 	def __del__( self ):
 		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def on_tutorial_button( self, event ):
+		event.Skip()
+
+	def on_glossary_button( self, event ):
+		event.Skip()
+
+	def on_issue_button( self, event ):
+		event.Skip()
 
 
 ###########################################################################

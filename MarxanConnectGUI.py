@@ -2654,12 +2654,24 @@ class spec_customizer(gui.spec_customizer):
         self.Hide()
 
 # ###########################  getting started popup functions #########################################################
-class GettingStarted (wx.Frame):
+class GettingStarted (gui.GettingStarted):
     def __init__(self, parent):
         gui.GettingStarted.__init__(self, parent)
+        self.parent = parent
         # set the icon
         parent.set_icon(frame=self, rootpath=MCPATH)
         self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL)
+
+    def on_tutorial_button(self, event):
+        print('test')
+        self.parent.on_tutorial(event=None)
+
+    def on_glossary_button(self, event):
+        self.parent.on_glossary(event=None)
+
+    def on_issue_button(self, event):
+        self.parent.on_github(event=None)
+
 
 # ########################### file popup viewer #####################################################################
 
