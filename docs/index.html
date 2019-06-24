@@ -91,9 +91,7 @@ h6 {
 
 <link rel="stylesheet" href="template.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -211,8 +209,6 @@ $(document).ready(function () {
   menuAnchor.closest('li.dropdown').addClass('active');
 });
 </script>
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -360,8 +356,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -370,6 +364,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -564,6 +568,7 @@ pip install dmgbuild pexpect # for mac only</code></pre>
 <p>As well as pre-requesite R packages to build the website, <em>i.e.</em>:</p>
 <pre class="r"><code>if(!require(&quot;rmarkdown&quot;)) install.packages(&quot;rmarkdown&quot;)</code></pre>
 <pre><code>## Loading required package: rmarkdown</code></pre>
+<pre><code>## Warning: package &#39;rmarkdown&#39; was built under R version 3.5.3</code></pre>
 <pre class="r"><code>if(!require(&quot;sf&quot;)) install.packages(&quot;sf&quot;)
 if(!require(&quot;leaflet&quot;)) install.packages(&quot;leaflet&quot;)
 if(!require(&quot;tmap&quot;)) install.packages(&quot;tmap&quot;)
