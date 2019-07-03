@@ -1991,7 +1991,12 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
 
-        self.plot.hist = plt.hist(self.temp['metric'],bins=int(len(self.temp['metric'])/15))
+        if int(len(self.temp['metric'])/15) > 100:
+            b=100
+        else:
+            b=int(len(self.temp['metric'])/15)
+
+        self.plot.hist = plt.hist(self.temp['metric'],bins=b)
         self.plot.xlabel = plt.xlabel(metric_type)
         self.plot.ylabel = plt.ylabel("Frequency")
         self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 25), label='test',color='k',linestyle='--')
