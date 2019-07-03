@@ -658,15 +658,15 @@ The elements (*i.e.* cells) contain information about the connectivity between d
 
 ## Edge List with Type
 
-Here, the Edge List structure from above is duplicated for each unique type (*e.g.* species, or dispersal trait). The first column now contains the type ID, The remaining columns are exactly as Edge List, above (donor site ID, recipient site ID, and connectivity value). 
+Here, the Edge List structure from above is duplicated for each unique type (*e.g.* species, or dispersal trait). The first column now contains the type ID, The remaining columns are exactly as Edge List, above (donor site ID, recipient site ID, and connectivity value). Type ID must contain characters (*e.g.* `sp1` not `1`)
 
-| type | id1 | id2 | value |
-|:----:|:---:|:---:|:-----:|
-|   1  |  1  |  1  |  0.1  |
-|   1  |  1  |  2  |  0.02 |
-|   1  |  1  |  3  | 0.005 |
-|   1  |  1  |  4  |  0.01 |
-|  ... | ... | ... |  ...  |
+|  type  | id1 | id2 | value |
+|:----__:|:---:|:---:|:-----:|
+|   sp1  |  1  |  1  |  0.1  |
+|   sp1  |  1  |  2  |  0.02 |
+|   sp1  |  1  |  3  | 0.005 |
+|   sp1  |  1  |  4  |  0.01 |
+|   ...  | ... | ... |  ...  |
 
 
 The elements (*i.e.* cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (*e.g.* [Probability](glossary.html#probability), [Migration](glossary.html#migration), or [Flow](glossary.html#flow)).
