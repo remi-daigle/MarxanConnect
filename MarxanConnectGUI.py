@@ -1863,13 +1863,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                     "Export Successful")
 
     def export_boundary_file(self, BD_filepath):
-        self.all_types = []
-        for type in ['demo_pu', 'land_pu']:
-            if 'spec_'+type in self.project['connectivityMetrics']:
-                self.all_types += [type]
-        if len(self.all_types)==0:
-            marxanconpy.warn_dialog(message="Boundary files can only be exported for planning units.")
-            return
         multiple = len(self.project['connectivityMetrics']['boundary'].keys()) > 1
 
         for k in self.project['connectivityMetrics']['boundary']:
