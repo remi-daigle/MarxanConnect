@@ -2293,7 +2293,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         :return:
         """
         if platform.system() == 'Windows':
-            os.system("start "+self.project['filepaths']['marxan_input'])
+            test=os.system("start "+self.project['filepaths']['marxan_input'])
+            if test==1:
+                marxanconpy.warn_dialog(
+                    "Your computer does have a default editor for the select file. In Windows File Explorer, double click on a the selected file, You will be asked to set the default program (notepad, notepad++, etc). After that MC will be able to open the file in the default editor")
         elif platform.system() == "Darwin":
             os.system("open -t " + self.project['filepaths']['marxan_input'])
 
