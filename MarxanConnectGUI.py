@@ -352,6 +352,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         self.NUMREPS.SetValue(self.project['options']['NUMREPS'])
         self.SCENNAME.SetValue(self.project['options']['SCENNAME'])
+        self.NUMITNS.SetValue(self.project['options']['NUMITNS'])
         self.marxan_CF.SetStringSelection(self.project['options']['marxan_CF'])
         self.marxan_bound.SetStringSelection(self.project['options']['marxan_bound'])
         self.inputdat_symmRadio.SetStringSelection(self.project['options']['inputdat_boundary'])
@@ -1491,6 +1492,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['options']['SCENNAME'] = self.SCENNAME.GetValue()
 
+    def on_NUMITNS( self, event ):
+        """
+        define NUMITNS
+        :param event:
+        :return:
+        """
+        self.project['options']['NUMITNS'] = self.NUMITNS.GetValue()
+
     def on_marxan_CF( self, event ):
         """
         define whether to use original or new conservation features in Marxan
@@ -1863,13 +1872,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                     "Export Successful")
 
     def export_boundary_file(self, BD_filepath):
-        self.all_types = []
-        for type in ['demo_pu', 'land_pu']:
-            if 'spec_'+type in self.project['connectivityMetrics']:
-                self.all_types += [type]
-        if len(self.all_types)==0:
-            marxanconpy.warn_dialog(message="Boundary files can only be exported for planning units.")
-            return
         multiple = len(self.project['connectivityMetrics']['boundary'].keys()) > 1
 
         for k in self.project['connectivityMetrics']['boundary']:
@@ -2191,6 +2193,15 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 else:
                     self.discrete_grid.SetCellValue(i, 1, str("Status Quo"))
 
+                if 'spec_demo_pu' in self.project['connectivityMetrics'] and 'spec_land_pu' in self.project['connectivityMetrics']:
+                    spec = {**self.project['connectivityMetrics']['spec_demo_pu'], **self.project['connectivityMetrics']['spec_land_pu']}
+                elif 'spec_demo_pu' in self.project['connectivityMetrics']:
+                    spec = self.project['connectivityMetrics']['spec_demo_pu']
+                elif 'spec_land_pu' in self.project['connectivityMetrics']:
+                    spec = self.project['connectivityMetrics']['spec_land_pu']
+
+                self.discrete_grid.SetCellValue(i,2,str(100*(numpy.mean(spec[metrics[i]])).round(2))+'%')
+
         self.discrete_grid.AutoSize()
 
 # ########################## marxan functions ##########################################################################
@@ -2229,6 +2240,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             if line.startswith("SCENNAME"):
                 line = 'SCENNAME ' + self.project['options']['SCENNAME'] + '\n'
+
+            if line.startswith("NUMITNS"):
+                line = 'NUMITNS ' + self.project['options']['NUMITNS'] + '\n'
 
             if line.startswith("BLM"):
                 line = 'BLM ' + self.project['options']['CSM'] + '\n'
@@ -2279,7 +2293,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         :return:
         """
         if platform.system() == 'Windows':
-            os.system("start "+self.project['filepaths']['marxan_input'])
+            test=os.system("start "+self.project['filepaths']['marxan_input'])
+            if test==1:
+                marxanconpy.warn_dialog(
+                    "Your computer does have a default editor for the select file. In Windows File Explorer, double click on a the selected file, You will be asked to set the default program (notepad, notepad++, etc). After that MC will be able to open the file in the default editor")
         elif platform.system() == "Darwin":
             os.system("open -t " + self.project['filepaths']['marxan_input'])
 
