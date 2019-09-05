@@ -1329,7 +1329,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.discrete_grid = wx.grid.Grid( self.preEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 
 		# Grid
-		self.discrete_grid.CreateGrid( 0, 2 )
+		self.discrete_grid.CreateGrid( 0, 3 )
 		self.discrete_grid.EnableEditing( True )
 		self.discrete_grid.EnableGridLines( True )
 		self.discrete_grid.EnableDragGridSize( False )
@@ -1338,11 +1338,13 @@ class MarxanConnectGUI ( wx.Frame ):
 		# Columns
 		self.discrete_grid.SetColSize( 0, 600 )
 		self.discrete_grid.SetColSize( 1, 50 )
+		self.discrete_grid.SetColSize( 2, 125 )
 		self.discrete_grid.EnableDragColMove( False )
 		self.discrete_grid.EnableDragColSize( True )
 		self.discrete_grid.SetColLabelSize( 30 )
 		self.discrete_grid.SetColLabelValue( 0, u"New Conservation Feature" )
 		self.discrete_grid.SetColLabelValue( 1, u"Status" )
+		self.discrete_grid.SetColLabelValue( 2, u"Planning Units" )
 		self.discrete_grid.SetColLabelAlignment( wx.ALIGN_CENTER, wx.ALIGN_CENTER )
 
 		# Rows
@@ -1676,11 +1678,21 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		marxan_misc.Add( self.SCENNAME_txt, 0, wx.ALL, 5 )
 
+		self.NUMITNS_txt = wx.StaticText( self.marxanAnalysis, wx.ID_ANY, u"Number of Iterations", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.NUMITNS_txt.Wrap( -1 )
+
+		self.NUMITNS_txt.SetToolTip( u"The number of annealing iterations, also known as \"NUMITNS\"." )
+
+		marxan_misc.Add( self.NUMITNS_txt, 0, wx.ALL, 5 )
+
 		self.NUMREPS = wx.TextCtrl( self.marxanAnalysis, wx.ID_ANY, u"100", wx.DefaultPosition, wx.DefaultSize, 0 )
 		marxan_misc.Add( self.NUMREPS, 0, wx.ALL|wx.EXPAND, 5 )
 
 		self.SCENNAME = wx.TextCtrl( self.marxanAnalysis, wx.ID_ANY, u"connect", wx.DefaultPosition, wx.Size( 200,-1 ), 0 )
 		marxan_misc.Add( self.SCENNAME, 0, wx.ALL, 5 )
+
+		self.NUMITNS = wx.TextCtrl( self.marxanAnalysis, wx.ID_ANY, u"1000000", wx.DefaultPosition, wx.DefaultSize, 0 )
+		marxan_misc.Add( self.NUMITNS, 0, wx.ALL, 5 )
 
 
 		marxanMainSizer.Add( marxan_misc, 1, wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -2443,6 +2455,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.default_input_template.Bind( wx.EVT_BUTTON, self.on_default_input_template )
 		self.NUMREPS.Bind( wx.EVT_TEXT, self.on_NUMREPS )
 		self.SCENNAME.Bind( wx.EVT_TEXT, self.on_SCENNAME )
+		self.NUMITNS.Bind( wx.EVT_TEXT, self.on_NUMITNS )
 		self.marxan_CF.Bind( wx.EVT_RADIOBOX, self.on_marxan_CF )
 		self.marxan_bound.Bind( wx.EVT_RADIOBOX, self.on_marxan_bound )
 		self.inputdat_symmRadio.Bind( wx.EVT_RADIOBOX, self.on_inputdat_symmRadio )
@@ -2746,6 +2759,9 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_SCENNAME( self, event ):
 		event.Skip()
 
+	def on_NUMITNS( self, event ):
+		event.Skip()
+
 	def on_marxan_CF( self, event ):
 		event.Skip()
 
@@ -2931,7 +2947,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.4. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.5-rc2019.09.05.10. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )

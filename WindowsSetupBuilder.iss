@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Marxan Connect"
-#define MyAppVersion "v0.1.4"
+#define MyAppVersion "v0.1.5-rc2019.09.05.10"
 #define MyAppPublisher "Canadian Healthy Oceans Network"
 #define MyAppURL "http://marxanconnect.ca/"
 #define MyAppExeName "MarxanConnectGUI.exe"
@@ -24,7 +24,7 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\LICENSE
 OutputDir=C:\Users\daigl\Documents\GitHub\MarxanConnect
-OutputBaseFilename=MarxanConnect-v0-1-4-windows-setup
+OutputBaseFilename=MarxanConnect-v0-1-5-rc2019-09-05-10-windows-setup
 SetupIconFile=C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\images\icon_bundle.ico
 Compression=lzma
 SolidCompression=yes
