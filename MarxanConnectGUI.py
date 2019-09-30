@@ -12,12 +12,12 @@ matplotlib.use('WXAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.collections import PatchCollection
-from mpl_toolkits.basemap import Basemap
 
 # import spatial modules
 import geopandas as gpd
 from descartes import PolygonPatch
 import shapely
+import cartopy
 
 # import system helper modules
 import os
@@ -117,11 +117,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             GettingStartedframe = GettingStarted(parent=self)
-            GettingStartedframe.Show()
-            # self.project['filepaths'] = {}
-            # self.project['filepaths']['projfile'] =r"C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\tutorial\CF_demographic\tutorial.MarCon"
-            # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
-            # self.load_project_function(launch=True)
+            # GettingStartedframe.Show()
+            self.project['filepaths'] = {}
+            self.project['filepaths']['projfile'] =r"C:\Users\duche\OneDrive\Documents\GitHub\MarxanConnect\test..MarCon"
+            self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
+            self.load_project_function(launch=True)
 
     def set_icon(self, frame, rootpath):
         # set the icon
@@ -561,12 +561,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 elif self.auinotebook.GetPageText(i) == "8) Plotting Options":
                     self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
         self.plot.figure = plt.figure(figsize=self.plot.GetClientSize()/wx.ScreenDC().GetPPI()[0])
-        self.plot.axes = self.plot.figure.gca()
-        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
-        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
-        self.plot.SetSizer(self.plot.sizer)
-        self.plot.Fit()
+
 
         # load lyr1 shapefile and data
         sf1, colour1, trans1, metric1, lowcol1, hicol1, legend1 = [None for i in range(7)]
@@ -589,9 +584,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 type1 = self.get_plot_type(selection=self.poly_shp_choice.GetStringSelection())
 
             if type1[-2:] == "pu":
-                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs({'init': 'epsg:4326'})
+                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
             else:
-                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type1 + '_filepath']).to_crs({'init': 'epsg:4326'})
+                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type1 + '_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
             # warn and break if shapefile not the same size as metrics
             if self.lyr1_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
@@ -623,9 +618,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 type2 = self.get_plot_type(selection=self.poly_shp_choice1.GetStringSelection())
 
             if type2[-2:] == "pu":
-                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs({'init': 'epsg:4326'})
+                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
             else:
-                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type2 + '_filepath']).to_crs({'init': 'epsg:4326'})
+                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type2 + '_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
             # warn and break if shapefile not the same size as metrics
             if self.lyr2_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
@@ -648,39 +643,62 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         lonmin, lonmax, latmin, latmax = marxanconpy.spatial.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
 
-
-        self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
-                                resolution='i', projection='tmerc', lat_0=(latmin + latmax) / 2,
-                                lon_0=(lonmin + lonmax) / 2)
+        crs = cartopy.crs.PlateCarree(central_longitude=(lonmin+lonmax)/2)
+        self.plot.axes = self.plot.figure.gca(projection=crs)
+        self.plot.axes.set_extent([lonmin, lonmax, latmin, latmax])
+        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
+        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        self.plot.SetSizer(self.plot.sizer)
+        self.plot.Fit()
 
         # plot basemap
         if self.bmap_plot_check.GetValue():
-            self.plot.map.drawmapboundary(fill_color=tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
-            self.plot.map.fillcontinents(color=tuple(c / 255 for c in self.bmap_landcol.GetColour()),
-                                         lake_color=tuple(c / 255 for c in self.bmap_lakecol.GetColour()))
-            self.plot.map.drawcoastlines()
-        else:
-            self.plot.map.drawmapboundary(fill_color='white')
+            self.plot.axes.add_feature(cartopy.feature.GSHHSFeature(levels=[1,3],
+                                                                    facecolor=tuple(c / 255 for c in self.bmap_landcol.GetColour()))
+                                       )
+            self.plot.axes.add_feature(cartopy.feature.GSHHSFeature(levels=[2],
+                                                                    facecolor=tuple(
+                                                                        c / 255 for c in self.bmap_lakecol.GetColour()))
+                                       )
+            self.plot.axes.background_patch.set_facecolor(tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
+
+        # self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
+        #                         resolution='i', projection='tmerc', lat_0=(latmin + latmax) / 2,
+        #                         lon_0=(lonmin + lonmax) / 2)
+        #
+        # # plot basemap
+        # if self.bmap_plot_check.GetValue():
+        #     self.plot.map.drawmapboundary(fill_color=tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
+        #     self.plot.map.fillcontinents(color=tuple(c / 255 for c in self.bmap_landcol.GetColour()),
+        #                                  lake_color=tuple(c / 255 for c in self.bmap_lakecol.GetColour()))
+        #     self.plot.map.drawcoastlines()
+        # else:
+        #     self.plot.map.drawmapboundary(fill_color='white')
 
         # plot first layer
         if self.lyr1_plot_check.GetValue():
-            self.draw_shapefiles(sf=sf1,
-                                 colour=colour1,
-                                 trans=trans1,
-                                 metric=metric1,
-                                 lowcol=lowcol1,
-                                 hicol=hicol1,
-                                 legend=legend1)
-
-        # plot second layer
-        if self.lyr2_plot_check.GetValue():
-            self.draw_shapefiles(sf=sf2,
-                                 colour=colour2,
-                                 trans=trans2,
-                                 metric=metric2,
-                                 lowcol=lowcol2,
-                                 hicol=hicol2,
-                                 legend=legend2)
+            self.plot.axes.add_geometries(sf1['geometry'].to_crs(
+                '+proj=eqc +lat_ts=0 +lat_0=0 +lon_0='+str((lonmin+lonmax)/2)+' +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'),
+                crs,
+                color='black')
+        #     self.draw_shapefiles(sf=sf1,
+        #                          colour=colour1,
+        #                          trans=trans1,
+        #                          metric=metric1,
+        #                          lowcol=lowcol1,
+        #                          hicol=hicol1,
+        #                          legend=legend1)
+        #
+        # # plot second layer
+        # if self.lyr2_plot_check.GetValue():
+        #     self.draw_shapefiles(sf=sf2,
+        #                          colour=colour2,
+        #                          trans=trans2,
+        #                          metric=metric2,
+        #                          lowcol=lowcol2,
+        #                          hicol=hicol2,
+        #                          legend=legend2)
 
         # change selection to plot tab
         for i in range(self.auinotebook.GetPageCount()):
