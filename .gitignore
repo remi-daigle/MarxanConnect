@@ -111,3 +111,4 @@ MarxanConnect-v*
 .DS_Store
 *.dmg
 *.rds
+.vscode/settings.json
