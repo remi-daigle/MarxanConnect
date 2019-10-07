@@ -117,11 +117,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
             # launch Getting started window
             GettingStartedframe = GettingStarted(parent=self)
-            # GettingStartedframe.Show()
-            self.project['filepaths'] = {}
-            self.project['filepaths']['projfile'] =r"C:\Users\duche\OneDrive\Documents\GitHub\MarxanConnect\test..MarCon"
-            self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
-            self.load_project_function(launch=True)
+            GettingStartedframe.Show()
+            # self.project['filepaths'] = {}
+            # self.project['filepaths']['projfile'] =r"C:\Users\daigl\Documents\GitHub\MarxanConnect\test.MarCon"
+            # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
+            # self.load_project_function(launch=True)
 
     def set_icon(self, frame, rootpath):
         # set the icon
@@ -584,9 +584,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 type1 = self.get_plot_type(selection=self.poly_shp_choice.GetStringSelection())
 
             if type1[-2:] == "pu":
-                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs(crs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
             else:
-                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type1 + '_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type1 + '_filepath']).to_crs(crs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 
             # warn and break if shapefile not the same size as metrics
             if self.lyr1_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
@@ -618,9 +618,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 type2 = self.get_plot_type(selection=self.poly_shp_choice1.GetStringSelection())
 
             if type2[-2:] == "pu":
-                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs(crs='+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
             else:
-                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type2 + '_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type2 + '_filepath']).to_crs(crs='+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
             # warn and break if shapefile not the same size as metrics
             if self.lyr2_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
@@ -663,59 +663,45 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                        )
             self.plot.axes.background_patch.set_facecolor(tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
 
-        # self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
-        #                         resolution='i', projection='tmerc', lat_0=(latmin + latmax) / 2,
-        #                         lon_0=(lonmin + lonmax) / 2)
-        #
-        # # plot basemap
-        # if self.bmap_plot_check.GetValue():
-        #     self.plot.map.drawmapboundary(fill_color=tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
-        #     self.plot.map.fillcontinents(color=tuple(c / 255 for c in self.bmap_landcol.GetColour()),
-        #                                  lake_color=tuple(c / 255 for c in self.bmap_lakecol.GetColour()))
-        #     self.plot.map.drawcoastlines()
-        # else:
-        #     self.plot.map.drawmapboundary(fill_color='white')
 
         # plot first layer
         if self.lyr1_plot_check.GetValue():
-            self.plot.axes.add_geometries(sf1['geometry'].to_crs(
-                '+proj=eqc +lat_ts=0 +lat_0=0 +lon_0='+str((lonmin+lonmax)/2)+' +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'),
-                crs,
-                color='black')
-        #     self.draw_shapefiles(sf=sf1,
-        #                          colour=colour1,
-        #                          trans=trans1,
-        #                          metric=metric1,
-        #                          lowcol=lowcol1,
-        #                          hicol=hicol1,
-        #                          legend=legend1)
-        #
-        # # plot second layer
-        # if self.lyr2_plot_check.GetValue():
-        #     self.draw_shapefiles(sf=sf2,
-        #                          colour=colour2,
-        #                          trans=trans2,
-        #                          metric=metric2,
-        #                          lowcol=lowcol2,
-        #                          hicol=hicol2,
-        #                          legend=legend2)
+            self.draw_shapefiles(sf=sf1,
+                                 crs=crs,
+                                 colour=colour1,
+                                 trans=trans1,
+                                 metric=metric1,
+                                 lowcol=lowcol1,
+                                 hicol=hicol1,
+                                 legend=legend1)
+        
+        # plot second layer
+        if self.lyr2_plot_check.GetValue():
+            self.draw_shapefiles(sf=sf2,
+                                 crs=crs,
+                                 colour=colour2,
+                                 trans=trans2,
+                                 metric=metric2,
+                                 lowcol=lowcol2,
+                                 hicol=hicol2,
+                                 legend=legend2)
 
         # change selection to plot tab
         for i in range(self.auinotebook.GetPageCount()):
             if self.auinotebook.GetPageText(i) == "8) Plot" or self.auinotebook.GetPageText(i) == "9) Plot":
                 self.auinotebook.ChangeSelection(i)
 
-    def draw_shapefiles(self, sf, colour=None, trans=None, metric=None, lowcol=None, hicol=None, legend=None):
+    def draw_shapefiles(self, sf, crs, colour=None, trans=None, metric=None, lowcol=None, hicol=None, legend=None):
         """
         Draws the desired shapefile on the plot created by 'on_plot_map_button'
         """
-        if metric == None:
+        if type(metric) == 'Nonetype':
             patches = []
             colour = tuple(c / 255 for c in colour)
-            for poly in sf.geometry:
-                mpoly = shapely.ops.transform(self.plot.map, poly)
-                patches.append(PolygonPatch(mpoly))
-            self.plot.axes.add_collection(PatchCollection(patches, match_original=True, color=colour, alpha=trans))
+            self.plot.axes.add_geometries(sf.geometry.to_crs(crs.proj4_init),
+                crs=crs,
+                facecolor=colour,
+                alpha=trans)
         else:
             patches = []
             # define colormap
@@ -736,12 +722,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             norm = matplotlib.colors.Normalize(min(metric), max(metric))
             bins = numpy.linspace(min(metric), max(metric), 10)
             color_producer = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
-            for poly, evc in zip(sf.geometry, metric):
-                rgba = color_producer.to_rgba(evc)
-                mpoly = shapely.ops.transform(self.plot.map, poly)
-                patches.append(PolygonPatch(mpoly, color=rgba))
-
-            self.plot.axes.add_collection(PatchCollection(patches, match_original=True, alpha=trans))
+            for poly, val in zip(sf.geometry.to_crs(crs.proj4_init), metric):
+                rgba = color_producer.to_rgba(val)
+                self.plot.axes.add_geometries(list([poly]),
+                    crs=crs,
+                    facecolor=rgba,
+                    alpha=trans)
+            
             if legend == 0:
                 self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.8, 0.2, 0.04], zorder=3)
                 self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend,
@@ -749,15 +736,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                 ticks=bins,
                                                                 boundaries=bins,
                                                                 orientation='horizontal')
-                self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
+                self.plot.cb.ax.set_xticklabels([str("{:.1e}".format(i)) for i in bins],
+                                                                rotation = 30,
+                                                                ha='right')
             elif legend == 1:
-                self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.15, 0.2, 0.04], zorder=3)
+                self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.2, 0.2, 0.04], zorder=3)
                 self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend,
                                                                 cmap=cmap,
                                                                 ticks=bins,
                                                                 boundaries=bins,
                                                                 orientation='horizontal')
-                self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
+                self.plot.cb.ax.set_xticklabels([str("{:.1e}".format(i)) for i in bins],
+                                                                rotation = 30,
+                                                                ha='right')
 
     def outline_shapefile_choices(self):
         choices = []
