@@ -150,7 +150,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.auinotebook.SetPageText(plottingpage, u"7) Plotting Options")
             if hasattr(self, 'plot'):
                 self.auinotebook.SetPageText(plotpage, u"8) Plot")
-                print(plotpage)
             self.auinotebook.RemovePage(posthocpage)
             self.posthocdefault = True
         else:
@@ -2694,7 +2693,6 @@ class GettingStarted (gui.GettingStarted):
         self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL)
 
     def on_tutorial_button(self, event):
-        print('test')
         self.parent.on_tutorial(event=None)
 
     def on_glossary_button(self, event):
