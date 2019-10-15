@@ -73,9 +73,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
 
-        # set posthoc page off by default
-        self.posthocdefault = False
-        self.on_posthoc(event=None)
+        # # set posthoc page off by default
+        # self.posthocdefault = False
+        # self.on_posthoc(event=None)
 
         # set MwZ option off by default
         self.mwzdefault = False
@@ -119,7 +119,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             GettingStartedframe = GettingStarted(parent=self)
             GettingStartedframe.Show()
             # self.project['filepaths'] = {}
-            # self.project['filepaths']['projfile'] =r"C:\Users\daigl\Documents\GitHub\MarxanConnect\test.MarCon"
+            # self.project['filepaths']['projfile'] =r"C:\Users\daigl\Documents\GitHub\MarxanConnect\docs\tutorial\CF_demographic\tutorial.MarCon"
             # self.workingdirectory = os.path.dirname(self.project['filepaths']['projfile'])
             # self.load_project_function(launch=True)
 
@@ -136,31 +136,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             except:
                 pass
                 frame.SetIcons(icons)
-
-    def on_posthoc(self, event):
-        for i in range(self.auinotebook.GetPageCount()):
-            if self.auinotebook.GetPageText(i) == "7) Post-Hoc Evaluation":
-                posthocpage = i
-            if self.auinotebook.GetPageText(i) == "8) Plotting Options" or self.auinotebook.GetPageText(i) == "7) Plotting Options":
-                plottingpage = i
-            if self.auinotebook.GetPageText(i) == "9) Plot" or self.auinotebook.GetPageText(i) == "8) Plot":
-                plotpage = i
-
-        if not self.posthocdefault:
-            self.auinotebook.SetPageText(plottingpage, u"7) Plotting Options")
-            if hasattr(self, 'plot'):
-                self.auinotebook.SetPageText(plotpage, u"8) Plot")
-            self.auinotebook.RemovePage(posthocpage)
-            self.posthocdefault = True
-        else:
-            if hasattr(self, 'plot'):
-                self.auinotebook.RemovePage(plotpage)
-            self.auinotebook.RemovePage(plottingpage)
-            self.auinotebook.AddPage(self.postHocEvaluation, u"7) Post-Hoc Evaluation", False, wx.NullBitmap)
-            self.auinotebook.AddPage(self.plottingOptions, u"8) Plotting Options", False, wx.NullBitmap)
-            if hasattr(self, 'plot'):
-                self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
-            self.posthocdefault = False
 
     def on_mwz( self, event ):
         if not self.mwzdefault:
@@ -1194,6 +1169,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines the input file for Marxan
         """
         self.project['filepaths']['marxan_input'] = self.inputdat_file.GetPath()
+        self.enable_postHoc()
+
 
     def on_inputdat_template_file(self, event):
         """
@@ -1601,7 +1578,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['options']['map_filecheck'] = self.PUSHP_filecheck.GetValue()
 
-
 # ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
         """
@@ -1712,7 +1688,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.warn:
                 marxanconpy.warn_dialog(message=self.message)
         return
-
 
 # ##########################  metric related functions ################################################################
 
@@ -2471,6 +2446,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.calc_postHoc.Enable(True)
             else:
                 self.calc_postHoc.Enable(False)
+                
+        if os.path.isfile(self.project['filepaths']['marxan_input']) & os.path.isfile(self.project['filepaths']['pu_filepath']):
+            self.calc_postHoc.Enable(True)
         else:
             self.calc_postHoc.Enable(False)
         if 'postHoc' in self.project:
@@ -2509,15 +2487,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         elif self.postHoc_category_choice.GetStringSelection() == "Demographic Data":
             format = self.demo_matrixFormatRadioBox.GetStringSelection()
             filename = self.project['filepaths']['demo_pu_cm_filepath']
+        else:
+            format = None
+            filename = "notarealfilename"
 
-        # solution = pandas.read_csv("C://Users//daigl//Documents//GitHub//MarxanConnect//docs//tutorial//CF_demographic//output//connect_best.txt")
         solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
                                                               self.postHoc_output_choice.GetStringSelection())
-        postHoc = marxanconpy.posthoc.calc_postHoc(filename,
-                                                        format,
-                                                        IDs=solution.iloc[:,0].values,
-                                                        selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
-
+        
+        pu = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+        postHoc = marxanconpy.posthoc.calc_postHoc(pu,
+                                                   filename,
+                                                   format,
+                                                   IDs=solution.iloc[:,0].values,
+                                                   selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
         Cols = self.postHoc_grid.GetNumberCols()
         Rows = self.postHoc_grid.GetNumberRows()
         if Cols > 0 or Rows > 0:
@@ -2528,14 +2510,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.postHoc_grid.AppendCols()
                 self.postHoc_grid.SetColLabelValue(col-1, label)
             for index in postHoc.index:
-                print(postHoc["Metric"][index])
                 if col == 0:
                     self.postHoc_grid.AppendRows()
                     self.postHoc_grid.SetRowLabelValue(index, str(postHoc.iloc[index, col]))
                 elif label == "Type":
                     self.postHoc_grid.SetCellValue(index, col - 1, str(postHoc.iloc[index, col]))
                 elif label == "Percent":
-                    self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
+                    if index > 0 and index < 6:
+                        self.postHoc_grid.SetCellValue(index, col-1, "")
+                    else:
+                        self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
+                elif label == "Planning Area" and index > 0 and index < 6:
+                            self.postHoc_grid.SetCellValue(index, col-1, "")
                 else:
                     if postHoc["Metric"][index] in ("Planning Units","Connections"):
                         self.postHoc_grid.SetCellValue(index, col-1, str(int(postHoc.iloc[index, col])))
@@ -2561,9 +2547,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     SCENNAME = line.replace('SCENNAME ', '').replace('\n', '')
                 if line.startswith('NUMREPS'):
                     NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
+                elif line.startswith('OUTPUTDIR'):
+                    OUTPUTDIR = line.replace('OUTPUTDIR ', '').replace('\n', '')
+                    
+            if not os.path.isdir(OUTPUTDIR):
+                OUTPUTDIR = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),OUTPUTDIR)
 
-            self.postHoc_output_choice.SetItems(['Best Solution'] +
+            fn = os.path.join(OUTPUTDIR, SCENNAME + "_best")
+            
+            if os.path.isfile(fn + '.csv') or os.path.isfile(fn + '.txt'):
+                self.postHoc_output_choice.SetItems(['Best Solution'] +
                                                       ["r" + "%05d" % t for t in range(1, NUMREPS)])
+            else:
+                self.postHoc_output_choice.SetItems(['No Output Available'])
+
+            
             self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
             self.postHoc_output_choice.SetSelection(0)
 

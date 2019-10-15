@@ -75,7 +75,6 @@ if platform.system() == 'Windows':
         'matplotlib.pyplot',
         'matplotlib.backends.backend_wxagg',
         'matplotlib.collections',
-        'mpl_toolkits.basemap',
         'geopandas',
         'descartes',
         'shapely',
