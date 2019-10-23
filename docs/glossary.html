@@ -541,10 +541,7 @@ div.tocify {
 <p><span class="math display">\[{\displaystyle TCC(v) = -\sum_{i \in E_{v,FA}} \sum_{j \in E_{FA,FA}}Cov(E_i,E_j)}\]</span></p>
 <p>where <span class="math inline">\({E_{FA,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that link 2 planning units, both of which spatially overlap with the focus area, <span class="math inline">\({E_{v,FA}}\)</span> are the <span class="math inline">\({E}\)</span> that originate in <span class="math inline">\({v}\)</span> and end in a planning unit which spatially overlaps with the focus area, and <span class="math inline">\({Cov()}\)</span> is the temporal covariance.</p>
 <p><strong>Illustration</strong></p>
-<div class="figure">
-<img src="images/temporalconnectivity.gif" />
-
-</div>
+<p><img src="images/temporalconnectivity.gif" /></p>
 </div>
 <div id="focus-area-recipients" class="section level2">
 <h2>Focus Area Recipients</h2>
@@ -788,7 +785,8 @@ div.tocify {
 <div id="edge-list-with-type" class="section level2">
 <h2>Edge List with Type</h2>
 <p>Here, the Edge List structure from above is duplicated for each unique type (<em>e.g.</em> species, or dispersal trait). The first column now contains the type ID, The remaining columns are exactly as Edge List, above (donor site ID, recipient site ID, and connectivity value). Type ID must contain characters (<em>e.g.</em> <code>sp1</code> not <code>1</code>)</p>
-<p>| type | id1 | id2 | value | |:—-__:|:—:|:—:|:—–:| | sp1 | 1 | 1 | 0.1 | | sp1 | 1 | 2 | 0.02 | | sp1 | 1 | 3 | 0.005 | | sp1 | 1 | 4 | 0.01 | | … | … | … | … |</p>
+<div class="line-block"> type | id1 | id2 | value |</div>
+<p>|:—-__:|:—:|:—:|:—–:| | sp1 | 1 | 1 | 0.1 | | sp1 | 1 | 2 | 0.02 | | sp1 | 1 | 3 | 0.005 | | sp1 | 1 | 4 | 0.01 | | … | … | … | … |</p>
 <p>The elements (<em>i.e.</em> cells) contain information about the connectivity between donor/recipient sites, but their values depend on the type of connectivity matrix being used (<em>e.g.</em> <a href="glossary.html#probability">Probability</a>, <a href="glossary.html#migration">Migration</a>, or <a href="glossary.html#flow">Flow</a>).</p>
 </div>
 </div>
