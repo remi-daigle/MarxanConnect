@@ -72,7 +72,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.mwz = wx.MenuItem( self.experimental, wx.ID_ANY, u"Marxan with Zones", wx.EmptyString, wx.ITEM_NORMAL )
 		self.experimental.Append( self.mwz )
 
-		self.posthoc = wx.MenuItem( self.experimental, wx.ID_ANY, u"Posthoc Tab", wx.EmptyString, wx.ITEM_NORMAL )
+		self.posthoc = wx.MenuItem( self.experimental, wx.ID_ANY, u"Post-Hoc Evaluation Tab", wx.EmptyString, wx.ITEM_NORMAL )
 		self.experimental.Append( self.posthoc )
 
 		self.help.AppendSubMenu( self.experimental, u"Experimental Features" )
@@ -1915,7 +1915,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		pudat_file_sizer1.SetFlexibleDirection( wx.BOTH )
 		pudat_file_sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.postHoc_export_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Metric", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_export_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Post-Hoc Output File", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.postHoc_export_txt.Wrap( -1 )
 
 		pudat_file_sizer1.Add( self.postHoc_export_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
@@ -2947,7 +2947,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.6-rc2019.10.19.10. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v0.1.6. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )

@@ -74,8 +74,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.auinotebook.ChangeSelection(0)
 
         # # set posthoc page off by default
-        # self.posthocdefault = False
-        # self.on_posthoc(event=None)
+        self.posthocdefault = False
+        self.on_posthoc(event=None)
 
         # set MwZ option off by default
         self.mwzdefault = False
@@ -136,6 +136,32 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             except:
                 pass
                 frame.SetIcons(icons)
+                
+    def on_posthoc(self, event):
+        for i in range(self.auinotebook.GetPageCount()):
+            if self.auinotebook.GetPageText(i) == "7) Post-Hoc Evaluation":
+                posthocpage = i
+            if self.auinotebook.GetPageText(i) == "8) Plotting Options" or self.auinotebook.GetPageText(i) == "7) Plotting Options":
+                plottingpage = i
+            if self.auinotebook.GetPageText(i) == "9) Plot" or self.auinotebook.GetPageText(i) == "8) Plot":
+                plotpage = i
+
+        if not self.posthocdefault:
+            self.auinotebook.SetPageText(plottingpage, u"7) Plotting Options")
+            if hasattr(self, 'plot'):
+                self.auinotebook.SetPageText(plotpage, u"8) Plot")
+                print(plotpage)
+            self.auinotebook.RemovePage(posthocpage)
+            self.posthocdefault = True
+        else:
+            if hasattr(self, 'plot'):
+                self.auinotebook.RemovePage(plotpage)
+            self.auinotebook.RemovePage(plottingpage)
+            self.auinotebook.AddPage(self.postHocEvaluation, u"7) Post-Hoc Evaluation", False, wx.NullBitmap)
+            self.auinotebook.AddPage(self.plottingOptions, u"8) Plotting Options", False, wx.NullBitmap)
+            if hasattr(self, 'plot'):
+                self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
+            self.posthocdefault = False
 
     def on_mwz( self, event ):
         if not self.mwzdefault:
@@ -2528,12 +2554,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     else:
                         self.postHoc_grid.SetCellValue(index, col-1, str(round(postHoc.iloc[index, col], 2)))
 
-        self.postHoc_grid.SetRowLabelSize(125)
-        self.postHoc_grid.AutoSizeColumns()
-        self.postHoc_grid.AutoSizeRows()
+        self.postHoc_grid.SetRowLabelSize(145)
         self.postHoc_grid.SetColLabelAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
         self.postHoc_grid.AutoSize()
         self.Layout()
+        x,y = self.postHoc_grid.GetSize()
+        winx,winy = self.GetSize()
+        if winy-y < 280:
+            self.postHoc_grid.SetSize(x+20,winy-280)
         self.project["postHoc"] = postHoc.to_json(orient='split')
         self.enable_postHoc()
 
