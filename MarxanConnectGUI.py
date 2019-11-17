@@ -12,12 +12,12 @@ matplotlib.use('WXAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.collections import PatchCollection
-from mpl_toolkits.basemap import Basemap
 
 # import spatial modules
 import geopandas as gpd
 from descartes import PolygonPatch
 import shapely
+import cartopy
 
 # import system helper modules
 import os
@@ -73,7 +73,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
 
-        # set posthoc page off by default
+        # # set posthoc page off by default
         self.posthocdefault = False
         self.on_posthoc(event=None)
 
@@ -136,7 +136,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             except:
                 pass
                 frame.SetIcons(icons)
-
+                
     def on_posthoc(self, event):
         for i in range(self.auinotebook.GetPageCount()):
             if self.auinotebook.GetPageText(i) == "7) Post-Hoc Evaluation":
@@ -561,12 +561,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 elif self.auinotebook.GetPageText(i) == "8) Plotting Options":
                     self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
         self.plot.figure = plt.figure(figsize=self.plot.GetClientSize()/wx.ScreenDC().GetPPI()[0])
-        self.plot.axes = self.plot.figure.gca()
-        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
-        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
-        self.plot.SetSizer(self.plot.sizer)
-        self.plot.Fit()
+
 
         # load lyr1 shapefile and data
         sf1, colour1, trans1, metric1, lowcol1, hicol1, legend1 = [None for i in range(7)]
@@ -589,9 +584,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 type1 = self.get_plot_type(selection=self.poly_shp_choice.GetStringSelection())
 
             if type1[-2:] == "pu":
-                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs({'init': 'epsg:4326'})
+                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs(crs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
             else:
-                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type1 + '_filepath']).to_crs({'init': 'epsg:4326'})
+                sf1 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type1 + '_filepath']).to_crs(crs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 
             # warn and break if shapefile not the same size as metrics
             if self.lyr1_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
@@ -623,9 +618,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 type2 = self.get_plot_type(selection=self.poly_shp_choice1.GetStringSelection())
 
             if type2[-2:] == "pu":
-                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs({'init': 'epsg:4326'})
+                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs(crs='+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
             else:
-                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type2 + '_filepath']).to_crs({'init': 'epsg:4326'})
+                sf2 = gpd.GeoDataFrame.from_file(self.project['filepaths'][type2 + '_filepath']).to_crs(crs='+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
             # warn and break if shapefile not the same size as metrics
             if self.lyr2_choice.GetChoiceCtrl().GetStringSelection() == "Colormap of connectivity metrics":
@@ -648,33 +643,42 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         lonmin, lonmax, latmin, latmax = marxanconpy.spatial.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
 
-
-        self.plot.map = Basemap(llcrnrlon=lonmin, llcrnrlat=latmin, urcrnrlon=lonmax, urcrnrlat=latmax,
-                                resolution='i', projection='tmerc', lat_0=(latmin + latmax) / 2,
-                                lon_0=(lonmin + lonmax) / 2)
+        crs = cartopy.crs.PlateCarree(central_longitude=(lonmin+lonmax)/2)
+        self.plot.axes = self.plot.figure.gca(projection=crs)
+        self.plot.axes.set_extent([lonmin, lonmax, latmin, latmax])
+        self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
+        self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.plot.sizer.Add(self.plot.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        self.plot.SetSizer(self.plot.sizer)
+        self.plot.Fit()
 
         # plot basemap
         if self.bmap_plot_check.GetValue():
-            self.plot.map.drawmapboundary(fill_color=tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
-            self.plot.map.fillcontinents(color=tuple(c / 255 for c in self.bmap_landcol.GetColour()),
-                                         lake_color=tuple(c / 255 for c in self.bmap_lakecol.GetColour()))
-            self.plot.map.drawcoastlines()
-        else:
-            self.plot.map.drawmapboundary(fill_color='white')
+            self.plot.axes.add_feature(cartopy.feature.GSHHSFeature(levels=[1,3],
+                                                                    facecolor=tuple(c / 255 for c in self.bmap_landcol.GetColour()))
+                                       )
+            self.plot.axes.add_feature(cartopy.feature.GSHHSFeature(levels=[2],
+                                                                    facecolor=tuple(
+                                                                        c / 255 for c in self.bmap_lakecol.GetColour()))
+                                       )
+            self.plot.axes.background_patch.set_facecolor(tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
+
 
         # plot first layer
         if self.lyr1_plot_check.GetValue():
             self.draw_shapefiles(sf=sf1,
+                                 crs=crs,
                                  colour=colour1,
                                  trans=trans1,
                                  metric=metric1,
                                  lowcol=lowcol1,
                                  hicol=hicol1,
                                  legend=legend1)
-
+        
         # plot second layer
         if self.lyr2_plot_check.GetValue():
             self.draw_shapefiles(sf=sf2,
+                                 crs=crs,
                                  colour=colour2,
                                  trans=trans2,
                                  metric=metric2,
@@ -687,17 +691,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.auinotebook.GetPageText(i) == "8) Plot" or self.auinotebook.GetPageText(i) == "9) Plot":
                 self.auinotebook.ChangeSelection(i)
 
-    def draw_shapefiles(self, sf, colour=None, trans=None, metric=None, lowcol=None, hicol=None, legend=None):
+    def draw_shapefiles(self, sf, crs, colour=None, trans=None, metric=None, lowcol=None, hicol=None, legend=None):
         """
         Draws the desired shapefile on the plot created by 'on_plot_map_button'
         """
-        if metric == None:
+        if type(metric) == 'Nonetype':
             patches = []
             colour = tuple(c / 255 for c in colour)
-            for poly in sf.geometry:
-                mpoly = shapely.ops.transform(self.plot.map, poly)
-                patches.append(PolygonPatch(mpoly))
-            self.plot.axes.add_collection(PatchCollection(patches, match_original=True, color=colour, alpha=trans))
+            self.plot.axes.add_geometries(sf.geometry.to_crs(crs.proj4_init),
+                crs=crs,
+                facecolor=colour,
+                alpha=trans)
         else:
             patches = []
             # define colormap
@@ -718,12 +722,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             norm = matplotlib.colors.Normalize(min(metric), max(metric))
             bins = numpy.linspace(min(metric), max(metric), 10)
             color_producer = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
-            for poly, evc in zip(sf.geometry, metric):
-                rgba = color_producer.to_rgba(evc)
-                mpoly = shapely.ops.transform(self.plot.map, poly)
-                patches.append(PolygonPatch(mpoly, color=rgba))
-
-            self.plot.axes.add_collection(PatchCollection(patches, match_original=True, alpha=trans))
+            for poly, val in zip(sf.geometry.to_crs(crs.proj4_init), metric):
+                rgba = color_producer.to_rgba(val)
+                self.plot.axes.add_geometries(list([poly]),
+                    crs=crs,
+                    facecolor=rgba,
+                    alpha=trans)
+            
             if legend == 0:
                 self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.8, 0.2, 0.04], zorder=3)
                 self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend,
@@ -731,15 +736,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                 ticks=bins,
                                                                 boundaries=bins,
                                                                 orientation='horizontal')
-                self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
+                self.plot.cb.ax.set_xticklabels([str("{:.1e}".format(i)) for i in bins],
+                                                                rotation = 30,
+                                                                ha='right')
             elif legend == 1:
-                self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.15, 0.2, 0.04], zorder=3)
+                self.plot.ax_legend = self.plot.figure.add_axes([0.415, 0.2, 0.2, 0.04], zorder=3)
                 self.plot.cb = matplotlib.colorbar.ColorbarBase(self.plot.ax_legend,
                                                                 cmap=cmap,
                                                                 ticks=bins,
                                                                 boundaries=bins,
                                                                 orientation='horizontal')
-                self.plot.cb.ax.set_xticklabels([str(round(i, 1)) for i in bins])
+                self.plot.cb.ax.set_xticklabels([str("{:.1e}".format(i)) for i in bins],
+                                                                rotation = 30,
+                                                                ha='right')
 
     def outline_shapefile_choices(self):
         choices = []
@@ -1186,6 +1195,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Defines the input file for Marxan
         """
         self.project['filepaths']['marxan_input'] = self.inputdat_file.GetPath()
+        self.enable_postHoc()
+
 
     def on_inputdat_template_file(self, event):
         """
@@ -1593,7 +1604,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['options']['map_filecheck'] = self.PUSHP_filecheck.GetValue()
 
-
 # ########################## rescaling and matrix generation ###########################################################
     def on_demo_rescale_button(self, event):
         """
@@ -1704,7 +1714,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             if self.warn:
                 marxanconpy.warn_dialog(message=self.message)
         return
-
 
 # ##########################  metric related functions ################################################################
 
@@ -2463,6 +2472,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.calc_postHoc.Enable(True)
             else:
                 self.calc_postHoc.Enable(False)
+                
+        if os.path.isfile(self.project['filepaths']['marxan_input']) & os.path.isfile(self.project['filepaths']['pu_filepath']):
+            self.calc_postHoc.Enable(True)
         else:
             self.calc_postHoc.Enable(False)
         if 'postHoc' in self.project:
@@ -2501,15 +2513,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         elif self.postHoc_category_choice.GetStringSelection() == "Demographic Data":
             format = self.demo_matrixFormatRadioBox.GetStringSelection()
             filename = self.project['filepaths']['demo_pu_cm_filepath']
+        else:
+            format = None
+            filename = "notarealfilename"
 
-        # solution = pandas.read_csv("C://Users//daigl//Documents//GitHub//MarxanConnect//docs//tutorial//CF_demographic//output//connect_best.txt")
         solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
                                                               self.postHoc_output_choice.GetStringSelection())
-        postHoc = marxanconpy.posthoc.calc_postHoc(filename,
-                                                        format,
-                                                        IDs=solution.iloc[:,0].values,
-                                                        selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
-
+        
+        pu = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+        postHoc = marxanconpy.posthoc.calc_postHoc(pu,
+                                                   filename,
+                                                   format,
+                                                   IDs=solution.iloc[:,0].values,
+                                                   selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
         Cols = self.postHoc_grid.GetNumberCols()
         Rows = self.postHoc_grid.GetNumberRows()
         if Cols > 0 or Rows > 0:
@@ -2520,26 +2536,32 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.postHoc_grid.AppendCols()
                 self.postHoc_grid.SetColLabelValue(col-1, label)
             for index in postHoc.index:
-                print(postHoc["Metric"][index])
                 if col == 0:
                     self.postHoc_grid.AppendRows()
                     self.postHoc_grid.SetRowLabelValue(index, str(postHoc.iloc[index, col]))
                 elif label == "Type":
                     self.postHoc_grid.SetCellValue(index, col - 1, str(postHoc.iloc[index, col]))
                 elif label == "Percent":
-                    self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
+                    if index > 0 and index < 6:
+                        self.postHoc_grid.SetCellValue(index, col-1, "")
+                    else:
+                        self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
+                elif label == "Planning Area" and index > 0 and index < 6:
+                            self.postHoc_grid.SetCellValue(index, col-1, "")
                 else:
                     if postHoc["Metric"][index] in ("Planning Units","Connections"):
                         self.postHoc_grid.SetCellValue(index, col-1, str(int(postHoc.iloc[index, col])))
                     else:
                         self.postHoc_grid.SetCellValue(index, col-1, str(round(postHoc.iloc[index, col], 2)))
 
-        self.postHoc_grid.SetRowLabelSize(125)
-        self.postHoc_grid.AutoSizeColumns()
-        self.postHoc_grid.AutoSizeRows()
+        self.postHoc_grid.SetRowLabelSize(145)
         self.postHoc_grid.SetColLabelAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
         self.postHoc_grid.AutoSize()
         self.Layout()
+        x,y = self.postHoc_grid.GetSize()
+        winx,winy = self.GetSize()
+        if winy-y < 280:
+            self.postHoc_grid.SetSize(x+20,winy-280)
         self.project["postHoc"] = postHoc.to_json(orient='split')
         self.enable_postHoc()
 
@@ -2553,9 +2575,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     SCENNAME = line.replace('SCENNAME ', '').replace('\n', '')
                 if line.startswith('NUMREPS'):
                     NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
+                elif line.startswith('OUTPUTDIR'):
+                    OUTPUTDIR = line.replace('OUTPUTDIR ', '').replace('\n', '')
+                    
+            if not os.path.isdir(OUTPUTDIR):
+                OUTPUTDIR = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),OUTPUTDIR)
 
-            self.postHoc_output_choice.SetItems(['Best Solution'] +
+            fn = os.path.join(OUTPUTDIR, SCENNAME + "_best")
+            
+            if os.path.isfile(fn + '.csv') or os.path.isfile(fn + '.txt'):
+                self.postHoc_output_choice.SetItems(['Best Solution'] +
                                                       ["r" + "%05d" % t for t in range(1, NUMREPS)])
+            else:
+                self.postHoc_output_choice.SetItems(['No Output Available'])
+
+            
             self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
             self.postHoc_output_choice.SetSelection(0)
 
@@ -2685,7 +2719,6 @@ class GettingStarted (gui.GettingStarted):
         self.SetWindowStyle(wx.DEFAULT_FRAME_STYLE|wx.FRAME_FLOAT_ON_PARENT|wx.TAB_TRAVERSAL)
 
     def on_tutorial_button(self, event):
-        print('test')
         self.parent.on_tutorial(event=None)
 
     def on_glossary_button(self, event):

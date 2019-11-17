@@ -62,7 +62,7 @@ endif
 
 win: exe WindowsSetupBuilder.iss
     # creates the Windows installers
-	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" WindowsSetupBuilder.iss
+	"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" WindowsSetupBuilder.iss
 
 zip: exe
 	rm -rf MarxanConnect.zip; \
