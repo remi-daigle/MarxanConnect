@@ -466,7 +466,7 @@ div.tocify {
 </div>
 <div id="windows-zipped-bundle" class="section level3">
 <h3>Windows Zipped Bundle</h3>
-<p>If you cannot use the installer because you do not have administrative privileges, we’ve provided a zipped bundle of the app to allow users to bypass that problem. To use, download the latest <a href="https://github.com/remi-daigle/MarxanConnect/releases">MarxanConnect.zip</a>, unzip it to your preferred destination (e.g. <code>~/Desktop</code>), and double-click <code>MarxanConnectGUI.exe</code>. In this case you will have to generate any start menu shortcuts, or file associations (i.e. <code>.MarCon</code>) manually.</p>
+<p>If you cannot use the installer because you do not have administrative privileges, we’ve provided a zipped bundle of the app to allow users to bypass that problem. To use, download the latest <a href="https://github.com/remi-daigle/MarxanConnect/releases">MarxanConnect.zip</a>, unzip it to your preferred destination (e.g. <code>~/Desktop</code>), and double-click <code>MarxanConnectGUI.exe</code>. In this case you will have to generate any start menu shortcuts, or file associations (i.e. <code>.MarCon</code>) manually.</p>
 </div>
 </div>
 <div id="macos-yosemite-10.10.5" class="section level2">
@@ -505,20 +505,7 @@ div.tocify {
 <p>It also assumes you have all the pre-requisite python modules installed to build the app itself, <em>i.e.</em>:</p>
 <pre class="bash"><code>#!/bin/bash
 
-conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy basemap basemap-data-hires
-# if you get the dreaded &quot;PROJ_LIB&quot; error, line 155 of basemap&#39;s __init__ file may need to change to:
-# if &#39;PROJ_LIB&#39; in os.environ:
-#     pyproj_datadir = os.environ[&#39;PROJ_LIB&#39;]
-#     if not os.path.isdir(pyproj_datadir):
-#         raise RuntimeError(&#39;Path in environment PROJ_LIB not a directory&#39;)
-# else:
-#   if os.name == &#39;nt&#39;:
-#     pyproj_datadir = pyproj.pyproj_datadir
-#   else:
-#     pyproj_datadir = os.path.join(sys.prefix, &#39;share&#39;, &#39;proj&#39;)
-
-# if you get the &#39;epsg&#39; error you may need to install an older version of pyproj 
-# conda install pyproj=1.9.5.1=py36_0
+conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy cartopy
 
 source activate marcon # for windows
 conda activate marcon # for mac/linux
@@ -529,16 +516,63 @@ pip install dmgbuild pexpect # for mac only</code></pre>
 <p>As well as pre-requesite R packages to build the website, <em>i.e.</em>:</p>
 <pre class="r"><code>if(!require(&quot;rmarkdown&quot;)) install.packages(&quot;rmarkdown&quot;)</code></pre>
 <pre><code>## Loading required package: rmarkdown</code></pre>
-<pre class="r"><code>if(!require(&quot;sf&quot;)) install.packages(&quot;sf&quot;)
-if(!require(&quot;leaflet&quot;)) install.packages(&quot;leaflet&quot;)
-if(!require(&quot;tmap&quot;)) install.packages(&quot;tmap&quot;)
-if(!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)
-if(!require(&quot;DT&quot;)) install.packages(&quot;DT&quot;)
-if(!require(&quot;igraph&quot;)) install.packages(&quot;igraph&quot;)
-if(!require(&quot;ggraph&quot;)) install.packages(&quot;ggraph&quot;)
-if(!require(&quot;gganimate&quot;)) devtools::install_github(&#39;thomasp85/gganimate&#39;)
-if(!require(&quot;tidygraph&quot;)) install.packages(&quot;tidygraph&quot;)
-if(!require(&quot;RColorBrewer&quot;)) install.packages(&quot;RColorBrewer&quot;)</code></pre>
+<pre class="r"><code>if(!require(&quot;sf&quot;)) install.packages(&quot;sf&quot;)</code></pre>
+<pre><code>## Loading required package: sf</code></pre>
+<pre><code>## Linking to GEOS 3.6.1, GDAL 2.2.3, PROJ 4.9.3</code></pre>
+<pre class="r"><code>if(!require(&quot;leaflet&quot;)) install.packages(&quot;leaflet&quot;)</code></pre>
+<pre><code>## Loading required package: leaflet</code></pre>
+<pre class="r"><code>if(!require(&quot;tmap&quot;)) install.packages(&quot;tmap&quot;)</code></pre>
+<pre><code>## Loading required package: tmap</code></pre>
+<pre class="r"><code>if(!require(&quot;tidyverse&quot;)) install.packages(&quot;tidyverse&quot;)</code></pre>
+<pre><code>## Loading required package: tidyverse</code></pre>
+<pre><code>## -- Attaching packages ------------------------------------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## v ggplot2 3.2.1     v purrr   0.3.2
+## v tibble  2.1.3     v dplyr   0.8.3
+## v tidyr   1.0.0     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.4.0</code></pre>
+<pre><code>## -- Conflicts ---------------------------------------------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>if(!require(&quot;DT&quot;)) install.packages(&quot;DT&quot;)</code></pre>
+<pre><code>## Loading required package: DT</code></pre>
+<pre class="r"><code>if(!require(&quot;igraph&quot;)) install.packages(&quot;igraph&quot;)</code></pre>
+<pre><code>## Loading required package: igraph</code></pre>
+<pre><code>## 
+## Attaching package: &#39;igraph&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     as_data_frame, groups, union</code></pre>
+<pre><code>## The following objects are masked from &#39;package:purrr&#39;:
+## 
+##     compose, simplify</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     crossing</code></pre>
+<pre><code>## The following object is masked from &#39;package:tibble&#39;:
+## 
+##     as_data_frame</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     decompose, spectrum</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     union</code></pre>
+<pre class="r"><code>if(!require(&quot;ggraph&quot;)) install.packages(&quot;ggraph&quot;)</code></pre>
+<pre><code>## Loading required package: ggraph</code></pre>
+<pre class="r"><code>if(!require(&quot;gganimate&quot;)) devtools::install_github(&#39;thomasp85/gganimate&#39;)</code></pre>
+<pre><code>## Loading required package: gganimate</code></pre>
+<pre class="r"><code>if(!require(&quot;tidygraph&quot;)) install.packages(&quot;tidygraph&quot;)</code></pre>
+<pre><code>## Loading required package: tidygraph</code></pre>
+<pre><code>## 
+## Attaching package: &#39;tidygraph&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:igraph&#39;:
+## 
+##     groups</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre class="r"><code>if(!require(&quot;RColorBrewer&quot;)) install.packages(&quot;RColorBrewer&quot;)</code></pre>
+<pre><code>## Loading required package: RColorBrewer</code></pre>
 </div>
 </div>
 <div id="built-with" class="section level1">

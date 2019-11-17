@@ -85,7 +85,8 @@ The default `make` will try to compile the windows version, so on macOS a full b
 
 It also assumes you have all the pre-requisite python modules installed to build the app itself, *i.e.*:
 
-```{bash, eval=FALSE}
+
+```bash
 #!/bin/bash
 
 conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy cartopy
@@ -100,18 +101,172 @@ pip install dmgbuild pexpect # for mac only
 
 As well as pre-requesite R packages to build the website, *i.e.*:
 
-```{r install R packages}
+
+```r
 if(!require("rmarkdown")) install.packages("rmarkdown")
+```
+
+```
+## Loading required package: rmarkdown
+```
+
+```r
 if(!require("sf")) install.packages("sf")
+```
+
+```
+## Loading required package: sf
+```
+
+```
+## Linking to GEOS 3.6.1, GDAL 2.2.3, PROJ 4.9.3
+```
+
+```r
 if(!require("leaflet")) install.packages("leaflet")
+```
+
+```
+## Loading required package: leaflet
+```
+
+```r
 if(!require("tmap")) install.packages("tmap")
+```
+
+```
+## Loading required package: tmap
+```
+
+```r
 if(!require("tidyverse")) install.packages("tidyverse")
+```
+
+```
+## Loading required package: tidyverse
+```
+
+```
+## -- Attaching packages ------------------------------------------------------------------------------------- tidyverse 1.2.1 --
+```
+
+```
+## v ggplot2 3.2.1     v purrr   0.3.2
+## v tibble  2.1.3     v dplyr   0.8.3
+## v tidyr   1.0.0     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.4.0
+```
+
+```
+## -- Conflicts ---------------------------------------------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+```r
 if(!require("DT")) install.packages("DT")
+```
+
+```
+## Loading required package: DT
+```
+
+```r
 if(!require("igraph")) install.packages("igraph")
+```
+
+```
+## Loading required package: igraph
+```
+
+```
+## 
+## Attaching package: 'igraph'
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     as_data_frame, groups, union
+```
+
+```
+## The following objects are masked from 'package:purrr':
+## 
+##     compose, simplify
+```
+
+```
+## The following object is masked from 'package:tidyr':
+## 
+##     crossing
+```
+
+```
+## The following object is masked from 'package:tibble':
+## 
+##     as_data_frame
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     decompose, spectrum
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     union
+```
+
+```r
 if(!require("ggraph")) install.packages("ggraph")
+```
+
+```
+## Loading required package: ggraph
+```
+
+```r
 if(!require("gganimate")) devtools::install_github('thomasp85/gganimate')
+```
+
+```
+## Loading required package: gganimate
+```
+
+```r
 if(!require("tidygraph")) install.packages("tidygraph")
+```
+
+```
+## Loading required package: tidygraph
+```
+
+```
+## 
+## Attaching package: 'tidygraph'
+```
+
+```
+## The following object is masked from 'package:igraph':
+## 
+##     groups
+```
+
+```
+## The following object is masked from 'package:stats':
+## 
+##     filter
+```
+
+```r
 if(!require("RColorBrewer")) install.packages("RColorBrewer")
+```
+
+```
+## Loading required package: RColorBrewer
 ```
 
 # Built With
