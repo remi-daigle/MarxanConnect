@@ -1196,6 +1196,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['marxan_input'] = self.inputdat_file.GetPath()
         self.enable_postHoc()
+        self.load_marxan_output()
 
 
     def on_inputdat_template_file(self, event):
@@ -2305,7 +2306,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             test=os.system("start "+self.project['filepaths']['marxan_input'])
             if test==1:
                 marxanconpy.warn_dialog(
-                    "Your computer does have a default editor for the select file. In Windows File Explorer, double click on a the selected file, You will be asked to set the default program (notepad, notepad++, etc). After that MC will be able to open the file in the default editor")
+                    "Your computer does not have a default editor for the select file. In Windows File Explorer, double click on a the selected file, You will be asked to set the default program (notepad, notepad++, etc). After that MC will be able to open the file in the default editor")
         elif platform.system() == "Darwin":
             os.system("open -t " + self.project['filepaths']['marxan_input'])
 
@@ -2397,35 +2398,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             proc.logfile = sys.stdout
             proc.expect('.*Press return to exit.*')
             proc.close()
+            
+        self.load_marxan_output()
 
-
-        # calculate selection frequency
-        for line in open(self.project['filepaths']['marxan_input']):
-            if line.startswith('SCENNAME'):
-                self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
-            elif line.startswith('NUMREPS'):
-                self.temp['NUMREPS'] = int(line.replace('NUMREPS ', '').replace('\n', ''))
-            elif line.startswith('OUTPUTDIR'):
-                self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-
-        if not os.path.isdir(self.temp['OUTPUTDIR']):
-            self.temp['OUTPUTDIR'] = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),
-                                                  self.temp['OUTPUTDIR'])
-
-        for self.temp['file'] in range(self.temp['NUMREPS']):
-            self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'],
-                                           self.temp['SCENNAME'] + "_r" + "%05d" % (self.temp['file'] + 1) + ".txt")
-            if self.temp['file'] == 0:
-                self.temp['select_freq'] = marxanconpy.read_csv_tsv(self.temp['fn'])
-            else:
-                self.temp['select_freq'].iloc[:,1] = self.temp['select_freq'].iloc[:,1] + \
-                                                       marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1]
-
-        self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq'].iloc[:,1].tolist()
-
-        # load best solution
-        self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + "_best.txt")
-        self.project['connectivityMetrics']['best_solution'] = marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1].tolist()
+    def load_marxan_output(self):
+        if not('connectivityMetrics' in self.project):
+            self.project['connectivityMetrics'] = {}
+        
+        self.project['connectivityMetrics']['select_freq'] = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+                                                              'Selection Frequency').iloc[:,1].tolist()
+        
+        self.project['connectivityMetrics']['best_solution'] = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+                                                              'Best Solution').iloc[:,1].tolist()
 
         # update plotting options
         self.colormap_shapefile_choices()
@@ -2440,12 +2424,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        mvbest = os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest.txt')
-        if os.path.isfile(mvbest):
-            file_viewer(parent=self, file=mvbest,title='mvbest')
+        mvbest = os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest')
+        if os.path.isfile(mvbest+".txt"):
+            file_viewer(parent=self, file=mvbest+".txt",title='mvbest')
+        elif os.path.isfile(mvbest+".csv"):
+            file_viewer(parent=self, file=mvbest+".csv",title='mvbest')
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".txt"):
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest+".txt"),
+                        title='mvbest')
         else:
             file_viewer(parent=self,
-                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest),
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest+".csv"),
                         title='mvbest')
 
     def on_view_sum(self,event):
@@ -2455,12 +2445,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        sumtxt = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + '_sum.txt')
-        if os.path.isfile(sumtxt):
-            file_viewer(parent=self, file=sumtxt, title='sum')
+        sumtxt = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + '_sum')
+        if os.path.isfile(sumtxt+".txt"):
+            file_viewer(parent=self, file=sumtxt, title='sum'+".txt")
+        if os.path.isfile(sumtxt+".csv"):
+            file_viewer(parent=self, file=sumtxt, title='sum'+".csv")
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),sumtxt)+".txt"):
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt+".txt"),
+                        title='sum')
         else:
             file_viewer(parent=self,
-                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt),
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".csv",
                         title='sum')
 
 # ########################## postHoc functions ##########################################################################
@@ -2542,11 +2538,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 elif label == "Type":
                     self.postHoc_grid.SetCellValue(index, col - 1, str(postHoc.iloc[index, col]))
                 elif label == "Percent":
-                    if index > 0 and index < 6:
+                    if index > 0 and index < 9:
                         self.postHoc_grid.SetCellValue(index, col-1, "")
                     else:
                         self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
-                elif label == "Planning Area" and index > 0 and index < 6:
+                elif label == "Planning Area" and index > 0 and index < 9:
                             self.postHoc_grid.SetCellValue(index, col-1, "")
                 else:
                     if postHoc["Metric"][index] in ("Planning Units","Connections"):
