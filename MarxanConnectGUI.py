@@ -2431,12 +2431,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             file_viewer(parent=self, file=mvbest+".csv",title='mvbest')
         elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".txt"):
             file_viewer(parent=self,
-                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest+".txt"),
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".txt",
+            title='mvbest')
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".csv"):
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".csv",
                         title='mvbest')
         else:
-            file_viewer(parent=self,
-                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest+".csv"),
-                        title='mvbest')
+            print("file not found")
 
     def on_view_sum(self,event):
         self.temp = {}
@@ -2447,17 +2449,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
         sumtxt = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + '_sum')
         if os.path.isfile(sumtxt+".txt"):
-            file_viewer(parent=self, file=sumtxt, title='sum'+".txt")
-        if os.path.isfile(sumtxt+".csv"):
-            file_viewer(parent=self, file=sumtxt, title='sum'+".csv")
-        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),sumtxt)+".txt"):
+            file_viewer(parent=self, file=sumtxt+".txt", title='sum')
+        elif os.path.isfile(sumtxt+".csv"):
+            file_viewer(parent=self, file=sumtxt+".csv", title='sum')
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".txt"):
             file_viewer(parent=self,
-                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt+".txt"),
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".txt",
                         title='sum')
-        else:
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".csv"):
             file_viewer(parent=self,
                         file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".csv",
                         title='sum')
+        else:
+            print("file not found")
 
 # ########################## postHoc functions ##########################################################################
 
