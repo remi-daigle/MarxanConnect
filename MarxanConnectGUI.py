@@ -1702,7 +1702,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.message = "See the Glossary for 'Data Formats' under 'Connectivity'."
             self.warn = False
             if not self.conmat.shape[1] == self.ncol:
-                self.message = self.message + " The " + format + " Data Format expects exactly " + self.ncol + " columns, not " + \
+                self.message = self.message + " The " + format + " Data Format expects exactly " + str(self.ncol) + " columns, not " + \
                                str(self.conmat.shape[1]) + " in the file."
                 self.warn = True
 
