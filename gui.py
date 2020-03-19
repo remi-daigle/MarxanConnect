@@ -248,7 +248,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.spatialInput.SetSizer( spatialMainSizer )
 		self.spatialInput.Layout()
 		spatialMainSizer.Fit( self.spatialInput )
-		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.spatialInput, u"1) Spatial Input", False, wx.NullBitmap )
 		self.connectivityInput = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		conn_input_mainsizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		conn_input_mainsizer.AddGrowableCol( 0 )
@@ -594,7 +594,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.hab_res.SetSizer( hab_res_sizer )
 		self.hab_res.Layout()
 		hab_res_sizer.Fit( self.hab_res )
-		self.land_type_choice.AddPage( self.hab_res, u"Habitat Type + Isolation", True )
+		self.land_type_choice.AddPage( self.hab_res, u"Habitat Type + Isolation", False )
 		self.res_suf = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		land_res_sizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		land_res_sizer.AddGrowableCol( 0 )
@@ -662,7 +662,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		land_res_sizer.Fit( self.res_suf )
 		self.land_type_choice.AddPage( self.res_suf, u"Resistance Surface", False )
 		self.con_mat = wx.Panel( self.land_type_choice, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		self.land_type_choice.AddPage( self.con_mat, u"Connectivity Edge List with Habitat", False )
+		self.land_type_choice.AddPage( self.con_mat, u"Connectivity Edge List with Habitat", True )
 		landMainSizer.Add( self.land_type_choice, 1, wx.EXPAND, 5 )
 
 		land_pucm_output_txt_sizer = wx.BoxSizer( wx.VERTICAL )
@@ -1823,7 +1823,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.postHocEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		postHocMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		postHocMainSizer.AddGrowableCol( 0 )
-		postHocMainSizer.AddGrowableRow( 2 )
+		postHocMainSizer.AddGrowableRow( 3 )
 		postHocMainSizer.SetFlexibleDirection( wx.BOTH )
 		postHocMainSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
@@ -1837,17 +1837,33 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		postHocMainSizer.Add( postHoc_def_sizer, 1, wx.EXPAND, 5 )
 
-		postHoc_choice_sizer = wx.BoxSizer( wx.VERTICAL )
+		postHoc_choice_sizer = wx.FlexGridSizer( 1, 3, 0, 0 )
+		postHoc_choice_sizer.AddGrowableCol( 2 )
+		postHoc_choice_sizer.SetFlexibleDirection( wx.BOTH )
+		postHoc_choice_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.postHoc_choice_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Choose Available Marxan output to evaluate.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_choice_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Choose Available Marxan output to evaluate:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.postHoc_choice_txt.Wrap( -1 )
 
 		self.postHoc_choice_txt.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, True, wx.EmptyString ) )
 
 		postHoc_choice_sizer.Add( self.postHoc_choice_txt, 0, wx.ALL, 5 )
 
-		postHoc_choice_opt_sizer = wx.FlexGridSizer( 2, 2, 0, 0 )
-		postHoc_choice_opt_sizer.AddGrowableCol( 1 )
+		self.postHoc_custom_choice = wx.CheckBox( self.postHocEvaluation, wx.ID_ANY, u"Use Custom Solution:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_custom_choice.SetToolTip( u"This file must be formatted exactly like the Marxan solution output files (e.g. scenario_r0001.csv). " )
+
+		postHoc_choice_sizer.Add( self.postHoc_custom_choice, 0, wx.ALL, 5 )
+
+		self.postHoc_custom_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, wx.EmptyString, u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		postHoc_choice_sizer.Add( self.postHoc_custom_file, 0, wx.ALL|wx.EXPAND, 0 )
+
+
+		postHocMainSizer.Add( postHoc_choice_sizer, 1, wx.EXPAND, 5 )
+
+		postHoc_choice_sizer = wx.BoxSizer( wx.VERTICAL )
+
+		postHoc_choice_opt_sizer = wx.FlexGridSizer( 2, 3, 0, 0 )
+		postHoc_choice_opt_sizer.AddGrowableCol( 2 )
 		postHoc_choice_opt_sizer.SetFlexibleDirection( wx.BOTH )
 		postHoc_choice_opt_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
@@ -1861,6 +1877,11 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		postHoc_choice_opt_sizer.Add( self.postHoc_output_choice_txt, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
+		self.postHoc_percentage_slider_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Selection Frequency Percentage Threshold", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_percentage_slider_txt.Wrap( -1 )
+
+		postHoc_choice_opt_sizer.Add( self.postHoc_percentage_slider_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+
 		postHoc_category_choiceChoices = [ u"Demographic Data", u"Landscape Data" ]
 		self.postHoc_category_choice = wx.Choice( self.postHocEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, postHoc_category_choiceChoices, 0 )
 		self.postHoc_category_choice.SetSelection( 0 )
@@ -1869,7 +1890,12 @@ class MarxanConnectGUI ( wx.Frame ):
 		postHoc_output_choiceChoices = []
 		self.postHoc_output_choice = wx.Choice( self.postHocEvaluation, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, postHoc_output_choiceChoices, 0 )
 		self.postHoc_output_choice.SetSelection( 0 )
-		postHoc_choice_opt_sizer.Add( self.postHoc_output_choice, 0, wx.ALL|wx.EXPAND, 5 )
+		self.postHoc_output_choice.SetMinSize( wx.Size( 400,-1 ) )
+
+		postHoc_choice_opt_sizer.Add( self.postHoc_output_choice, 0, wx.ALL, 5 )
+
+		self.postHoc_percentage_slider = wx.Slider( self.postHocEvaluation, wx.ID_ANY, 80, 0, 100, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_VALUE_LABEL )
+		postHoc_choice_opt_sizer.Add( self.postHoc_percentage_slider, 0, wx.ALL|wx.EXPAND, 5 )
 
 
 		postHoc_choice_sizer.Add( postHoc_choice_opt_sizer, 1, wx.EXPAND, 5 )
@@ -1910,22 +1936,6 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		postHocMainSizer.Add( postHoc_grid_sizer, 1, wx.EXPAND, 5 )
 
-		pudat_file_sizer1 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		pudat_file_sizer1.AddGrowableCol( 1 )
-		pudat_file_sizer1.SetFlexibleDirection( wx.BOTH )
-		pudat_file_sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-
-		self.postHoc_export_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Post-Hoc Output File", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.postHoc_export_txt.Wrap( -1 )
-
-		pudat_file_sizer1.Add( self.postHoc_export_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
-
-		self.postHoc_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
-		pudat_file_sizer1.Add( self.postHoc_file, 0, wx.ALL|wx.EXPAND, 5 )
-
-
-		postHocMainSizer.Add( pudat_file_sizer1, 1, wx.EXPAND, 5 )
-
 		metrics_buttons_sizer2 = wx.FlexGridSizer( 0, 6, 0, 0 )
 		metrics_buttons_sizer2.AddGrowableCol( 0 )
 		metrics_buttons_sizer2.SetFlexibleDirection( wx.BOTH )
@@ -1936,8 +1946,11 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		metrics_buttons_sizer2.Add( self.spacertext2, 0, wx.ALL, 5 )
 
-		self.export_postHoc = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Export File", wx.DefaultPosition, wx.DefaultSize, 0 )
-		metrics_buttons_sizer2.Add( self.export_postHoc, 0, wx.ALL, 5 )
+		self.plot_postHoc_sizes = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Plot Size Frequency", wx.DefaultPosition, wx.DefaultSize, 0 )
+		metrics_buttons_sizer2.Add( self.plot_postHoc_sizes, 0, wx.ALL, 5 )
+
+		self.plot_postHoc_spacing = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Plot Spacing Frequency", wx.DefaultPosition, wx.DefaultSize, 0 )
+		metrics_buttons_sizer2.Add( self.plot_postHoc_spacing, 0, wx.ALL, 5 )
 
 		self.calc_postHoc = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Calculate Post-Hoc", wx.DefaultPosition, wx.DefaultSize, 0 )
 		metrics_buttons_sizer2.Add( self.calc_postHoc, 0, wx.ALL, 5 )
@@ -1945,11 +1958,41 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		postHocMainSizer.Add( metrics_buttons_sizer2, 1, wx.EXPAND, 5 )
 
+		pudat_file_sizer1 = wx.FlexGridSizer( 2, 3, 0, 0 )
+		pudat_file_sizer1.AddGrowableCol( 1 )
+		pudat_file_sizer1.SetFlexibleDirection( wx.BOTH )
+		pudat_file_sizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+		self.postHoc_export_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Post-Hoc Summary File:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_export_txt.Wrap( -1 )
+
+		pudat_file_sizer1.Add( self.postHoc_export_txt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
+
+		self.postHoc_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.csv", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		pudat_file_sizer1.Add( self.postHoc_file, 0, wx.ALL|wx.EXPAND, 5 )
+
+		self.export_postHoc = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Export File", wx.DefaultPosition, wx.DefaultSize, 0 )
+		pudat_file_sizer1.Add( self.export_postHoc, 0, wx.ALL, 5 )
+
+		self.postHoc_shp_export_txt = wx.StaticText( self.postHocEvaluation, wx.ID_ANY, u"Post-Hoc Clusters Shapefile:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.postHoc_shp_export_txt.Wrap( -1 )
+
+		pudat_file_sizer1.Add( self.postHoc_shp_export_txt, 0, wx.ALL, 5 )
+
+		self.postHoc_shp_file = wx.FilePickerCtrl( self.postHocEvaluation, wx.ID_ANY, u"~\\postHoc.shp", u"Select a file", u"Comma Separated Values (*.csv)|*.csv|All files (*.*)|*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_OPEN|wx.FLP_USE_TEXTCTRL )
+		pudat_file_sizer1.Add( self.postHoc_shp_file, 0, wx.ALL|wx.EXPAND, 5 )
+
+		self.export_postHoc_shp = wx.Button( self.postHocEvaluation, wx.ID_ANY, u"Export File", wx.DefaultPosition, wx.DefaultSize, 0 )
+		pudat_file_sizer1.Add( self.export_postHoc_shp, 0, wx.ALL, 5 )
+
+
+		postHocMainSizer.Add( pudat_file_sizer1, 1, wx.EXPAND, 5 )
+
 
 		self.postHocEvaluation.SetSizer( postHocMainSizer )
 		self.postHocEvaluation.Layout()
 		postHocMainSizer.Fit( self.postHocEvaluation )
-		self.auinotebook.AddPage( self.postHocEvaluation, u"7) Post-Hoc Evaluation", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.postHocEvaluation, u"7) Post-Hoc Evaluation", True, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -2469,11 +2512,17 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.run_marxan_button.Bind( wx.EVT_BUTTON, self.on_run_marxan )
 		self.view_sum.Bind( wx.EVT_BUTTON, self.on_view_sum )
 		self.view_mvbest.Bind( wx.EVT_BUTTON, self.on_view_mvbest )
+		self.postHoc_custom_choice.Bind( wx.EVT_CHECKBOX, self.on_postHoc_custom_choice )
+		self.postHoc_custom_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_postHoc_custom_file )
 		self.postHoc_category_choice.Bind( wx.EVT_CHOICE, self.on_postHoc_category_choice )
 		self.postHoc_output_choice.Bind( wx.EVT_CHOICE, self.on_postHoc_output_choice )
+		self.plot_postHoc_sizes.Bind( wx.EVT_BUTTON, self.on_plot_postHoc_sizes )
+		self.plot_postHoc_spacing.Bind( wx.EVT_BUTTON, self.on_plot_postHoc_spacing )
+		self.calc_postHoc.Bind( wx.EVT_BUTTON, self.on_calc_postHoc )
 		self.postHoc_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_postHoc_file )
 		self.export_postHoc.Bind( wx.EVT_BUTTON, self.on_export_postHoc )
-		self.calc_postHoc.Bind( wx.EVT_BUTTON, self.on_calc_postHoc )
+		self.postHoc_shp_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_postHoc_shp_file )
+		self.export_postHoc_shp.Bind( wx.EVT_BUTTON, self.on_export_postHoc_shp )
 		self.metric_shp_choice.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice )
 		self.metric_shp_choice1.Bind( wx.EVT_CHOICE, self.on_metric_shp_choice1 )
 		self.plot_map_button.Bind( wx.EVT_BUTTON, self.on_plot_map_button )
@@ -2801,10 +2850,25 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_view_mvbest( self, event ):
 		event.Skip()
 
+	def on_postHoc_custom_choice( self, event ):
+		event.Skip()
+
+	def on_postHoc_custom_file( self, event ):
+		event.Skip()
+
 	def on_postHoc_category_choice( self, event ):
 		event.Skip()
 
 	def on_postHoc_output_choice( self, event ):
+		event.Skip()
+
+	def on_plot_postHoc_sizes( self, event ):
+		event.Skip()
+
+	def on_plot_postHoc_spacing( self, event ):
+		event.Skip()
+
+	def on_calc_postHoc( self, event ):
 		event.Skip()
 
 	def on_postHoc_file( self, event ):
@@ -2813,7 +2877,10 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_export_postHoc( self, event ):
 		event.Skip()
 
-	def on_calc_postHoc( self, event ):
+	def on_postHoc_shp_file( self, event ):
+		event.Skip()
+
+	def on_export_postHoc_shp( self, event ):
 		event.Skip()
 
 	def on_metric_shp_choice( self, event ):
@@ -2947,7 +3014,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v1.0.1-rc2020.03.06.08. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v1.0.1-rc2020.03.19.17. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
