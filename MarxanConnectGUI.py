@@ -74,8 +74,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.auinotebook.ChangeSelection(0)
 
         # # set posthoc page off by default
-        self.posthocdefault = False
-        self.on_posthoc(event=None)
+        # self.posthocdefault = False
+        # self.on_posthoc(event=None)
 
         # set MwZ option off by default
         self.mwzdefault = False
@@ -410,6 +410,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
 
         # Post-Hoc
         self.postHoc_file.SetPath(self.project['filepaths']['posthoc'])
+        self.postHoc_shp_file.SetPath(self.project['filepaths']['posthoc_shp'])
 
         # Export plot data
         self.PUSHP_file.SetPath(self.project['filepaths']['pushp'])
@@ -1196,6 +1197,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         self.project['filepaths']['marxan_input'] = self.inputdat_file.GetPath()
         self.enable_postHoc()
+        self.load_marxan_output()
 
 
     def on_inputdat_template_file(self, event):
@@ -1701,7 +1703,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.message = "See the Glossary for 'Data Formats' under 'Connectivity'."
             self.warn = False
             if not self.conmat.shape[1] == self.ncol:
-                self.message = self.message + " The " + format + " Data Format expects exactly " + self.ncol + " columns, not " + \
+                self.message = self.message + " The " + format + " Data Format expects exactly " + str(self.ncol) + " columns, not " + \
                                str(self.conmat.shape[1]) + " in the file."
                 self.warn = True
 
@@ -1985,7 +1987,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # get the 'from' for discretization
         if 'spec_' + type in self.project['connectivityMetrics']:
             self.temp['metric'] = numpy.array(self.project['connectivityMetrics']['spec_' + type][metric_type])
-
+            
+        self.on_plot_freq(self.temp['metric'],metric_type)
+            
+    def on_plot_freq(self,metric,metric_type):
         # prepare plotting window
         if not hasattr(self, 'plot'):
             self.plot = wx.Panel(self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
@@ -2002,20 +2007,20 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.plot.SetSizer(self.plot.sizer)
         self.plot.Fit()
 
-        if int(len(self.temp['metric'])/15) > 100:
+        if int(len(metric)/15) > 100:
             b=100
         else:
-            b=int(len(self.temp['metric'])/15)
+            b=int(len(metric)/15)
 
-        self.plot.hist = plt.hist(self.temp['metric'],bins=b)
+        self.plot.hist = plt.hist(metric,bins=b)
         self.plot.xlabel = plt.xlabel(metric_type)
         self.plot.ylabel = plt.ylabel("Frequency")
-        self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 25), label='test',color='k',linestyle='--')
-        self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 20),sum(self.plot.axes.get_ylim())/2,'Lower Quartile',rotation=90,verticalalignment='center')
-        self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 50), label='test',color='k',linestyle='--')
-        self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 45), sum(self.plot.axes.get_ylim()) / 2, 'Median', rotation=90,verticalalignment='center')
-        self.plot.axvline = plt.axvline(numpy.percentile(self.temp['metric'], 75), label='test',color='k',linestyle='--')
-        self.plot.text = plt.text(numpy.percentile(self.temp['metric'], 70), sum(self.plot.axes.get_ylim()) / 2, 'Upper Quartile', rotation=90,verticalalignment='center')
+        self.plot.axvline = plt.axvline(numpy.percentile(metric, 25), label='test',color='k',linestyle='--')
+        self.plot.text = plt.text(numpy.percentile(metric, 20),sum(self.plot.axes.get_ylim())/2,'Lower Quartile',rotation=90,verticalalignment='center')
+        self.plot.axvline = plt.axvline(numpy.percentile(metric, 50), label='test',color='k',linestyle='--')
+        self.plot.text = plt.text(numpy.percentile(metric, 45), sum(self.plot.axes.get_ylim()) / 2, 'Median', rotation=90,verticalalignment='center')
+        self.plot.axvline = plt.axvline(numpy.percentile(metric, 75), label='test',color='k',linestyle='--')
+        self.plot.text = plt.text(numpy.percentile(metric, 70), sum(self.plot.axes.get_ylim()) / 2, 'Upper Quartile', rotation=90,verticalalignment='center')
         # change selection to plot tab
         for i in range(self.auinotebook.GetPageCount()):
             if self.auinotebook.GetPageText(i) == "8) Plot" or self.auinotebook.GetPageText(i) == "9) Plot":
@@ -2305,7 +2310,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             test=os.system("start "+self.project['filepaths']['marxan_input'])
             if test==1:
                 marxanconpy.warn_dialog(
-                    "Your computer does have a default editor for the select file. In Windows File Explorer, double click on a the selected file, You will be asked to set the default program (notepad, notepad++, etc). After that MC will be able to open the file in the default editor")
+                    "Your computer does not have a default editor for the select file. In Windows File Explorer, double click on a the selected file, You will be asked to set the default program (notepad, notepad++, etc). After that MC will be able to open the file in the default editor")
         elif platform.system() == "Darwin":
             os.system("open -t " + self.project['filepaths']['marxan_input'])
 
@@ -2397,35 +2402,18 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             proc.logfile = sys.stdout
             proc.expect('.*Press return to exit.*')
             proc.close()
+            
+        self.load_marxan_output()
 
-
-        # calculate selection frequency
-        for line in open(self.project['filepaths']['marxan_input']):
-            if line.startswith('SCENNAME'):
-                self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
-            elif line.startswith('NUMREPS'):
-                self.temp['NUMREPS'] = int(line.replace('NUMREPS ', '').replace('\n', ''))
-            elif line.startswith('OUTPUTDIR'):
-                self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-
-        if not os.path.isdir(self.temp['OUTPUTDIR']):
-            self.temp['OUTPUTDIR'] = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),
-                                                  self.temp['OUTPUTDIR'])
-
-        for self.temp['file'] in range(self.temp['NUMREPS']):
-            self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'],
-                                           self.temp['SCENNAME'] + "_r" + "%05d" % (self.temp['file'] + 1) + ".txt")
-            if self.temp['file'] == 0:
-                self.temp['select_freq'] = marxanconpy.read_csv_tsv(self.temp['fn'])
-            else:
-                self.temp['select_freq'].iloc[:,1] = self.temp['select_freq'].iloc[:,1] + \
-                                                       marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1]
-
-        self.project['connectivityMetrics']['select_freq'] = self.temp['select_freq'].iloc[:,1].tolist()
-
-        # load best solution
-        self.temp['fn'] = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + "_best.txt")
-        self.project['connectivityMetrics']['best_solution'] = marxanconpy.read_csv_tsv(self.temp['fn']).iloc[:,1].tolist()
+    def load_marxan_output(self):
+        if not('connectivityMetrics' in self.project):
+            self.project['connectivityMetrics'] = {}
+        
+        self.project['connectivityMetrics']['select_freq'] = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+                                                              'Selection Frequency').iloc[:,1].tolist()
+        
+        self.project['connectivityMetrics']['best_solution'] = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+                                                              'Best Solution').iloc[:,1].tolist()
 
         # update plotting options
         self.colormap_shapefile_choices()
@@ -2440,13 +2428,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        mvbest = os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest.txt')
-        if os.path.isfile(mvbest):
-            file_viewer(parent=self, file=mvbest,title='mvbest')
-        else:
+        mvbest = os.path.join(self.temp['OUTPUTDIR'],self.temp['SCENNAME']+'_mvbest')
+        if os.path.isfile(mvbest+".txt"):
+            file_viewer(parent=self, file=mvbest+".txt",title='mvbest')
+        elif os.path.isfile(mvbest+".csv"):
+            file_viewer(parent=self, file=mvbest+".csv",title='mvbest')
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".txt"):
             file_viewer(parent=self,
-                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest),
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".txt",
+            title='mvbest')
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".csv"):
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),mvbest)+".csv",
                         title='mvbest')
+        else:
+            print("file not found")
 
     def on_view_sum(self,event):
         self.temp = {}
@@ -2455,13 +2451,21 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.temp['SCENNAME'] = line.replace('SCENNAME ', '').replace('\n', '')
             elif line.startswith('OUTPUTDIR'):
                 self.temp['OUTPUTDIR'] = line.replace('OUTPUTDIR ', '').replace('\n', '')
-        sumtxt = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + '_sum.txt')
-        if os.path.isfile(sumtxt):
-            file_viewer(parent=self, file=sumtxt, title='sum')
-        else:
+        sumtxt = os.path.join(self.temp['OUTPUTDIR'], self.temp['SCENNAME'] + '_sum')
+        if os.path.isfile(sumtxt+".txt"):
+            file_viewer(parent=self, file=sumtxt+".txt", title='sum')
+        elif os.path.isfile(sumtxt+".csv"):
+            file_viewer(parent=self, file=sumtxt+".csv", title='sum')
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".txt"):
             file_viewer(parent=self,
-                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt),
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".txt",
                         title='sum')
+        elif os.path.isfile(os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".csv"):
+            file_viewer(parent=self,
+                        file=os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']), sumtxt)+".csv",
+                        title='sum')
+        else:
+            print("file not found")
 
 # ########################## postHoc functions ##########################################################################
 
@@ -2477,19 +2481,45 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             self.calc_postHoc.Enable(True)
         else:
             self.calc_postHoc.Enable(False)
+            
+            
         if 'postHoc' in self.project:
-            self.export_postHoc.Enable(True)
+            if 'areas' in self.project['postHoc']:
+                self.export_postHoc.Enable(True)
+                self.export_postHoc_shp.Enable(True)
+                self.plot_postHoc_spacing.Enable(True)
+                self.plot_postHoc_sizes.Enable(True)
+            else:
+                self.export_postHoc.Enable(False)
+                self.export_postHoc_shp.Enable(False)
+                self.plot_postHoc_spacing.Enable(False)
+                self.plot_postHoc_sizes.Enable(False)
         else:
             self.export_postHoc.Enable(False)
+            self.export_postHoc_shp.Enable(False)
+            self.plot_postHoc_spacing.Enable(False)
+            self.plot_postHoc_sizes.Enable(False)
+        
+        if self.postHoc_output_choice.GetStringSelection() == "Selection Frequency":
+            self.postHoc_percentage_slider.Enable(True)
+        else:
+            self.postHoc_percentage_slider.Enable(False)
+        
+        self.postHoc_enable_custom()
+
 
     def set_postHoc_category_choice(self):
+        if self.postHoc_output_choice.GetSelection()==-1:
+            selection=0
+        else:
+            selection=self.postHoc_output_choice.GetSelection()
         choices = []
         if os.path.isfile(self.project['filepaths']['land_pu_cm_filepath']):
             choices.append("Landscape Data")
         if os.path.isfile(self.project['filepaths']['demo_pu_cm_filepath']):
             choices.append("Demographic Data")
         self.postHoc_category_choice.SetItems(choices)
-        self.postHoc_category_choice.SetSelection(0)
+        self.postHoc_category_choice.SetSelection(selection)
         self.set_postHoc_output_choice()
 
     def on_postHoc_category_choice(self, event):
@@ -2498,6 +2528,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if Cols > 0 or Rows > 0:
             self.postHoc_grid.DeleteCols(0, Cols, True)
             self.postHoc_grid.DeleteRows(0, Rows, True)
+            
+        if self.postHoc_output_choice.GetStringSelection() == "Selection Frequency":
+            self.postHoc_percentage_slider.Enable(True)
+        else:
+            self.postHoc_percentage_slider.Enable(False)
 
     def on_postHoc_output_choice(self, event):
         Cols = self.postHoc_grid.GetNumberCols()
@@ -2505,8 +2540,14 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if Cols > 0 or Rows > 0:
             self.postHoc_grid.DeleteCols(0, Cols, True)
             self.postHoc_grid.DeleteRows(0, Rows, True)
+            
+        if self.postHoc_output_choice.GetStringSelection() == "Selection Frequency":
+            self.postHoc_percentage_slider.Enable(True)
+        else:
+            self.postHoc_percentage_slider.Enable(False)
 
     def on_calc_postHoc(self, event):
+        self.project["postHoc"] = {}
         if self.postHoc_category_choice.GetStringSelection() == "Landscape Data":
             format = "Edge List with Habitat"
             filename = self.project['filepaths']['land_pu_cm_filepath']
@@ -2517,15 +2558,67 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             format = None
             filename = "notarealfilename"
 
-        solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+        if self.postHoc_custom_choice.GetValue():        
+            solution = marxanconpy.read_csv_tsv(self.postHoc_custom_file.GetPath())
+        elif self.postHoc_output_choice.GetStringSelection()=="Selection Frequency":
+            for line in open(self.project['filepaths']['marxan_input']):
+                if line.startswith('NUMREPS'):
+                    NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
+                    
+            solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
+                                                              self.postHoc_output_choice.GetStringSelection())
+            solution.iloc[:,1] = (solution.iloc[:,1]>(NUMREPS/100*self.postHoc_percentage_slider.GetValue())).astype(int)
+        else:
+            solution = marxanconpy.manipulation.get_marxan_output(self.project['filepaths']['marxan_input'],
                                                               self.postHoc_output_choice.GetStringSelection())
         
         pu = gpd.GeoDataFrame.from_file(self.project['filepaths']['pu_filepath']).to_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+        self.project["postHoc"]["min_dist"] = marxanconpy.posthoc.calc_postHoc_dist(pu,
+                                                         filename,
+                                                         format,
+                                                         IDs=solution.iloc[:,0].values,
+                                                         selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
+        self.project["postHoc"]["clusters"] = marxanconpy.posthoc.calc_postHoc_clusters(pu,
+                                                               filename,
+                                                               format,
+                                                               IDs=solution.iloc[:,0].values,
+                                                               selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
+        self.project["postHoc"]["areas"] = self.project["postHoc"]["clusters"].area
+        self.project["postHoc"]["fragmentation"] = marxanconpy.posthoc.calc_postHoc_frag(self.project["postHoc"]["clusters"])
+        
+        
+        # sum data
+        for line in open(self.project['filepaths']['marxan_input']):
+            if line.startswith('SCENNAME'):
+                SCENNAME = line.replace('SCENNAME ', '').replace('\n', '')
+            elif line.startswith('NUMREPS'):
+                NUMREPS = int(line.replace('NUMREPS ', '').replace('\n', ''))
+            elif line.startswith('OUTPUTDIR'):
+                OUTPUTDIR = line.replace('OUTPUTDIR ', '').replace('\n', '')
+
+        if not os.path.isdir(OUTPUTDIR):
+            OUTPUTDIR = os.path.join(os.path.dirname(self.project['filepaths']['marxan_input']),OUTPUTDIR)
+            
+            
+        fn = os.path.join(OUTPUTDIR, SCENNAME + "_sum")
+        if os.path.isfile(fn + '.csv'):
+            file = marxanconpy.read_csv_tsv(fn + '.csv')
+        elif os.path.isfile(fn + '.txt'):
+            file = marxanconpy.read_csv_tsv(fn + '.txt')
+        else:
+            print('WARNING: ' + fn + ' not found')
+        
+        self.project["postHoc"]["sum_data"] = file.iloc[int(file[["Score"]].idxmin())]
+        
         postHoc = marxanconpy.posthoc.calc_postHoc(pu,
                                                    filename,
                                                    format,
                                                    IDs=solution.iloc[:,0].values,
-                                                   selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values)
+                                                   selectionIDs=solution[(solution.iloc[:,1].astype("str")=="1").values].iloc[:,0].values,
+                                                   sum_data=self.project["postHoc"]["sum_data"],
+                                                   min_dist=self.project["postHoc"]["min_dist"],
+                                                   fragmentation=self.project["postHoc"]["fragmentation"],
+                                                   postHoc_areas=self.project["postHoc"]["areas"])
         Cols = self.postHoc_grid.GetNumberCols()
         Rows = self.postHoc_grid.GetNumberRows()
         if Cols > 0 or Rows > 0:
@@ -2542,15 +2635,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 elif label == "Type":
                     self.postHoc_grid.SetCellValue(index, col - 1, str(postHoc.iloc[index, col]))
                 elif label == "Percent":
-                    if index > 0 and index < 6:
+                    if index > 0 and index < 11:
                         self.postHoc_grid.SetCellValue(index, col-1, "")
                     else:
                         self.postHoc_grid.SetCellValue(index, col - 1, str(round(postHoc.iloc[index, col], 2)))
-                elif label == "Planning Area" and index > 0 and index < 6:
+                elif label == "Planning Area" and index > 0 and index < 11:
                             self.postHoc_grid.SetCellValue(index, col-1, "")
                 else:
-                    if postHoc["Metric"][index] in ("Planning Units","Connections"):
+                    if postHoc["Metric"][index] in ("Planning Units","Connections","Clusters","Marxan Score"):
                         self.postHoc_grid.SetCellValue(index, col-1, str(int(postHoc.iloc[index, col])))
+                    elif postHoc["Metric"][index] in ("Graph Density"):
+                        self.postHoc_grid.SetCellValue(index, col-1, str(round(postHoc.iloc[index, col], 6)))
                     else:
                         self.postHoc_grid.SetCellValue(index, col-1, str(round(postHoc.iloc[index, col], 2)))
 
@@ -2562,13 +2657,38 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         winx,winy = self.GetSize()
         if winy-y < 280:
             self.postHoc_grid.SetSize(x+20,winy-280)
-        self.project["postHoc"] = postHoc.to_json(orient='split')
+        self.project["postHoc"]["summary"] = postHoc.to_json(orient='split')
         self.enable_postHoc()
 
     def on_export_postHoc( self, event ):
-        pandas.read_json(self.project["postHoc"], orient='split').to_csv(self.postHoc_file.GetPath(), index=0)
+        pandas.read_json(self.project["postHoc"]["summary"], orient='split').to_csv(self.project['filepaths']['posthoc'], index=0)
+        
+    def on_export_postHoc_shp( self, event ):
+        self.temp = {}
+        self.temp['clusters'] = self.project["postHoc"]["clusters"]
+        if 'areas' in self.project['postHoc']:
+            self.temp['clusters'] = pandas.concat(
+                [self.temp['clusters'], pandas.DataFrame.from_dict(self.project['postHoc']['areas'])],
+                axis=1)
+            print(self.temp['clusters'].columns)
+            self.temp['clusters'].rename(columns={0:'areas'},inplace=True)
+            print(self.temp['clusters'].columns)
+        if 'min_dist' in self.project['postHoc']:
+            self.temp['clusters'] = pandas.concat(
+                [self.temp['clusters'], pandas.DataFrame.from_dict(self.project['postHoc']['min_dist'].min(axis=1))],
+                axis=1)
+            print(self.temp['clusters'].columns)
+            self.temp['clusters'].rename(columns={0:'min_dist'},inplace=True)
+            print(self.temp['clusters'].columns)
+        
+        print(self.temp['clusters'])
+        self.temp['clusters'].to_file(self.project['filepaths']['posthoc_shp'])
 
     def set_postHoc_output_choice(self):
+        if self.postHoc_output_choice.GetSelection()==-1:
+            selection=0
+        else:
+            selection=self.postHoc_output_choice.GetSelection()
         if os.path.isfile(self.project['filepaths']['marxan_input']):
             for line in open(self.project['filepaths']['marxan_input']):
                 if line.startswith('SCENNAME'):
@@ -2584,17 +2704,49 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             fn = os.path.join(OUTPUTDIR, SCENNAME + "_best")
             
             if os.path.isfile(fn + '.csv') or os.path.isfile(fn + '.txt'):
-                self.postHoc_output_choice.SetItems(['Best Solution'] +
-                                                      ["r" + "%05d" % t for t in range(1, NUMREPS)])
+                if self.postHoc_custom_choice.GetValue():
+                    self.postHoc_output_choice.SetItems(['Custom Solution'])
+                    self.postHoc_output_choice_txt.SetLabel("Output")
+                    self.postHoc_output_choice.SetSelection(selection)
+                else:    
+                    self.postHoc_output_choice.SetItems(['Best Solution'] + 
+                                                        ['Selection Frequency'] +
+                                                        ["r" + "%05d" % t for t in range(NUMREPS+1)])
+                    self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
+                    self.postHoc_output_choice.SetSelection(selection)
             else:
                 self.postHoc_output_choice.SetItems(['No Output Available'])
-
+                
+                        
             
-            self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
-            self.postHoc_output_choice.SetSelection(0)
 
     def on_postHoc_file(self,event):
         self.project['filepaths']['posthoc'] = self.postHoc_file.GetPath()
+        
+    def on_postHoc_shp_file(self,event):
+        self.project['filepaths']['posthoc_shp'] = self.postHoc_shp_file.GetPath()
+        
+    def on_plot_postHoc_spacing( self, event ):
+        metric_type = "Distance to nearest cluster (km)"
+        self.on_plot_freq(numpy.array(self.project["postHoc"]["min_dist"]).min(axis=1)/1000,metric_type)
+        
+    def on_plot_postHoc_sizes( self, event ):
+        metric_type = "Cluster areas (km^2)"
+        self.on_plot_freq(numpy.array(self.project["postHoc"]["areas"])/1000000,metric_type)
+        
+    def on_postHoc_custom_choice( self, event):
+        self.postHoc_enable_custom()
+        self.set_postHoc_output_choice()
+        
+    def postHoc_enable_custom(self):
+        if self.postHoc_custom_choice.GetValue():
+            self.postHoc_custom_file.Enable(True)
+            self.postHoc_category_choice.Enable(False)
+            self.postHoc_output_choice.Enable(False)
+        else:
+            self.postHoc_custom_file.Enable(False)
+            self.postHoc_category_choice.Enable(True)
+            self.postHoc_output_choice.Enable(True)
 
 
 # ###########################  spec grid popup functions ###############################################################
