@@ -2467,6 +2467,9 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         else:
             print("file not found")
 
+    def on_load_marxan(self, event):
+        self.load_marxan_output()
+
 # ########################## postHoc functions ##########################################################################
 
     def enable_postHoc(self):
@@ -2710,7 +2713,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                     self.postHoc_output_choice.SetSelection(selection)
                 else:    
                     self.postHoc_output_choice.SetItems(['Best Solution'] + 
-                                                        ['Selection Frequency'] +
                                                         ["r" + "%05d" % t for t in range(NUMREPS+1)])
                     self.postHoc_output_choice_txt.SetLabel("Output: " + SCENNAME)
                     self.postHoc_output_choice.SetSelection(selection)

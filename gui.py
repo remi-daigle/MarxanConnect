@@ -1793,7 +1793,7 @@ class MarxanConnectGUI ( wx.Frame ):
 
 		marxanMainSizer.Add( inputdat_file_sizer, 1, wx.EXPAND, 5 )
 
-		run_marxan_sizer = wx.FlexGridSizer( 1, 4, 0, 0 )
+		run_marxan_sizer = wx.FlexGridSizer( 1, 5, 0, 0 )
 		run_marxan_sizer.AddGrowableCol( 0 )
 		run_marxan_sizer.SetFlexibleDirection( wx.BOTH )
 		run_marxan_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -1812,6 +1812,9 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.view_mvbest = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"View mvbest", wx.DefaultPosition, wx.DefaultSize, 0 )
 		run_marxan_sizer.Add( self.view_mvbest, 0, wx.ALL, 5 )
 
+		self.load_marxan_button = wx.Button( self.marxanAnalysis, wx.ID_ANY, u"Load Marxan Results", wx.DefaultPosition, wx.DefaultSize, 0 )
+		run_marxan_sizer.Add( self.load_marxan_button, 0, wx.ALL, 5 )
+
 
 		marxanMainSizer.Add( run_marxan_sizer, 1, wx.EXPAND, 5 )
 
@@ -1819,7 +1822,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.marxanAnalysis.SetSizer( marxanMainSizer )
 		self.marxanAnalysis.Layout()
 		marxanMainSizer.Fit( self.marxanAnalysis )
-		self.auinotebook.AddPage( self.marxanAnalysis, u"6) Run Marxan", False, wx.NullBitmap )
+		self.auinotebook.AddPage( self.marxanAnalysis, u"6) Run Marxan", True, wx.NullBitmap )
 		self.postHocEvaluation = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		postHocMainSizer = wx.FlexGridSizer( 0, 1, 0, 0 )
 		postHocMainSizer.AddGrowableCol( 0 )
@@ -1992,7 +1995,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.postHocEvaluation.SetSizer( postHocMainSizer )
 		self.postHocEvaluation.Layout()
 		postHocMainSizer.Fit( self.postHocEvaluation )
-		self.auinotebook.AddPage( self.postHocEvaluation, u"7) Post-Hoc Evaluation", True, wx.NullBitmap )
+		self.auinotebook.AddPage( self.postHocEvaluation, u"7) Post-Hoc Evaluation", False, wx.NullBitmap )
 		self.plottingOptions = wx.Panel( self.auinotebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		plottingMainSizer = wx.FlexGridSizer( 15, 0, 0, 0 )
 		plottingMainSizer.AddGrowableCol( 0 )
@@ -2512,6 +2515,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.run_marxan_button.Bind( wx.EVT_BUTTON, self.on_run_marxan )
 		self.view_sum.Bind( wx.EVT_BUTTON, self.on_view_sum )
 		self.view_mvbest.Bind( wx.EVT_BUTTON, self.on_view_mvbest )
+		self.load_marxan_button.Bind( wx.EVT_BUTTON, self.on_load_marxan )
 		self.postHoc_custom_choice.Bind( wx.EVT_CHECKBOX, self.on_postHoc_custom_choice )
 		self.postHoc_custom_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_postHoc_custom_file )
 		self.postHoc_category_choice.Bind( wx.EVT_CHOICE, self.on_postHoc_category_choice )
@@ -2850,6 +2854,9 @@ class MarxanConnectGUI ( wx.Frame ):
 	def on_view_mvbest( self, event ):
 		event.Skip()
 
+	def on_load_marxan( self, event ):
+		event.Skip()
+
 	def on_postHoc_custom_choice( self, event ):
 		event.Skip()
 
@@ -3014,7 +3021,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v1.0.1-rc2020.03.19.17. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v1.0.1-rc2021.01.04.22. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )
