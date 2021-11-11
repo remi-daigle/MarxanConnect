@@ -149,8 +149,10 @@ if platform.system() == 'Darwin':
     binaries = osgeo_pyds + [
         (os.path.join(libs, 'libspatialindex.dylib'), '.'),
         (os.path.join(libs, 'libspatialindex_c.dylib'), '.'),
-        (os.path.join(libs, 'libspatialindex.4.dylib'), '.'),
-        (os.path.join(libs, 'libspatialindex_c.4.dylib'), '.'),
+        (os.path.join(libs, 'libspatialindex.6.dylib'), '.'),
+        (os.path.join(libs, 'libspatialindex_c.6.dylib'), '.'),
+        (os.path.join(libs, 'libmkl_intel_thread.1.dylib'), '.'),
+        (os.path.join(libs, 'libgeos_c.1.dylib'), '.'),
     ]
 
     hidden_imports = [

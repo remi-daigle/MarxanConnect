@@ -50,7 +50,7 @@ If you cannot use the installer because you do not have administrative privilege
 
 ## macOS (>Yosemite 10.10.5)
 
-Please download the latest [MarxanConnect-vX-Y-Z.dmg](https://github.com/remi-daigle/MarxanConnect/releases) file, double-click the downloaded file and a Finder window wil appear, and click-and-drag into the Applications folder. You may get a 'This is an application downloaded from the Internet' security warning since we are not a large software company. Assuming you trust the contents of the app, in the Finder, locate Marxan Connect. Press the Control key and click the app icon, then choose Open from the shortcut menu. Click Open. Marxan Connect is saved as an exception to your security settings, and you can open it in the future by double-clicking it just as you can any registered app. This was built and tested in macOS Mojave (10.14), but testing indicates it is compatible with older operating systems (>Yosemite 10.10.5). Alternatively (for advanced users only), follow the [Building from source](#building-from-source) instructions to use the latest bleeding edge version of the app.
+Please download the latest [MarxanConnect-vX-Y-Z.dmg](https://github.com/remi-daigle/MarxanConnect/releases) file, double-click the downloaded file and a Finder window will appear, and click-and-drag into the Applications folder. You may get a 'This is an application downloaded from the Internet' security warning since we are not a large software company. Assuming you trust the contents of the app, in the Finder, locate Marxan Connect. Press the Control key and click the app icon, then choose Open from the shortcut menu. Click Open. Marxan Connect is saved as an exception to your security settings, and you can open it in the future by double-clicking it just as you can any registered app. This was built and tested in macOS Big Sur (11.6), but testing indicates it is compatible with older operating systems (>Yosemite 10.10.5). There has been no testing on macOS versions newer than the version on which it was built. Alternatively (for advanced users only), follow the [Building from source](#building-from-source) instructions to use the latest bleeding edge version of the app.
 
 ## Linux 
 
@@ -88,15 +88,15 @@ It also assumes you have all the pre-requisite python modules installed to build
 ```{bash, eval=FALSE}
 #!/bin/bash
 
-conda create --name marcon wxpython matplotlib geopandas descartes shapely pandas numpy cartopy
+conda create --name marcon python=3.7 wxpython matplotlib=3.1.1 matplotlib-base=3.1 geopandas=0.4.1 descartes shapely=1.6.4 pandas=0.25.1 numpy cartopy=0.17 pyproj=1.9.6
 
-source activate marcon # for windows
-conda activate marcon # for mac/linux
+conda activate marcon
 
-pip install python-igraph # on windows you may need to install via wheel https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
-pip install PyInstaller marxanconpy bs4
-pip install dmgbuild pexpect # for mac only
+pip install python-igraph PyInstaller marxanconpy bs4
+pip install dmgbuild pexpect biplist # for mac only
 ```
+
+Note that for `python-igraph` above, you may need to install via wheel (https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph) on Windows.
 
 As well as pre-requesite R packages to build the website, *i.e.*:
 
