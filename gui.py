@@ -68,15 +68,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.start = wx.MenuItem( self.help, wx.ID_ANY, u"Getting Started", wx.EmptyString, wx.ITEM_NORMAL )
 		self.help.Append( self.start )
 
-		self.experimental = wx.Menu()
-		self.mwz = wx.MenuItem( self.experimental, wx.ID_ANY, u"Marxan with Zones", wx.EmptyString, wx.ITEM_NORMAL )
-		self.experimental.Append( self.mwz )
-
-		self.posthoc = wx.MenuItem( self.experimental, wx.ID_ANY, u"Post-Hoc Evaluation Tab", wx.EmptyString, wx.ITEM_NORMAL )
-		self.experimental.Append( self.posthoc )
-
-		self.help.AppendSubMenu( self.experimental, u"Experimental Features" )
-
 		self.menu.Append( self.help, u"Help" )
 
 		self.SetMenuBar( self.menu )
@@ -992,7 +983,7 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.metric_definition_choice.SetSelection( 0 )
 		metric_help_sizer.Add( self.metric_definition_choice, 0, wx.ALL|wx.EXPAND, 5 )
 
-		self.metric_definition_html = wx.html2.WebView.New( self.connectivityMetrics)
+		self.metric_definition_html = wx.html.HtmlWindow( self.connectivityMetrics, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO )
 		metric_help_sizer.Add( self.metric_definition_html, 0, wx.ALL|wx.EXPAND, 5 )
 
 
@@ -1751,14 +1742,15 @@ class MarxanConnectGUI ( wx.Frame ):
 		marxan_Radio_sizer.SetFlexibleDirection( wx.HORIZONTAL )
 		marxan_Radio_sizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		marxan_RadioChoices = [ u"Marxan", u"Marxan with Zones" ]
+		marxan_RadioChoices = [ u"Marxan 2.4.3", u"Marxan 4.0.6" ]
 		self.marxan_Radio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Marxan Version", wx.DefaultPosition, wx.DefaultSize, marxan_RadioChoices, 2, wx.RA_SPECIFY_COLS )
 		self.marxan_Radio.SetSelection( 1 )
 		marxan_Radio_sizer.Add( self.marxan_Radio, 0, wx.ALL|wx.EXPAND, 5 )
 
 		marxanBit_RadioChoices = [ u"32-bit", u"64-bit" ]
 		self.marxanBit_Radio = wx.RadioBox( self.marxanAnalysis, wx.ID_ANY, u"Bit Version", wx.DefaultPosition, wx.DefaultSize, marxanBit_RadioChoices, 2, wx.RA_SPECIFY_COLS )
-		self.marxanBit_Radio.SetSelection( 1 )
+		self.marxanBit_Radio.SetSelection( 0 )
+		self.marxanBit_Radio.Enable( False )
 		self.marxanBit_Radio.SetToolTip( u"Processing speed is typically higher with the 64-bit version of Marxan, but this is only compatible with 64-bit computers. Asymmetric linkage definitions may not be compatible with 32-bit Marxan." )
 
 		marxan_Radio_sizer.Add( self.marxanBit_Radio, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.EXPAND, 5 )
@@ -2406,8 +2398,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.on_license, id = self.license.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_about, id = self.about.GetId() )
 		self.Bind( wx.EVT_MENU, self.on_getting_started, id = self.start.GetId() )
-		self.Bind( wx.EVT_MENU, self.on_mwz, id = self.mwz.GetId() )
-		self.Bind( wx.EVT_MENU, self.on_posthoc, id = self.posthoc.GetId() )
 		self.PU_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_PU_file )
 		self.PU_file_pu_id.Bind( wx.EVT_CHOICE, self.on_PU_file_pu_id )
 		self.FA_file.Bind( wx.EVT_FILEPICKER_CHANGED, self.on_FA_file )
@@ -2577,12 +2567,6 @@ class MarxanConnectGUI ( wx.Frame ):
 		event.Skip()
 
 	def on_getting_started( self, event ):
-		event.Skip()
-
-	def on_mwz( self, event ):
-		event.Skip()
-
-	def on_posthoc( self, event ):
 		event.Skip()
 
 	def on_PU_file( self, event ):
@@ -3021,7 +3005,7 @@ class GettingStarted ( wx.Frame ):
 
 		bSizer512 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect v1.0.1-rc2021.01.04.22. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1002 = wx.StaticText( self.m_panel27, wx.ID_ANY, u"How to cite (will have DOI, etc later):\n\nDaigle, RM; Metaxas, A; Balbar, AC; McGowan, J; Treml, EA; Kuempel, CD; Possingham, HP; Beger, M. 2018. Marxan Connect vX.X.X. https://github.com/remi-daigle/MarxanConnect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1002.Wrap( -1 )
 
 		bSizer512.Add( self.m_staticText1002, 0, wx.ALL|wx.EXPAND, 5 )

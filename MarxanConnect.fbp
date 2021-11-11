@@ -258,40 +258,6 @@
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">on_getting_started</event>
                     </object>
-                    <object class="submenu" expanded="0">
-                        <property name="bitmap">Load From Art Provider; gtk-warning; wxART_MENU</property>
-                        <property name="label">Experimental Features</property>
-                        <property name="name">experimental</property>
-                        <property name="permission">protected</property>
-                        <object class="wxMenuItem" expanded="0">
-                            <property name="bitmap"></property>
-                            <property name="checked">0</property>
-                            <property name="enabled">1</property>
-                            <property name="help"></property>
-                            <property name="id">wxID_ANY</property>
-                            <property name="kind">wxITEM_NORMAL</property>
-                            <property name="label">Marxan with Zones</property>
-                            <property name="name">mwz</property>
-                            <property name="permission">none</property>
-                            <property name="shortcut"></property>
-                            <property name="unchecked_bitmap"></property>
-                            <event name="OnMenuSelection">on_mwz</event>
-                        </object>
-                        <object class="wxMenuItem" expanded="0">
-                            <property name="bitmap"></property>
-                            <property name="checked">0</property>
-                            <property name="enabled">1</property>
-                            <property name="help"></property>
-                            <property name="id">wxID_ANY</property>
-                            <property name="kind">wxITEM_NORMAL</property>
-                            <property name="label">Post-Hoc Evaluation Tab</property>
-                            <property name="name">posthoc</property>
-                            <property name="permission">none</property>
-                            <property name="shortcut"></property>
-                            <property name="unchecked_bitmap"></property>
-                            <event name="OnMenuSelection">on_posthoc</event>
-                        </object>
-                    </object>
                 </object>
             </object>
             <object class="wxBoxSizer" expanded="0">
@@ -15070,7 +15036,7 @@
                                                     <property name="caption"></property>
                                                     <property name="caption_visible">1</property>
                                                     <property name="center_pane">0</property>
-                                                    <property name="choices">&quot;Marxan&quot; &quot;Marxan with Zones&quot;</property>
+                                                    <property name="choices">&quot;Marxan 2.4.3&quot; &quot;Marxan 4.0.6&quot;</property>
                                                     <property name="close_button">1</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
@@ -15145,7 +15111,7 @@
                                                     <property name="dock">Dock</property>
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
-                                                    <property name="enabled">1</property>
+                                                    <property name="enabled">0</property>
                                                     <property name="fg"></property>
                                                     <property name="floatable">1</property>
                                                     <property name="font"></property>
@@ -15169,7 +15135,7 @@
                                                     <property name="pin_button">1</property>
                                                     <property name="pos"></property>
                                                     <property name="resize">Resizable</property>
-                                                    <property name="selection">1</property>
+                                                    <property name="selection">0</property>
                                                     <property name="show">1</property>
                                                     <property name="size"></property>
                                                     <property name="style">wxRA_SPECIFY_COLS</property>
