@@ -180,6 +180,7 @@ if platform.system() == 'Darwin':
         ('VERSION', '.'),
         ('docs', 'docs'),
         ('Marxan243', 'Marxan243'),
+        ('Marxan406','Marxan406'),
         (os.path.join(env_path,'share','proj'),os.path.join('share','proj'))
     ]
 

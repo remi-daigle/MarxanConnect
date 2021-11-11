@@ -73,14 +73,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         # set opening tab to Spatial Input (0)
         self.auinotebook.ChangeSelection(0)
 
-        # # set posthoc page off by default
-        # self.posthocdefault = False
-        # self.on_posthoc(event=None)
-
-        # set MwZ option off by default
-        self.mwzdefault = False
-        self.on_mwz(event=None)
-
         # set help page
         # self.on_metric_definition_choice(event=None) #currently disabled so that help appears blank/less intimidating
 
@@ -163,15 +155,6 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 self.auinotebook.AddPage(self.plot, u"9) Plot", False, wx.NullBitmap)
             self.posthocdefault = False
 
-    def on_mwz( self, event ):
-        if not self.mwzdefault:
-            self.marxan_Radio.Hide()
-            self.marxanAnalysis.Layout()
-            self.mwzdefault = True
-        else:
-            self.marxan_Radio.Show()
-            self.marxanAnalysis.Layout()
-            self.mwzdefault = False
 
 # ##########################  project managment functions ##############################################################
 
@@ -973,6 +956,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.colormap_shapefile_choices()
         self.on_FA_file(event=None)
         self.on_AA_file(event=None)
+        self.enable_postHoc()
 
     def on_PU_file_pu_id(self, event):
         """
@@ -1565,14 +1549,16 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         Option for Marxan version
         """
         self.project['options']['marxan'] = self.marxan_Radio.GetStringSelection()
-        if self.project['options']['marxan'] == "Marxan":
-            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan.exe")) or\
-                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan_x64.exe")):
-                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
+        if self.project['options']['marxan'] == "Marxan 2.4.3":
+            self.marxanBit_Radio.Enable(True)
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243','Marxan.exe')) or\
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243','Marxan_x64.exe')):
+                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Connect Directory")
         else:
-            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone.exe")) or \
-                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone_x64.exe")):
-                marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
+            self.marxanBit_Radio.Enable(False)
+            if not os.path.isfile(os.path.join(MCPATH, 'Marxan406', 'Marxan_x64-4.0.6-Windows', 'Marxan_x64.exe')):
+                marxanconpy.warn_dialog(message="Marxan 4.0.3 executables (Marxan_x64.exe) not found in Marxan Connect Directory")
+            
 
     def on_inputdat_symmRadio(self, event):
         self.project['options']['inputdat_boundary'] = self.inputdat_symmRadio.GetStringSelection()
@@ -2319,15 +2305,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Starts Marxan
         """
-        if self.project['options']['marxan'] == "Marxan":
-            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan.exe")) or\
-                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243',"Marxan_x64.exe")):
-                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Directory")
-        else:
-            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone.exe")) or \
-                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243', "MarZone_x64.exe")):
-                marxanconpy.warn_dialog(message="Marxan executables (MarZone.exe or MarZone_x64.exe) not found in Marxan Directory")
-
+        self.on_marxan_Radio(event=None)
         if not 'connectivityMetrics' in self.project:
             self.project['connectivityMetrics'] = {}
         self.temp = {}
@@ -2360,22 +2338,19 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         if platform.system() == 'Windows':
             marxanconpy.warn_dialog(
                 "Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished and has been closed.")
-            if self.project['options']['marxan'] == "Marxan":
+            if self.project['options']['marxan'] == "Marxan 4.0.6":
+                marxan_exec = os.path.join(marxanpath, 'Marxan406', 'Marxan_x64-4.0.6-Windows', 'Marxan_x64.exe')
+            elif self.project['options']['marxan'] == "Marxan 2.4.3":
                 if self.project['options']['marxan_bit']=="64-bit":
-                    marxan_exec = 'Marxan_x64.exe'
+                    marxan_exec =  os.path.join(marxanpath, 'Marxan243', 'Marxan_x64.exe')
                 else:
-                    marxan_exec = 'Marxan.exe'
-            else:
-                if self.project['options']['marxan_bit']=="64-bit":
-                    marxan_exec = 'MarZone_x64.exe'
-                else:
-                    marxan_exec = 'MarZone.exe'
+                    marxan_exec = os.path.join(marxanpath, 'Marxan243', 'Marxan.exe')
 
             if " " in self.project['filepaths']['marxan_input']:
                 marxanconpy.warn_dialog("Marxan will likely fail to find the input file because the filepath contains "
                                         "spaces. Please move your project folder or rename the offending directory")
 
-            subprocess.call(os.path.join(marxanpath, 'Marxan243', marxan_exec) + ' ' +
+            subprocess.call(marxan_exec + ' ' +
                             self.project['filepaths']['marxan_input'],
                             creationflags=subprocess.CREATE_NEW_CONSOLE,
                             cwd=inputpath)
@@ -2386,11 +2361,13 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 "Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished. On macOS,"
                 "Marxan Connect does not provide 'live' updates on Marxan's progress. See the 'macOS Marxan feedback' "
                 "issue on our github page")
-            if self.project['options']['marxan'] == "Marxan":
+            if self.project['options']['marxan'] == "Marxan 4.0.6":
+                marxan_exec = os.path.join(marxanpath, 'Marxan406', 'marxan-4.0.6-MacOS-11-M1', 'marxan')
+            elif self.project['options']['marxan'] == "Marxan 2.4.3":
                 if self.project['options']['marxan_bit']=="64-bit":
-                    marxan_exec = 'MarOpt_v243_Mac64'
+                    marxan_exec = os.path.join(marxanpath, 'Marxan243', 'MarOpt_v243_Mac64')
                 else:
-                    marxan_exec = 'MarOpt_v243_Mac32'
+                    marxan_exec = os.path.join(marxanpath, 'Marxan243','MarOpt_v243_Mac32')
             else:
                 marxanconpy.warn_dialog('Sorry, this experimental feature is only available for Windows at the monment')
 
@@ -2398,7 +2375,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 marxanconpy.warn_dialog("Marxan will likely fail to find the input file because the filepath contains "
                                         "spaces. Please move your project folder or rename the offending directory")
                 
-            proc = pexpect.spawnu(os.path.join(marxanpath, 'Marxan243', marxan_exec)+' '+os.path.relpath(self.project['filepaths']['marxan_input'],inputpath),cwd=inputpath)
+            proc = pexpect.spawnu(marxan_exec+' '+os.path.relpath(self.project['filepaths']['marxan_input'],inputpath),cwd=inputpath)
             proc.logfile = sys.stdout
             proc.expect('.*Press return to exit.*')
             proc.close()
@@ -2406,6 +2383,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.load_marxan_output()
 
     def load_marxan_output(self):
+        print("loading marxan outputs")
+        
         if not('connectivityMetrics' in self.project):
             self.project['connectivityMetrics'] = {}
         
