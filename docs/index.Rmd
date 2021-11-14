@@ -40,8 +40,6 @@ Marxan Connect was built for Windows or macOS. The app is currently not compatib
 
 ### Windows Installer
 
-(**WARNING! Marxan Connect is in 'beta' release**)
-
 Please download the latest [MarxanConnect-vX-Y-Z-windows-setup.exe](https://github.com/remi-daigle/MarxanConnect/releases) installer file, run it, and follow the instructions. You may get a 'Windows protected your PC' security warning since we are not a large software company. Assuming you trust the contents of the app, click on `More info`, then `Run anyway` to install. Alternatively (for advanced users only), follow the [Building from source](#building-from-source) instructions to use the latest bleeding edge version of the app.
 
 ### Windows Zipped Bundle
