@@ -90,7 +90,9 @@ if platform.system() == 'Windows':
     ]
 
     added_files = collect_data_files('geopandas', subdir='datasets')+[('VERSION','.'),
-        ('docs','docs'),('Marxan243','Marxan243')]
+        ('docs','docs'),
+        ('Marxan243','Marxan243'),
+        ('Marxan406/Marxan_x64-4.0.6-Windows','Marxan406/Marxan_x64-4.0.6-Windows')]
 
     a = Analysis(['MarxanConnectGUI.py'],
                  pathex=paths,
