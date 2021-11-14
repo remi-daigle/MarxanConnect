@@ -623,12 +623,17 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             gdf_list = [sf2]
         else:
             marxanconpy.warn_dialog(message="No data layers were selected")
-            lonmin, lonmax, latmin, latmax = -180, 180, -90, -90
+            lonmin, lonmax, latmin, latmax = -180, 180, -90, 90
 
-        lonmin, lonmax, latmin, latmax = marxanconpy.spatial.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
+        if self.lyr1_plot_check.GetValue() or self.lyr2_plot_check.GetValue():
+            lonmin, lonmax, latmin, latmax = marxanconpy.spatial.buffer_shp_corners(gdf_list, float(self.bmap_buffer.GetValue()))
 
-        crs = cartopy.crs.PlateCarree(central_longitude=(lonmin+lonmax)/2)
-        self.plot.axes = self.plot.figure.gca(projection=crs)
+        cent_long = (lonmin+lonmax)/2
+        cent_lat = (latmin+latmax)/2
+        crs = cartopy.crs.AlbersEqualArea(cent_long, cent_lat)
+        
+        #PlateCarree(central_longitude=cent_long)
+        self.plot.axes = plt.axes(projection=crs)
         self.plot.axes.set_extent([lonmin, lonmax, latmin, latmax])
         self.plot.canvas = FigureCanvas(self.plot, -1, self.plot.figure)
         self.plot.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -645,7 +650,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                                                                     facecolor=tuple(
                                                                         c / 255 for c in self.bmap_lakecol.GetColour()))
                                        )
-            self.plot.axes.background_patch.set_facecolor(tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
+            self.plot.axes.patch.set_facecolor(tuple(c / 255 for c in self.bmap_oceancol.GetColour()))
 
 
         # plot first layer
@@ -679,6 +684,7 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         """
         Draws the desired shapefile on the plot created by 'on_plot_map_button'
         """
+        
         if type(metric) == 'Nonetype':
             patches = []
             colour = tuple(c / 255 for c in colour)
