@@ -85,13 +85,14 @@ It also assumes you have all the pre-requisite python modules installed to build
 
 ```{bash, eval=FALSE}
 #!/bin/bash
-
-conda create --name marcon python=3.7 wxpython matplotlib=3.1.1 matplotlib-base=3.1 geopandas=0.4.1 descartes shapely=1.6.4 pandas=0.25.1 numpy cartopy=0.17 pyproj=1.9.6
+conda create --name marcon python=3.7 wxpython matplotlib geopandas descartes shapely pandas numpy cartopy pyproj
 
 conda activate marcon
 
 pip install python-igraph PyInstaller marxanconpy bs4
-pip install dmgbuild pexpect biplist # for mac only
+
+# for mac only:
+pip install dmgbuild pexpect biplist 
 ```
 
 Note that for `python-igraph` above, you may need to install via wheel (https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph) on Windows.
