@@ -2366,9 +2366,11 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             marxanconpy.warn_dialog(
                 "Please note: Marxan Connect will be unresponsive until the Marxan pop-up window has finished. On macOS,"
                 "Marxan Connect does not provide 'live' updates on Marxan's progress. See the 'macOS Marxan feedback' "
-                "issue on our github page")
+                "issue on our github page. If you have chosen Marxan 4.0.6, Marxan Connect will use the version for "
+                "MacOS x86-64")
             if self.project['options']['marxan'] == "Marxan 4.0.6":
-                marxan_exec = os.path.join(marxanpath, 'Marxan406', 'marxan-4.0.6-MacOS-11-M1', 'marxan')
+                #marxan_exec = os.path.join(marxanpath, 'Marxan406', 'marxan-4.0.6-MacOS-11-M1', 'marxan')
+                marxan_exec = os.path.join(marxanpath, 'Marxan406', 'marxan-4.0.6-MacOS-10.15-x86-64', 'marxan')
             elif self.project['options']['marxan'] == "Marxan 2.4.3":
                 if self.project['options']['marxan_bit']=="64-bit":
                     marxan_exec = os.path.join(marxanpath, 'Marxan243', 'MarOpt_v243_Mac64')
@@ -2381,6 +2383,8 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
                 marxanconpy.warn_dialog("Marxan will likely fail to find the input file because the filepath contains "
                                         "spaces. Please move your project folder or rename the offending directory")
                 
+            print("inputpath:"+inputpath)
+            print("pexpect:"+marxan_exec+' '+os.path.relpath(self.project['filepaths']['marxan_input']))
             proc = pexpect.spawnu(marxan_exec+' '+os.path.relpath(self.project['filepaths']['marxan_input'],inputpath),cwd=inputpath)
             proc.logfile = sys.stdout
             proc.expect('.*Press return to exit.*')
