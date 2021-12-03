@@ -183,6 +183,7 @@ if platform.system() == 'Darwin':
         ('docs', 'docs'),
         ('Marxan243', 'Marxan243'),
         ('Marxan406/marxan-4.0.6-MacOS-11-M1','Marxan406/marxan-4.0.6-MacOS-11-M1'),
+        ('Marxan406/marxan-4.0.6-MacOS-10.15-x86-64','Marxan406/marxan-4.0.6-MacOS-10.15-x86-64'),
         (os.path.join(env_path,'share','proj'),os.path.join('share','proj'))
     ]
 

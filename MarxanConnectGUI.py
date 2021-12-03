@@ -2397,7 +2397,10 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
             print("pexpect:"+marxan_exec+' '+os.path.relpath(self.project['filepaths']['marxan_input']))
             proc = pexpect.spawnu(marxan_exec+' '+os.path.relpath(self.project['filepaths']['marxan_input'],inputpath),cwd=inputpath)
             proc.logfile = sys.stdout
-            proc.expect('.*Press return to exit.*')
+            if self.project['options']['marxan'] == "Marxan 2.4.3":
+                proc.expect('.*Press return to exit.*')
+            else:
+                proc.expect('.*The End.*')
             proc.close()
             
         self.load_marxan_output()
