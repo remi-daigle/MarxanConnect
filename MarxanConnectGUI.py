@@ -1557,13 +1557,23 @@ class MarxanConnectGUI(gui.MarxanConnectGUI):
         self.project['options']['marxan'] = self.marxan_Radio.GetStringSelection()
         if self.project['options']['marxan'] == "Marxan 2.4.3":
             self.marxanBit_Radio.Enable(True)
-            if not os.path.isfile(os.path.join(MCPATH, 'Marxan243','Marxan.exe')) or\
+            if platform.system() == "Darwin":
+                if not os.path.isfile(os.path.join(MCPATH, 'Marxan243', 'MarOpt_v243_Mac32')) or\
+                    not os.path.isfile(os.path.join(MCPATH, 'Marxan243','MarOpt_v243_Mac64')):
+                    marxanconpy.warn_dialog(message="Marxan 4.0.3 executables (MarOpt_v243_Mac32 or MarOpt_v243_Mac64) not found in Marxan Connect Directory")
+            else:
+                if not os.path.isfile(os.path.join(MCPATH, 'Marxan243','Marxan.exe')) or\
                     not os.path.isfile(os.path.join(MCPATH, 'Marxan243','Marxan_x64.exe')):
-                marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Connect Directory")
+                    marxanconpy.warn_dialog(message="Marxan executables (Marxan.exe or Marxan_x64.exe) not found in Marxan Connect Directory")
         else:
             self.marxanBit_Radio.Enable(False)
-            if not os.path.isfile(os.path.join(MCPATH, 'Marxan406', 'Marxan_x64-4.0.6-Windows', 'Marxan_x64.exe')):
-                marxanconpy.warn_dialog(message="Marxan 4.0.3 executables (Marxan_x64.exe) not found in Marxan Connect Directory")
+            if platform.system() == "Darwin":
+                if not os.path.isfile(os.path.join(MCPATH, 'Marxan406', 'marxan-4.0.6-MacOS-10.15-x86-64', 'marxan')):
+                    marxanconpy.warn_dialog(message="Marxan 4.0.6 executables (marxan-4.0.6-MacOS-10.15-x86-64/marxan) not found in Marxan Connect Directory")
+            else:
+                if not os.path.isfile(os.path.join(MCPATH, 'Marxan406', 'Marxan_x64-4.0.6-Windows', 'Marxan_x64.exe')):
+                    marxanconpy.warn_dialog(message="Marxan 4.0.6 executables (Marxan_x64.exe) not found in Marxan Connect Directory")
+                    
             
 
     def on_inputdat_symmRadio(self, event):
